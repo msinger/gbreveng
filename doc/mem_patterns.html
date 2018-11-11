@@ -203,6 +203,40 @@ outputs (driven by the GameBoy). There is a short switching period when #read an
 <i><u>Table 2</u><br>
 Arrows: Indicate legal state changes<br>
 (*): The "default" state, when cartridge and WRAM are not accessed</i></p>
+<p>There are two peripherals that also gain access to some of the busses: The PPU and the DMA. The PPU has
+the highest priority, the CPU has the lowest.</p>
+<p><table border="1">
+<tr>
+<th><p><i>has access to bus<br>(ordered by priority)</i></p></th>
+<th><p>Hidden Bus</p></th>
+<th><p>External Bus</p></th>
+<th><p>Internal Bus</p></th>
+<th><p>External Video Bus</p></th>
+<th><p>Internal Video Bus</p></th>
+</tr><tr>
+<th><p>PPU</p></th>
+<td><p>&nbsp;</p></td>
+<td><p>&nbsp;</p></td>
+<td><p>&nbsp;</p></td>
+<td align="center"><p>X (ro)</p></td>
+<td align="center"><p>X (ro)</p></td>
+</tr><tr>
+<th><p>DMA</p></th>
+<td align="center"><p>?</p></td>
+<td align="center"><p>X (ro)</p></td>
+<td align="center"><p>?</p></td>
+<td align="center"><p>X (ro)</p></td>
+<td align="center"><p>X (wo)</p></td>
+</tr><tr>
+<th><p>CPU</p></th>
+<td align="center"><p>X</p></td>
+<td align="center"><p>X</p></td>
+<td align="center"><p>X</p></td>
+<td align="center"><p>X</p></td>
+<td align="center"><p>X</p></td>
+</tr>
+</table>
+<i><u>Table 3</u></i></p>
 <p><table border="1">
 <tr>
 <th><p><i>signals visible on<br>external bus during<br>CPU mem access</i></p></th>
@@ -260,7 +294,7 @@ Arrows: Indicate legal state changes<br>
 <td><p>no change</p></td>
 </tr>
 </table>
-<i><u>Table 3</u><br>
+<i><u>Table 4</u><br>
 Signals visible on external bus when CPU accesses any of the five busses<br>
 (*): Write access on hidden bus not tested yet</i></p>
 <p><table border="1">
@@ -314,7 +348,7 @@ Signals visible on external bus when CPU accesses any of the five busses<br>
 <td><p>?</p></td>
 </tr>
 </table>
-<i><u>Table 4</u><br>
+<i><u>Table 5</u><br>
 Signals visible on external video bus when CPU accesses any of the five busses (while PPU is not accessing VRAM)<br>
 (*): Write access on hidden bus not tested yet</i></p>
 <p><table border="1">
@@ -337,7 +371,7 @@ Signals visible on external video bus when CPU accesses any of the five busses (
 <td colspan="5" align="center"><p>controlled by CPU</p></td>
 </tr>
 </table>
-<i><u>Table 5</u><br>
+<i><u>Table 6</u><br>
 Signals visible on external video bus when PPU accesses any of the two busses</i></p>
 <!--
 write WRAM:
@@ -348,6 +382,9 @@ write WRAM:
     830ns-840ns  #wr  low -> high
     950ns        clk  low -> high
     980ns        #rd  high -> low
+-->
+<!--
+What happens when DMA reads 0xff00? Does it access the 0xe000 (echo) region?
 -->
 </body>
 </html>
