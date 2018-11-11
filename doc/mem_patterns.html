@@ -295,7 +295,7 @@ the highest priority, the CPU has the lowest.</p>
 </tr>
 </table>
 <i><u>Table 4</u><br>
-Signals visible on external bus when CPU accesses any of the five busses<br>
+Signals visible on external bus when CPU accesses any of the five busses (while DMA is not accessing WRAM or cartridge)<br>
 (*): Write access on hidden bus not tested yet</i></p>
 <p><table border="1">
 <tr>
@@ -349,7 +349,7 @@ Signals visible on external bus when CPU accesses any of the five busses<br>
 </tr>
 </table>
 <i><u>Table 5</u><br>
-Signals visible on external video bus when CPU accesses any of the five busses (while PPU is not accessing VRAM)<br>
+Signals visible on external video bus when CPU accesses any of the five busses (while PPU and DMA are not accessing VRAM)<br>
 (*): Write access on hidden bus not tested yet</i></p>
 <p><table border="1">
 <tr>
@@ -368,11 +368,104 @@ Signals visible on external video bus when CPU accesses any of the five busses (
 <td><p>input (glitchy)</p></td>
 </tr><tr>
 <th><p>Internal Video Bus</p></th>
-<td colspan="5" align="center"><p>controlled by CPU</p></td>
+<td colspan="5" align="center"><p>controlled by DMA or CPU</p></td>
 </tr>
 </table>
 <i><u>Table 6</u><br>
 Signals visible on external video bus when PPU accesses any of the two busses</i></p>
+<p><table border="1">
+<tr>
+<th><p><i>signals visible on<br>external bus during<br>DMA mem access</i></p></th>
+<th><p>#write</p></th>
+<th><p>#read</p></th>
+<th><p>#cs</p></th>
+<th><p>A15</p></th>
+<th><p>A0-A14</p></th>
+<th><p>D0-D7 direction</p></th>
+</tr><tr>
+<th><p>Hidden Bus (*)</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>External Bus</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>Internal Bus (*)</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>External Video Bus</p></th>
+<td colspan="6" align="center"><p>controlled by CPU</p></td>
+</tr><tr>
+<th><p>Internal Video Bus</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr>
+</table>
+<i><u>Table 7</u><br>
+Signals visible on external bus when DMA accesses any of the three/five (*) busses<br>
+(*): Not tested yet if DMA has access to hidden or internal bus</i></p>
+<p><table border="1">
+<tr>
+<th><p><i>signals visible on<br>ext. video bus during<br>DMA mem access</i></p></th>
+<th><p>#vwrite</p></th>
+<th><p>#vread</p></th>
+<th><p>#vcs</p></th>
+<th><p>VA0-VA12</p></th>
+<th><p>VD0-VD7 direction</p></th>
+</tr><tr>
+<th><p>Hidden Bus (*)</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>External Bus</p></th>
+<td colspan="5" align="center"><p>controlled by PPU or CPU</p></td>
+</tr><tr>
+<th><p>Internal Bus (*)</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>External Video Bus</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>Internal Video Bus</p></th>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+<td><p>?</p></td>
+</tr>
+</table>
+<i><u>Table 8</u><br>
+Signals visible on external video bus when DMA accesses any of the three/five (*) busses (while PPU is not accessing VRAM)<br>
+(*): Not tested yet if DMA has access to hidden or internal bus</i></p>
 <!--
 write WRAM:
   950ns clk period:
