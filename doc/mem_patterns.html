@@ -82,11 +82,11 @@ Boot ROM instructions at address 0x13 and 0x14</i></p>
 <p><table border="1">
 <tr>
 <th><p><i>mapping</i></p></th>
-<th><p>External Bus</p></th>
-<th><p>Internal Bus</p></th>
-<th><p>External Video Bus</p></th>
-<th><p>Internal Video Bus</p></th>
-<th><p>Hidden Bus</p></th>
+<th bgcolor="#ffe0e0"><p>External Bus</p></th>
+<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffe0"><p>Hidden Bus</p></th>
 </tr><tr>
 <th><p>Boot ROM<br>0x0000-0x00FF</p></th>
 <td><p>&nbsp;</p></td>
@@ -182,7 +182,7 @@ and therefore both RAMs are active.</p>
 <p>When #read is low, D0-D7 are always configured as inputs (driven by the cartridge or WRAM or pulled up by
 a pull-up resistor). When #read is high and a chip select (#cs or A15) is low, D0-D7 are always configured as
 outputs (driven by the GameBoy). There is a short switching period when #read and both chip selects are high.</p>
-<p><table border="1">
+<p><table border="1" bgcolor="#ffe0e0">
 <tr>
 <th><p><i>&amp;&amp;</i></p></th>
 <th><p>!(#cs) &amp;&amp; (A15)</p></th>
@@ -208,11 +208,11 @@ the highest priority, the CPU has the lowest.</p>
 <p><table border="1">
 <tr>
 <th><p><i>has access to bus<br>(ordered by priority)</i></p></th>
-<th><p>Hidden Bus</p></th>
-<th><p>External Bus</p></th>
-<th><p>Internal Bus</p></th>
-<th><p>External Video Bus</p></th>
-<th><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffe0"><p>Hidden Bus</p></th>
+<th bgcolor="#ffe0e0"><p>External Bus</p></th>
+<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
 </tr><tr>
 <th><p>PPU</p></th>
 <td><p>&nbsp;</p></td>
@@ -237,7 +237,7 @@ the highest priority, the CPU has the lowest.</p>
 </tr>
 </table>
 <i><u>Table 3</u></i></p>
-<p><table border="1">
+<p><table border="1" bgcolor="#ffe0e0">
 <tr>
 <th><p><i>signals visible on<br>external bus during<br>CPU mem access</i></p></th>
 <th><p>#write</p></th>
@@ -248,7 +248,7 @@ the highest priority, the CPU has the lowest.</p>
 <th><p>D0-D7 direction</p></th>
 <th><p>D0-D7 output buffer</p></th>
 </tr><tr>
-<th><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
 <td><p>high</p></td>
 <td><p>low</p></td>
 <td><p>high</p></td>
@@ -257,7 +257,7 @@ the highest priority, the CPU has the lowest.</p>
 <td><p>input</p></td>
 <td><p>no change</p></td>
 </tr><tr>
-<th><p>External Bus</p></th>
+<th bgcolor="#ffe0e0"><p>External Bus</p></th>
 <td><p>w: low<br>r: high</p></td>
 <td><p>w: high<br>r: low</p></td>
 <td><p>high</p></td>
@@ -266,7 +266,7 @@ the highest priority, the CPU has the lowest.</p>
 <td><p>w: output<br>r: input</p></td>
 <td><p>w: change<br>r: no change</p></td>
 </tr><tr>
-<th><p>Internal Bus</p></th>
+<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
 <td><p>high</p></td>
 <td><p>w: low (glitchy)<br>r: low</p></td>
 <td><p>high</p></td>
@@ -275,7 +275,7 @@ the highest priority, the CPU has the lowest.</p>
 <td><p>input</p></td>
 <td><p>no change</p></td>
 </tr><tr>
-<th><p>External Video Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
 <td><p>high</p></td>
 <td><p>w: low (glitchy)<br>r: low</p></td>
 <td><p>high</p></td>
@@ -284,7 +284,7 @@ the highest priority, the CPU has the lowest.</p>
 <td><p>input</p></td>
 <td><p>no change</p></td>
 </tr><tr>
-<th><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
 <td><p>high</p></td>
 <td><p>w: low (glitchy)<br>r: low</p></td>
 <td><p>high</p></td>
@@ -297,7 +297,7 @@ the highest priority, the CPU has the lowest.</p>
 <i><u>Table 4</u><br>
 Signals visible on external bus when CPU accesses any of the five busses (while DMA is not accessing WRAM or cartridge)<br>
 (*): Write access on hidden bus not tested yet</i></p>
-<p><table border="1">
+<p><table border="1" bgcolor="#e0e0ff">
 <tr>
 <th><p><i>signals visible on<br>ext. video bus during<br>CPU mem access</i></p></th>
 <th><p>#vwrite</p></th>
@@ -307,7 +307,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <th><p>VD0-VD7 direction</p></th>
 <th><p>VD0-VD7 output buffer</p></th>
 </tr><tr>
-<th><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
 <td><p>high</p></td>
 <td><p>low</p></td>
 <td><p>high</p></td>
@@ -315,7 +315,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <td><p>input</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>External Bus</p></th>
+<th bgcolor="#ffe0e0"><p>External Bus</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>high</p></td>
@@ -323,7 +323,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <td><p>input</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>Internal Bus</p></th>
+<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>high</p></td>
@@ -331,7 +331,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <td><p>input</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>External Video Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
 <td><p>w: low<br>r: high</p></td>
 <td><p>w: high<br>r: low</p></td>
 <td><p>low</p></td>
@@ -339,7 +339,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <td><p>w: output<br>r: input</p></td>
 <td><p>w: change<br>r: ?</p></td>
 </tr><tr>
-<th><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
 <td><p>high</p></td>
 <td><p>low</p></td>
 <td><p>high</p></td>
@@ -351,7 +351,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <i><u>Table 5</u><br>
 Signals visible on external video bus when CPU accesses any of the five busses (while PPU and DMA are not accessing VRAM)<br>
 (*): Write access on hidden bus not tested yet</i></p>
-<p><table border="1">
+<p><table border="1" bgcolor="#e0e0ff">
 <tr>
 <th><p><i>signals visible on<br>ext. video bus during<br>PPU mem access</i></p></th>
 <th><p>#vwrite</p></th>
@@ -360,20 +360,20 @@ Signals visible on external video bus when CPU accesses any of the five busses (
 <th><p>VA0-VA12</p></th>
 <th><p>VD0-VD7 direction</p></th>
 </tr><tr>
-<th><p>External Video Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
 <td><p>high</p></td>
 <td><p>low</p></td>
 <td><p>low</p></td>
 <td><p>change</p></td>
 <td><p>input (glitchy)</p></td>
 </tr><tr>
-<th><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
 <td colspan="5" align="center"><p>controlled by DMA or CPU</p></td>
 </tr>
 </table>
 <i><u>Table 6</u><br>
 Signals visible on external video bus when PPU accesses any of the two busses</i></p>
-<p><table border="1">
+<p><table border="1" bgcolor="#ffe0e0">
 <tr>
 <th><p><i>signals visible on<br>external bus during<br>DMA mem access</i></p></th>
 <th><p>#write</p></th>
@@ -383,7 +383,7 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <th><p>A0-A14</p></th>
 <th><p>D0-D7 direction</p></th>
 </tr><tr>
-<th><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
@@ -391,7 +391,7 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <td><p>?</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>External Bus</p></th>
+<th bgcolor="#ffe0e0"><p>External Bus</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
@@ -399,7 +399,7 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <td><p>?</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>Internal Bus (*)</p></th>
+<th bgcolor="#ffffe0"><p>Internal Bus (*)</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
@@ -407,10 +407,10 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <td><p>?</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>External Video Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
 <td colspan="6" align="center"><p>controlled by CPU</p></td>
 </tr><tr>
-<th><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
@@ -422,7 +422,7 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <i><u>Table 7</u><br>
 Signals visible on external bus when DMA accesses any of the three/five (*) busses<br>
 (*): Not tested yet if DMA has access to hidden or internal bus</i></p>
-<p><table border="1">
+<p><table border="1" bgcolor="#e0e0ff">
 <tr>
 <th><p><i>signals visible on<br>ext. video bus during<br>DMA mem access</i></p></th>
 <th><p>#vwrite</p></th>
@@ -431,31 +431,31 @@ Signals visible on external bus when DMA accesses any of the three/five (*) buss
 <th><p>VA0-VA12</p></th>
 <th><p>VD0-VD7 direction</p></th>
 </tr><tr>
-<th><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>External Bus</p></th>
+<th bgcolor="#ffe0e0"><p>External Bus</p></th>
 <td colspan="5" align="center"><p>controlled by PPU or CPU</p></td>
 </tr><tr>
-<th><p>Internal Bus (*)</p></th>
+<th bgcolor="#ffffe0"><p>Internal Bus (*)</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>External Video Bus</p></th>
+<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
 </tr><tr>
-<th><p>Internal Video Bus</p></th>
+<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
