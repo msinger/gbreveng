@@ -13,7 +13,9 @@ GameBoy, when the signals are slowly rising.</p>
 <p>Later I got another (much cheaper) logic analyzer from China that claims to be a Saleae, but it isn't.
 Although it only costs about a third of the Hantek, it is actually able to utilize all 16 inputs! All
 recordings with 16M/s, 25M/s and 32M/s are done with this new one; the 24M/s ones are done with the Hantek.
-The level also flickers between high and low when the probed voltage is in the range of 1.3V and 1.5V.</p>
+The level also flickers between high and low when the probed voltage is in the range of 1.3V and 1.5V. This
+logic analyzer returns some old buffers when it starts sampling. The beginning of the captured data needs to
+be ignored.</p>
 <p>An EverDrive cartridge was used for running the test code. This means the state and timing of the data
 lines when reading from the cartridge may not be representative for an original cartridge. Also, when this
 cartridge is plugged in during power up of the GameBoy, the ramp up time of the reset line drops from ~50ms
@@ -470,11 +472,41 @@ Signals visible on external video bus when DMA accesses any of the three/five (*
 write WRAM:
   950ns clk period:
     140ns-150ns  #rd  low -> high
-    480ns        clk  high -> low
+    150ns        a0   change            # also for read; also for HRAM and OAM; this is also the point where #rd glitches during HRAM and OAM write access
+    240ns-250ns  #cs  high -> low
+    470ns-480ns  clk  high -> low
     480ns-490ns  #wr  high -> low
+    500ns        d0   input -> output
     830ns-840ns  #wr  low -> high
     950ns        clk  low -> high
+    950ns-960ns  #cs  low -> high
+    960ns-970ns  d0   output -> input
     980ns        #rd  high -> low
+   1100ns-1110ns a0   change            # also for read
+  960ns clk period:
+    150ns        #rd  low -> high
+    150ns-160ns  a0   change
+    250ns        #cs  high -> low
+    480ns-490ns  clk  high -> low
+    490ns        #wr  high -> low
+    500ns        d0   input -> output
+    840ns        #wr  low -> high
+    960ns        clk  low -> high
+    960ns        #cs  low -> high
+    970ns        d0   output -> input
+    990ns        #rd  high -> low
+   1100ns-1110ns a0   change
+
+I removed the EverDrive cartridge for determining the timings of the data lines during writes, because
+I have the suspicion, that this cartridge messes around with the data lines during writes to the ROM and
+cartridge RAM. It looks like this cartridge switches its data lines to output too early. I suspect collisions.
+When writing to cartridge RAM, it keeps the state of the data lines as they were written when the GameBoy
+stops driving the lines. It does that without noticeable peaks of the pull-ups, they must be driven from both
+sides for a short period of time (but luckyly to the same level). When writing to ROM, the EverDrive seems to
+drive the data lines as soon as the chip select (A15) goes low, even when #rd is high. It seems like it is
+always driving the lines with the same value they were driven before by the GameBoy. It stops driving when
+#wr goes low, but remembers the written value for next time. Maybe the EverDrive has "keeper" pull-up/down
+resistors, that keep the lines at their last state.
 -->
 <!--
 What happens when DMA reads 0xff00? Does it access the 0xe000 (echo) region?
