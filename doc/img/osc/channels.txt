@@ -1,0 +1,32 @@
+rom-rw* wram-rw* xram-rw*
+CH1  1X yellow:  1MHz clk on cartridge slot
+CH2  1X cyan:    D0 on cartridge slot
+CH3  1X magenta: #wr on cartridge slot
+CH4  1X blue:    #cs on cartridge slot
+
+vram-rw 1-8
+CH1 10X yellow:  1MHz clk on cartridge slot
+CH2 10X cyan:    A0 on VRAM chip
+CH3 10X magenta: #cs on VRAM chip
+CH4 10X blue:    D0 on VRAM chip
+
+vram-rw 9-12
+CH1 10X yellow:  1MHz clk on cartridge slot
+CH2 10X cyan:    #wr on VRAM chip
+CH3 10X magenta: #cs on VRAM chip
+CH4 10X blue:    D0 on VRAM chip
+
+crystal
+CH1  1X yellow:  1MHz clk on cartridge slot
+CH2 10X cyan:    DMG pin 74 (X1)
+CH3 10X magenta: DMG pin 73 (X0)
+
+startup_crystal*
+CH1 10X yellow:  1MHz clk on cartridge slot
+CH2 10X cyan:    DMG pin 74 (X1)
+CH3 10X magenta: DMG pin 73 (X0)
+CH4 10X blue:    #rst on cartridge slot
+
+startup*
+CH1  1X yellow:  1MHz clk on cartridge slot
+CH2  1X cyan:    #rst on cartridge slot
