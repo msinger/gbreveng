@@ -481,7 +481,7 @@ CPU write WRAM:
     830ns-840ns  #wr  low -> high
     950ns        clk  low -> high
     950ns-960ns  #cs  low -> high
-    960ns-970ns  d0   output -> input
+    950ns-960ns  d0   output -> input
     980ns        #rd  high -> low
    1100ns-1110ns a0   change            # also for read
   960ns clk period:
@@ -491,23 +491,23 @@ CPU write WRAM:
     480ns-490ns  clk  high -> low
     490ns        #wr  high -> low
     500ns        d0   input -> output
+    700ns-710ns  d0   sampling takes place here during read
     840ns        #wr  low -> high
     960ns        clk  low -> high
     960ns        #cs  low -> high
-    970ns        d0   output -> input
+    960ns        d0   output -> input
     990ns        #rd  high -> low
    1100ns-1110ns a0   change
 
 I removed the EverDrive cartridge for determining the timings of the data lines during writes, because
 I have the suspicion, that this cartridge messes around with the data lines during writes to the ROM and
-cartridge RAM. It looks like this cartridge switches its data lines to output too early. I suspect collisions.
-When writing to cartridge RAM, it keeps the state of the data lines as they were written when the GameBoy
-stops driving the lines. It does that without noticeable peaks of the pull-ups, they must be driven from both
-sides for a short period of time (but luckyly to the same level). When writing to ROM, the EverDrive seems to
-drive the data lines as soon as the chip select (A15) goes low, even when #rd is high. It seems like it is
-always driving the lines with the same value they were driven before by the GameBoy. It stops driving when
-#wr goes low, but remembers the written value for next time. Maybe the EverDrive has "keeper" pull-up/down
-resistors, that keep the lines at their last state.
+cartridge RAM. When writing to cartridge RAM, it keeps the state of the data lines as they were written when
+the GameBoy stops driving the lines. It does that without noticeable peaks of the pull-ups. When writing to
+ROM, the EverDrive seems to drive the data lines as soon as the chip select (A15) goes low, even when #rd is
+high. It seems like it is always driving the lines with the same value they were driven before by the GameBoy.
+It stops driving when #wr goes low, but remembers the written value for next time. I suspect that the
+EverDrive has "keeper" pull-up/down resistors, that keep the lines at their last state. Maybe it saves power
+to avoid the slow signal transitions from low to high, that normally happen without the EverDrive.
 
 DMA read WRAM start (period #1/160):
   950ns clk period:
@@ -530,7 +530,7 @@ DMA read VRAM start (period #1/160):
     480ns        clk  high -> low
     950ns        clk  low -> high
     960ns        va0  change
-DMA read WRAM end (period #160/160):
+DMA read VRAM end (period #160/160):
   950ns clk period:
     10ns         va0  change
     480ns        clk  high -> low
@@ -551,7 +551,7 @@ CPU write VRAM:
     830ns        #vwr low -> high
     950ns        clk  low -> high
     960ns        #vcs low -> high
-?    ns          vd0  output -> input   # can't measure; maybe because of too weak pull-up? need to add some extra resistor for measurement
+    960ns        vd0  output -> input
     980ns        #vrd high -> low
 
 If PPU is not accessing VRAM, #vrd stays low when idle just like #rd on the external bus. When the PPU
