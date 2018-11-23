@@ -21,6 +21,7 @@ MY_PROG_FIX
 AC_CONFIG_FILES([
 test_roms/Makefile
 mrd_test/Makefile
+genclk/Makefile
 Makefile
 ])
 
