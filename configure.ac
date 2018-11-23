@@ -26,3 +26,17 @@ Makefile
 ])
 
 AC_OUTPUT
+
+echo
+echo
+echo "=== CONFIGURATION SUMMARY ==="
+echo
+echo "--- Tools ---"
+echo "Yosys:                              $YOSYS"
+echo "arachne-pnr:                        $ARACHNE"
+echo "IcePack:                            $ICEPACK"
+echo "IcePLL:                             $ICEPLL"
+echo "IceProg:                            $ICEPROG"
+echo "Assembler:                          $AS"
+echo "Linker:                             $LD"
+echo "rgbfix:                             $FIX"
