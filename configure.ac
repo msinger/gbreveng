@@ -22,6 +22,7 @@ AC_CONFIG_FILES([
 test_roms/Makefile
 mrd_test/Makefile
 genclk/Makefile
+skip_ff50/Makefile
 Makefile
 ])
 
