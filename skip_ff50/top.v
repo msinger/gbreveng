@@ -4,23 +4,21 @@
  * Prepare GameBoy:
  * 1. Desolder quartz and both capacitors from GameBoy CPU board. (The 1 meg
  *    resistor may stay.)
- * 2. Wire your FPGA clock output to DMG pin 73 (X0). This is the oscillator
- *    output. Input pin 74 (X1) won't work! DMG seems to get its internal
- *    clock from the amplified output pin. If we attach to the input, the
- *    signal seems to get too washed up at the output when passing through the
- *    amplifier. Voltage range must be 0-5V. I used Nexperia 74LVCH8T245PW as
- *    voltage translator. Drive as hard as possible (no resistor between the
- *    outputs).
- * 3. Leave clock input pin 74 open. Do not attach any probes to it! For some
- *    reason, when it's open, it won't override the output. My GameBoy won't
- *    boot if something is attached to pin 74 while I'm raping pin 73.
+ * 2. Wire your FPGA clock output to DMG pin 74 (X1). This is the oscillator
+ *    input. Voltage range should be 0-5V. I used Nexperia 74LVCH8T245PW as
+ *    voltage translator.
+ * 3. Hook up all data lines D0-D7, #wr, #rd, address lines A0-A8 and the ROM
+ *    chip select A15 to the FPGA.
  *
  * Startup:
  * 1. Switch off GameBoy and FPGA board (unplug USB).
- * 2. Set switch inputs on FPGA to LXXLHHLH (from bit 7 to bit 0; X = don't
- *    care). Bits 4-0 represent the value 13. This gets substracted from the
+ * 2. Set switch inputs on FPGA to LXHHLHLH (from bit 7 to bit 0; X = don't
+ *    care). Bits 5-0 represent the value 53. This gets substracted from the
  *    FIRST_INSTR clock ticks defined below. These bits can be used for fine
- *    tuning the exact clock tick when to start overclocking.
+ *    tuning the exact clock tick that gets overclocked. The value 53 targets
+ *    the first tick of the second cycle of the last INC HL instruction of
+ *    the boot ROM. It causes the PC to jump to 0x1fe and HL gets set to
+ *    0x1ff instead of getting incremented to 0x14d.
  * 3. Power up FPGA.
  * 4. Switch on GameBoy. It won't start because it doesn't get clocked yet.
  * 5. Flip bit 7 of switch inputs to high. GameBoy should start running.
@@ -31,7 +29,7 @@
 /* Number of clock ticks until first instruction at 0x100 gets fetched. */
 `define FIRST_INSTR 23_571_404
 
-/* Bit-widtth of clock tick counter. FIRST_INSTR needs to fit in there. */
+/* Bit-width of clock tick counter. FIRST_INSTR needs to fit in there. */
 `define COUNTER_WIDTH 25
 
 (* nolatches *)
@@ -43,7 +41,7 @@ module top(
 		inout  wire [7:0] data,
 		input  wire       n_read,
 		input  wire       n_write,
-		input  wire       n_cs,
+		input  wire       n_cs,      /* A15 */
 		input  wire [7:0] sw,
 		output wire [7:0] led,
 	);
@@ -62,7 +60,7 @@ module top(
 	reg  [3:0] clkreg = 0;
 	reg  [7:0] ledreg = 8'haa;
 	reg        clocking = 0;
-	reg  [5:0] done = 0;
+	reg  [1:0] done = 0;
 
 	reg [`COUNTER_WIDTH-1:0] count = 0;
 	reg [`COUNTER_WIDTH-1:0] comp = 0;
@@ -143,24 +141,24 @@ module top(
 	always @(posedge clk)
 		data_out <= rdrom;
 
-	always @(posedge clk) if (swin[7])
+	always @(posedge clk) if (swin[7]) /* start clocking (and counting) when SW7 gets flipped */
 		clocking <= 1;
 
 	always @(posedge clk) if (clocking) begin
-		if ((done == 0 && count == comp) || (done != 0 && done != 32)) begin
-			clkreg <= ~clkreg;
-			done <= done + 1;
+		if ((!done[1] && count == comp) || done[0]) begin /* overclock one high and one low phase */
+			clkreg[3] <= !clkreg[3];
+			done      <= done + 1;
 		end else
-			clkreg <= clkreg + 1;
+			clkreg    <= clkreg + 1;
 	end
 
 	always @(posedge clkout)
 		count <= count + 1;
 
 	always @(posedge clk)
-		comp <= `FIRST_INSTR - swin[4:0];
+		comp <= `FIRST_INSTR - swin[5:0];
 
-	always @(posedge clk) if (!ncs && !nwr && adr_in == 'h1ff)
+	always @(posedge clk) if (!ncs && !nwr && adr_in == 'h1ff) /* display what GameBoy writes to 0x1ff */
 		ledreg = data_in;
 endmodule
 
