@@ -16,13 +16,13 @@ module top(
 
 	wire       clk;
 	wire [6:0] adr_in;
-	wire [7:0] data_out;
+	reg  [7:0] data_out;
 	wire [7:0] data_in;
 	wire       data_drv;
 	wire       nrd;
 	wire       nwr;
 	wire       ncs;
-	wire [7:0] rdrom;
+	reg  [7:0] rdrom;
 	wire [7:0] swin;
 
 	reg  [3:0]  clkreg = 0;

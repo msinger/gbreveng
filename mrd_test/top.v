@@ -15,7 +15,7 @@ module top(
 
 	wire       clk;
 	wire [6:0] adr_in;
-	wire [7:0] data_out;
+	reg  [7:0] data_out;
 	wire [7:0] data_in;
 	wire       data_drv;
 	wire       wrff;
@@ -23,7 +23,7 @@ module top(
 	wire       nwr;
 	wire       ncs;
 	wire [7:0] comp;
-	wire [7:0] rdrom;
+	reg  [7:0] rdrom;
 
 	reg  [7:0] ff;
 	reg  [7:0] count;
