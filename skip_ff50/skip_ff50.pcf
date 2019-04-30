@@ -1,46 +1,80 @@
-# For the iCE40HX-8K Breakout Board
+# For the Game Boy reverse eng. FPGA board
 
 set_io clk12m    J3
 
-set_io clkout    R9
+set_io clkout    H11
+set_io clkoe     R14
+set_io clkdir    R15
 
-set_io led[0]    C3
-set_io led[1]    B3
-set_io led[2]    C4
-set_io led[3]    C5
-set_io led[4]    A1
-set_io led[5]    A2
-set_io led[6]    B4
-set_io led[7]    B5
+set_io led[0]    N4
+set_io led[1]    R1
+set_io led[2]    M5
+set_io led[3]    P2
+set_io led[4]    M4
+set_io led[5]    P1
+set_io led[6]    N3
+set_io led[7]    L5
+set_io led[8]    M3
+set_io led[9]    M6
+set_io led[10]   N2
+set_io led[11]   L7
+set_io led[12]   M2
+set_io led[13]   K5
+set_io led[14]   L3
+set_io led[15]   L6
 
-set_io sw[0]     R10
-set_io sw[1]     P9
-set_io sw[2]     T8
-set_io sw[3]     R6
-set_io sw[4]     R5
-set_io sw[5]     R4
-set_io sw[6]     T3
-set_io sw[7]     T2
+set_io sw[0]     K3
+set_io sw[1]     K1
+set_io sw[2]     E2
+set_io sw[3]     H5
+set_io sw[4]     E3
+set_io sw[5]     G4
+set_io sw[6]     D1
+set_io sw[7]     G5
+set_io sw[8]     D2
+set_io sw[9]     F4
+set_io sw[10]    C2
+set_io sw[11]    C1
+set_io sw[12]    B1
+set_io sw[13]    J1
+set_io sw[14]    K11
+set_io sw[15]    P13
 
-set_io adr[0]    R16
-set_io adr[1]    T15
-set_io adr[2]    T13
-set_io adr[3]    N12
-set_io adr[4]    N10
-set_io adr[5]    T11
-set_io adr[6]    T10
-set_io adr[7]    P10
-set_io adr[8]    P13
+set_io btn[0]    M1
+set_io btn[1]    K4
+set_io btn[2]    L1
+set_io btn[3]    L4
 
-set_io data[0]   P8
-set_io data[1]   T9
-set_io data[2]   T7
-set_io data[3]   T6
-set_io data[4]   T5
-set_io data[5]   R3
-set_io data[6]   R2
-set_io data[7]   T1
+set_io boe       P16
+set_io bdir      P14
 
-set_io n_write   T16
-set_io n_read    T14
-set_io n_cs      M11
+set_io adr[0]    A6
+set_io adr[1]    D7
+set_io adr[2]    C6
+set_io adr[3]    B6
+set_io adr[4]    B7
+set_io adr[5]    C7
+set_io adr[6]    D9
+set_io adr[7]    E9
+set_io adr[8]    C9
+set_io adr[9]    D10
+set_io adr[10]   A11
+set_io adr[11]   A10
+set_io adr[12]   C10
+set_io adr[13]   B11
+set_io adr[14]   A7
+
+set_io data[0]   M14
+set_io data[1]   L12
+set_io data[2]   N16
+set_io data[3]   L13
+set_io data[4]   L14
+set_io data[5]   K12
+set_io data[6]   M16
+set_io data[7]   J10
+
+set_io n_write   A9
+set_io n_read    D8
+set_io n_cs      B8
+set_io n_reset   J11
+

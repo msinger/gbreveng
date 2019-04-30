@@ -7,23 +7,23 @@
  * 2. Wire your FPGA clock output to DMG pin 74 (X1). This is the oscillator
  *    input. Voltage range should be 0-5V. I used Nexperia 74LVCH8T245PW as
  *    voltage translator.
- * 3. Hook up all data lines D0-D7, #wr, #rd, address lines A0-A8 and the ROM
+ * 3. Hook up all data lines D0-D7, #wr, #rd, address lines A0-A14 and the ROM
  *    chip select A15 to the FPGA.
  *
  * Startup:
  * 1. Switch off GameBoy and FPGA board (unplug USB).
- * 2. Set switch inputs on FPGA to LXHHLHLH (from bit 7 to bit 0; X = don't
- *    care). Bits 5-0 represent the value 53. This gets substracted from the
- *    FIRST_INSTR clock ticks defined below. These bits can be used for fine
- *    tuning the exact clock tick that gets overclocked. The value 53 targets
- *    the first tick of the second cycle of the last INC HL instruction of
- *    the boot ROM. It causes the PC to jump to 0x1fe and HL gets set to
- *    0x1ff instead of getting incremented to 0x14d.
+ * 2. Set DipSW 0-5 inputs on FPGA to HHLHLH (from bit 5 to bit 0). Bits 5-0
+ *    represent the value 53. This gets substracted from the FIRST_INSTR clock
+ *    ticks defined below. These bits can be used for fine tuning the exact
+ *    clock tick that gets overclocked. The value 53 targets the first tick of
+ *    the second cycle of the last INC HL instruction of the boot ROM. It causes
+ *    the PC to jump to 0x1fe and HL gets set to 0x1ff instead of getting
+ *    incremented to 0x14d.
  * 3. Power up FPGA.
  * 4. Switch on GameBoy. It won't start because it doesn't get clocked yet.
- * 5. Flip bit 7 of switch inputs to high. GameBoy should start running.
+ * 5. Press SW1. GameBoy should start running.
  * 6. After the chime, the first byte of the boot ROM should be displayed by
- *    the LEDs (00110001).
+ *    the LEDs 0-7 (00110001).
  */
 
 /* Number of clock ticks until first instruction at 0x100 gets fetched. */
@@ -35,32 +35,39 @@
 (* nolatches *)
 (* top *)
 module top(
-		input  wire       clk12m,    /* 12 MHz clock input */
-		output wire       clkout,
-		input  wire [8:0] adr,
-		inout  wire [7:0] data,
-		input  wire       n_read,
-		input  wire       n_write,
-		input  wire       n_cs,      /* A15 */
-		input  wire [7:0] sw,
-		output wire [7:0] led,
+		input  wire        clk12m,    /* 12 MHz clock input */
+		output wire        clkout,
+		output wire        clkoe,
+		output wire        clkdir,
+		output wire        boe,
+		output wire        bdir,
+		input  wire [14:0] adr,
+		inout  wire [7:0]  data,
+		input  wire        n_read,
+		input  wire        n_write,
+		input  wire        n_cs,      /* A15 */
+		inout  wire        n_reset,
+		input  wire [15:0] sw,
+		output wire [15:0] led,
+		input  wire [3:0]  btn,
 	);
 
-	wire       clk;
-	wire [8:0] adr_in;
-	reg  [7:0] data_out;
-	wire [7:0] data_in;
-	wire       data_drv;
-	wire       nrd;
-	wire       nwr;
-	wire       ncs;
-	reg  [7:0] rdrom;
-	wire [7:0] swin;
+	wire        clk;
+	wire [14:0] adr_in;
+	reg  [7:0]  data_out;
+	wire [7:0]  data_in;
+	wire        data_drv;
+	wire        nrd;
+	wire        nwr;
+	wire        ncs;
+	reg  [7:0]  rdrom;
+	wire [15:0] swin;
+	wire [3:0]  btnin;
 
-	reg  [3:0] clkreg = 0;
-	reg  [7:0] ledreg = 8'haa;
-	reg        clocking = 0;
-	reg  [1:0] done = 0;
+	reg  [3:0]  clkreg = 0;
+	reg  [15:0] ledreg = 8'haa;
+	reg         clocking = 0;
+	reg  [1:0]  done = 0;
 
 	reg [`COUNTER_WIDTH-1:0] count = 0;
 	reg [`COUNTER_WIDTH-1:0] comp = 0;
@@ -71,7 +78,7 @@ module top(
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
-		) adr_io[8:0] (
+		) adr_io[14:0] (
 			.PACKAGE_PIN(adr),
 			.INPUT_CLK(clk),
 			.D_IN_0(adr_in),
@@ -119,10 +126,29 @@ module top(
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
-		) sw_io[7:0] (
+		) sw_io[15:0] (
 			.PACKAGE_PIN(sw),
 			.INPUT_CLK(clk),
 			.D_IN_0(swin),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0000_00),
+			.PULLUP(1),
+		) btn_io[3:0] (
+			.PACKAGE_PIN(btn),
+			.INPUT_CLK(clk),
+			.D_IN_0(btnin),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 1101_00),
+			.PULLUP(1),
+		) n_reset_io (
+			.PACKAGE_PIN(n_reset),
+			.OUTPUT_CLK(clk),
+			.OUTPUT_ENABLE(btnin[0]),
+			.D_OUT_0(0),
 		);
 
 	pll pll_inst(
@@ -130,18 +156,24 @@ module top(
 		.clock_out(clk),
 	);
 
+	assign clkoe    = 0;
+	assign clkdir   = 1;
+
+	assign boe      = 0;
+	assign bdir     = data_drv;
+
 	assign data_drv = !nrd && !ncs;
 
 	assign led      = ledreg;
 	assign clkout   = clkreg[3];
 
 	always @(posedge clk)
-		rdrom <= rom[adr_in];
+		rdrom <= rom[adr_in[8:0]];
 
 	always @(posedge clk)
 		data_out <= rdrom;
 
-	always @(posedge clk) if (swin[7]) /* start clocking (and counting) when SW7 gets flipped */
+	always @(posedge clk) if (btnin[1]) /* start clocking (and counting) when SW1 gets pressed */
 		clocking <= 1;
 
 	always @(posedge clk) if (clocking) begin

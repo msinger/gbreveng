@@ -22,7 +22,11 @@
  *
  * There mustn't be anything connected to the reset line of the GameBoy. The
  * result seems to always differ by a few clocks if the reset line is messed
- * with. Leave it open.
+ * with. Leave it open. The clock wire must be kept short (~10cm). Unplug the
+ * jumpers of all unused components of the FPGA board. If too many components
+ * on the board are active or the wire is too long, it also causes the results
+ * to differ by a few clocks. The clock input of the GameBoy is very
+ * sensitive to small voltage fluctuations.
  */
 
 (* nolatches *)
@@ -38,7 +42,7 @@ module top(
 		inout  wire [7:0]  data,
 		input  wire        n_read,
 		input  wire        n_write,
-		input  wire        n_cs,
+		input  wire        n_cs,      /* A15 */
 		inout  wire        n_reset,
 		input  wire [15:0] sw,
 		output wire [15:0] led,
