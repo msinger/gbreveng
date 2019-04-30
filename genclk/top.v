@@ -1,36 +1,68 @@
 `default_nettype none
 
+/*
+ * Prepare GameBoy:
+ * 1. Desolder quartz and both capacitors from GameBoy CPU board. (The 1 meg
+ *    resistor may stay.)
+ * 2. Wire your FPGA clock output to DMG pin 74 (X1). This is the oscillator
+ *    input. Voltage range should be 0-5V. I used Nexperia 74LVCH8T245PW as
+ *    voltage translator.
+ * 3. Hook up all data lines D0-D7, #wr, #rd, address lines A0-A14 and the ROM
+ *    chip select A15 to the FPGA.
+ *
+ * Startup:
+ * 1. Switch off GameBoy and FPGA board (unplug USB).
+ * 2. Power up FPGA.
+ * 3. Switch on GameBoy. It won't start because it doesn't get clocked yet.
+ * 5. Press SW1. GameBoy should start running.
+ * 6. After the chime, the number of clocks until the GameBoy reads address
+ *    0x100 is displayed on LEDs 0-7. These are four bytes that get repeatedly
+ *    cycled through. LEDs 12-15 tell which of the four bytes is currently
+ *    displayed by LEDs 0-7.
+ *
+ * There mustn't be anything connected to the reset line of the GameBoy. The
+ * result seems to always differ by a few clocks if the reset line is messed
+ * with. Leave it open.
+ */
+
 (* nolatches *)
 (* top *)
 module top(
-		input  wire       clk12m,    /* 12 MHz clock input */
-		output wire       clkout,
-		input  wire [6:0] adr,
-		inout  wire [7:0] data,
-		input  wire       n_read,
-		input  wire       n_write,
-		input  wire       n_cs,
-		input  wire [7:0] sw,
-		output wire [7:0] led,
+		input  wire        clk12m,    /* 12 MHz clock input */
+		output wire        clkout,
+		output wire        clkoe,
+		output wire        clkdir,
+		output wire        boe,
+		output wire        bdir,
+		input  wire [14:0] adr,
+		inout  wire [7:0]  data,
+		input  wire        n_read,
+		input  wire        n_write,
+		input  wire        n_cs,
+		inout  wire        n_reset,
+		input  wire [15:0] sw,
+		output wire [15:0] led,
+		input  wire [3:0]  btn,
 	);
 
-	wire       clk;
-	wire [6:0] adr_in;
-	reg  [7:0] data_out;
-	wire [7:0] data_in;
-	wire       data_drv;
-	wire       nrd;
-	wire       nwr;
-	wire       ncs;
-	reg  [7:0] rdrom;
-	wire [7:0] swin;
+	wire        clk;
+	wire [14:0] adr_in;
+	reg  [7:0]  data_out;
+	wire [7:0]  data_in;
+	wire        data_drv;
+	wire        nrd;
+	wire        nwr;
+	wire        ncs;
+	reg  [7:0]  rdrom;
+	wire [15:0] swin;
+	wire [3:0]  btnin;
 
 	reg  [3:0]  clkreg = 0;
 	reg  [31:0] count = 0;
 	reg  [31:0] r100_at = 0;
 	reg         r100 = 0;
-	reg  [7:0]  ledreg = 8'haa;
-	reg  [2:0]  ledstate = 0;
+	reg  [15:0] ledreg = 0;
+	reg  [1:0]  ledstate = 0;
 	reg         clocking = 0;
 
 	reg  [7:0] rom[0:127];
@@ -39,7 +71,7 @@ module top(
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
-		) adr_io[6:0] (
+		) adr_io[14:0] (
 			.PACKAGE_PIN(adr),
 			.INPUT_CLK(clk),
 			.D_IN_0(adr_in),
@@ -87,16 +119,41 @@ module top(
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
-		) sw_io[7:0] (
+		) sw_io[15:0] (
 			.PACKAGE_PIN(sw),
 			.INPUT_CLK(clk),
 			.D_IN_0(swin),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0000_00),
+			.PULLUP(1),
+		) btn_io[3:0] (
+			.PACKAGE_PIN(btn),
+			.INPUT_CLK(clk),
+			.D_IN_0(btnin),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 1101_00),
+			.PULLUP(1),
+		) n_reset_io (
+			.PACKAGE_PIN(n_reset),
+			.OUTPUT_CLK(clk),
+			.OUTPUT_ENABLE(btnin[0]),
+			.D_OUT_0(0),
 		);
 
 	pll pll_inst(
 		.clock_in(clk12m),
 		.clock_out(clk),
 	);
+
+	assign clkoe    = 0;
+	assign clkdir   = 1;
+
+	assign boe      = 0;
+	assign bdir     = data_drv;
 
 	assign data_drv = !nrd && !ncs;
 
@@ -109,7 +166,7 @@ module top(
 	always @(posedge clk)
 		data_out <= rdrom;
 
-	always @(posedge clk) if (swin[7])
+	always @(posedge clk) if (btnin[1])
 		clocking <= 1;
 
 	always @(posedge clk) if (clocking)
@@ -118,21 +175,17 @@ module top(
 	always @(posedge clkout)
 		count <= count + 1;
 
-	always @(posedge clkout) if (!r100 && !nrd && !ncs && !adr_in) begin
+	always @(posedge clkout) if (!r100 && !nrd && !ncs && adr_in == 'h100) begin
 		r100    <= 1;
 		r100_at <= count;
 	end
 
 	always @(posedge count[20]) begin
 		case (ledstate)
-			0: ledreg <= 8'h88;
-			1: ledreg <= 8'h44;
-			2: ledreg <= 8'h22;
-			3: ledreg <= 8'h11;
-			4: ledreg <= r100_at[31:24];
-			5: ledreg <= r100_at[23:16];
-			6: ledreg <= r100_at[15:8];
-			7: ledreg <= r100_at[7:0];
+			0: ledreg <= { 8'b10000000, r100_at[31:24] };
+			1: ledreg <= { 8'b01000000, r100_at[23:16] };
+			2: ledreg <= { 8'b00100000, r100_at[15:8] };
+			3: ledreg <= { 8'b00010000, r100_at[7:0] };
 		endcase
 		ledstate <= ledstate + 1;
 	end
