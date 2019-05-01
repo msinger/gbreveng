@@ -69,7 +69,7 @@ module top(
 	reg  [1:0]  ledstate = 0;
 	reg         clocking = 0;
 
-	reg  [7:0] rom[0:127];
+	reg  [7:0]  rom[0:127];
 	initial $readmemh("rom.hex", rom, 0, 127);
 
 	SB_IO #(
@@ -165,7 +165,7 @@ module top(
 	assign clkout   = clkreg[3];
 
 	always @(posedge clk)
-		rdrom <= rom[adr_in];
+		rdrom <= rom[adr_in[6:0]];
 
 	always @(posedge clk)
 		data_out <= rdrom;

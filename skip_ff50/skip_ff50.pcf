@@ -77,4 +77,3 @@ set_io n_write   A9
 set_io n_read    D8
 set_io n_cs      B8
 set_io n_reset   J11
-

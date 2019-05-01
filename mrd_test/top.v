@@ -3,39 +3,45 @@
 (* nolatches *)
 (* top *)
 module top(
-		input  wire       clk12m,    /* 12 MHz clock input */
-		input  wire [6:0] adr,
-		inout  wire [7:0] data,
-		input  wire       n_read,
-		input  wire       n_write,
-		input  wire       n_cs,
-		input  wire [7:0] sw,
-		output wire [7:0] led,
+		input  wire        clk12m,    /* 12 MHz clock input */
+		output wire        boe,
+		output wire        bdir,
+		input  wire [14:0] adr,
+		inout  wire [7:0]  data,
+		input  wire        n_read,
+		input  wire        n_write,
+		input  wire        n_cs,      /* A15 */
+		inout  wire        n_reset,
+		input  wire [15:0] sw,
+		output wire [15:0] led,
+		output wire [3:0]  btn,
 	);
 
-	wire       clk;
-	wire [6:0] adr_in;
-	reg  [7:0] data_out;
-	wire [7:0] data_in;
-	wire       data_drv;
-	wire       wrff;
-	wire       nrd;
-	wire       nwr;
-	wire       ncs;
-	wire [7:0] comp;
-	reg  [7:0] rdrom;
+	wire        clk;
+	wire [14:0] adr_in;
+	reg  [7:0]  data_out;
+	wire [7:0]  data_in;
+	wire        data_drv;
+	wire        wrff;
+	wire        nrd;
+	wire        nwr;
+	wire        ncs;
+	wire [7:0]  comp;
+	reg  [7:0]  rdrom;
+	wire [15:0] swin;
+	wire [3:0]  btnin;
 
-	reg  [7:0] ff;
-	reg  [7:0] count;
-	reg        r_wrff;
+	reg  [7:0]  ff;
+	reg  [7:0]  count;
+	reg         r_wrff;
 
-	reg  [7:0] rom[0:127];
+	reg  [7:0]  rom[0:127];
 	initial $readmemh("rom.hex", rom, 0, 127);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
-		) adr_io[6:0] (
+		) adr_io[14:0] (
 			.PACKAGE_PIN(adr),
 			.INPUT_CLK(clk),
 			.D_IN_0(adr_in),
@@ -83,10 +89,29 @@ module top(
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
-		) sw_io[7:0] (
+		) sw_io[15:0] (
 			.PACKAGE_PIN(sw),
 			.INPUT_CLK(clk),
-			.D_IN_0(comp),
+			.D_IN_0(swin),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0000_00),
+			.PULLUP(1),
+		) btn_io[3:0] (
+			.PACKAGE_PIN(btn),
+			.INPUT_CLK(clk),
+			.D_IN_0(btnin),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 1101_00),
+			.PULLUP(1),
+		) n_reset_io (
+			.PACKAGE_PIN(n_reset),
+			.OUTPUT_CLK(clk),
+			.OUTPUT_ENABLE(btnin[0]),
+			.D_OUT_0(0),
 		);
 
 	pll pll_inst(
@@ -94,8 +119,13 @@ module top(
 		.clock_out(clk),
 	);
 
+	assign boe      = 0;
+	assign bdir     = data_drv;
+
+	assign comp     = swin[7:0];
+
 	assign led      = ff;
-	assign wrff     = !nwr && !ncs && &adr_in;
+	assign wrff     = !nwr && !ncs && adr_in == 'hff;
 	assign data_drv = !nrd && !ncs;
 
 	always @(posedge clk) begin
@@ -107,10 +137,10 @@ module top(
 		count <= !wrff ? count + 1 : 0;
 
 	always @(posedge clk)
-		rdrom <= rom[adr_in];
+		rdrom <= rom[adr_in[6:0]];
 
 	always @(posedge clk)
-		data_out <= &adr_in ? {8{count > comp}} : rdrom;
+		data_out <= adr_in == 'hff ? {8{count > comp}} : rdrom;
 
 endmodule
 

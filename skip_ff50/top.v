@@ -72,7 +72,7 @@ module top(
 	reg [`COUNTER_WIDTH-1:0] count = 0;
 	reg [`COUNTER_WIDTH-1:0] comp = 0;
 
-	reg  [7:0] rom[0:511];
+	reg  [7:0]  rom[0:511];
 	initial $readmemh("rom.hex", rom, 0, 511);
 
 	SB_IO #(
