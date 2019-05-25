@@ -61,13 +61,14 @@ module top(
 	wire [15:0] swin;
 	wire [3:0]  btnin;
 
-	reg  [3:0]  clkreg = 0;
-	reg  [31:0] count = 0;
-	reg  [31:0] r100_at = 0;
-	reg         r100 = 0;
+	reg  [3:0]  clkreg,   r_clkreg = 0;
+	reg  [31:0] count,    r_count = 0;
+	reg  [31:0] r100_at,  r_r100_at = 0;
+	reg         r100,     r_r100 = 0;
+	reg         clocking, r_clocking = 0;
+
 	reg  [15:0] ledreg = 0;
 	reg  [1:0]  ledstate = 0;
-	reg         clocking = 0;
 
 	reg  [7:0]  rom[0:127];
 	initial $readmemh("rom.hex", rom, 0, 127);
@@ -162,7 +163,7 @@ module top(
 	assign data_drv = !nrd && !ncs;
 
 	assign led      = ledreg;
-	assign clkout   = clkreg[3];
+	assign clkout   = r_clkreg[3];
 
 	always @(posedge clk)
 		rdrom <= rom[adr_in[6:0]];
@@ -170,26 +171,57 @@ module top(
 	always @(posedge clk)
 		data_out <= rdrom;
 
-	always @(posedge clk) if (btnin[1])
-		clocking <= 1;
+	always @(posedge clk) begin
+		clkreg   = r_clkreg;
+		count    = r_count;
+		r100_at  = r_r100_at;
+		r100     = r_r100;
+		clocking = r_clocking;
 
-	always @(posedge clk) if (clocking)
-		clkreg <= clkreg + 1;
+		if (btnin[1])
+			clocking = 1;
 
-	always @(posedge clkout)
-		count <= count + 1;
+		if (r_clocking)
+			clkreg = r_clkreg + 1;
 
-	always @(posedge clkout) if (!r100 && !nrd && !ncs && adr_in == 'h100) begin
-		r100    <= 1;
-		r100_at <= count;
+		if (!clkout && clkreg[3]) begin
+			if (!r_r100 && !nrd && !ncs && adr_in == 'h100) begin
+				r100    = 1;
+				r100_at = r_count;
+			end
+
+			count = r_count + 1;
+		end
+
+		/* Stop the clock only when the total amount of ticks the gameboy got
+		 * is dividable by four (but add up to 3 extra ticks set by DIP
+		 * switches). */
+		if (btnin[2] && (r_count[1:0] != swin[9:8] && count[1:0] == swin[9:8]))
+			clocking = 0;
+
+		if (btnin[0]) begin
+			clocking = 0;
+			count    = 0;
+			clkreg   = 0;
+			r100     = 0;
+			r100_at  = 0;
+		end
 	end
 
-	always @(posedge count[20]) begin
+	always @(posedge clk) begin
+		r_clkreg   <= clkreg;
+		r_count    <= count;
+		r_r100_at  <= r100_at;
+		r_r100     <= r100;
+		r_clocking <= clocking;
+	end
+
+	always @(posedge r_count[20]) begin
 		case (ledstate)
-			0: ledreg <= { 8'b10000000, r100_at[31:24] };
-			1: ledreg <= { 8'b01000000, r100_at[23:16] };
-			2: ledreg <= { 8'b00100000, r100_at[15:8] };
-			3: ledreg <= { 8'b00010000, r100_at[7:0] };
+			0: ledreg <= { 8'b10000000, r_r100_at[31:24] };
+			1: ledreg <= { 8'b01000000, r_r100_at[23:16] };
+			2: ledreg <= { 8'b00100000, r_r100_at[15:8] };
+			3: ledreg <= { 8'b00010000, r_r100_at[7:0] };
 		endcase
 		ledstate <= ledstate + 1;
 	end
