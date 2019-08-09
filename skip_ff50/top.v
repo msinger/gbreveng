@@ -32,6 +32,8 @@
 /* Bit-width of clock tick counter. FIRST_INSTR needs to fit in there. */
 `define COUNTER_WIDTH 25
 
+`define CLKREG_WIDTH 4
+
 (* nolatches *)
 (* top *)
 module top(
@@ -64,12 +66,14 @@ module top(
 	wire [15:0] swin;
 	wire [3:0]  btnin;
 
-	reg  [3:0]  clkreg = 0;
-	reg  [15:0] ledreg = 8'haa;
-	reg         clocking = 0;
-	reg  [1:0]  done = 0;
+	reg  [`CLKREG_WIDTH-1:0] clkreg, r_clkreg = 0;
 
-	reg [`COUNTER_WIDTH-1:0] count = 0;
+	reg        clocking, r_clocking = 0;
+	reg  [1:0] done,     r_done = 0;
+
+	reg  [15:0] ledreg = 8'haa;
+
+	reg [`COUNTER_WIDTH-1:0] count, r_count = 0;
 	reg [`COUNTER_WIDTH-1:0] comp = 0;
 
 	reg  [7:0]  rom[0:511];
@@ -147,7 +151,7 @@ module top(
 		) n_reset_io (
 			.PACKAGE_PIN(n_reset),
 			.OUTPUT_CLK(clk),
-			.OUTPUT_ENABLE(btnin[0]),
+			.OUTPUT_ENABLE(btnin[3]),
 			.D_OUT_0(0),
 		);
 
@@ -165,7 +169,7 @@ module top(
 	assign data_drv = !nrd && !ncs;
 
 	assign led      = ledreg;
-	assign clkout   = clkreg[3];
+	assign clkout   = r_clkreg[`CLKREG_WIDTH-1];
 
 	always @(posedge clk)
 		rdrom <= rom[adr_in[8:0]];
@@ -173,24 +177,58 @@ module top(
 	always @(posedge clk)
 		data_out <= rdrom;
 
-	always @(posedge clk) if (btnin[1]) /* start clocking (and counting) when SW1 gets pressed */
-		clocking <= 1;
+	always @* begin
+		clkreg   = r_clkreg;
+		clocking = r_clocking;
+		done     = r_done;
+		count    = r_count;
 
-	always @(posedge clk) if (clocking) begin
-		if ((!done[1] && count == comp) || done[0]) begin /* overclock one high and one low phase */
-			clkreg[3] <= !clkreg[3];
-			done      <= done + 1;
-		end else
-			clkreg    <= clkreg + 1;
+		if (btnin[1])
+			clocking = 1;
+
+		if (r_clocking) begin
+			if ((!r_done[1] && r_count == comp) || r_done[0]) begin /* overclock one high and one low phase */
+				clkreg[`CLKREG_WIDTH-1] = !r_clkreg[`CLKREG_WIDTH-1];
+				done                    = r_done + 1;
+			end else
+				clkreg                  = r_clkreg + 1;
+		end
+
+		if (!clkout && clkreg[`CLKREG_WIDTH-1]) begin
+			count = r_count + 1;
+		end
+
+		/* Stop the clock only when the total amount of ticks the gameboy got
+		 * is dividable by four (but add up to 3 extra ticks set by DIP
+		 * switches). */
+		if (btnin[2] && (r_count[1:0] != swin[9:8] && count[1:0] == swin[9:8]))
+			clocking = 0;
+
+		if (btnin[0]) begin
+			clkreg   = 0;
+			clocking = 0;
+			done     = 0;
+			count    = 0;
+		end
 	end
 
-	always @(posedge clkout)
-		count <= count + 1;
+	always @(posedge clk) begin
+		r_clkreg   <= clkreg;
+		r_clocking <= clocking;
+		r_done     <= done;
+		r_count    <= count;
+	end
 
 	always @(posedge clk)
 		comp <= `FIRST_INSTR - swin[5:0];
 
-	always @(posedge clk) if (!ncs && !nwr && adr_in == 'h1ff) /* display what GameBoy writes to 0x1ff */
-		ledreg = data_in;
+	always @(posedge clk) begin
+		if (!ncs && !nwr && adr_in == 'h1ff) /* display what GameBoy writes to 0x1ff */
+			ledreg <= data_in;
+
+		if (btnin[0])
+			ledreg <= 8'haa;
+	end
+
 endmodule
 

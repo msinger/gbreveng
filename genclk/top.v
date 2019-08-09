@@ -29,6 +29,8 @@
  * sensitive to small voltage fluctuations.
  */
 
+`define CLKREG_WIDTH 4
+
 (* nolatches *)
 (* top *)
 module top(
@@ -61,7 +63,8 @@ module top(
 	wire [15:0] swin;
 	wire [3:0]  btnin;
 
-	reg  [3:0]  clkreg,   r_clkreg = 0;
+	reg  [`CLKREG_WIDTH-1:0] clkreg, r_clkreg = 0;
+
 	reg  [31:0] count,    r_count = 0;
 	reg  [31:0] r100_at,  r_r100_at = 0;
 	reg         r100,     r_r100 = 0;
@@ -145,7 +148,7 @@ module top(
 		) n_reset_io (
 			.PACKAGE_PIN(n_reset),
 			.OUTPUT_CLK(clk),
-			.OUTPUT_ENABLE(btnin[0]),
+			.OUTPUT_ENABLE(btnin[3]),
 			.D_OUT_0(0),
 		);
 
@@ -163,7 +166,7 @@ module top(
 	assign data_drv = !nrd && !ncs;
 
 	assign led      = ledreg;
-	assign clkout   = r_clkreg[3];
+	assign clkout   = r_clkreg[`CLKREG_WIDTH-1];
 
 	always @(posedge clk)
 		rdrom <= rom[adr_in[6:0]];
@@ -171,7 +174,7 @@ module top(
 	always @(posedge clk)
 		data_out <= rdrom;
 
-	always @(posedge clk) begin
+	always @* begin
 		clkreg   = r_clkreg;
 		count    = r_count;
 		r100_at  = r_r100_at;
@@ -184,7 +187,7 @@ module top(
 		if (r_clocking)
 			clkreg = r_clkreg + 1;
 
-		if (!clkout && clkreg[3]) begin
+		if (!clkout && clkreg[`CLKREG_WIDTH-1]) begin
 			if (!r_r100 && !nrd && !ncs && adr_in == 'h100) begin
 				r100    = 1;
 				r100_at = r_count;
