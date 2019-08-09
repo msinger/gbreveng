@@ -19,9 +19,7 @@ rom.bin \
 rom.hex \
 skip_ff50.asc \
 skip_ff50.bin \
-skip_ff50.blif \
-skip_ff50.post.blif \
-skip_ff50.post.blif.json \
+skip_ff50.json \
 viewer.html
 
 DISTCLEANFILES = \
@@ -35,24 +33,19 @@ prog: skip_ff50.bin
 run: skip_ff50.bin
 	$(ICEPROG) -S $<
 
-json: skip_ff50.post.json
-
 view: skip_ff50.asc
 	$(top_srcdir)/ice40_viewer/iceview_html.py -s firefox $< viewer.html
 
 .PHONY: all prog run json view
 
-skip_ff50.blif: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
-	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -blif $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
+skip_ff50.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
+	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-skip_ff50.asc skip_ff50.post.blif: skip_ff50.blif skip_ff50.pcf Makefile
-	$(ARACHNE) $(ARACHNEFLAGS) -m 800 -d 8k -p skip_ff50.pcf $< -o skip_ff50.asc --post-place-blif skip_ff50.post.blif
+skip_ff50.asc: skip_ff50.json skip_ff50.pcf Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf skip_ff50.pcf --json $< --asc $@
 
 skip_ff50.bin: skip_ff50.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@
-
-skip_ff50.post.json: skip_ff50.post.blif Makefile
-	$(YOSYS) $(YOSYSFLAGS) -o $@ $<
 
 %.o: %.s
 	$(AS) $(ASFLAGS) -o $@ $<

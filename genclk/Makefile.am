@@ -19,9 +19,7 @@ rom.bin \
 rom.hex \
 genclk.asc \
 genclk.bin \
-genclk.blif \
-genclk.post.blif \
-genclk.post.blif.json \
+genclk.json \
 viewer.html
 
 DISTCLEANFILES = \
@@ -35,24 +33,19 @@ prog: genclk.bin
 run: genclk.bin
 	$(ICEPROG) -S $<
 
-json: genclk.post.json
-
 view: genclk.asc
 	$(top_srcdir)/ice40_viewer/iceview_html.py -s firefox $< viewer.html
 
 .PHONY: all prog run json view
 
-genclk.blif: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
-	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -blif $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
+genclk.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
+	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-genclk.asc genclk.post.blif: genclk.blif genclk.pcf Makefile
-	$(ARACHNE) $(ARACHNEFLAGS) -m 800 -d 8k -p genclk.pcf $< -o genclk.asc --post-place-blif genclk.post.blif
+genclk.asc: genclk.json genclk.pcf Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf genclk.pcf --json $< --asc $@
 
 genclk.bin: genclk.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@
-
-genclk.post.json: genclk.post.blif Makefile
-	$(YOSYS) $(YOSYSFLAGS) -o $@ $<
 
 %.o: %.s
 	$(AS) $(ASFLAGS) -o $@ $<

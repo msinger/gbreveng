@@ -19,9 +19,7 @@ rom.bin \
 rom.hex \
 mrd_test.asc \
 mrd_test.bin \
-mrd_test.blif \
-mrd_test.post.blif \
-mrd_test.post.blif.json \
+mrd_test.json \
 viewer.html
 
 DISTCLEANFILES = \
@@ -35,24 +33,19 @@ prog: mrd_test.bin
 run: mrd_test.bin
 	$(ICEPROG) -S $<
 
-json: mrd_test.post.json
-
 view: mrd_test.asc
 	$(top_srcdir)/ice40_viewer/iceview_html.py -s firefox $< viewer.html
 
 .PHONY: all prog run json view
 
-mrd_test.blif: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
-	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -blif $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
+mrd_test.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
+	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-mrd_test.asc mrd_test.post.blif: mrd_test.blif mrd_test.pcf Makefile
-	$(ARACHNE) $(ARACHNEFLAGS) -m 800 -d 8k -p mrd_test.pcf $< -o mrd_test.asc --post-place-blif mrd_test.post.blif
+mrd_test.asc: mrd_test.json mrd_test.pcf Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf mrd_test.pcf --json $< --asc $@
 
 mrd_test.bin: mrd_test.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@
-
-mrd_test.post.json: mrd_test.post.blif Makefile
-	$(YOSYS) $(YOSYSFLAGS) -o $@ $<
 
 %.o: %.s
 	$(AS) $(ASFLAGS) -o $@ $<
