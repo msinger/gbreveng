@@ -37,7 +37,6 @@ LIBS:Oscillators
 LIBS:sram
 LIBS:tda7050
 LIBS:Connector
-LIBS:SeeedOPL-Connector-2016
 LIBS:fpgaboard-cache
 EELAYER 25 0
 EELAYER END
@@ -45,8 +44,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 11
 Title "Game Boy reverse eng. FPGA board"
-Date "2019-01-20"
-Rev "0"
+Date "2019-08-11"
+Rev "1"
 Comp "Author: Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
 Comment2 "http://iceboy.a-singer.de/"
