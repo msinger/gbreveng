@@ -44,7 +44,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 8 11
 Title "Game Boy reverse eng. FPGA board"
-Date "2019-08-11"
+Date "2019-08-17"
 Rev "1"
 Comp "Author: Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
@@ -1160,7 +1160,7 @@ NoConn ~ 3300 7400
 Wire Wire Line
 	3400 7000 3400 7400
 Text Notes 6300 7000 3    60   ~ 0
-VCC
+VDD
 Text Notes 3200 7000 3    60   ~ 0
 GND
 Text Notes 10600 1600 1    60   ~ 0
@@ -1389,9 +1389,9 @@ F 3 "" H 4350 4450 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Text Label 7500 1600 1    60   ~ 0
-X_VCC
+X_VDD
 Text Label 3700 4800 0    60   ~ 0
-X_VCC
+X_VDD
 Text Label 3700 4900 0    60   ~ 0
 X_CLK
 Text Label 3700 5000 0    60   ~ 0

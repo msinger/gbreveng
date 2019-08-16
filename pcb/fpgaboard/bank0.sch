@@ -44,7 +44,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 11
 Title "Game Boy reverse eng. FPGA board"
-Date "2019-08-11"
+Date "2019-08-17"
 Rev "1"
 Comp "Author: Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
