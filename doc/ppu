@@ -1,0 +1,80 @@
+* Pixel clock is inverted GB clock when clocking out pixels
+* Pixel clock is non-inverted GB clock for the one clock pulse during HSync
+
+* Enabling PPU:
+  - Latch starts low
+  - Altsig starts high
+  - Initial values get set on rising edge
+
+* When PPU off:
+  - Latch&Altsig toggle on rising edge of GB clk
+  - Latch toggles every 256 GB clk cycles
+  - Altsig toggles every 512 GB clk cycles
+  - They are in sync: when Altsig toggles, Latch also toggles
+  - Has nothing to do with the moment of switching off PPU.
+    May be wired to 2 bits of the DIV register.
+
+* When PPU on:
+  - Latch&Altsig toggle on falling edge of GB clk
+
+* D0&D1 glitch to high for a fraction of a clk cycle at rising edge of GB clk when writing
+  background palette register to the same value it already has while PPU is disabled
+
+* Enabling PPU timeline:
+    (Starts with first pixel row, but VSync=0)
+  1. On write to 0xff40, on rising edge, Latch=0 & Altsig=1
+  2. 27.5 GB clk cycles after (1), on falling edge, Control=1
+  3. 4 GB clk cycles after (2), Control=0
+  4. 47 GB clk cycles after (3), HSync=1
+  5. 6.5 GB clk cycles after (4), on rising edge, pixel clock emits one cycle (is high for 0.5 cycles)
+  6. 14.5 GB clk cycles after (4), on rising edge, HSync=0
+  
+* Ctrl timeline:
+  1. Ctrl=1 on falling edge of GB clk (represents (2) of Enabling PPU timeline)
+  2. 4 GB clk cycles after (1), Ctrl=0 (represents (3) of Enabling PPU timeline)
+  3. 148 GB clk cycles after (2), Ctrl=1
+  4. 4 GB clk cycles after (3), Ctrl=0
+  5. 148 GB clk cycles after (4), Ctrl=1
+  6. 4 GB clk cycles after (5), Ctrl=0
+  7. 116 GB clk cycles after (6), Ctrl=1
+  8. 8 GB clk cycles after (7), Ctrl=0
+  9. 24 GB clk cycles after (8), which is also 148 GB clk cycles after (6), repeat on (1)
+  #. Also on (7), Latch=1
+  #. 4 GB clk cycles after (7), which is also 4 GB clk cycles before (8), Altsig toggles, Latch=0
+
+* HSync goes high 45 GB clk cycles after (2) of Ctrl timeline, except for the very first line after
+  enabling the PPU (see (4) of Enabling PPU timeline)
+
+# TODO: check if Hsync may vary depending on sprites or window or xscroll
+* HSync is high for 14.5 GB clk cycles
+* HSync rises about 100ns after GB clk falling edge
+* HSync falls about 150ns after GB clk rising edge
+* For normal speed GB clk, this delay makes it seem like it is on for 15 cycles, falling on the falling GB clk edge
+* The pixel clock pulse during HSync starts 6.5 GB clk cycles after HSync rising edge
+* Pixels can get shifted out 0.5 GB cycles after HSync falling edge (pixel clock rises 0.5 GB clk cycles after HSync falls. On normal GB clk speed, due to HSync delay, it looks like pixel clock rises the same time that HSync falls.)
+
+* Each pixel row (except directly after enabling PPU) timeline:
+  1. on falling edge of GB clk, Latch=1, Control=1 (represents (7) of Ctrl timeline)
+  2. 4 GB clk cycles after (1), Latch=0, Altsig toggles
+  3. Only on first or second row of each frame:
+     2 GB clk cycles after (2), VSync=1 on first row, VSync=0 on second row
+  4. 4 GB clk cycles after (2), Control=0 (represents (8) of Ctrl timeline)
+  5. 24 GB clk cycles after (4), Control=1 (represents (1) of Ctrl timeline)
+  6. 4 GB clk cycles after (5), Control=0 (represents (2) of Ctrl timeline)
+  7. 45 GB clk cycles after (6), HSync=1, D0&D1 may start changing
+  8. 6.5 GB clk cycles after (7), on rising edge, pixel clock emits one cycle (is high for 0.5 cycles)
+  9. 14.5 GB clk cycles after (7), on rising edge, HSync=0
+
+* Latch, Altsig and Control keep repeating their pattern even between the frames where no pixel
+  rows are shifted out.
+
+* Altsig does an extra toggle after the last line of each frame 2 GB clk cycles before the normal
+  toggle happens. That's in the middle of the Latch pulse, or 2 GB clk cycles after (1) of
+  Each pixel row timeline.
+
+* Disabling PPU:
+  - Happens immediately.
+  - D0, D1, Ctrl, VSync and HSync get cut off (set to low) on rising edge of GB clk.
+    (HSync seems to cut off on falling edge, but this is due to some delay. When slowing down
+     GB clk, can be clearly assigned to the same rising edge.)
+  - Altsig and Latch get cut off and continue their regular "PPU off" pattern on same rising edge.
