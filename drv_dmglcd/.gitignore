@@ -1,0 +1,6 @@
+*.hex
+*.asc
+*.bin
+*.blif
+*.json
+/viewer.html
