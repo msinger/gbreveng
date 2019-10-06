@@ -44,7 +44,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 11
 Title "Game Boy reverse eng. FPGA board"
-Date "2019-08-17"
+Date "2019-10-06"
 Rev "1"
 Comp "Author: Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
@@ -1139,9 +1139,9 @@ DISP_ALTSIG
 Text Label 2150 2850 0    60   ~ 0
 DISP_CLK
 Text Label 2150 2950 0    60   ~ 0
-DISP_D0
-Text Label 2150 3050 0    60   ~ 0
 DISP_D1
+Text Label 2150 3050 0    60   ~ 0
+DISP_D0
 Text Label 2150 3150 0    60   ~ 0
 DISP_CTRL
 Text Label 2150 4150 0    60   ~ 0
@@ -1167,9 +1167,9 @@ XDISP_ALTSIG
 Text Label 9950 2200 1    60   ~ 0
 XDISP_CLK
 Text Label 10050 2200 1    60   ~ 0
-XDISP_D0
-Text Label 10150 2200 1    60   ~ 0
 XDISP_D1
+Text Label 10150 2200 1    60   ~ 0
+XDISP_D0
 Text Label 10250 2200 1    60   ~ 0
 XDISP_HSYNC
 Text Label 10350 2200 1    60   ~ 0

@@ -35,8 +35,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Display Bridge"
-Date "2019-08-10"
-Rev "0"
+Date "2019-10-06"
+Rev "1"
 Comp "Author: Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
 Comment2 "http://iceboy.a-singer.de/"
@@ -787,9 +787,9 @@ ALT
 Text Notes 1300 3900 0    60   ~ 0
 CLK
 Text Notes 1300 4000 0    60   ~ 0
-D0
-Text Notes 1300 4100 0    60   ~ 0
 D1
+Text Notes 1300 4100 0    60   ~ 0
+D0
 Text Notes 1300 4200 0    60   ~ 0
 HSYNC
 Text Notes 1300 4300 0    60   ~ 0
@@ -829,9 +829,9 @@ ALT
 Text Notes 7250 3200 0    60   ~ 0
 CLK
 Text Notes 6000 3300 0    60   ~ 0
-D0
-Text Notes 7250 3300 0    60   ~ 0
 D1
+Text Notes 7250 3300 0    60   ~ 0
+D0
 Text Notes 6000 3400 0    60   ~ 0
 HSYNC
 Text Notes 7250 3400 0    60   ~ 0

@@ -1,3 +1,25 @@
+ 1  GND
+ 2  Battery LED
+ 3  -19V
+ 4  P11
+ 5  P14
+ 6  P13
+ 7  P12
+ 8  P10
+ 9  P15
+10  GND
+11  VCC
+12  VSync
+13  FR - Frame inversion signal (aka. ALTSIGL)
+14  Pixel clock
+15  D1 - Pixel data MSB
+16  D0 - Pixel data LSB
+17  HSync
+18  Latch
+19  Timing signal for generating lighter pixels (aka. CONTROL)
+20  Speaker
+21  GND
+
 * Pixel clock is inverted GB clock when clocking out pixels
 * Pixel clock is non-inverted GB clock for the one clock pulse during HSync
 
@@ -31,7 +53,7 @@
      for 0.5 cycles)
   6. 14.5 + (scx%8) + ((wx<=7)?6:0) + X GB clk cycles after (4), on rising edge, HSync=0
      (X are additional cycles for sprites)
-  
+
 * Ctrl timeline:
   1. Ctrl=1 on falling edge of GB clk (represents (2) of Enabling PPU timeline)
   2. 4 GB clk cycles after (1), Ctrl=0 (represents (3) of Enabling PPU timeline)
