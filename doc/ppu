@@ -27,7 +27,9 @@
   - Latch starts low
   - Altsig starts high
   - Initial values get set on rising edge
-  - First line of first frame after enabling will not handle sprites
+  - First line of first frame after enabling will not handle sprites.
+    -> This is because during OAM search, OAM is not locked by PPU. So PPU probably reads 0xff from OAM.
+       OAM gets locked during pixel transfer stage though.
 
 * When PPU off:
   - Latch&Altsig toggle on rising edge of GB clk
