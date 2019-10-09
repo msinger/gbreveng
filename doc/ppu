@@ -125,19 +125,25 @@
   - While PPU hasn't claimed VRAM, !RD is always low, except if CPU is writing to VRAM.
   - PPU releases VRAM claim immediately on the falling edge of the pixel clock pulse of
     the last pixel.
+    -> VRAM gets released on rising GB clk.
+  - VRAM gets claimed on falling GB clk, the moment HSync rises.
 
 * Pixel clock gets streched during high phase when window x triggers (for x>7). Stretches it from
   0.5 to at least 6.5 GB clk cycles.
 * Pixel clock gets streched during high phase when sprite x triggers (for x>8).
 
-* Pixel color (D0&D1) gets set 1 GB clk cycle before the pixel clock rises.
-* GUESS: Rising pixel clock triggers shift register in column driver.
-* D0&D1 change to color of next pixel on same rising edge of pixel clock.
-* ALTERNATIVE GUESS: The falling edge of the result of the operation
-                        px_clk <OR> HSync
-                     triggers shift register in column driver. This would explain why HSync is
-                     always stretched just before the first visible pixel, and why pixel clock
-                     gets stretched for window and sprite loads after the HSync phase.
+* Pixel color (D0&D1) gets set on rising edge of pixel clock.
+* Falling edge of pixel clock triggers shift register in column driver.
+* First and last pixels are special:
+  - First pixel gets set 0.5 clk cycles before HSync falls.
+  - First pixel has no pixel clock pulse. Shift register gets triggered by falling HSync.
+  - Last pixel has no pixel clock pulse. It gets taken directly from the wires (D0&D1) on Latch.
+    -> TODO: Figure out on which edge.
+* GUESS: The falling edge of the result of the operation
+           px_clk <OR> HSync
+         triggers shift register in column driver. This explains why HSync is
+         always stretched just before the first visible pixel, and why pixel clock
+         gets stretched for window and sprite loads after the HSync phase.
 
 * PPU loads pixel data into upper half of pixel FIFO. At beginning of each line, lower half of
   pixel FIFO contains garbage pixels from previous line, which gets shifted out during HSync.
