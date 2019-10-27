@@ -44,7 +44,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 11
 Title "Game Boy reverse eng. FPGA board"
-Date "2019-10-06"
+Date "2019-10-26"
 Rev "1"
 Comp "Author: Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
@@ -696,7 +696,7 @@ D4
 Text Notes 2550 6350 0    60   ~ 0
 ~TXLED
 Text Notes 2900 6350 0    60   ~ 0
-SIWUB
+SIWU
 Text Notes 2150 6450 0    60   ~ 0
 USB_~PWR
 Text Notes 2150 6550 0    60   ~ 0
@@ -1176,4 +1176,36 @@ Text Label 10350 2200 1    60   ~ 0
 XDISP_LATCH
 Text Label 10450 2200 1    60   ~ 0
 XDISP_CTRL
+Text Notes 3500 5550 0    60   ~ 0
+D0
+Text Notes 3500 5650 0    60   ~ 0
+D1
+Text Notes 3500 5750 0    60   ~ 0
+~RD
+Text Notes 3500 5850 0    60   ~ 0
+~WR
+Text Notes 3500 5950 0    60   ~ 0
+~TXE
+Text Notes 3500 6050 0    60   ~ 0
+D2
+Text Notes 3500 6150 0    60   ~ 0
+D3
+Text Notes 3500 6250 0    60   ~ 0
+D4
+Text Notes 3500 6350 0    60   ~ 0
+SIWU
+Text Notes 3500 6650 0    60   ~ 0
+D5
+Text Notes 3500 6750 0    60   ~ 0
+~RXF
+Text Notes 3500 6850 0    60   ~ 0
+D6
+Text Notes 3500 6950 0    60   ~ 0
+D7
+Text Notes 2650 7000 3    60   ~ 0
+UART
+Text Notes 3050 7000 3    60   ~ 0
+CPU\nFIFO
+Text Notes 3700 7000 3    60   ~ 0
+FT245\nFIFO
 $EndSCHEMATC
