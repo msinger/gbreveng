@@ -13,8 +13,8 @@
 [ A2  5 33 1]                Disp. Latch
 [---  6 33 0]
 [ B4  6 33 1]                Disp. Clk
-[ E6  7 33 0]                Disp. D0
-[ B5  7 33 1]                Disp. D1
+[ E6  7 33 0]                Disp. D1
+[ B5  7 33 1]                Disp. D0
 [ A5  8 33 0]                Disp. Ctrl
 [ D6  8 33 1]
 [ A6  9 33 0]                Cart. Slave A0
@@ -47,22 +47,22 @@
 [A10 22 33 1]                Cart. Slave A11
 [C10 23 33 0]                Cart. Slave A12
 [B11 23 33 1]                Cart. Slave A13
-[B10 24 33 0]                FTDI Bus0 (RX; D0)
-[B12 24 33 1]                FTDI Bus1 (TX; D1)
-[D11 25 33 0]                FTDI Bus10 (-; RD)
-[C11 25 33 1]                FTDI Bus11 (RXLED; WR)
-[E10 26 33 0]                FTDI Bus9 (-; A0)
-[B13 26 33 1]                FTDI Bus2 (RTS; D2)
-[A15 27 33 0]                FTDI Bus3 (CTS; D3)
-[A16 27 33 1]                FTDI Bus4 (DTR; D4)
+[B10 24 33 0]                FTDI Bus0  (RX;    D0;   D0)
+[B12 24 33 1]                FTDI Bus1  (TX;    D1;   D1)
+[D11 25 33 0]                FTDI Bus10 (-;     RD;   RD)
+[C11 25 33 1]                FTDI Bus11 (RXLED; WR;   WR)
+[E10 26 33 0]                FTDI Bus9  (-;     A0;   TXE)
+[B13 26 33 1]                FTDI Bus2  (RTS;   D2;   D2)
+[A15 27 33 0]                FTDI Bus3  (CTS;   D3;   D3)
+[A16 27 33 1]                FTDI Bus4  (DTR;   D4;   D4)
 [--- 28 33 0]
-[C13 28 33 1]                FTDI Bus12 (TXLED; SIWUB)
+[C13 28 33 1]                FTDI Bus12 (TXLED; SIWU; SIWU)
 [E11 29 33 0]                FTDI USB Power
 [C12 29 33 1]                FTDI USB Suspend
-[B14 30 33 0]                FTDI Bus5 (DSR; D5)
-[D13 30 33 1]                FTDI Bus8 (TXDEN; CS)
-[B15 31 33 0]                FTDI Bus6 (DCD; D6)
-[C14 31 33 1]                FTDI Bus7 (RI; D7)
+[B14 30 33 0]                FTDI Bus5  (DSR;   D5;   D5)
+[D13 30 33 1]                FTDI Bus8  (TXDEN; CS;   RXF)
+[B15 31 33 0]                FTDI Bus6  (DCD;   D6;   D6)
+[C14 31 33 1]                FTDI Bus7  (RI;    D7;   D7)
 [--- 32 33 0]
 [--- 32 33 1]
 *** BANK1 ***

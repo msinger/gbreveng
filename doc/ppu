@@ -96,6 +96,7 @@
   2. 4 GB clk cycles after (1), Latch=0, Altsig toggles
   3. Only on first or second row of each frame:
      2 GB clk cycles after (2), VSync=1 on first row, VSync=0 on second row
+       (GUESS: this might be tick lx=0, which is skipped on first frame after enabling PPU)
   4. 4 GB clk cycles after (2), Control=0 (represents (8) of Ctrl timeline)
   5. 24 GB clk cycles after (4), Control=1 (represents (1) of Ctrl timeline)
   6. 4 GB clk cycles after (5), Control=0 (represents (2) of Ctrl timeline)
