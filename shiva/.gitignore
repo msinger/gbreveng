@@ -1,0 +1,10 @@
+/pll.v
+*.o
+*.coff
+*.gb
+*.hex
+*.asc
+*.bin
+*.blif
+*.json
+/viewer.html
