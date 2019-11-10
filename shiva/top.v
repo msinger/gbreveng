@@ -7,7 +7,7 @@ module top(
 		input  wire        clk16m,        /* 16 MiHz clock input */
 		output wire        clk16m_en = 0, /* 16 MiHz clock enable */
 
-		output wire [15:0] led,
+		output reg  [15:0] led,
 		input  wire [15:0] sw,
 		input  wire [3:0]  btn,
 
@@ -118,11 +118,17 @@ module top(
 
 	wire rd_cpu, wr_cpu;
 
+	reg  cs_cpu_sysram, cs_cpu_dutram, cs_cpu_recram;
+	reg  cs_cpu_led0, cs_cpu_led1;
+	reg  cs_cpu_sw0, cs_cpu_sw1;
 	reg  cs_cpu_io_if, cs_cpu_io_ie;
 
 	wire [7:0] data_cpu_out;
 	reg  [7:0] data_cpu_in;
 	wire [7:0] data_cpureg_out;
+	reg  [7:0] data_sysram_out;
+	reg  [7:0] data_dutram_out;
+	reg  [7:0] data_recram_out;
 	wire [7:0] data_dbg_out;
 
 	wire [15:0] pc, sp;
@@ -137,6 +143,14 @@ module top(
 	wire [7:0] dbg_data_tx;
 	wire       dbg_data_tx_seq;
 	wire       dbg_data_tx_ack;
+
+	reg  [7:0] sysram[0:4095];
+	reg  [7:0] dutram[0:4095];
+	reg  [7:0] recram[0:4095];
+
+	/* Place jump instruction at $0000 that jumps onto itself. */
+	initial sysram[0] = 'h18; /* JR */
+	initial sysram[1] = 'hfe; /* -2 */
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
@@ -320,8 +334,6 @@ module top(
 		.clock_out(pllclk),
 	);
 
-	assign led = { !ft245_n_rxf_in, ft245_n_txe_in };
-
 	assign cpuclk = clk12m;
 
 	always @* begin
@@ -362,11 +374,44 @@ module top(
 		r_reset_state         <= reset_state;
 	end
 
+	always @(posedge cpuclk) begin
+		data_sysram_out <= sysram[adr_cpu[11:0]];
+		data_dutram_out <= dutram[adr_cpu[11:0]];
+		data_recram_out <= recram[adr_cpu[11:0]];
+
+		if (wr_cpu) case (1)
+		cs_cpu_sysram:
+			sysram[adr_cpu[11:0]] <= data_cpu_out;
+		cs_cpu_dutram:
+			dutram[adr_cpu[11:0]] <= data_cpu_out;
+		cs_cpu_recram:
+			recram[adr_cpu[11:0]] <= data_cpu_out;
+		cs_cpu_led0:
+			led[7:0] <= data_cpu_out;
+		cs_cpu_led1:
+			led[15:8] <= data_cpu_out;
+		endcase
+	end
+
 	always @* begin
 		data_cpu_in = 'hff;
 
 		(* parallelcase *)
 		case (1)
+		cs_cpu_sysram:
+			data_cpu_in = data_sysram_out;
+		cs_cpu_dutram:
+			data_cpu_in = data_dutram_out;
+		cs_cpu_recram:
+			data_cpu_in = data_recram_out;
+		cs_cpu_led0:
+			data_cpu_in = led[7:0];
+		cs_cpu_led1:
+			data_cpu_in = led[15:8];
+		cs_cpu_sw0:
+			data_cpu_in = sw_in[7:0];
+		cs_cpu_sw1:
+			data_cpu_in = sw_in[15:8];
 		cs_cpu_io_if || cs_cpu_io_ie:
 			data_cpu_in = data_cpureg_out;
 		endcase
@@ -376,14 +421,35 @@ module top(
 	end
 
 	always @* begin
-		cs_cpu_io_if = 0;
-		cs_cpu_io_ie = 0;
+		cs_cpu_sysram = 0;
+		cs_cpu_dutram = 0;
+		cs_cpu_recram = 0;
+		cs_cpu_led0   = 0;
+		cs_cpu_led1   = 0;
+		cs_cpu_sw0   = 0;
+		cs_cpu_sw1   = 0;
+		cs_cpu_io_if  = 0;
+		cs_cpu_io_ie  = 0;
 
 		if (reset_done) casez (adr_cpu)
 		/* A15....A8 A7.....A0 */
-		'b_1111_1111_1111_1111: /* 0xffff: Interrupt Enable */
+		'b_0000_????_????_????: /* 0x0000-0x0fff: System RAM */
+			cs_cpu_sysram = 1;
+		'b_0001_????_????_????: /* 0x1000-0x1fff: Device-Under-Test RAM */
+			cs_cpu_dutram = 1;
+		'b_0010_????_????_????: /* 0x2000-0x2fff: Recording RAM */
+			cs_cpu_recram = 1;
+		'b_1111_1111_0000_0000: /* 0xff00:        LED 0-7 */
+			cs_cpu_led0 = 1;
+		'b_1111_1111_0000_0001: /* 0xff01:        LED 8-15 */
+			cs_cpu_led1 = 1;
+		'b_1111_1111_0000_0010: /* 0xff02:        SW 0-7 */
+			cs_cpu_sw0 = 1;
+		'b_1111_1111_0000_0011: /* 0xff03:        SW 8-15 */
+			cs_cpu_sw1 = 1;
+		'b_1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
 			cs_cpu_io_ie = 1;
-		'b_1111_1111_1111_1110: /* 0xfffe: Interrupt Flag */
+		'b_1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
 			cs_cpu_io_if = 1;
 		endcase
 	end
