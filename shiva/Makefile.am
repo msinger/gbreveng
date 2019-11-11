@@ -3,7 +3,9 @@ top.v \
 cdc.v \
 lr35902_cpu.v \
 lr35902_dbg_ifc.v \
-ft245_ifc.v
+ft245_ifc.v \
+counter.v \
+dp_reg.v
 
 NODIST_SRC = \
 pll.v

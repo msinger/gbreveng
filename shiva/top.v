@@ -1,5 +1,7 @@
 `default_nettype none
 
+`define COUNTER_WIDTH 26
+
 (* nolatches *)
 (* top *)
 module top(
@@ -87,6 +89,9 @@ module top(
 		output wire [1:0]  lcd_data   = 0,
 	);
 
+	wire pllclk;
+	wire cpuclk;
+
 `define rst_assert  0
 `define rst_release 1
 `define rst_done    2
@@ -95,10 +100,9 @@ module top(
 	reg  [3:0] r_reset_ticks         = 0, reset_ticks;
 	reg  [3:0] r_initial_reset_ticks = 0, initial_reset_ticks;
 	reg        r_initial_reset_done  = 0, initial_reset_done;
-	reg        reset_done;
-
-	wire pllclk;
-	wire cpuclk;
+	reg        r_reset_done          = 0, reset_done;
+	wire       f_reset;
+	cdc f_reset_cdc(pllclk, !reset_done, f_reset);
 
 	wire [15:0] sw_in,  sw_ext;
 	wire [3:0]  btn_in, btn_ext;
@@ -122,6 +126,8 @@ module top(
 	reg  cs_cpu_led0, cs_cpu_led1;
 	reg  cs_cpu_sw0, cs_cpu_sw1;
 	reg  cs_cpu_io_if, cs_cpu_io_ie;
+	reg  cs_cpu_atom;
+	reg  cs_cpu_counter0;
 
 	wire [7:0] data_cpu_out;
 	reg  [7:0] data_cpu_in;
@@ -130,6 +136,16 @@ module top(
 	reg  [7:0] data_dutram_out;
 	reg  [7:0] data_recram_out;
 	wire [7:0] data_dbg_out;
+
+	reg  [31:0] atom;
+
+	wire [`COUNTER_WIDTH-1:0] counter0_value;
+	wire [`COUNTER_WIDTH-1:0] counter0_value_cpu;
+	wire [`COUNTER_WIDTH-1:0] counter0_load_value;
+	wire                      counter0_load_set;
+	wire                      counter0_cpu_trigger;
+	reg                       r_counter0_cpu_trigger;
+	wire [4:0]                counter0_cpu_trigger_sig;
 
 	wire [15:0] pc, sp;
 	wire [7:4]  flags;
@@ -177,7 +193,7 @@ module top(
 			.PACKAGE_PIN(ft245_d),
 			.OUTPUT_CLK(cpuclk),
 			.INPUT_CLK(cpuclk),
-			.OUTPUT_ENABLE(reset_done && ft245_dir_out),
+			.OUTPUT_ENABLE(r_reset_done && ft245_dir_out),
 			.D_OUT_0(ft245_d_out),
 			.D_IN_0(ft245_d_in),
 		);
@@ -205,7 +221,7 @@ module top(
 		) ft245_n_rd_io (
 			.PACKAGE_PIN(ft245_n_rd),
 			.OUTPUT_CLK(cpuclk),
-			.D_OUT_0(!reset_done || !ft245_rd_out),
+			.D_OUT_0(!r_reset_done || !ft245_rd_out),
 		);
 
 	SB_IO #(
@@ -213,7 +229,7 @@ module top(
 		) ft245_n_wr_io (
 			.PACKAGE_PIN(ft245_n_wr),
 			.OUTPUT_CLK(cpuclk),
-			.D_OUT_0(!reset_done || !ft245_wr_out),
+			.D_OUT_0(!r_reset_done || !ft245_wr_out),
 		);
 
 	SB_IO #(
@@ -221,7 +237,7 @@ module top(
 		) ft245_siwu_io (
 			.PACKAGE_PIN(ft245_siwu),
 			.OUTPUT_CLK(cpuclk),
-			.D_OUT_0(!reset_done || !ft245_siwu_out),
+			.D_OUT_0(!r_reset_done || !ft245_siwu_out),
 		);
 
 	SB_IO #(
@@ -372,6 +388,7 @@ module top(
 		r_initial_reset_done  <= initial_reset_done;
 		r_reset_ticks         <= reset_ticks;
 		r_reset_state         <= reset_state;
+		r_reset_done          <= reset_done;
 	end
 
 	always @(posedge cpuclk) begin
@@ -390,6 +407,14 @@ module top(
 			led[7:0] <= data_cpu_out;
 		cs_cpu_led1:
 			led[15:8] <= data_cpu_out;
+		cs_cpu_atom && adr_cpu[1:0] == 0:
+			atom[7:0] <= data_cpu_out;
+		cs_cpu_atom && adr_cpu[1:0] == 1:
+			atom[15:8] <= data_cpu_out;
+		cs_cpu_atom && adr_cpu[1:0] == 2:
+			atom[23:16] <= data_cpu_out;
+		cs_cpu_atom && adr_cpu[1:0] == 3:
+			atom[31:24] <= data_cpu_out;
 		endcase
 	end
 
@@ -412,6 +437,22 @@ module top(
 			data_cpu_in = sw_in[7:0];
 		cs_cpu_sw1:
 			data_cpu_in = sw_in[15:8];
+		cs_cpu_atom && adr_cpu[1:0] == 0:
+			data_cpu_in = atom[7:0];
+		cs_cpu_atom && adr_cpu[1:0] == 1:
+			data_cpu_in = atom[15:8];
+		cs_cpu_atom && adr_cpu[1:0] == 2:
+			data_cpu_in = atom[23:16];
+		cs_cpu_atom && adr_cpu[1:0] == 3:
+			data_cpu_in = atom[31:24];
+		cs_cpu_counter0 && adr_cpu[1:0] == 0:
+			data_cpu_in = counter0_value_cpu[7:0];
+		cs_cpu_counter0 && adr_cpu[1:0] == 1:
+			data_cpu_in = counter0_value_cpu[15:8];
+		cs_cpu_counter0 && adr_cpu[1:0] == 2:
+			data_cpu_in = counter0_value_cpu[23:16];
+		cs_cpu_counter0 && adr_cpu[1:0] == 3:
+			data_cpu_in = counter0_value_cpu[`COUNTER_WIDTH-1:24];
 		cs_cpu_io_if || cs_cpu_io_ie:
 			data_cpu_in = data_cpureg_out;
 		endcase
@@ -421,17 +462,19 @@ module top(
 	end
 
 	always @* begin
-		cs_cpu_sysram = 0;
-		cs_cpu_dutram = 0;
-		cs_cpu_recram = 0;
-		cs_cpu_led0   = 0;
-		cs_cpu_led1   = 0;
-		cs_cpu_sw0   = 0;
-		cs_cpu_sw1   = 0;
-		cs_cpu_io_if  = 0;
-		cs_cpu_io_ie  = 0;
+		cs_cpu_sysram   = 0;
+		cs_cpu_dutram   = 0;
+		cs_cpu_recram   = 0;
+		cs_cpu_led0     = 0;
+		cs_cpu_led1     = 0;
+		cs_cpu_sw0      = 0;
+		cs_cpu_sw1      = 0;
+		cs_cpu_atom     = 0;
+		cs_cpu_counter0 = 0;
+		cs_cpu_io_if    = 0;
+		cs_cpu_io_ie    = 0;
 
-		if (reset_done) casez (adr_cpu)
+		if (r_reset_done) casez (adr_cpu)
 		/* A15....A8 A7.....A0 */
 		'b_0000_????_????_????: /* 0x0000-0x0fff: System RAM */
 			cs_cpu_sysram = 1;
@@ -447,6 +490,10 @@ module top(
 			cs_cpu_sw0 = 1;
 		'b_1111_1111_0000_0011: /* 0xff03:        SW 8-15 */
 			cs_cpu_sw1 = 1;
+		'b_1111_1111_0001_00??: /* 0xff10-0xff13: Atomic load register */
+			cs_cpu_atom = 1;
+		'b_1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
+			cs_cpu_counter0 = 1;
 		'b_1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
 			cs_cpu_io_ie = 1;
 		'b_1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
@@ -456,7 +503,7 @@ module top(
 
 	lr35902_cpu cpu(
 		.clk(cpuclk),
-		.reset(!reset_done),
+		.reset(!r_reset_done),
 
 		.adr(adr_cpu),
 		.din(data_cpu_in),
@@ -483,7 +530,7 @@ module top(
 
 	ft245_ifc dbg_ft245(
 		.clk(cpuclk),
-		.reset(!reset_done),
+		.reset(!r_reset_done),
 
 		.rx_data(dbg_data_rx),
 		.rx_seq(dbg_data_rx_seq),
@@ -524,5 +571,56 @@ module top(
 		.data_tx_seq(dbg_data_tx_seq),
 		.data_tx_ack(dbg_data_tx_ack),
 	);
+
+	counter #(`COUNTER_WIDTH) counter0(
+		.clk(pllclk),
+		.sysrst(f_reset),
+
+		.value(counter0_value),
+		.ivalue(counter0_load_value),
+
+		.start(counter0_cpu_trigger_sig[0]),
+		.stop(counter0_cpu_trigger_sig[1]),
+		.reset(counter0_cpu_trigger_sig[2]),
+		.load(counter0_cpu_trigger_sig[3]),
+		.count(counter0_cpu_trigger_sig[4]),
+	);
+
+	dp_reg #(`COUNTER_WIDTH) counter0_load_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(counter0_load_value),
+
+		.svalue_in(atom[`COUNTER_WIDTH-1:0]),
+		.svalue_mask({`COUNTER_WIDTH{counter0_load_set}}),
+	);
+
+	dp_reg #(5) counter0_cpu_trigger_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(counter0_cpu_trigger_sig),
+		.fvalue_mask('b11111),
+
+		.svalue_in(data_cpu_out[4:0]),
+		.svalue_mask({5{counter0_cpu_trigger}}),
+	);
+
+	dp_reg #(`COUNTER_WIDTH) counter0_value_reg2cpu(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_in(counter0_value),
+		.fvalue_mask({`COUNTER_WIDTH{1'b1}}),
+
+		.svalue_out(counter0_value_cpu),
+	);
+
+	always @(posedge cpuclk) r_counter0_cpu_trigger <= wr_cpu && cs_cpu_counter0;
+	assign counter0_cpu_trigger = wr_cpu && cs_cpu_counter0 && !r_counter0_cpu_trigger;
+	assign counter0_load_set = counter0_cpu_trigger && data_cpu_out[7];
 
 endmodule
