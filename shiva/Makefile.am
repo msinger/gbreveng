@@ -5,6 +5,7 @@ lr35902_cpu.v \
 lr35902_dbg_ifc.v \
 ft245_ifc.v \
 counter.v \
+counter_block.v \
 dp_reg.v
 
 NODIST_SRC = \
