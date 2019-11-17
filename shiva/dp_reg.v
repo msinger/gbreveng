@@ -38,7 +38,7 @@ module dp_reg #(
 			f2s_sack   <= f2s_sseq;
 		end
 
-		if (s2f_sseq == s2f_sack && |svalue_mask) begin
+		if (s2f_sseq == s2f_sack && svalue_mask) begin
 			s2f_mask  <= svalue_mask;
 			s2f_value <= svalue_in;
 			s2f_sseq  <= !s2f_sack;

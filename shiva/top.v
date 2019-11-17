@@ -1,6 +1,9 @@
 `default_nettype none
 
-`define COUNTER_WIDTH 26
+`define COUNTER_WIDTH    20
+`define NUM_COUNTERS     2
+`define NUM_COMPARATORS  4
+`define NUM_ROUTES       4
 
 (* nolatches *)
 (* top *)
@@ -89,6 +92,9 @@ module top(
 		output wire [1:0]  lcd_data   = 0,
 	);
 
+	genvar  i, j;
+	integer k;
+
 	wire pllclk;
 	wire cpuclk;
 
@@ -127,10 +133,14 @@ module top(
 	reg  cs_cpu_sw0, cs_cpu_sw1;
 	reg  cs_cpu_io_if, cs_cpu_io_ie;
 	reg  cs_cpu_atom;
-	reg  cs_cpu_counter0;
+
+	(* mem2reg *)
+	reg  cs_cpu_counter[0:`NUM_COUNTERS-1];
 
 	wire [7:0] data_cpu_out;
-	reg  [7:0] data_cpu_in;
+	wire [7:0] data_cpu_in;
+	reg  [7:0] data_cpu_in_r;
+	wand [7:0] data_cpu_in_wand;
 	wire [7:0] data_cpureg_out;
 	reg  [7:0] data_sysram_out;
 	reg  [7:0] data_dutram_out;
@@ -139,13 +149,22 @@ module top(
 
 	reg  [31:0] atom;
 
-	wire [`COUNTER_WIDTH-1:0] counter0_value;
-	wire [`COUNTER_WIDTH-1:0] counter0_value_cpu;
-	wire [`COUNTER_WIDTH-1:0] counter0_load_value;
-	wire                      counter0_load_set;
-	wire                      counter0_cpu_trigger;
-	reg                       r_counter0_cpu_trigger;
-	wire [4:0]                counter0_cpu_trigger_sig;
+	wire [`COUNTER_WIDTH-1:0]   counter_value[0:`NUM_COUNTERS-1];
+	wire [`COUNTER_WIDTH-1:0]   counter_value_cpu[0:`NUM_COUNTERS-1];
+	wire [`COUNTER_WIDTH-1:0]   counter_load_value[0:`NUM_COUNTERS-1];
+	wire [`COUNTER_WIDTH-1:0]   counter_compare_value[0:`NUM_COUNTERS-1][0:`NUM_COMPARATORS-1];
+	wire                        counter_load_set[0:`NUM_COUNTERS-1];
+	wire [`NUM_COMPARATORS-1:0] counter_compare_set[0:`NUM_COUNTERS-1];
+	wire                        counter_cpu_trigger[0:`NUM_COUNTERS-1];
+	(* mem2reg *)
+	reg                         r_counter_cpu_trigger[0:`NUM_COUNTERS-1];
+	wire [4:0]                  counter_cpu_trigger_sig[0:`NUM_COUNTERS-1];
+	wire [`NUM_ROUTES-1:0]      counter_trigger_in[0:`NUM_COUNTERS-1][0:4];
+	wire [`NUM_ROUTES-1:0]      counter_compare_trigger_out[0:`NUM_COUNTERS-1][0:`NUM_COMPARATORS-1];
+	wire [4:0]                  counter_trigger_in_set[0:`NUM_COUNTERS-1];
+	wire [`NUM_COMPARATORS-1:0] counter_compare_trigger_out_set[0:`NUM_COUNTERS-1];
+
+	wor  [`NUM_ROUTES-1:0] route;
 
 	wire [15:0] pc, sp;
 	wire [7:4]  flags;
@@ -419,60 +438,54 @@ module top(
 	end
 
 	always @* begin
-		data_cpu_in = 'hff;
+		data_cpu_in_r = 'hff;
 
 		(* parallelcase *)
 		case (1)
 		cs_cpu_sysram:
-			data_cpu_in = data_sysram_out;
+			data_cpu_in_r = data_sysram_out;
 		cs_cpu_dutram:
-			data_cpu_in = data_dutram_out;
+			data_cpu_in_r = data_dutram_out;
 		cs_cpu_recram:
-			data_cpu_in = data_recram_out;
+			data_cpu_in_r = data_recram_out;
 		cs_cpu_led0:
-			data_cpu_in = led[7:0];
+			data_cpu_in_r = led[7:0];
 		cs_cpu_led1:
-			data_cpu_in = led[15:8];
+			data_cpu_in_r = led[15:8];
 		cs_cpu_sw0:
-			data_cpu_in = sw_in[7:0];
+			data_cpu_in_r = sw_in[7:0];
 		cs_cpu_sw1:
-			data_cpu_in = sw_in[15:8];
+			data_cpu_in_r = sw_in[15:8];
 		cs_cpu_atom && adr_cpu[1:0] == 0:
-			data_cpu_in = atom[7:0];
+			data_cpu_in_r = atom[7:0];
 		cs_cpu_atom && adr_cpu[1:0] == 1:
-			data_cpu_in = atom[15:8];
+			data_cpu_in_r = atom[15:8];
 		cs_cpu_atom && adr_cpu[1:0] == 2:
-			data_cpu_in = atom[23:16];
+			data_cpu_in_r = atom[23:16];
 		cs_cpu_atom && adr_cpu[1:0] == 3:
-			data_cpu_in = atom[31:24];
-		cs_cpu_counter0 && adr_cpu[1:0] == 0:
-			data_cpu_in = counter0_value_cpu[7:0];
-		cs_cpu_counter0 && adr_cpu[1:0] == 1:
-			data_cpu_in = counter0_value_cpu[15:8];
-		cs_cpu_counter0 && adr_cpu[1:0] == 2:
-			data_cpu_in = counter0_value_cpu[23:16];
-		cs_cpu_counter0 && adr_cpu[1:0] == 3:
-			data_cpu_in = counter0_value_cpu[`COUNTER_WIDTH-1:24];
+			data_cpu_in_r = atom[31:24];
 		cs_cpu_io_if || cs_cpu_io_ie:
-			data_cpu_in = data_cpureg_out;
+			data_cpu_in_r = data_cpureg_out;
 		endcase
-
-		if (ddrv_dbg)
-			data_cpu_in = data_dbg_out;
 	end
 
+	assign data_cpu_in_wand = data_cpu_in_r;
+	assign data_cpu_in = ddrv_dbg ? data_dbg_out : data_cpu_in_wand;
+
 	always @* begin
-		cs_cpu_sysram   = 0;
-		cs_cpu_dutram   = 0;
-		cs_cpu_recram   = 0;
-		cs_cpu_led0     = 0;
-		cs_cpu_led1     = 0;
-		cs_cpu_sw0      = 0;
-		cs_cpu_sw1      = 0;
-		cs_cpu_atom     = 0;
-		cs_cpu_counter0 = 0;
-		cs_cpu_io_if    = 0;
-		cs_cpu_io_ie    = 0;
+		cs_cpu_sysram = 0;
+		cs_cpu_dutram = 0;
+		cs_cpu_recram = 0;
+		cs_cpu_led0   = 0;
+		cs_cpu_led1   = 0;
+		cs_cpu_sw0    = 0;
+		cs_cpu_sw1    = 0;
+		cs_cpu_atom   = 0;
+		cs_cpu_io_if  = 0;
+		cs_cpu_io_ie  = 0;
+
+		for (k = 0; k < `NUM_COUNTERS; k = k + 1)
+			cs_cpu_counter[k] = 0;
 
 		if (r_reset_done) casez (adr_cpu)
 		/* A15....A8 A7.....A0 */
@@ -493,7 +506,21 @@ module top(
 		'b_1111_1111_0001_00??: /* 0xff10-0xff13: Atomic load register */
 			cs_cpu_atom = 1;
 		'b_1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
-			cs_cpu_counter0 = 1;
+			if (`NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
+		'b_1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
+			if (`NUM_COUNTERS > 1) cs_cpu_counter[1] = 1;
+		'b_1111_1111_0010_10??: /* 0xff28-0xff2b: Counter 2 */
+			if (`NUM_COUNTERS > 2) cs_cpu_counter[2] = 1;
+		'b_1111_1111_0010_11??: /* 0xff2c-0xff2f: Counter 3 */
+			if (`NUM_COUNTERS > 3) cs_cpu_counter[3] = 1;
+		'b_1111_1111_0011_00??: /* 0xff30-0xff33: Counter 4 */
+			if (`NUM_COUNTERS > 4) cs_cpu_counter[4] = 1;
+		'b_1111_1111_0011_01??: /* 0xff34-0xff37: Counter 5 */
+			if (`NUM_COUNTERS > 5) cs_cpu_counter[5] = 1;
+		'b_1111_1111_0011_10??: /* 0xff38-0xff3b: Counter 6 */
+			if (`NUM_COUNTERS > 6) cs_cpu_counter[6] = 1;
+		'b_1111_1111_0011_11??: /* 0xff3c-0xff3f: Counter 7 */
+			if (`NUM_COUNTERS > 7) cs_cpu_counter[7] = 1;
 		'b_1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
 			cs_cpu_io_ie = 1;
 		'b_1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
@@ -572,55 +599,129 @@ module top(
 		.data_tx_ack(dbg_data_tx_ack),
 	);
 
-	counter #(`COUNTER_WIDTH) counter0(
-		.clk(pllclk),
-		.sysrst(f_reset),
+	generate for (j = 0; j < `NUM_COUNTERS; j = j + 1) begin
+		if (`COUNTER_WIDTH > 24) begin
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 0) ? counter_value_cpu[j][7:0] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 1) ? counter_value_cpu[j][15:8] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 2) ? counter_value_cpu[j][23:16] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 3) ?
+			                          counter_value_cpu[j][`COUNTER_WIDTH-1:24] : 'hff;
+		end else if (`COUNTER_WIDTH > 16) begin
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 0) ? counter_value_cpu[j][7:0] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 1) ? counter_value_cpu[j][15:8] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 2) ?
+			                          counter_value_cpu[j][`COUNTER_WIDTH-1:16] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 3) ? 0 : 'hff;
+		end else if (`COUNTER_WIDTH > 8) begin
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 0) ? counter_value_cpu[j][7:0] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 1) ?
+			                          counter_value_cpu[j][`COUNTER_WIDTH-1:8] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 2) ? 0 : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 3) ? 0 : 'hff;
+		end else begin
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 0) ?
+			                          counter_value_cpu[j][`COUNTER_WIDTH-1:0] : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 1) ? 0 : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 2) ? 0 : 'hff;
+			assign data_cpu_in_wand = (cs_cpu_counter[j] && adr_cpu[1:0] == 3) ? 0 : 'hff;
+		end
 
-		.value(counter0_value),
-		.ivalue(counter0_load_value),
+		counter #(`COUNTER_WIDTH) counter(
+			.clk(pllclk),
+			.sysrst(f_reset),
 
-		.start(counter0_cpu_trigger_sig[0]),
-		.stop(counter0_cpu_trigger_sig[1]),
-		.reset(counter0_cpu_trigger_sig[2]),
-		.load(counter0_cpu_trigger_sig[3]),
-		.count(counter0_cpu_trigger_sig[4]),
-	);
+			.value(counter_value[j]),
+			.ivalue(counter_load_value[j]),
 
-	dp_reg #(`COUNTER_WIDTH) counter0_load_reg(
-		.fclk(pllclk),
-		.sclk(cpuclk),
-		.frst(f_reset),
+			.start(counter_cpu_trigger_sig[j][0] || route & counter_trigger_in[j][0]),
+			.stop (counter_cpu_trigger_sig[j][1] || route & counter_trigger_in[j][1]),
+			.reset(counter_cpu_trigger_sig[j][2] || route & counter_trigger_in[j][2]),
+			.load (counter_cpu_trigger_sig[j][3] || route & counter_trigger_in[j][3]),
+			.count(counter_cpu_trigger_sig[j][4] || route & counter_trigger_in[j][4]),
+		);
 
-		.fvalue_out(counter0_load_value),
+		dp_reg #(`COUNTER_WIDTH) counter_load_reg(
+			.fclk(pllclk),
+			.sclk(cpuclk),
+			.frst(f_reset),
 
-		.svalue_in(atom[`COUNTER_WIDTH-1:0]),
-		.svalue_mask({`COUNTER_WIDTH{counter0_load_set}}),
-	);
+			.fvalue_out(counter_load_value[j]),
 
-	dp_reg #(5) counter0_cpu_trigger_reg(
-		.fclk(pllclk),
-		.sclk(cpuclk),
-		.frst(f_reset),
+			.svalue_in(atom[`COUNTER_WIDTH-1:0]),
+			.svalue_mask({`COUNTER_WIDTH{counter_load_set[j]}}),
+		);
 
-		.fvalue_out(counter0_cpu_trigger_sig),
-		.fvalue_mask('b11111),
+		dp_reg #(5) counter_cpu_trigger_reg(
+			.fclk(pllclk),
+			.sclk(cpuclk),
+			.frst(f_reset),
 
-		.svalue_in(data_cpu_out[4:0]),
-		.svalue_mask({5{counter0_cpu_trigger}}),
-	);
+			.fvalue_out(counter_cpu_trigger_sig[j]),
+			.fvalue_mask('b11111),
 
-	dp_reg #(`COUNTER_WIDTH) counter0_value_reg2cpu(
-		.fclk(pllclk),
-		.sclk(cpuclk),
+			.svalue_in(data_cpu_out[4:0]),
+			.svalue_mask({5{(counter_cpu_trigger[j] && !adr_cpu[1:0])}}),
+		);
 
-		.fvalue_in(counter0_value),
-		.fvalue_mask({`COUNTER_WIDTH{1'b1}}),
+		dp_reg #(`COUNTER_WIDTH) counter_value_reg2cpu(
+			.fclk(pllclk),
+			.sclk(cpuclk),
 
-		.svalue_out(counter0_value_cpu),
-	);
+			.fvalue_in(counter_value[j]),
+			.fvalue_mask({`COUNTER_WIDTH{1'b1}}),
 
-	always @(posedge cpuclk) r_counter0_cpu_trigger <= wr_cpu && cs_cpu_counter0;
-	assign counter0_cpu_trigger = wr_cpu && cs_cpu_counter0 && !r_counter0_cpu_trigger;
-	assign counter0_load_set = counter0_cpu_trigger && data_cpu_out[7];
+			.svalue_out(counter_value_cpu[j]),
+		);
+
+		for (i = 0; i < `NUM_COMPARATORS; i = i + 1) begin
+			dp_reg #(`COUNTER_WIDTH) counter_compare_reg(
+				.fclk(pllclk),
+				.sclk(cpuclk),
+				.frst(f_reset),
+
+				.fvalue_out(counter_compare_value[j][i]),
+
+				.svalue_in(atom[`COUNTER_WIDTH-1:0]),
+				.svalue_mask({`COUNTER_WIDTH{counter_compare_set[j][i]}}),
+			);
+
+			dp_reg #(`NUM_ROUTES) counter_compare_trigger_out_reg(
+				.fclk(pllclk),
+				.sclk(cpuclk),
+				.frst(f_reset),
+
+				.fvalue_out(counter_compare_trigger_out[j][i]),
+
+				.svalue_in(atom[`NUM_ROUTES-1:0]),
+				.svalue_mask({`NUM_ROUTES{counter_compare_trigger_out_set[j][i]}}),
+			);
+
+			assign route = {`NUM_ROUTES{counter_compare_value[j][i] == counter_value[j]}} &
+			               counter_compare_trigger_out[j][i];
+		end
+
+		for (i = 0; i < 5; i = i + 1) begin
+			dp_reg #(`NUM_ROUTES) counter_trigger_in_reg(
+				.fclk(pllclk),
+				.sclk(cpuclk),
+				.frst(f_reset),
+
+				.fvalue_out(counter_trigger_in[j][i]),
+
+				.svalue_in(atom[`NUM_ROUTES-1:0]),
+				.svalue_mask({`NUM_ROUTES{counter_trigger_in_set[j][i]}}),
+			);
+		end
+
+		always @(posedge cpuclk) r_counter_cpu_trigger[j] <= wr_cpu && cs_cpu_counter[j];
+		assign counter_cpu_trigger[j]             = wr_cpu && cs_cpu_counter[j] && !r_counter_cpu_trigger[j];
+		assign counter_load_set[j]                = counter_cpu_trigger[j] && !adr_cpu[1:0] && data_cpu_out[7];
+		assign counter_compare_set[j]             = {`NUM_COMPARATORS{counter_cpu_trigger[j] && adr_cpu[1:0] == 1}} &
+		                                            data_cpu_out[`NUM_COMPARATORS-1:0];
+		assign counter_trigger_in_set[j]          = {5{counter_cpu_trigger[j] && adr_cpu[1:0] == 2}} &
+		                                            data_cpu_out[4:0];
+		assign counter_compare_trigger_out_set[j] = {`NUM_COMPARATORS{counter_cpu_trigger[j] && &adr_cpu[1:0]}} &
+		                                            data_cpu_out[`NUM_COMPARATORS-1:0];
+	end endgenerate
 
 endmodule
