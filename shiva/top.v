@@ -58,8 +58,8 @@ module top(
 		input  wire        n_cs_xram,
 		input  wire        phi,
 		inout  wire        n_reset,
-		output wire        n_soe     = 0,
-		output wire        sdir      = 0,
+		output wire        n_soe,
+		output wire        sdir,
 
 		output wire [13:0] vadr  = 0,
 		output wire [7:0]  vdata = 'hff,
@@ -163,8 +163,33 @@ module top(
 	wire       dbg_data_tx_seq;
 	wire       dbg_data_tx_ack;
 
+	wire [14:0] dut_adr_ext,          dut_adr_in;
+	reg         dut_data_dir_out,     r_dut_data_dir_out;
+	reg         dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
+	reg         dut_data_lvl_ena;
+	reg  [7:0]  dut_data_out;
+	wire [7:0]  dut_data_ext,         dut_data_in;
+	wire        n_dut_rd_ext,         dut_rd_in;
+	wire        n_dut_wr_ext,         dut_wr_in;
+	wire        n_dut_cs_rom_ext,     dut_cs_rom_in;
+	wire        n_dut_cs_xram_ext,    dut_cs_xram_in;
+	wire        dut_phi_ext,          dut_phi_in;
+	reg         dut_reset_out,        r_dut_reset_out;
+	wire        n_dut_reset_ext,      dut_reset_in;
+	cdc #(1) dut_adr_cdc[14:0](pllclk, dut_adr_ext,        dut_adr_in);
+	cdc #(1) dut_data_cdc[7:0](pllclk, dut_data_ext,       dut_data_in);
+	cdc #(1) dut_rd_cdc       (pllclk, !n_dut_rd_ext,      dut_rd_in);
+	cdc #(1) dut_wr_cdc       (pllclk, !n_dut_wr_ext,      dut_wr_in);
+	cdc #(1) dut_cs_rom_cdc   (pllclk, !n_dut_cs_rom_ext,  dut_cs_rom_in);
+	cdc #(1) dut_cs_xram_cdc  (pllclk, !n_dut_cs_xram_ext, dut_cs_xram_in);
+	cdc #(1) dut_phi_cdc      (pllclk, dut_phi_ext,        dut_phi_in);
+	cdc #(1) dut_reset_cdc    (pllclk, !n_dut_reset_ext,   dut_reset_in);
+
+	reg dut_any_cs;
+
 	reg  [7:0] sysram[0:4095];
-	reg  [7:0] dutram[0:4095];
+	reg  [7:0] dut_ro_ram[0:4095];
+	reg  [7:0] dut_wo_ram[0:4095];
 	reg  [7:0] recram[0:4095];
 
 	/* Place jump instruction at $0000 that jumps onto itself. */
@@ -279,59 +304,96 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
 		) adr_io[14:0] (
 			.PACKAGE_PIN(adr),
+			.INPUT_CLK(pllclk),
+			.D_IN_0(dut_adr_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 1101_00),
 			.PULLUP(1),
 		) data_io[7:0] (
 			.PACKAGE_PIN(data),
+			.OUTPUT_CLK(pllclk),
+			.INPUT_CLK(pllclk),
+			.OUTPUT_ENABLE(!f_reset && dut_data_dir_out),
+			.D_OUT_0(dut_data_out),
+			.D_IN_0(dut_data_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
 		) n_rd_io (
 			.PACKAGE_PIN(n_rd),
+			.INPUT_CLK(pllclk),
+			.D_IN_0(n_dut_rd_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
 		) n_wr_io (
 			.PACKAGE_PIN(n_wr),
+			.INPUT_CLK(pllclk),
+			.D_IN_0(n_dut_wr_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
 		) n_cs_rom_io (
 			.PACKAGE_PIN(n_cs_rom),
+			.INPUT_CLK(pllclk),
+			.D_IN_0(n_dut_cs_rom_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
 		) n_cs_xram_io (
 			.PACKAGE_PIN(n_cs_xram),
+			.INPUT_CLK(pllclk),
+			.D_IN_0(n_dut_cs_xram_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0000_00),
 			.PULLUP(1),
 		) phi_io (
 			.PACKAGE_PIN(phi),
+			.INPUT_CLK(pllclk),
+			.D_IN_0(dut_phi_ext),
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 1101_00),
 			.PULLUP(1),
 		) n_reset_io (
 			.PACKAGE_PIN(n_reset),
+			.OUTPUT_CLK(pllclk),
+			.INPUT_CLK(pllclk),
+			.OUTPUT_ENABLE(!f_reset && dut_reset_out),
+			.D_IN_0(n_dut_reset_ext),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01),
+		) n_soe_io (
+			.PACKAGE_PIN(n_soe),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(f_reset || !dut_data_lvl_ena),
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01),
+		) sdir_io (
+			.PACKAGE_PIN(sdir),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(!f_reset && dut_data_lvl_dir_out),
 		);
 
 	SB_IO #(
@@ -396,14 +458,14 @@ module top(
 
 	always @(posedge cpuclk) begin
 		data_sysram_out <= sysram[adr_cpu[11:0]];
-		data_dutram_out <= dutram[adr_cpu[11:0]];
+		data_dutram_out <= dut_wo_ram[adr_cpu[11:0]];
 		data_recram_out <= recram[adr_cpu[11:0]];
 
 		if (wr_cpu) case (1)
 		cs_cpu_sysram:
 			sysram[adr_cpu[11:0]] <= data_cpu_out;
 		cs_cpu_dutram:
-			dutram[adr_cpu[11:0]] <= data_cpu_out;
+			dut_ro_ram[adr_cpu[11:0]] <= data_cpu_out;
 		cs_cpu_recram:
 			recram[adr_cpu[11:0]] <= data_cpu_out;
 		cs_cpu_led0:
@@ -600,5 +662,40 @@ module top(
 		.rd(rd_cpu),
 		.wr(wr_cpu),
 	);
+
+	always @* begin
+		dut_data_dir_out     = r_dut_data_dir_out;
+		dut_data_lvl_dir_out = r_dut_data_lvl_dir_out;
+		dut_reset_out        = 0;
+
+		dut_any_cs = dut_cs_rom_in || (dut_cs_xram_in && dut_adr_in[13] && !dut_adr_in[14]);
+
+		dut_data_lvl_ena = dut_any_cs;
+
+		if (dut_rd_in && dut_any_cs) begin
+			dut_data_lvl_dir_out = 1;
+
+			if (r_dut_data_lvl_dir_out)
+				dut_data_dir_out = 1;
+		end else begin
+			dut_data_dir_out = 0;
+
+			if (r_dut_data_dir_out)
+				dut_data_lvl_dir_out = 0;
+			else
+				dut_data_lvl_ena = 0;
+		end
+	end
+
+	always @(posedge pllclk) begin
+		r_dut_data_dir_out     <= dut_data_dir_out;
+		r_dut_data_lvl_dir_out <= dut_data_lvl_dir_out;
+		r_dut_reset_out        <= dut_reset_out;
+
+		dut_data_out <= dut_ro_ram[dut_adr_in[11:0]];
+
+		if (dut_wr_in && dut_cs_xram_in && dut_adr_in[13])
+			dut_wo_ram[dut_adr_in[11:0]] <= dut_data_in;
+	end
 
 endmodule
