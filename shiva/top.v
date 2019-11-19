@@ -67,7 +67,7 @@ module top(
 		output wire        n_vwr = 1,
 		output wire        n_vcs = 1,
 
-		output wire [7:0]  pa      = 0,
+		inout  wire [7:0]  pa,
 		output wire        n_pa_oe = 0,
 		output wire        pa_dir  = 1,
 
@@ -132,8 +132,8 @@ module top(
 	reg  cs_cpu_sw0, cs_cpu_sw1;
 	reg  cs_cpu_io_if, cs_cpu_io_ie;
 	reg  cs_cpu_atom;
+	reg  cs_cpu_pa;
 
-	(* mem2reg *)
 	reg  [`NUM_COUNTERS-1:0] cs_cpu_counter;
 
 	wire [7:0] data_cpu_out;
@@ -145,6 +145,16 @@ module top(
 	reg  [7:0] data_dutram_out;
 	reg  [7:0] data_recram_out;
 	wire [7:0] data_dbg_out;
+
+	wire [7:0]  data_pa_in;
+	wire [7:0]  data_pa_out;
+	reg  [7:0]  pa_out;
+	wire [7:0]  pa_ext, pa_in;
+	wire        pa_set_sig, pa_reset_sig;
+	wire [7:0]  pa_set_mask, pa_reset_mask;
+	wire        pa_trigger;
+	reg         r_pa_trigger;
+	cdc #(1) pa_cdc[7:0](pllclk, pa_ext, pa_in);
 
 	reg  [31:0] atom;
 
@@ -410,6 +420,16 @@ module top(
 			.PACKAGE_PIN(sd_sw),
 		);
 
+	SB_IO #(
+			.PIN_TYPE('b 0101_00),
+		) pa_io[7:0] (
+			.PACKAGE_PIN(pa),
+			.OUTPUT_CLK(pllclk),
+			.INPUT_CLK(pllclk),
+			.D_OUT_0(pa_out),
+			.D_IN_0(pa_ext),
+		);
+
 	pll pll_inst(
 		.clock_in(clk12m),
 		.clock_out(pllclk),
@@ -510,6 +530,10 @@ module top(
 			data_cpu_in_r = atom[23:16];
 		cs_cpu_atom && adr_cpu[1:0] == 3:
 			data_cpu_in_r = atom[31:24];
+		cs_cpu_pa && adr_cpu[1:0] == 0:
+			data_cpu_in_r = data_pa_out[7:0];
+		cs_cpu_pa && adr_cpu[1:0] == 1:
+			data_cpu_in_r = data_pa_in[7:0];
 		cs_cpu_io_if || cs_cpu_io_ie:
 			data_cpu_in_r = data_cpureg_out;
 		endcase
@@ -529,6 +553,7 @@ module top(
 		cs_cpu_atom   = 0;
 		cs_cpu_io_if  = 0;
 		cs_cpu_io_ie  = 0;
+		cs_cpu_pa     = 0;
 
 		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
 			cs_cpu_counter[i] = 0;
@@ -567,6 +592,8 @@ module top(
 			if (`NUM_COUNTERS > 6) cs_cpu_counter[6] = 1;
 		'b_1111_1111_0011_11??: /* 0xff3c-0xff3f: Counter 7 */
 			if (`NUM_COUNTERS > 7) cs_cpu_counter[7] = 1;
+		'b_1111_1111_0100_00??: /* 0xff40-0xff43: Port A */
+			cs_cpu_pa = 1;
 		'b_1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
 			cs_cpu_io_ie = 1;
 		'b_1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
@@ -697,5 +724,59 @@ module top(
 		if (dut_wr_in && dut_cs_xram_in && dut_adr_in[13])
 			dut_wo_ram[dut_adr_in[11:0]] <= dut_data_in;
 	end
+
+	dp_reg #(8) pa_in_reg2bus(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_in(pa_in),
+		.fvalue_mask('hff),
+
+		.svalue_out(data_pa_in),
+	);
+
+	dp_reg #(8) pa_out_reg2bus(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_in(pa_out),
+		.fvalue_mask('hff),
+
+		.svalue_out(data_pa_out),
+	);
+
+	dp_reg #(8) pa_out_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(pa_set_mask),
+		.fvalue_mask('hff),
+
+		.svalue_in(data_cpu_out),
+		.svalue_mask({8{pa_set_sig}}),
+	);
+
+	dp_reg #(8) pa_out_reset_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(pa_reset_mask),
+		.fvalue_mask('hff),
+
+		.svalue_in(data_cpu_out),
+		.svalue_mask({8{pa_reset_sig}}),
+	);
+
+	always @(posedge pllclk) begin
+		pa_out <= ((pa_out | pa_set_mask) & ~pa_reset_mask);
+
+		if (f_reset)
+			pa_out <= 0;
+	end
+
+	always @(posedge cpuclk) r_pa_trigger <= wr_cpu && cs_cpu_pa;
+	assign pa_trigger = wr_cpu && cs_cpu_pa && !r_pa_trigger;
+	assign pa_set_sig = pa_trigger && !adr_cpu[1:0];
+	assign pa_reset_sig = pa_trigger && adr_cpu[1:0] == 1;
 
 endmodule
