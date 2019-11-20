@@ -132,6 +132,7 @@ module top(
 	reg  cs_cpu_sw0, cs_cpu_sw1;
 	reg  cs_cpu_io_if, cs_cpu_io_ie;
 	reg  cs_cpu_atom;
+	reg  cs_cpu_ones_set;
 	reg  cs_cpu_pa;
 
 	reg  [`NUM_COUNTERS-1:0] cs_cpu_counter;
@@ -159,6 +160,9 @@ module top(
 	cdc #(1) pa_cdc[7:0](pllclk, pa_ext, pa_in);
 
 	reg  [31:0] atom;
+
+	wire                   ones_set_trigger;
+	wire [`NUM_ROUTES-1:0] ones_set;
 
 	wor  [`NUM_ROUTES-1:0] route;
 
@@ -545,17 +549,18 @@ module top(
 	assign data_cpu_in = ddrv_dbg ? data_dbg_out : data_cpu_in_wand;
 
 	always @* begin
-		cs_cpu_sysram = 0;
-		cs_cpu_dutram = 0;
-		cs_cpu_recram = 0;
-		cs_cpu_led0   = 0;
-		cs_cpu_led1   = 0;
-		cs_cpu_sw0    = 0;
-		cs_cpu_sw1    = 0;
-		cs_cpu_atom   = 0;
-		cs_cpu_io_if  = 0;
-		cs_cpu_io_ie  = 0;
-		cs_cpu_pa     = 0;
+		cs_cpu_sysram   = 0;
+		cs_cpu_dutram   = 0;
+		cs_cpu_recram   = 0;
+		cs_cpu_led0     = 0;
+		cs_cpu_led1     = 0;
+		cs_cpu_sw0      = 0;
+		cs_cpu_sw1      = 0;
+		cs_cpu_atom     = 0;
+		cs_cpu_ones_set = 0;
+		cs_cpu_io_if    = 0;
+		cs_cpu_io_ie    = 0;
+		cs_cpu_pa       = 0;
 
 		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
 			cs_cpu_counter[i] = 0;
@@ -578,6 +583,8 @@ module top(
 			cs_cpu_sw1 = 1;
 		'b_1111_1111_0001_00??: /* 0xff10-0xff13: Atomic load register */
 			cs_cpu_atom = 1;
+		'b_1111_1111_0001_0100: /* 0xff14:        Always one trigger */
+			cs_cpu_ones_set = 1;
 		'b_1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
 			if (`NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
 		'b_1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
@@ -807,5 +814,20 @@ module top(
 
 	assign pa_set_mask[0] = |(pa_trigger_set & route);
 	assign pa_reset_mask[0] = |(pa_trigger_reset & route);
+
+	dp_reg #(`NUM_ROUTES) ones_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(ones_set),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{ones_set_trigger}}),
+	);
+
+	assign ones_set_trigger = wr_cpu && cs_cpu_ones_set;
+
+	assign route = ones_set;
 
 endmodule
