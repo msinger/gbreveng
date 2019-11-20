@@ -151,9 +151,11 @@ module top(
 	reg  [7:0]  pa_out;
 	wire [7:0]  pa_ext, pa_in;
 	wire        pa_set_sig, pa_reset_sig;
-	wire [7:0]  pa_set_mask, pa_reset_mask;
+	wor  [7:0]  pa_set_mask, pa_reset_mask;
 	wire        pa_trigger;
 	reg         r_pa_trigger;
+	wire        pa_trigger_set_set, pa_trigger_reset_set;
+	wire [`NUM_ROUTES-1:0] pa_trigger_set, pa_trigger_reset;
 	cdc #(1) pa_cdc[7:0](pllclk, pa_ext, pa_in);
 
 	reg  [31:0] atom;
@@ -767,6 +769,28 @@ module top(
 		.svalue_mask({8{pa_reset_sig}}),
 	);
 
+	dp_reg #(`NUM_ROUTES) pa_trigger_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(pa_trigger_set),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{pa_trigger_set_set}}),
+	);
+
+	dp_reg #(`NUM_ROUTES) pa_trigger_reset_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(pa_trigger_reset),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{pa_trigger_reset_set}}),
+	);
+
 	always @(posedge pllclk) begin
 		pa_out <= ((pa_out | pa_set_mask) & ~pa_reset_mask);
 
@@ -778,5 +802,10 @@ module top(
 	assign pa_trigger = wr_cpu && cs_cpu_pa && !r_pa_trigger;
 	assign pa_set_sig = pa_trigger && !adr_cpu[1:0];
 	assign pa_reset_sig = pa_trigger && adr_cpu[1:0] == 1;
+	assign pa_trigger_set_set = pa_trigger && adr_cpu[1:0] == 2 && data_cpu_out == 1;
+	assign pa_trigger_reset_set = pa_trigger && &adr_cpu[1:0] && data_cpu_out == 1;
+
+	assign pa_set_mask[0] = |(pa_trigger_set & route);
+	assign pa_reset_mask[0] = |(pa_trigger_reset & route);
 
 endmodule
