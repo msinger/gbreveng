@@ -203,6 +203,8 @@ module top(
 
 	reg dut_any_cs;
 
+	wire [7:0] irq, f_irq;
+
 	reg  [7:0] sysram[0:4095];
 	reg  [7:0] dut_ro_ram[0:4095];
 	reg  [7:0] dut_wo_ram[0:4095];
@@ -619,7 +621,7 @@ module top(
 		.dout(data_cpu_out),
 		.write(wr_cpu),
 		.read(rd_cpu),
-		.irq(0),
+		.irq(irq),
 
 		.cs_if(cs_cpu_io_if),
 		.cs_ie(cs_cpu_io_ie),
@@ -829,5 +831,18 @@ module top(
 	assign ones_set_trigger = wr_cpu && cs_cpu_ones_set;
 
 	assign route = ones_set;
+
+	dp_reg #(8) route2irq_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_in(f_irq),
+		.fvalue_mask(f_irq),
+
+		.svalue_out(irq),
+		.svalue_mask('hff),
+	);
+
+	assign f_irq = {{(`NUM_ROUTES > 8 ? 0 : 8-`NUM_ROUTES){1'b0}}, route[(`NUM_ROUTES > 8 ? 7 : `NUM_ROUTES-1):0]};
 
 endmodule
