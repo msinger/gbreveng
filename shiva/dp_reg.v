@@ -2,7 +2,7 @@
 
 (* nolatches *)
 module dp_reg #(
-		parameter WIDTH       = 16,
+		parameter WIDTH       = 1,
 		          RESET_VALUE = 0,
 		          RESET_MASK  = 'hffffffff,
 	) (

@@ -134,6 +134,7 @@ module top(
 	reg  cs_cpu_atom;
 	reg  cs_cpu_ones_set;
 	reg  cs_cpu_pa;
+	reg  cs_cpu_dut;
 
 	reg  [`NUM_COUNTERS-1:0] cs_cpu_counter;
 
@@ -179,11 +180,13 @@ module top(
 	wire       dbg_data_tx_seq;
 	wire       dbg_data_tx_ack;
 
+	wire [29:0] data_dut_in;
 	wire [14:0] dut_adr_ext,          dut_adr_in;
 	reg         dut_data_dir_out,     r_dut_data_dir_out;
 	reg         dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
 	reg         dut_data_lvl_ena;
 	reg  [7:0]  dut_data_out;
+	wire [7:0]  dut_data_ovr_out;
 	wire [7:0]  dut_data_ext,         dut_data_in;
 	wire        n_dut_rd_ext,         dut_rd_in;
 	wire        n_dut_wr_ext,         dut_wr_in;
@@ -202,6 +205,15 @@ module top(
 	cdc #(1) dut_reset_cdc    (pllclk, !n_dut_reset_ext,   dut_reset_in);
 
 	reg dut_any_cs;
+
+	reg  r_dut_ctl_trigger;
+	wire dut_ctl_trigger;
+	reg  r_dut_data_ovr;
+	wire dut_ctl_sig, dut_data_sig;
+	wire dut_reset_set_mask;
+	wire dut_reset_reset_mask;
+	wire dut_data_set_mask;
+	wire dut_data_reset_mask;
 
 	wire [7:0] irq, f_irq;
 
@@ -338,7 +350,7 @@ module top(
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
 			.OUTPUT_ENABLE(!f_reset && dut_data_dir_out),
-			.D_OUT_0(dut_data_out),
+			.D_OUT_0(r_dut_data_ovr ? dut_data_ovr_out : dut_data_out),
 			.D_IN_0(dut_data_ext),
 		);
 
@@ -542,6 +554,14 @@ module top(
 			data_cpu_in_r = data_pa_out[7:0];
 		cs_cpu_pa && adr_cpu[1:0] == 1:
 			data_cpu_in_r = data_pa_in[7:0];
+		cs_cpu_dut && adr_cpu[1:0] == 0:
+			data_cpu_in_r = data_dut_in[7:0];
+		cs_cpu_dut && adr_cpu[1:0] == 1:
+			data_cpu_in_r = data_dut_in[15:8];
+		cs_cpu_dut && adr_cpu[1:0] == 2:
+			data_cpu_in_r = data_dut_in[23:16];
+		cs_cpu_dut && adr_cpu[1:0] == 3:
+			data_cpu_in_r = { 1'b0, data_pa_in[0], data_dut_in[29:24] };
 		cs_cpu_io_if || cs_cpu_io_ie:
 			data_cpu_in_r = data_cpureg_out;
 		endcase
@@ -560,9 +580,10 @@ module top(
 		cs_cpu_sw1      = 0;
 		cs_cpu_atom     = 0;
 		cs_cpu_ones_set = 0;
+		cs_cpu_pa       = 0;
+		cs_cpu_dut      = 0;
 		cs_cpu_io_if    = 0;
 		cs_cpu_io_ie    = 0;
-		cs_cpu_pa       = 0;
 
 		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
 			cs_cpu_counter[i] = 0;
@@ -605,6 +626,8 @@ module top(
 			if (`NUM_COUNTERS > 7) cs_cpu_counter[7] = 1;
 		'b_1111_1111_0100_00??: /* 0xff40-0xff43: Port A */
 			cs_cpu_pa = 1;
+		'b_1111_1111_0101_00??: /* 0xff50-0xff53: DUT Bus */
+			cs_cpu_dut = 1;
 		'b_1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
 			cs_cpu_io_ie = 1;
 		'b_1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
@@ -704,7 +727,7 @@ module top(
 	always @* begin
 		dut_data_dir_out     = r_dut_data_dir_out;
 		dut_data_lvl_dir_out = r_dut_data_lvl_dir_out;
-		dut_reset_out        = 0;
+		dut_reset_out        = r_dut_reset_out;
 
 		dut_any_cs = dut_cs_rom_in || (dut_cs_xram_in && dut_adr_in[13] && !dut_adr_in[14]);
 
@@ -723,6 +746,11 @@ module top(
 			else
 				dut_data_lvl_ena = 0;
 		end
+
+		dut_reset_out = (dut_reset_out || dut_reset_set_mask) && !dut_reset_reset_mask;
+
+		if (f_reset)
+			dut_reset_out = 0;
 	end
 
 	always @(posedge pllclk) begin
@@ -844,5 +872,84 @@ module top(
 	);
 
 	assign f_irq = {{(`NUM_ROUTES > 8 ? 0 : 8-`NUM_ROUTES){1'b0}}, route[(`NUM_ROUTES > 8 ? 7 : `NUM_ROUTES-1):0]};
+
+	dp_reg #(30) dut_reg2bus(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_in({ dut_reset_in, dut_phi_in,
+		             dut_wr_in, dut_rd_in,
+		             dut_cs_xram_in, dut_data_dir_out, dut_data_in,
+		             dut_cs_rom_in, dut_adr_in }),
+		.fvalue_mask('h3fffffff),
+
+		.svalue_out(data_dut_in),
+	);
+
+	dp_reg dut_reset_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_reset_set_mask),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[0]),
+		.svalue_mask(dut_ctl_sig),
+	);
+
+	dp_reg dut_reset_reset_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_reset_reset_mask),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[2]),
+		.svalue_mask(dut_ctl_sig),
+	);
+
+	dp_reg dut_data_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_data_set_mask),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[1]),
+		.svalue_mask(dut_ctl_sig),
+	);
+
+	dp_reg dut_data_reset_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_data_reset_mask),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[3]),
+		.svalue_mask(dut_ctl_sig),
+	);
+
+	dp_reg #(8) dut_data_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_data_ovr_out),
+
+		.svalue_in(data_cpu_out),
+		.svalue_mask({8{dut_data_sig}}),
+	);
+
+	always @(posedge cpuclk) r_dut_ctl_trigger <= wr_cpu && cs_cpu_dut;
+	assign dut_ctl_trigger = wr_cpu && cs_cpu_dut && !r_dut_ctl_trigger;
+	assign dut_ctl_sig = dut_ctl_trigger && !adr_cpu[1:0];
+	assign dut_data_sig = dut_ctl_trigger && adr_cpu[1:0] == 2;
+
+	always @(posedge pllclk) begin
+		r_dut_data_ovr <= (r_dut_data_ovr | dut_data_set_mask) & !dut_data_reset_mask;
+
+		if (f_reset)
+			r_dut_data_ovr <= 0;
+	end
 
 endmodule
