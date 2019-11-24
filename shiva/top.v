@@ -181,6 +181,8 @@ module top(
 	wire       dbg_data_tx_ack;
 
 	wire [29:0] data_dut_in;
+	reg  [30:0] dut_data_compare,     dut_data_compare_mask;
+	wire [`NUM_ROUTES-1:0] dut_data_compare_trig_set;
 	wire [14:0] dut_adr_ext,          dut_adr_in;
 	reg         dut_data_dir_out,     r_dut_data_dir_out;
 	reg         dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
@@ -206,14 +208,16 @@ module top(
 
 	reg dut_any_cs;
 
-	reg  r_dut_ctl_trigger;
-	wire dut_ctl_trigger;
-	reg  r_dut_data_ovr;
-	wire dut_ctl_sig, dut_data_sig;
+	reg  r_dut_trigger;
+	wire dut_trigger;
+	reg  dut_data_ovr;
+	wire dut_ctl_sig, dut_trig_sig, dut_data_sig, dut_cmp_sig;
 	wire dut_reset_set_mask;
 	wire dut_reset_reset_mask;
 	wire dut_data_set_mask;
 	wire dut_data_reset_mask;
+	wire dut_data_compare_set, dut_data_compare_mask_set;
+	wire dut_data_compare_matches;
 
 	wire [7:0] irq, f_irq;
 
@@ -350,7 +354,7 @@ module top(
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
 			.OUTPUT_ENABLE(!f_reset && dut_data_dir_out),
-			.D_OUT_0(r_dut_data_ovr ? dut_data_ovr_out : dut_data_out),
+			.D_OUT_0(dut_data_ovr ? dut_data_ovr_out : dut_data_out),
 			.D_IN_0(dut_data_ext),
 		);
 
@@ -940,16 +944,64 @@ module top(
 		.svalue_mask({8{dut_data_sig}}),
 	);
 
-	always @(posedge cpuclk) r_dut_ctl_trigger <= wr_cpu && cs_cpu_dut;
-	assign dut_ctl_trigger = wr_cpu && cs_cpu_dut && !r_dut_ctl_trigger;
-	assign dut_ctl_sig = dut_ctl_trigger && !adr_cpu[1:0];
-	assign dut_data_sig = dut_ctl_trigger && adr_cpu[1:0] == 2;
+	dp_reg dut_data_compare_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_data_compare_set),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[0]),
+		.svalue_mask(dut_cmp_sig),
+	);
+
+	dp_reg dut_data_compare_mask_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(dut_data_compare_mask_set),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[1]),
+		.svalue_mask(dut_cmp_sig),
+	);
+
+	dp_reg #(`NUM_ROUTES) dut_trigger_set_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(dut_data_compare_trig_set),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{dut_trig_sig && data_cpu_out[0]}}),
+	);
+
+	always @(posedge cpuclk) r_dut_trigger <= wr_cpu && cs_cpu_dut;
+	assign dut_trigger = wr_cpu && cs_cpu_dut && !r_dut_trigger;
+	assign dut_ctl_sig = dut_trigger && !adr_cpu[1:0];
+	assign dut_trig_sig = dut_trigger && adr_cpu[1:0] == 1;
+	assign dut_data_sig = dut_trigger && adr_cpu[1:0] == 2;
+	assign dut_cmp_sig = dut_trigger && &adr_cpu[1:0];
 
 	always @(posedge pllclk) begin
-		r_dut_data_ovr <= (r_dut_data_ovr | dut_data_set_mask) & !dut_data_reset_mask;
+		dut_data_ovr <= (dut_data_ovr | dut_data_set_mask) & !dut_data_reset_mask;
 
-		if (f_reset)
-			r_dut_data_ovr <= 0;
+		if (dut_data_compare_set)
+			dut_data_compare <= atom;
+		if (dut_data_compare_mask_set)
+			dut_data_compare_mask <= atom;
+
+		if (f_reset) begin
+			dut_data_ovr          <= 0;
+			dut_data_compare      <= 0;
+			dut_data_compare_mask <= 0;
+		end
 	end
+
+	assign dut_data_compare_matches = ({ data_pa_in[0], data_dut_in } & dut_data_compare_mask_set) ==
+	                                  (dut_data_compare_set & dut_data_compare_mask_set);
+
+	assign route = {`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set;
 
 endmodule
