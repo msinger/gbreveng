@@ -180,7 +180,7 @@ module top(
 	wire       dbg_data_tx_seq;
 	wire       dbg_data_tx_ack;
 
-	wire [29:0] data_dut_in;
+	wire [29:0] data_dut_in,          dut_in;
 	reg  [30:0] dut_data_compare,     dut_data_compare_mask;
 	wire [`NUM_ROUTES-1:0] dut_data_compare_trig_set;
 	wire [14:0] dut_adr_ext,          dut_adr_in;
@@ -881,14 +881,16 @@ module top(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
-		.fvalue_in({ dut_reset_in, dut_phi_in,
-		             dut_wr_in, dut_rd_in,
-		             dut_cs_xram_in, dut_data_dir_out, dut_data_in,
-		             dut_cs_rom_in, dut_adr_in }),
+		.fvalue_in(dut_in),
 		.fvalue_mask('h3fffffff),
 
 		.svalue_out(data_dut_in),
 	);
+
+	assign dut_in = { dut_reset_in, dut_phi_in,
+	                  dut_wr_in, dut_rd_in,
+	                  dut_cs_xram_in, dut_data_dir_out, dut_data_in,
+	                  dut_cs_rom_in, dut_adr_in };
 
 	dp_reg dut_reset_set_reg(
 		.fclk(pllclk),
@@ -999,8 +1001,8 @@ module top(
 		end
 	end
 
-	assign dut_data_compare_matches = ({ data_pa_in[0], data_dut_in } & dut_data_compare_mask_set) ==
-	                                  (dut_data_compare_set & dut_data_compare_mask_set);
+	assign dut_data_compare_matches = ({ pa_in[0], dut_in } & dut_data_compare_mask) ==
+	                                  (dut_data_compare & dut_data_compare_mask);
 
 	assign route = {`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set;
 
