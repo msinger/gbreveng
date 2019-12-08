@@ -745,7 +745,7 @@ module top(
 		end else begin
 			dut_data_dir_out = 0;
 
-			if (r_dut_data_dir_out)
+			if (!r_dut_data_dir_out)
 				dut_data_lvl_dir_out = 0;
 			else
 				dut_data_lvl_ena = 0;
