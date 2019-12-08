@@ -1,8 +1,8 @@
 `default_nettype none
 
-`define COUNTER_WIDTH    20
-`define NUM_COUNTERS     2
-`define NUM_COMPARATORS  4
+`define COUNTER_WIDTH    5
+`define NUM_COUNTERS     1
+`define NUM_COMPARATORS  5
 `define NUM_ROUTES       4
 
 (* nolatches *)
