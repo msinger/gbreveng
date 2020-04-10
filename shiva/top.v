@@ -594,47 +594,47 @@ module top(
 
 		if (r_reset_done) casez (adr_cpu)
 		/* A15....A8 A7.....A0 */
-		'b_0000_????_????_????: /* 0x0000-0x0fff: System RAM */
+		'b 0000_????_????_????: /* 0x0000-0x0fff: System RAM */
 			cs_cpu_sysram = 1;
-		'b_0001_????_????_????: /* 0x1000-0x1fff: Device-Under-Test RAM */
+		'b 0001_????_????_????: /* 0x1000-0x1fff: Device-Under-Test RAM */
 			cs_cpu_dutram = 1;
-		'b_0010_????_????_????: /* 0x2000-0x2fff: Recording RAM */
+		'b 0010_????_????_????: /* 0x2000-0x2fff: Recording RAM */
 			cs_cpu_recram = 1;
-		'b_1111_1111_0000_0000: /* 0xff00:        LED 0-7 */
+		'b 1111_1111_0000_0000: /* 0xff00:        LED 0-7 */
 			cs_cpu_led0 = 1;
-		'b_1111_1111_0000_0001: /* 0xff01:        LED 8-15 */
+		'b 1111_1111_0000_0001: /* 0xff01:        LED 8-15 */
 			cs_cpu_led1 = 1;
-		'b_1111_1111_0000_0010: /* 0xff02:        SW 0-7 */
+		'b 1111_1111_0000_0010: /* 0xff02:        SW 0-7 */
 			cs_cpu_sw0 = 1;
-		'b_1111_1111_0000_0011: /* 0xff03:        SW 8-15 */
+		'b 1111_1111_0000_0011: /* 0xff03:        SW 8-15 */
 			cs_cpu_sw1 = 1;
-		'b_1111_1111_0001_00??: /* 0xff10-0xff13: Atomic load register */
+		'b 1111_1111_0001_00??: /* 0xff10-0xff13: Atomic load register */
 			cs_cpu_atom = 1;
-		'b_1111_1111_0001_0100: /* 0xff14:        Always one trigger */
+		'b 1111_1111_0001_0100: /* 0xff14:        Always one trigger */
 			cs_cpu_ones_set = 1;
-		'b_1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
+		'b 1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
 			if (`NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
-		'b_1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
+		'b 1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
 			if (`NUM_COUNTERS > 1) cs_cpu_counter[1] = 1;
-		'b_1111_1111_0010_10??: /* 0xff28-0xff2b: Counter 2 */
+		'b 1111_1111_0010_10??: /* 0xff28-0xff2b: Counter 2 */
 			if (`NUM_COUNTERS > 2) cs_cpu_counter[2] = 1;
-		'b_1111_1111_0010_11??: /* 0xff2c-0xff2f: Counter 3 */
+		'b 1111_1111_0010_11??: /* 0xff2c-0xff2f: Counter 3 */
 			if (`NUM_COUNTERS > 3) cs_cpu_counter[3] = 1;
-		'b_1111_1111_0011_00??: /* 0xff30-0xff33: Counter 4 */
+		'b 1111_1111_0011_00??: /* 0xff30-0xff33: Counter 4 */
 			if (`NUM_COUNTERS > 4) cs_cpu_counter[4] = 1;
-		'b_1111_1111_0011_01??: /* 0xff34-0xff37: Counter 5 */
+		'b 1111_1111_0011_01??: /* 0xff34-0xff37: Counter 5 */
 			if (`NUM_COUNTERS > 5) cs_cpu_counter[5] = 1;
-		'b_1111_1111_0011_10??: /* 0xff38-0xff3b: Counter 6 */
+		'b 1111_1111_0011_10??: /* 0xff38-0xff3b: Counter 6 */
 			if (`NUM_COUNTERS > 6) cs_cpu_counter[6] = 1;
-		'b_1111_1111_0011_11??: /* 0xff3c-0xff3f: Counter 7 */
+		'b 1111_1111_0011_11??: /* 0xff3c-0xff3f: Counter 7 */
 			if (`NUM_COUNTERS > 7) cs_cpu_counter[7] = 1;
-		'b_1111_1111_0100_00??: /* 0xff40-0xff43: Port A */
+		'b 1111_1111_0100_00??: /* 0xff40-0xff43: Port A */
 			cs_cpu_pa = 1;
-		'b_1111_1111_0101_00??: /* 0xff50-0xff53: DUT Bus */
+		'b 1111_1111_0101_00??: /* 0xff50-0xff53: DUT Bus */
 			cs_cpu_dut = 1;
-		'b_1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
+		'b 1111_1111_1111_1111: /* 0xffff:        Interrupt Enable */
 			cs_cpu_io_ie = 1;
-		'b_1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
+		'b 1111_1111_1111_1110: /* 0xfffe:        Interrupt Flag */
 			cs_cpu_io_if = 1;
 		endcase
 	end
