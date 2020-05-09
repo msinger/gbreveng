@@ -92,7 +92,7 @@ module top(
 		output wire [1:0]  lcd_data   = 0,
 	);
 
-	integer i;
+	genvar i;
 
 	wire pllclk;
 	wire cpuclk;
@@ -139,9 +139,8 @@ module top(
 	reg  [`NUM_COUNTERS-1:0] cs_cpu_counter;
 
 	wire [7:0] data_cpu_out;
-	wire [7:0] data_cpu_in;
-	reg  [7:0] data_cpu_in_r;
-	wand [7:0] data_cpu_in_wand;
+	reg  [7:0] data_cpu_in;
+	wire [7:0] data_counter_out[0:`NUM_COUNTERS-1];
 	wire [7:0] data_cpureg_out;
 	reg  [7:0] data_sysram_out;
 	reg  [7:0] data_dutram_out;
@@ -153,7 +152,8 @@ module top(
 	reg  [7:0]  pa_out;
 	wire [7:0]  pa_ext, pa_in;
 	wire        pa_set_sig, pa_reset_sig;
-	wor  [7:0]  pa_set_mask, pa_reset_mask;
+	reg  [7:0]  pa_set_mask, pa_reset_mask;
+	wire [7:0]  pa_reg_set_mask, pa_reg_reset_mask;
 	wire        pa_trigger;
 	reg         r_pa_trigger;
 	wire        pa_trigger_set_set, pa_trigger_reset_set;
@@ -165,7 +165,9 @@ module top(
 	wire                   ones_set_trigger;
 	wire [`NUM_ROUTES-1:0] ones_set;
 
-	wor  [`NUM_ROUTES-1:0] route;
+	reg  [`NUM_ROUTES-1:0] route;
+	reg  [`NUM_ROUTES-1:0] piped_route;
+	wire [`NUM_ROUTES-1:0] route_counter_out[0:`NUM_COUNTERS-1];
 
 	wire [15:0] pc, sp;
 	wire [7:4]  flags;
@@ -527,54 +529,58 @@ module top(
 		endcase
 	end
 
-	always @* begin
-		data_cpu_in_r = 'hff;
+	always @* begin :combine_cpu_data
+		data_cpu_in = 'hff;
 
 		(* parallelcase *)
 		case (1)
 		cs_cpu_sysram:
-			data_cpu_in_r = data_sysram_out;
+			data_cpu_in = data_sysram_out;
 		cs_cpu_dutram:
-			data_cpu_in_r = data_dutram_out;
+			data_cpu_in = data_dutram_out;
 		cs_cpu_recram:
-			data_cpu_in_r = data_recram_out;
+			data_cpu_in = data_recram_out;
 		cs_cpu_led0:
-			data_cpu_in_r = led[7:0];
+			data_cpu_in = led[7:0];
 		cs_cpu_led1:
-			data_cpu_in_r = led[15:8];
+			data_cpu_in = led[15:8];
 		cs_cpu_sw0:
-			data_cpu_in_r = sw_in[7:0];
+			data_cpu_in = sw_in[7:0];
 		cs_cpu_sw1:
-			data_cpu_in_r = sw_in[15:8];
+			data_cpu_in = sw_in[15:8];
 		cs_cpu_atom && adr_cpu[1:0] == 0:
-			data_cpu_in_r = atom[7:0];
+			data_cpu_in = atom[7:0];
 		cs_cpu_atom && adr_cpu[1:0] == 1:
-			data_cpu_in_r = atom[15:8];
+			data_cpu_in = atom[15:8];
 		cs_cpu_atom && adr_cpu[1:0] == 2:
-			data_cpu_in_r = atom[23:16];
+			data_cpu_in = atom[23:16];
 		cs_cpu_atom && adr_cpu[1:0] == 3:
-			data_cpu_in_r = atom[31:24];
+			data_cpu_in = atom[31:24];
 		cs_cpu_pa && adr_cpu[1:0] == 0:
-			data_cpu_in_r = data_pa_out[7:0];
+			data_cpu_in = data_pa_out[7:0];
 		cs_cpu_pa && adr_cpu[1:0] == 1:
-			data_cpu_in_r = data_pa_in[7:0];
+			data_cpu_in = data_pa_in[7:0];
 		cs_cpu_dut && adr_cpu[1:0] == 0:
-			data_cpu_in_r = data_dut_in[7:0];
+			data_cpu_in = data_dut_in[7:0];
 		cs_cpu_dut && adr_cpu[1:0] == 1:
-			data_cpu_in_r = data_dut_in[15:8];
+			data_cpu_in = data_dut_in[15:8];
 		cs_cpu_dut && adr_cpu[1:0] == 2:
-			data_cpu_in_r = data_dut_in[23:16];
+			data_cpu_in = data_dut_in[23:16];
 		cs_cpu_dut && adr_cpu[1:0] == 3:
-			data_cpu_in_r = { 1'b0, data_pa_in[0], data_dut_in[29:24] };
+			data_cpu_in = { 1'b0, data_pa_in[0], data_dut_in[29:24] };
 		cs_cpu_io_if || cs_cpu_io_ie:
-			data_cpu_in_r = data_cpureg_out;
+			data_cpu_in = data_cpureg_out;
 		endcase
+
+		integer i;
+		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
+			data_cpu_in = data_cpu_in & data_counter_out[i];
+
+		if (ddrv_dbg)
+			data_cpu_in = data_dbg_out;
 	end
 
-	assign data_cpu_in_wand = data_cpu_in_r;
-	assign data_cpu_in = ddrv_dbg ? data_dbg_out : data_cpu_in_wand;
-
-	always @* begin
+	always @* begin :adr_to_cs
 		cs_cpu_sysram   = 0;
 		cs_cpu_dutram   = 0;
 		cs_cpu_recram   = 0;
@@ -589,6 +595,7 @@ module top(
 		cs_cpu_io_if    = 0;
 		cs_cpu_io_ie    = 0;
 
+		integer i;
 		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
 			cs_cpu_counter[i] = 0;
 
@@ -710,23 +717,25 @@ module top(
 		.data_tx_ack(dbg_data_tx_ack),
 	);
 
-	counter_block #(`COUNTER_WIDTH, `NUM_COMPARATORS, `NUM_ROUTES) counter[`NUM_COUNTERS-1:0](
-		.ctrclk(pllclk),
-		.busclk(cpuclk),
-		.ctrrst(f_reset),
+	generate for (i = 0; i < `NUM_COUNTERS; i = i + 1)
+		counter_block #(`COUNTER_WIDTH, `NUM_COMPARATORS, `NUM_ROUTES) counter(
+			.ctrclk(pllclk),
+			.busclk(cpuclk),
+			.ctrrst(f_reset),
 
-		.route_in(route),
-		.route_out(route),
+			.route_in(route),
+			.route_out(route_counter_out[i]),
 
-		.route_con(atom[`NUM_ROUTES-1:0]),
-		.wide_data(atom[`COUNTER_WIDTH-1:0]),
-		.data_in(data_cpu_out),
-		.data_out(data_cpu_in_wand),
-		.adr(adr_cpu[1:0]),
-		.cs(cs_cpu_counter),
-		.rd(rd_cpu),
-		.wr(wr_cpu),
-	);
+			.route_con(atom[`NUM_ROUTES-1:0]),
+			.wide_data(atom[`COUNTER_WIDTH-1:0]),
+			.data_in(data_cpu_out),
+			.data_out(data_counter_out[i]),
+			.adr(adr_cpu[1:0]),
+			.cs(cs_cpu_counter[i]),
+			.rd(rd_cpu),
+			.wr(wr_cpu),
+		);
+	endgenerate
 
 	always @* begin
 		dut_data_dir_out     = r_dut_data_dir_out;
@@ -792,7 +801,7 @@ module top(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
-		.fvalue_out(pa_set_mask),
+		.fvalue_out(pa_reg_set_mask),
 		.fvalue_mask('hff),
 
 		.svalue_in(data_cpu_out),
@@ -803,7 +812,7 @@ module top(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
-		.fvalue_out(pa_reset_mask),
+		.fvalue_out(pa_reg_reset_mask),
 		.fvalue_mask('hff),
 
 		.svalue_in(data_cpu_out),
@@ -846,8 +855,13 @@ module top(
 	assign pa_trigger_set_set = pa_trigger && adr_cpu[1:0] == 2 && data_cpu_out == 1;
 	assign pa_trigger_reset_set = pa_trigger && &adr_cpu[1:0] && data_cpu_out == 1;
 
-	assign pa_set_mask[0] = |(pa_trigger_set & route);
-	assign pa_reset_mask[0] = |(pa_trigger_reset & route);
+	always @* begin
+		pa_set_mask   = pa_reg_set_mask;
+		pa_reset_mask = pa_reg_reset_mask;
+
+		pa_set_mask[0]   = pa_set_mask[0]   | |(pa_trigger_set   & route);
+		pa_reset_mask[0] = pa_reset_mask[0] | |(pa_trigger_reset & route);
+	end
 
 	dp_reg #(`NUM_ROUTES) ones_set_reg(
 		.fclk(pllclk),
@@ -861,8 +875,6 @@ module top(
 	);
 
 	assign ones_set_trigger = wr_cpu && cs_cpu_ones_set;
-
-	assign route = ones_set;
 
 	dp_reg #(8) route2irq_reg(
 		.fclk(pllclk),
@@ -1004,6 +1016,18 @@ module top(
 	assign dut_data_compare_matches = ({ pa_in[0], dut_in } & dut_data_compare_mask) ==
 	                                  (dut_data_compare & dut_data_compare_mask);
 
-	assign route = {`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set;
+	always @(posedge pllclk) begin
+		piped_route = ones_set;
+	end
+
+	always @* begin :combine_route
+		route = piped_route;
+
+		integer i;
+		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
+			route = route | route_counter_out[i];
+
+		route = route | ({`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set);
+	end
 
 endmodule

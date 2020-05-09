@@ -11,12 +11,12 @@ module counter_block #(
 		input  wire ctrrst,
 
 		input  wire [NUM_ROUTES-1:0] route_in,
-		output wor  [NUM_ROUTES-1:0] route_out,
+		output reg  [NUM_ROUTES-1:0] route_out,
 
 		input  wire [NUM_ROUTES-1:0] route_con,
 		input  wire [WIDTH-1:0]      wide_data,
 		input  wire [7:0]            data_in,
-		output wand [7:0]            data_out,
+		output reg  [7:0]            data_out,
 		input  wire [1:0]            adr,
 		input  wire                  cs,
 		input  wire                  rd,
@@ -36,6 +36,7 @@ module counter_block #(
 	wire [4:0]                 bus_trigger_sig;
 	wire [NUM_ROUTES-1:0]      trigger_in[0:4];
 	wire [NUM_ROUTES-1:0]      compare_trigger_out[0:NUM_COMPARATORS-1];
+	wire [NUM_ROUTES-1:0]      compare_route_out[0:NUM_COMPARATORS-1];
 	wire [4:0]                 trigger_in_set;
 	wire [NUM_COMPARATORS-1:0] compare_trigger_out_set;
 
@@ -87,28 +88,6 @@ module counter_block #(
 	);
 
 	generate
-		if (WIDTH > 24) begin
-			assign data_out = (rd && cs && adr == 0) ? value_bus[7:0]        : 'hff;
-			assign data_out = (rd && cs && adr == 1) ? value_bus[15:8]       : 'hff;
-			assign data_out = (rd && cs && adr == 2) ? value_bus[23:16]      : 'hff;
-			assign data_out = (rd && cs && adr == 3) ? value_bus[WIDTH-1:24] : 'hff;
-		end else if (WIDTH > 16) begin
-			assign data_out = (rd && cs && adr == 0) ? value_bus[7:0]        : 'hff;
-			assign data_out = (rd && cs && adr == 1) ? value_bus[15:8]       : 'hff;
-			assign data_out = (rd && cs && adr == 2) ? value_bus[WIDTH-1:16] : 'hff;
-			assign data_out = (rd && cs && adr == 3) ? 0                     : 'hff;
-		end else if (WIDTH > 8) begin
-			assign data_out = (rd && cs && adr == 0) ? value_bus[7:0]        : 'hff;
-			assign data_out = (rd && cs && adr == 1) ? value_bus[WIDTH-1:8]  : 'hff;
-			assign data_out = (rd && cs && adr == 2) ? 0                     : 'hff;
-			assign data_out = (rd && cs && adr == 3) ? 0                     : 'hff;
-		end else begin
-			assign data_out = (rd && cs && adr == 0) ? value_bus[WIDTH-1:0]  : 'hff;
-			assign data_out = (rd && cs && adr == 1) ? 0                     : 'hff;
-			assign data_out = (rd && cs && adr == 2) ? 0                     : 'hff;
-			assign data_out = (rd && cs && adr == 3) ? 0                     : 'hff;
-		end
-
 		for (i = 0; i < NUM_COMPARATORS; i = i + 1) begin
 			dp_reg #(WIDTH) compare_reg(
 				.fclk(ctrclk),
@@ -132,7 +111,7 @@ module counter_block #(
 				.svalue_mask({NUM_ROUTES{compare_trigger_out_set[i]}}),
 			);
 
-			assign route_out = {NUM_ROUTES{compare_value[i] == value}} & compare_trigger_out[i];
+			assign compare_route_out[i] = {NUM_ROUTES{compare_value[i] == value}} & compare_trigger_out[i];
 		end
 
 		for (i = 0; i < 5; i = i + 1) begin
@@ -148,6 +127,37 @@ module counter_block #(
 			);
 		end
 	endgenerate
+
+	always @* begin :combine_out
+		route_out = 0;
+		data_out  = 'hff;
+
+		if (WIDTH > 24) begin
+			data_out = data_out & ((rd && cs && adr == 0) ? value_bus[7:0]        : 'hff);
+			data_out = data_out & ((rd && cs && adr == 1) ? value_bus[15:8]       : 'hff);
+			data_out = data_out & ((rd && cs && adr == 2) ? value_bus[23:16]      : 'hff);
+			data_out = data_out & ((rd && cs && adr == 3) ? value_bus[WIDTH-1:24] : 'hff);
+		end else if (WIDTH > 16) begin
+			data_out = data_out & ((rd && cs && adr == 0) ? value_bus[7:0]        : 'hff);
+			data_out = data_out & ((rd && cs && adr == 1) ? value_bus[15:8]       : 'hff);
+			data_out = data_out & ((rd && cs && adr == 2) ? value_bus[WIDTH-1:16] : 'hff);
+			data_out = data_out & ((rd && cs && adr == 3) ? 0                     : 'hff);
+		end else if (WIDTH > 8) begin
+			data_out = data_out & ((rd && cs && adr == 0) ? value_bus[7:0]        : 'hff);
+			data_out = data_out & ((rd && cs && adr == 1) ? value_bus[WIDTH-1:8]  : 'hff);
+			data_out = data_out & ((rd && cs && adr == 2) ? 0                     : 'hff);
+			data_out = data_out & ((rd && cs && adr == 3) ? 0                     : 'hff);
+		end else begin
+			data_out = data_out & ((rd && cs && adr == 0) ? value_bus[WIDTH-1:0]  : 'hff);
+			data_out = data_out & ((rd && cs && adr == 1) ? 0                     : 'hff);
+			data_out = data_out & ((rd && cs && adr == 2) ? 0                     : 'hff);
+			data_out = data_out & ((rd && cs && adr == 3) ? 0                     : 'hff);
+		end
+
+		integer i;
+		for (i = 0; i < NUM_COMPARATORS; i = i + 1)
+			route_out = route_out | compare_route_out[i];
+	end
 
 	always @(posedge busclk) r_bus_trigger <= wr && cs;
 	assign bus_trigger             = wr && cs && !r_bus_trigger;
