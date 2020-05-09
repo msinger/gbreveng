@@ -1018,6 +1018,7 @@ module top(
 
 	always @(posedge pllclk) begin
 		piped_route = ones_set;
+		piped_route = piped_route | ({`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set);
 	end
 
 	always @* begin :combine_route
@@ -1026,8 +1027,6 @@ module top(
 		integer i;
 		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
 			route = route | route_counter_out[i];
-
-		route = route | ({`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set);
 	end
 
 endmodule
