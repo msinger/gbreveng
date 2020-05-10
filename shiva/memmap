@@ -90,6 +90,9 @@ FF50          DUT_CTRL
   0 -/w       If 1, sets DUT reset signal.
 
 FF51          DUT_CMP_OUT
+  3 -/w       If 1, applies ATOM for COMPARE3 MATCH signal output.
+  2 -/w       If 1, applies ATOM for COMPARE2 MATCH signal output.
+  1 -/w       If 1, applies ATOM for COMPARE1 MATCH signal output.
   0 -/w       If 1, applies ATOM for COMPARE0 MATCH signal output.
 
 FF52          DUT_DATA_IN
@@ -99,16 +102,22 @@ FF52          DUT_DATA_OUT
   7:0 -/w     Value driven on data lines, if DUT data output override (DUT_CTRL[1]) is set.
 
 FF53          DUT_IN
-  30 r/-      Reads Port A Pin 0 input. (For timing reference when used to clock DUT.)
-  29 r/-      Reads DUT reset signal.
-  28 r/-      Reads DUT PHI signal.
-  27 r/-      Reads DUT write signal.
-  26 r/-      Reads DUT read signal.
-  25 r/-      Reads DUT CS (RAM chip select) signal.
-  24 r/-      Reads 1, if DUT data lines are currently driven (SYS->DUT). Reads 0, if they are input (DUT->SYS).
+  6 r/-       Reads Port A Pin 0 input. (For timing reference when used to clock DUT.)
+  5 r/-       Reads DUT reset signal.
+  4 r/-       Reads DUT PHI signal.
+  3 r/-       Reads DUT write signal.
+  2 r/-       Reads DUT read signal.
+  1 r/-       Reads DUT CS (RAM chip select) signal.
+  0 r/-       Reads 1, if DUT data lines are currently driven (SYS->DUT). Reads 0, if they are input (DUT->SYS).
 
 FF53          DUT_CMP_IN
-  1 -/w       If 1, writes ATOM into COMPARE0 mask.
+  7 -/w       If 1, writes ATOM into COMPARE3 mask.
+  6 -/w       If 1, writes ATOM into COMPARE2 mask.
+  5 -/w       If 1, writes ATOM into COMPARE1 mask.
+  4 -/w       If 1, writes ATOM into COMPARE0 mask.
+  3 -/w       If 1, writes ATOM into COMPARE3 value.
+  2 -/w       If 1, writes ATOM into COMPARE2 value.
+  1 -/w       If 1, writes ATOM into COMPARE1 value.
   0 -/w       If 1, writes ATOM into COMPARE0 value.
 
 FFFE          IFLAG: Interrupt Flags

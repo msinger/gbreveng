@@ -1,9 +1,10 @@
 `default_nettype none
 
-`define COUNTER_WIDTH    5
-`define NUM_COUNTERS     1
-`define NUM_COMPARATORS  5
-`define NUM_ROUTES       4
+`define COUNTER_WIDTH           5
+`define NUM_COUNTERS            1
+`define NUM_COUNTER_COMPARATORS 5
+`define NUM_BUS_COMPARATORS     4
+`define NUM_ROUTES              4
 
 (* nolatches *)
 (* top *)
@@ -183,8 +184,11 @@ module top(
 	wire       dbg_data_tx_ack;
 
 	wire [29:0] data_dut_in,          dut_in;
-	reg  [30:0] dut_data_compare,     dut_data_compare_mask;
-	wire [`NUM_ROUTES-1:0] dut_data_compare_trig_set;
+	(* mem2reg *)
+	reg  [30:0] dut_data_compare[0:`NUM_BUS_COMPARATORS-1];
+	(* mem2reg *)
+	reg  [30:0] dut_data_compare_mask[0:`NUM_BUS_COMPARATORS-1];
+	wire [`NUM_ROUTES-1:0] dut_data_compare_trig_set[0:`NUM_BUS_COMPARATORS-1];
 	wire [14:0] dut_adr_ext,          dut_adr_in;
 	reg         dut_data_dir_out,     r_dut_data_dir_out;
 	reg         dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
@@ -218,8 +222,7 @@ module top(
 	wire dut_reset_reset_mask;
 	wire dut_data_set_mask;
 	wire dut_data_reset_mask;
-	wire dut_data_compare_set, dut_data_compare_mask_set;
-	wire dut_data_compare_matches;
+	wire [`NUM_BUS_COMPARATORS-1:0] dut_data_compare_set, dut_data_compare_mask_set;
 
 	wire [7:0] irq, f_irq;
 
@@ -718,7 +721,7 @@ module top(
 	);
 
 	generate for (i = 0; i < `NUM_COUNTERS; i = i + 1)
-		counter_block #(`COUNTER_WIDTH, `NUM_COMPARATORS, `NUM_ROUTES) counter(
+		counter_block #(`COUNTER_WIDTH, `NUM_COUNTER_COMPARATORS, `NUM_ROUTES) counter(
 			.ctrclk(pllclk),
 			.busclk(cpuclk),
 			.ctrrst(f_reset),
@@ -958,38 +961,40 @@ module top(
 		.svalue_mask({8{dut_data_sig}}),
 	);
 
-	dp_reg dut_data_compare_set_reg(
+	dp_reg #(`NUM_BUS_COMPARATORS) dut_data_compare_set_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_data_compare_set),
-		.fvalue_mask(1),
+		.fvalue_mask({`NUM_BUS_COMPARATORS{1'b1}}),
 
-		.svalue_in(data_cpu_out[0]),
-		.svalue_mask(dut_cmp_sig),
+		.svalue_in(data_cpu_out[`NUM_BUS_COMPARATORS-1:0]),
+		.svalue_mask({`NUM_BUS_COMPARATORS{dut_cmp_sig}}),
 	);
 
-	dp_reg dut_data_compare_mask_set_reg(
+	dp_reg #(`NUM_BUS_COMPARATORS) dut_data_compare_mask_set_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_data_compare_mask_set),
-		.fvalue_mask(1),
+		.fvalue_mask({`NUM_BUS_COMPARATORS{1'b1}}),
 
-		.svalue_in(data_cpu_out[1]),
-		.svalue_mask(dut_cmp_sig),
+		.svalue_in(data_cpu_out[`NUM_BUS_COMPARATORS-1+4:4]),
+		.svalue_mask({`NUM_BUS_COMPARATORS{dut_cmp_sig}}),
 	);
 
-	dp_reg #(`NUM_ROUTES) dut_trigger_set_reg(
-		.fclk(pllclk),
-		.sclk(cpuclk),
-		.frst(f_reset),
+	generate for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1)
+		dp_reg #(`NUM_ROUTES) dut_trigger_set_reg(
+			.fclk(pllclk),
+			.sclk(cpuclk),
+			.frst(f_reset),
 
-		.fvalue_out(dut_data_compare_trig_set),
+			.fvalue_out(dut_data_compare_trig_set[i]),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{dut_trig_sig && data_cpu_out[0]}}),
-	);
+			.svalue_in(atom[`NUM_ROUTES-1:0]),
+			.svalue_mask({`NUM_ROUTES{dut_trig_sig && data_cpu_out[i]}}),
+		);
+	endgenerate
 
 	always @(posedge cpuclk) r_dut_trigger <= wr_cpu && cs_cpu_dut;
 	assign dut_trigger = wr_cpu && cs_cpu_dut && !r_dut_trigger;
@@ -998,27 +1003,37 @@ module top(
 	assign dut_data_sig = dut_trigger && adr_cpu[1:0] == 2;
 	assign dut_cmp_sig = dut_trigger && &adr_cpu[1:0];
 
-	always @(posedge pllclk) begin
+	always @(posedge pllclk) begin :dut_glue
+		integer i;
+
 		dut_data_ovr <= (dut_data_ovr | dut_data_set_mask) & !dut_data_reset_mask;
 
-		if (dut_data_compare_set)
-			dut_data_compare <= atom;
-		if (dut_data_compare_mask_set)
-			dut_data_compare_mask <= atom;
+		for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1) begin
+			if (dut_data_compare_set[i])
+				dut_data_compare[i] <= atom;
+			if (dut_data_compare_mask_set[i])
+				dut_data_compare_mask[i] <= atom;
+		end
 
 		if (f_reset) begin
-			dut_data_ovr          <= 0;
-			dut_data_compare      <= 0;
-			dut_data_compare_mask <= 0;
+			dut_data_ovr <= 0;
+			for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1) begin
+				dut_data_compare[i]      <= 0;
+				dut_data_compare_mask[i] <= 0;
+			end
 		end
 	end
 
-	assign dut_data_compare_matches = ({ pa_in[0], dut_in } & dut_data_compare_mask) ==
-	                                  (dut_data_compare & dut_data_compare_mask);
-
-	always @(posedge pllclk) begin
+	always @(posedge pllclk) begin :combine_piped_route
 		piped_route = ones_set;
-		piped_route = piped_route | ({`NUM_ROUTES{dut_data_compare_matches}} & dut_data_compare_trig_set);
+
+		integer i;
+		for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1) begin :match_bus
+			reg matches;
+			matches     = ({ pa_in[0], dut_in } & dut_data_compare_mask[i]) ==
+			              (dut_data_compare[i] & dut_data_compare_mask[i]);
+			piped_route = piped_route | ({`NUM_ROUTES{matches}} & dut_data_compare_trig_set[i]);
+		end
 	end
 
 	always @* begin :combine_route
