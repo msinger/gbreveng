@@ -40,6 +40,7 @@ FF20          COUNT0_CTRL
   0 -/w       Counter 0: If 1, set counter state to STARTED. (triggers START)
 
 FF21          COUNT0_SETCMP
+  4 -/w       Counter 0: If 1, writes ATOM into COMPARE4.
   3 -/w       Counter 0: If 1, writes ATOM into COMPARE3.
   2 -/w       Counter 0: If 1, writes ATOM into COMPARE2.
   1 -/w       Counter 0: If 1, writes ATOM into COMPARE1.
@@ -53,6 +54,7 @@ FF22          COUNT0_SETIN
   0 -/w       Counter 0: If 1, applies ATOM for START trigger input.
 
 FF23          COUNT0_SETOUT
+  4 -/w       Counter 0: If 1, applies ATOM for COMPARE4 MATCH signal output.
   3 -/w       Counter 0: If 1, applies ATOM for COMPARE3 MATCH signal output.
   2 -/w       Counter 0: If 1, applies ATOM for COMPARE2 MATCH signal output.
   1 -/w       Counter 0: If 1, applies ATOM for COMPARE1 MATCH signal output.
@@ -90,6 +92,10 @@ FF50          DUT_CTRL
   0 -/w       If 1, sets DUT reset signal.
 
 FF51          DUT_CMP_OUT
+  7 -/w       If 1, applies ATOM for COMPARE3 MATCH POS EDGE signal output.
+  6 -/w       If 1, applies ATOM for COMPARE2 MATCH POS EDGE signal output.
+  5 -/w       If 1, applies ATOM for COMPARE1 MATCH POS EDGE signal output.
+  4 -/w       If 1, applies ATOM for COMPARE0 MATCH POS EDGE signal output.
   3 -/w       If 1, applies ATOM for COMPARE3 MATCH signal output.
   2 -/w       If 1, applies ATOM for COMPARE2 MATCH signal output.
   1 -/w       If 1, applies ATOM for COMPARE1 MATCH signal output.
