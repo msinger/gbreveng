@@ -134,6 +134,7 @@ module top(
 	reg  cs_cpu_io_if, cs_cpu_io_ie;
 	reg  cs_cpu_atom;
 	reg  cs_cpu_ones_set;
+	reg  cs_cpu_rec;
 	reg  cs_cpu_pa;
 	reg  cs_cpu_dut;
 
@@ -145,7 +146,7 @@ module top(
 	wire [7:0] data_cpureg_out;
 	reg  [7:0] data_sysram_out;
 	reg  [7:0] data_dutram_out;
-	reg  [7:0] data_recram_out;
+	reg  [31:0] data_recram_out;
 	wire [7:0] data_dbg_out;
 
 	wire [7:0]  data_pa_in;
@@ -230,7 +231,7 @@ module top(
 	reg  [7:0] sysram[0:4095];
 	reg  [7:0] dut_ro_ram[0:4095];
 	reg  [7:0] dut_wo_ram[0:4095];
-	reg  [7:0] recram[0:4095];
+	reg  [31:0] recram[0:1023];
 
 	/* Place jump instruction at $0000 that jumps onto itself. */
 	initial sysram[0] = 'h18; /* JR */
@@ -509,15 +510,13 @@ module top(
 	always @(posedge cpuclk) begin
 		data_sysram_out <= sysram[adr_cpu[11:0]];
 		data_dutram_out <= dut_wo_ram[adr_cpu[11:0]];
-		data_recram_out <= recram[adr_cpu[11:0]];
+		data_recram_out <= recram[adr_cpu[11:2]];
 
 		if (wr_cpu) case (1)
 		cs_cpu_sysram:
 			sysram[adr_cpu[11:0]] <= data_cpu_out;
 		cs_cpu_dutram:
 			dut_ro_ram[adr_cpu[11:0]] <= data_cpu_out;
-		cs_cpu_recram:
-			recram[adr_cpu[11:0]] <= data_cpu_out;
 		cs_cpu_led0:
 			led[7:0] <= data_cpu_out;
 		cs_cpu_led1:
@@ -543,7 +542,12 @@ module top(
 		cs_cpu_dutram:
 			data_cpu_in = data_dutram_out;
 		cs_cpu_recram:
-			data_cpu_in = data_recram_out;
+			case (adr_cpu[1:0])
+				0: data_cpu_in = data_recram_out[7:0];
+				1: data_cpu_in = data_recram_out[15:8];
+				2: data_cpu_in = data_recram_out[23:16];
+				3: data_cpu_in = data_recram_out[31:24];
+			endcase
 		cs_cpu_led0:
 			data_cpu_in = led[7:0];
 		cs_cpu_led1:
@@ -594,6 +598,7 @@ module top(
 		cs_cpu_sw1      = 0;
 		cs_cpu_atom     = 0;
 		cs_cpu_ones_set = 0;
+		cs_cpu_rec      = 0;
 		cs_cpu_pa       = 0;
 		cs_cpu_dut      = 0;
 		cs_cpu_io_if    = 0;
@@ -623,6 +628,8 @@ module top(
 			cs_cpu_atom = 1;
 		'b 1111_1111_0001_0100: /* 0xff14:        Always one trigger */
 			cs_cpu_ones_set = 1;
+		'b 1111_1111_0001_0101: /* 0xff15:        Recording Control */
+			cs_cpu_rec = 1;
 		'b 1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
 			if (`NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
 		'b 1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
@@ -1063,6 +1070,48 @@ module top(
 		integer i;
 		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
 			route = route | route_counter_out[i];
+	end
+
+	reg  [9:0] rec_adr;
+	wire [9:0] rec_adr_new;
+	wire       rec_adr_set;
+	wire rec_trigger;
+	wire [`NUM_ROUTES-1:0] rec_capture;
+
+	dp_reg #(11) rec_adr_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out({ rec_adr_set, rec_adr_new }),
+		.fvalue_mask(11'b1xxxxxxxxxx),
+		.fvalue_in(11'b0xxxxxxxxxx),
+
+		.svalue_in({ 1'b1, atom[9:0] }),
+		.svalue_mask({11{rec_trigger && data_cpu_out[0]}}),
+	);
+
+	dp_reg #(`NUM_ROUTES) rec_capture_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(rec_capture),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[1]}}),
+	);
+
+	assign rec_trigger = wr_cpu && cs_cpu_rec;
+
+	always @(posedge pllclk) begin
+		if (rec_capture & route) begin
+			recram[rec_adr] <= { 1'b0, pa_in[0], dut_in[29:0] };
+			rec_adr         <= rec_adr + 1;
+		end
+
+		if (rec_adr_set)
+			rec_adr <= rec_adr_new;
 	end
 
 endmodule
