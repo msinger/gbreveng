@@ -142,7 +142,7 @@ module top(
 
 	wire [7:0] data_cpu_out;
 	reg  [7:0] data_cpu_in;
-	wire [7:0] data_counter_out[0:`NUM_COUNTERS-1];
+	wand [7:0] data_cpu_in_wand;
 	wire [7:0] data_cpureg_out;
 	reg  [7:0] data_sysram_out;
 	reg  [7:0] data_dutram_out;
@@ -154,8 +154,7 @@ module top(
 	reg  [7:0]  pa_out;
 	wire [7:0]  pa_ext, pa_in;
 	wire        pa_set_sig, pa_reset_sig;
-	reg  [7:0]  pa_set_mask, pa_reset_mask;
-	wire [7:0]  pa_reg_set_mask, pa_reg_reset_mask;
+	wor  [7:0]  pa_set_mask, pa_reset_mask;
 	wire        pa_trigger;
 	reg         r_pa_trigger;
 	wire        pa_trigger_set_set, pa_trigger_reset_set;
@@ -167,9 +166,8 @@ module top(
 	wire                   ones_set_trigger;
 	wire [`NUM_ROUTES-1:0] ones_set;
 
-	reg  [`NUM_ROUTES-1:0] route;
+	wor  [`NUM_ROUTES-1:0] route;
 	reg  [`NUM_ROUTES-1:0] piped_route;
-	wire [`NUM_ROUTES-1:0] route_counter_out[0:`NUM_COUNTERS-1];
 
 	wire [15:0] pc, sp;
 	wire [7:4]  flags;
@@ -580,9 +578,7 @@ module top(
 			data_cpu_in = data_cpureg_out;
 		endcase
 
-		integer i;
-		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
-			data_cpu_in = data_cpu_in & data_counter_out[i];
+		data_cpu_in = data_cpu_in & data_cpu_in_wand;
 
 		if (ddrv_dbg)
 			data_cpu_in = data_dbg_out;
@@ -728,25 +724,23 @@ module top(
 		.data_tx_ack(dbg_data_tx_ack),
 	);
 
-	generate for (i = 0; i < `NUM_COUNTERS; i = i + 1)
-		counter_block #(`COUNTER_WIDTH, `NUM_COUNTER_COMPARATORS, `NUM_ROUTES) counter(
-			.ctrclk(pllclk),
-			.busclk(cpuclk),
-			.ctrrst(f_reset),
+	counter_block #(`COUNTER_WIDTH, `NUM_COUNTER_COMPARATORS, `NUM_ROUTES) counter[0:`NUM_COUNTERS-1](
+		.ctrclk(pllclk),
+		.busclk(cpuclk),
+		.ctrrst(f_reset),
 
-			.route_in(route),
-			.route_out(route_counter_out[i]),
+		.route_in(route),
+		.route_out(route),
 
-			.route_con(atom[`NUM_ROUTES-1:0]),
-			.wide_data(atom[`COUNTER_WIDTH-1:0]),
-			.data_in(data_cpu_out),
-			.data_out(data_counter_out[i]),
-			.adr(adr_cpu[1:0]),
-			.cs(cs_cpu_counter[i]),
-			.rd(rd_cpu),
-			.wr(wr_cpu),
-		);
-	endgenerate
+		.route_con(atom[`NUM_ROUTES-1:0]),
+		.wide_data(atom[`COUNTER_WIDTH-1:0]),
+		.data_in(data_cpu_out),
+		.data_out(data_cpu_in_wand),
+		.adr(adr_cpu[1:0]),
+		.cs(cs_cpu_counter),
+		.rd(rd_cpu),
+		.wr(wr_cpu),
+	);
 
 	always @* begin
 		dut_data_dir_out     = r_dut_data_dir_out;
@@ -812,7 +806,7 @@ module top(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
-		.fvalue_out(pa_reg_set_mask),
+		.fvalue_out(pa_set_mask),
 		.fvalue_mask('hff),
 
 		.svalue_in(data_cpu_out),
@@ -823,7 +817,7 @@ module top(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
-		.fvalue_out(pa_reg_reset_mask),
+		.fvalue_out(pa_reset_mask),
 		.fvalue_mask('hff),
 
 		.svalue_in(data_cpu_out),
@@ -866,13 +860,8 @@ module top(
 	assign pa_trigger_set_set = pa_trigger && adr_cpu[1:0] == 2 && data_cpu_out == 1;
 	assign pa_trigger_reset_set = pa_trigger && &adr_cpu[1:0] && data_cpu_out == 1;
 
-	always @* begin
-		pa_set_mask   = pa_reg_set_mask;
-		pa_reset_mask = pa_reg_reset_mask;
-
-		pa_set_mask[0]   = pa_set_mask[0]   | |(pa_trigger_set   & route);
-		pa_reset_mask[0] = pa_reset_mask[0] | |(pa_trigger_reset & route);
-	end
+	assign pa_set_mask[0]   = |(pa_trigger_set   & route);
+	assign pa_reset_mask[0] = |(pa_trigger_reset & route);
 
 	dp_reg #(`NUM_ROUTES) ones_set_reg(
 		.fclk(pllclk),
@@ -1064,13 +1053,7 @@ module top(
 		end
 	end
 
-	always @* begin :combine_route
-		route = piped_route;
-
-		integer i;
-		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
-			route = route | route_counter_out[i];
-	end
+	assign route = piped_route;
 
 	reg  [9:0] rec_adr;
 	wire [9:0] rec_adr_new;
