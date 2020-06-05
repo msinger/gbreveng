@@ -1,10 +1,10 @@
 `default_nettype none
 
 `define COUNTER_WIDTH           5
-`define NUM_COUNTERS            1
+`define NUM_COUNTERS            2
 `define NUM_COUNTER_COMPARATORS 5
 `define NUM_BUS_COMPARATORS     4
-`define NUM_ROUTES              4
+`define NUM_ROUTES              8
 
 (* nolatches *)
 (* top *)
