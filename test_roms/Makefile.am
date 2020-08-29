@@ -12,7 +12,8 @@ ROMS = \
 	w-wram \
 	dma-wram \
 	dma-vram \
-	move-logo
+	move-logo \
+	disp-test
 
 CLEANFILES = \
 common.o \
