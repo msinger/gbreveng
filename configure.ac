@@ -25,6 +25,7 @@ genclk/Makefile
 skip_ff50/Makefile
 drv_dmglcd/Makefile
 shiva/Makefile
+test_hw/Makefile
 Makefile
 ])
 

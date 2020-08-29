@@ -26,8 +26,8 @@ FF14          ONES
   7:0 -/w     Write anything to apply ATOM for always-one signal source.
 
 FF15          REC_CTRL
-  2 -/w       If 1, applies ATOM for RECORD trigger input.
-  1 -/w       If 1, writes ATOM to RECORD ADDRESS.
+  1 -/w       If 1, applies ATOM for RECORD trigger input.
+  0 -/w       If 1, writes ATOM to RECORD ADDRESS.
 
 FF20 (LSB)    COUNT0
 FF21

@@ -1,0 +1,251 @@
+# For the Game Boy reverse eng. FPGA board
+
+# Clock & Reset
+set_io clk12m      J3
+set_io clk16m      C8
+set_io clk16m_en   F9
+
+# LEDs
+set_io led[0]      N4
+set_io led[1]      R1
+set_io led[2]      M5
+set_io led[3]      P2
+set_io led[4]      M4
+set_io led[5]      P1
+set_io led[6]      N3
+set_io led[7]      L5
+set_io led[8]      M3
+set_io led[9]      M6
+set_io led[10]     N2
+set_io led[11]     L7
+set_io led[12]     M2
+set_io led[13]     K5
+set_io led[14]     L3
+set_io led[15]     L6
+
+# Switches
+set_io sw[0]       K3
+set_io sw[1]       K1
+set_io sw[2]       E2
+set_io sw[3]       H5
+set_io sw[4]       E3
+set_io sw[5]       G4
+set_io sw[6]       D1
+set_io sw[7]       G5
+set_io sw[8]       D2
+set_io sw[9]       F4
+set_io sw[10]      C2
+set_io sw[11]      C1
+set_io sw[12]      B1
+set_io sw[13]      J1
+set_io sw[14]      K11
+set_io sw[15]      P13
+
+# Buttons
+set_io btn[0]      M1
+set_io btn[1]      K4
+set_io btn[2]      L1
+set_io btn[3]      L4
+
+# FT245 parallel FIFO
+set_io ft245_d[0]  B10
+set_io ft245_d[1]  B12
+set_io ft245_d[2]  B13
+set_io ft245_d[3]  A15
+set_io ft245_d[4]  A16
+set_io ft245_d[5]  B14
+set_io ft245_d[6]  B15
+set_io ft245_d[7]  C14
+set_io ft245_n_rxf D13
+set_io ft245_n_txe E10
+set_io ft245_n_rd  D11
+set_io ft245_n_wr  C11
+set_io ft245_siwu  C13
+
+# Audio PWMs
+set_io chl         B2
+set_io chr         E4
+set_io chm         F5
+
+# Joypad
+set_io p10         C3
+set_io p11         D3
+set_io p12         E5
+set_io p13         D4
+set_io p14         B3
+set_io p15         C4
+
+# Master Address Bus
+set_io madr[0]     L10
+set_io madr[1]     R10
+set_io madr[2]     T9
+set_io madr[3]     N9
+set_io madr[4]     P7
+set_io madr[5]     T8
+set_io madr[6]     T7
+set_io madr[7]     L9
+set_io madr[8]     T6
+set_io madr[9]     P8
+set_io madr[10]    T5
+set_io madr[11]    M8
+set_io madr[12]    P6
+set_io madr[13]    N7
+set_io madr[14]    T3
+set_io madr[15]    R5
+set_io madr[16]    P10
+set_io madr[17]    N10
+set_io madr[18]    T10
+set_io madr[19]    T11
+set_io madr[20]    T15
+
+# Master Data Bus
+set_io mdata[0]    R3
+set_io mdata[1]    P5
+set_io mdata[2]    T2
+set_io mdata[3]    N5
+set_io mdata[4]    R2
+set_io mdata[5]    P4
+set_io mdata[6]    T1
+set_io mdata[7]    N6
+
+# Master R/W
+set_io n_mrd       R6
+set_io n_mwr       M9
+set_io n_prog      R9
+
+# Master Chip Selects
+set_io n_mcs_rom   T14 # A15 (ROM CS) on cartridge connector
+set_io n_mcs_xram  M11 # nCS (RAM CS) on cartridge connector
+set_io n_mcs_wram  R16 # WRAM
+set_io n_mcs_crom  N12 # onboard cartridge ROM
+set_io n_mcs_cram  L11 # onboard cartridge RAM
+
+# Master Clock & Reset
+set_io mphi        K9
+set_io n_mreset    R4
+
+# Master Bus Level Shifters
+set_io n_moe       P9  # output enable for n_mrd, n_mwr, n_mcs_xram, n_mcs_rom and madr[14:13]
+set_io n_moed      M7  # output enable for mdata[7:0]
+set_io mdir        T13 # direction for mdata[7:0]
+
+# Slave Address Bus
+set_io adr[0]      A6
+set_io adr[1]      D7
+set_io adr[2]      C6
+set_io adr[3]      B6
+set_io adr[4]      B7
+set_io adr[5]      C7
+set_io adr[6]      D9
+set_io adr[7]      E9
+set_io adr[8]      C9
+set_io adr[9]      D10
+set_io adr[10]     A11
+set_io adr[11]     A10
+set_io adr[12]     C10
+set_io adr[13]     B11
+set_io adr[14]     A7
+
+# Slave Data Bus
+set_io data[0]     M14
+set_io data[1]     L12
+set_io data[2]     N16
+set_io data[3]     L13
+set_io data[4]     L14
+set_io data[5]     K12
+set_io data[6]     M16
+set_io data[7]     J10
+
+# Slave R/W
+set_io n_rd        D8
+set_io n_wr        A9
+
+# Slave Chip Selects
+set_io n_cs_rom    B8  # A15 (ROM CS) on cartridge connector
+set_io n_cs_xram   M15 # nCS (RAM CS) on cartridge connector
+
+# Slave Clock & Reset
+set_io phi         F7
+set_io n_reset     J11
+
+# Slave Bus Level Shifters
+set_io n_soe       P16
+set_io sdir        P14
+
+# VRAM Address Bus
+set_io vadr[0]     E16
+set_io vadr[1]     G13
+set_io vadr[2]     D16
+set_io vadr[3]     G12
+set_io vadr[4]     F14
+set_io vadr[5]     F12
+set_io vadr[6]     D15
+set_io vadr[7]     F11
+set_io vadr[8]     C16
+set_io vadr[9]     F13
+set_io vadr[10]    B16
+set_io vadr[11]    E13
+set_io vadr[12]    L16
+set_io vadr[13]    K13
+
+# VRAM Data Bus
+set_io vdata[0]    G16
+set_io vdata[1]    H12
+set_io vdata[2]    G15
+set_io vdata[3]    G10
+set_io vdata[4]    F16
+set_io vdata[5]    G11
+set_io vdata[6]    F15
+set_io vdata[7]    G14
+
+# Master R/W & Chip Select
+set_io n_vrd       D14
+set_io n_vwr       E14
+set_io n_vcs       J12
+
+# GPIO A
+set_io pa[0]       H11
+set_io pa[1]       H13
+set_io pa[2]       J16
+set_io pa[3]       J13
+set_io pa[4]       J14
+set_io pa[5]       K16
+set_io pa[6]       J15
+set_io pa[7]       K14
+set_io n_pa_oe     R14
+set_io pa_dir      R15
+
+# GPIO B
+set_io pb[0]       G1  # External Link Port SCX
+set_io pb[1]       J5
+set_io pb[2]       G2
+set_io pb[3]       H4
+set_io pb[4]       J2
+set_io pb[5]       J4
+set_io pb[6]       H16
+set_io pb[7]       H14
+set_io n_pb_oe     H1
+set_io pb_dir      H2
+
+# External Link Port
+set_io sin         F3
+set_io sout        G3
+
+# SDCard
+set_io sd_sw       K15
+set_io sd_clk      M12
+set_io sd_cmd      T16
+set_io sd_data[0]  F1
+set_io sd_data[1]  H6
+set_io sd_data[2]  F2
+set_io sd_data[3]  H3
+
+# Display
+set_io lcd_hsync   C5
+set_io lcd_vsync   A1
+set_io lcd_latch   A2
+set_io lcd_altsig  D5
+set_io lcd_ctrl    A5
+set_io lcd_clk     B4
+set_io lcd_data[0] B5
+set_io lcd_data[1] E6
