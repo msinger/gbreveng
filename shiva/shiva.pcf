@@ -199,8 +199,8 @@ set_io vdata[6]    F15
 set_io vdata[7]    G14
 
 # Master R/W & Chip Select
-set_io n_vrd       D14
-set_io n_vwr       E14
+set_io n_vrd       E14
+set_io n_vwr       D14
 set_io n_vcs       J12
 
 # GPIO A
