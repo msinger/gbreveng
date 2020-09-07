@@ -35,8 +35,8 @@ view: test_hw.asc
 test_hw.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR)
 	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-test_hw.asc: test_hw.json test_hw.pcf test_hw-constraints.py Makefile
-	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf test_hw.pcf --pre-pack test_hw-constraints.py --json $< --asc $@
+test_hw.asc: test_hw.json $(srcdir)/test_hw.pcf $(srcdir)/test_hw-constraints.py Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf $(srcdir)/test_hw.pcf --pre-pack $(srcdir)/test_hw-constraints.py --json $< --asc $@
 
 test_hw.bin: test_hw.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@

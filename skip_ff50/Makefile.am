@@ -41,8 +41,8 @@ view: skip_ff50.asc
 skip_ff50.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
 	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-skip_ff50.asc: skip_ff50.json skip_ff50.pcf Makefile
-	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf skip_ff50.pcf --json $< --asc $@
+skip_ff50.asc: skip_ff50.json $(srcdir)/skip_ff50.pcf Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf $(srcdir)/skip_ff50.pcf --json $< --asc $@
 
 skip_ff50.bin: skip_ff50.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@

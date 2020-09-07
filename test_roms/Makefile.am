@@ -1,29 +1,31 @@
 ROMS = \
-	hram-rw \
-	wram-rw \
-	xram-rw \
-	vram-rw \
-	oam-rw \
-	rom-rw \
-	w-rom-ie \
-	w-rom-vram \
-	w-hram \
-	w-vram \
-	w-wram \
-	dma-wram \
-	dma-vram \
-	move-logo \
-	disp-test
+	hram-rw.s \
+	wram-rw.s \
+	xram-rw.s \
+	vram-rw.s \
+	oam-rw.s \
+	rom-rw.s \
+	w-rom-ie.s \
+	w-rom-vram.s \
+	w-hram.s \
+	w-vram.s \
+	w-wram.s \
+	dma-wram.s \
+	dma-vram.s \
+	move-logo.s \
+	disp-test.s
+
+EXTRA_DIST = common.s $(ROMS)
 
 CLEANFILES = \
 common.o \
 common.coff \
 common.gb \
-$(ROMS:%=%.o) \
-$(ROMS:%=%.coff) \
-$(ROMS:%=%.gb)
+$(ROMS:%.s=%.o) \
+$(ROMS:%.s=%.coff) \
+$(ROMS:%.s=%.gb)
 
-all: $(ROMS:%=%.gb)
+all: $(ROMS:%.s=%.gb)
 
 .PHONY: all
 

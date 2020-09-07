@@ -43,8 +43,8 @@ view: shiva.asc
 shiva.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR)
 	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-shiva.asc: shiva.json shiva.pcf shiva-constraints.py Makefile
-	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf shiva.pcf --pre-pack shiva-constraints.py --json $< --asc $@
+shiva.asc: shiva.json $(srcdir)/shiva.pcf $(srcdir)/shiva-constraints.py Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf $(srcdir)/shiva.pcf --pre-pack $(srcdir)/shiva-constraints.py --json $< --asc $@
 
 shiva.bin: shiva.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@

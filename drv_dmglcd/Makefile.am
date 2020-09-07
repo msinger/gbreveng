@@ -36,8 +36,8 @@ view: drv_dmglcd.asc
 drv_dmglcd.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR)
 	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-drv_dmglcd.asc: drv_dmglcd.json drv_dmglcd.pcf Makefile
-	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf drv_dmglcd.pcf --json $< --asc $@
+drv_dmglcd.asc: drv_dmglcd.json $(srcdir)/drv_dmglcd.pcf Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf $(srcdir)/drv_dmglcd.pcf --json $< --asc $@
 
 drv_dmglcd.bin: drv_dmglcd.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@

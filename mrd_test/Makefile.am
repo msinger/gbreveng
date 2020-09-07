@@ -41,8 +41,8 @@ view: mrd_test.asc
 mrd_test.json: Makefile $(addprefix $(srcdir)/,$(SRC) $(HDR)) $(NODIST_SRC) $(NODIST_HDR) rom.hex
 	$(YOSYS) $(YOSYSFLAGS) -q -p "synth_ice40 -abc2 -json $@" $(addprefix $(srcdir)/,$(SRC)) $(NODIST_SRC)
 
-mrd_test.asc: mrd_test.json mrd_test.pcf Makefile
-	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf mrd_test.pcf --json $< --asc $@
+mrd_test.asc: mrd_test.json $(srcdir)/mrd_test.pcf Makefile
+	$(NEXTPNR) $(NEXTPNRFLAGS) --hx8k --package ct256 --pcf $(srcdir)/mrd_test.pcf --json $< --asc $@
 
 mrd_test.bin: mrd_test.asc Makefile
 	$(ICEPACK) $(ICEPACKFLAGS) $< $@
