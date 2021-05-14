@@ -1,0 +1,32 @@
+# For the iCE40HX-8K Breakout Board
+
+# Clock
+set_io clk12m    J3
+
+# Start signal
+set_io start     T1
+
+# LEDs
+set_io led[0]    C3
+set_io led[1]    B3
+set_io led[2]    C4
+set_io led[3]    C5
+set_io led[4]    A1
+set_io led[5]    A2
+set_io led[6]    B4
+set_io led[7]    B5
+
+# UART
+set_io rx        B10
+set_io tx        B12
+set_io rts       B13
+set_io cts       A15
+set_io dtr       A16
+set_io dsr       B14
+set_io dcd       B15
+
+# Xilinx XCS20XL PROM
+set_io data      R16
+set_io clk       T15
+set_io n_reset   T13
+set_io n_ce      T16
