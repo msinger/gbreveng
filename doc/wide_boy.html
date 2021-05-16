@@ -7,10 +7,12 @@
 <h2>Overview</h2>
 <p>I got my hands on a Wide-Boy64 AGB that I found on Ebay. It's in a very good condition.</p>
 <p><img src="img/wideboy64agb.png"><br>
-<i><u>Picture 1</u> Wide-Boy64 AGB</i></p>
+<i><u>Picture 1</u><br>
+Wide-Boy64 AGB</i></p>
 <p>It came with this small cable. I don't know what this is used for.</p>
 <p><img src="img/wideboy64cable.png"><br>
-<i><u>Picture 2</u> Cable that came with the Wide-Boy64</i></p>
+<i><u>Picture 2</u><br>
+Cable that came with the Wide-Boy64</i></p>
 The smaller black connector of this cable fits into the white connector on the front side of the Wide-Boy.
 The bigger white connector fits into the connector on a Wide-Boy64 CGB cartridge port adapter that is used to
 connect a specially prepped Game Boy Color to a Wide-Boy64 CGB. I bought such an adapter from the same seller
@@ -26,7 +28,8 @@ buttons (and maybe the audio amplifier, not sure about that). So they just act a
 <p>Here is what I found out about the main components inside the Wide-Boy64 AGB. (Higher resolution pictures can
 be found in my <a href="../db/wb64agb_iceboy_1.html">Game Boy database</a>.)</p>
 <p><img src="img/wideboy64agb_components.png"><br>
-<i><u>Picture 3</u> Components of the Wide-Boy64 AGB</i></p>
+<i><u>Picture 3</u><br>
+Components of the Wide-Boy64 AGB</i></p>
 <p>The EEPROM in the bottom left (BU9850) is used in many N64 cartridges that allow to save the game. I don't
 know what it is used for in the Wide-Boy. My guess is, they designed it in just in case they need it, but then
 never used it for anything. The Wide-Boy64 AGB does not save any settings. It doesn't even have a menu or
@@ -40,19 +43,22 @@ accessed by the N64 or if the FPGA reads some other data than the N64 software f
 <h2>Spartan bitstream</h2>
 <p>I was able to dump the FPGA bitstream from the PROM with an iCE40HX-8K Breakout Board.</p>
 <p><img src="img/wideboy64agb_prom_dump.png"><br>
-<i><u>Picture 4</u> Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
+<i><u>Picture 4</u><br>
+Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
 <p>The code I used for dumping it on a 1MBit UART can be found <a href="https://sourceforge.net/p/iceboy/reveng/ci/master/tree/wb64agb_prom_dump/dump.sv">here</a>.</p>
 <p>The PROM contains 179160 bits (22395 bytes) and when stored LSB-first it has the following hashes:</p>
-<ul>
+<p><ul>
 <li>MD5: 536e776798fa2ab103e49cd322fb5669</li>
 <li>SHA256: b41f2e84b0d14a2065dfcc17bfb7d49056a277c9c2f0ace1124c7e48b831b49f</li>
-</ul>
+</ul></p>
 <h2>CGB Adapter</h2>
 <p>This is the CGB Adapter I bought:</p>
 <p><img src="img/wideboy64cgb_adapter_front.png"><img src="img/wideboy64cgb_adapter_back.png"><br>
-<i><u>Picture 5&6</u> Wide-Boy64 CGB Adapter</i></p>
+<i><u>Picture 5&6</u><br>
+Wide-Boy64 CGB Adapter</i></p>
 <p><img src="img/wideboy64cgb_adapter_pcbfront.png"><img src="img/wideboy64cgb_adapter_pcbback.png"><br>
-<i><u>Picture 7&8</u> Wide-Boy64 CGB Adapter PCB</i></p>
+<i><u>Picture 7&8</u><br>
+Wide-Boy64 CGB Adapter PCB</i></p>
 <p>I have drawn a schematic for the PCB: <a href="dmg_cart_probe.pdf">dmg_cart_probe.pdf</a></p>
 <p>I labelled the pins on the cartridge connector with the signals that they ususally have on a cartridge
 (address, data, ...), not the display and button signals that the Wide-Boy puts onto them. The fact that they
@@ -60,5 +66,278 @@ didn't connect pin 31 (the analog pin) makes me think that this PCB wasn't desig
 Wide-Boy in mind. They might have used this for probing the signals between a Game Boy and a cartridge.
 (Notice the silk print on the PCB: "DMG CARTRIDGE PROBE") It wouldn't make any sense to not use pin 31
 otherwise.</p>
+<h2>40-pin connector pinout on Wide-Boy64 AGB</h2>
+<p><table border="1">
+<tr>
+<th><p><i>Pin#</i></p></th>
+<th><p>Usage</p></th>
+<th colspan="2"><p>To CPU</p></th>
+<th colspan="2"><p>To FPGA</p></th>
+<th><p><i>Pin#</i></p></th>
+<th><p>Usage</p></th>
+<th colspan="2"><p>To CPU</p></th>
+<th colspan="2"><p>To FPGA</p></th>
+</tr><tr>
+<th><p>1</p></th>
+<td><p>?</p></td>
+<td><p>6</p></td>
+<td><p>?</p></td>
+<td colspan="2"><p>-</p></td>
+<th><p>21</p></th>
+<td><p>?</p></td>
+<td><p>100</p></td>
+<td><p>?</p></td>
+<td><p>86</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>2</p></th>
+<td><p>?</p></td>
+<td><p>7</p></td>
+<td><p>?</p></td>
+<td colspan="2"><p>-</p></td>
+<th><p>22</p></th>
+<td><p>?</p></td>
+<td><p>99</p></td>
+<td><p>?</p></td>
+<td><p>87</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>3</p></th>
+<td><p>?</p></td>
+<td><p>5</p></td>
+<td><p>?</p></td>
+<td><p>61</p></td>
+<td><p>?</p></td>
+<th><p>23</p></th>
+<td><p>?</p></td>
+<td><p>98</p></td>
+<td><p>?</p></td>
+<td><p>88</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>4</p></th>
+<td><p>?</p></td>
+<td><p>4</p></td>
+<td><p>?</p></td>
+<td><p>71</p></td>
+<td><p>?</p></td>
+<th><p>24</p></th>
+<td><p>?</p></td>
+<td><p>97</p></td>
+<td><p>?</p></td>
+<td><p>89</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>5</p></th>
+<td><p>?</p></td>
+<td><p>3</p></td>
+<td><p>?</p></td>
+<td><p>63</p></td>
+<td><p>?</p></td>
+<th><p>25</p></th>
+<td><p>?</p></td>
+<td><p>96</p></td>
+<td><p>?</p></td>
+<td><p>92</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>6</p></th>
+<td><p>?</p></td>
+<td><p>127</p></td>
+<td><p>?</p></td>
+<td><p>65</p></td>
+<td><p>?</p></td>
+<th><p>26</p></th>
+<td><p>?</p></td>
+<td><p>95</p></td>
+<td><p>?</p></td>
+<td><p>93</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>7</p></th>
+<td><p>?</p></td>
+<td><p>126</p></td>
+<td><p>?</p></td>
+<td><p>66</p></td>
+<td><p>?</p></td>
+<th><p>27</p></th>
+<td><p>?</p></td>
+<td><p>94</p></td>
+<td><p>?</p></td>
+<td><p>94</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>8</p></th>
+<td><p>?</p></td>
+<td><p>123</p></td>
+<td><p>?</p></td>
+<td><p>67</p></td>
+<td><p>?</p></td>
+<th><p>28</p></th>
+<td><p>GND</p></td>
+<td><p>102,128,...</p></td>
+<td><p>GND</p></td>
+<td><p>81,91,...</p></td>
+<td><p>GND</p></td>
+</tr><tr>
+<th><p>9</p></th>
+<td><p>?</p></td>
+<td><p>122</p></td>
+<td><p>?</p></td>
+<td><p>68</p></td>
+<td><p>?</p></td>
+<th><p>29</p></th>
+<td><p>?</p></td>
+<td><p>93</p></td>
+<td><p>?</p></td>
+<td><p>95</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>10</p></th>
+<td><p>?</p></td>
+<td><p>121</p></td>
+<td><p>?</p></td>
+<td><p>69</p></td>
+<td><p>?</p></td>
+<th><p>30</p></th>
+<td><p>?</p></td>
+<td><p>92</p></td>
+<td><p>?</p></td>
+<td><p>96</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>11</p></th>
+<td><p>?</p></td>
+<td><p>120</p></td>
+<td><p>?</p></td>
+<td><p>75</p></td>
+<td><p>?</p></td>
+<th><p>31</p></th>
+<td><p>?</p></td>
+<td><p>91</p></td>
+<td><p>?</p></td>
+<td><p>97</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>12</p></th>
+<td><p>?</p></td>
+<td><p>119</p></td>
+<td><p>?</p></td>
+<td><p>77</p></td>
+<td><p>?</p></td>
+<th><p>32</p></th>
+<td><p>?</p></td>
+<td><p>90</p></td>
+<td><p>?</p></td>
+<td><p>98</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>13</p></th>
+<td><p>?</p></td>
+<td><p>118</p></td>
+<td><p>?</p></td>
+<td><p>78</p></td>
+<td><p>?</p></td>
+<th><p>33</p></th>
+<td><p>?</p></td>
+<td><p>89</p></td>
+<td><p>?</p></td>
+<td><p>99</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>14</p></th>
+<td><p>?</p></td>
+<td><p>108</p></td>
+<td><p>?</p></td>
+<td><p>79</p></td>
+<td><p>?</p></td>
+<th><p>34</p></th>
+<td><p>?</p></td>
+<td><p>88</p></td>
+<td><p>?</p></td>
+<td><p>101</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>15</p></th>
+<td><p>?</p></td>
+<td><p>107</p></td>
+<td><p>?</p></td>
+<td><p>80</p></td>
+<td><p>?</p></td>
+<th><p>35</p></th>
+<td><p>?</p></td>
+<td><p>87</p></td>
+<td><p>?</p></td>
+<td><p>102</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>16</p></th>
+<td><p>?</p></td>
+<td><p>106</p></td>
+<td><p>?</p></td>
+<td><p>82</p></td>
+<td><p>?</p></td>
+<th><p>36</p></th>
+<td><p>GND</p></td>
+<td><p>102,128,...</p></td>
+<td><p>GND</p></td>
+<td><p>81,91,...</p></td>
+<td><p>GND</p></td>
+</tr><tr>
+<th><p>17</p></th>
+<td><p>?</p></td>
+<td><p>105</p></td>
+<td><p>?</p></td>
+<td><p>83</p></td>
+<td><p>?</p></td>
+<th><p>37</p></th>
+<td><p>?</p></td>
+<td><p>86</p></td>
+<td><p>?</p></td>
+<td><p>103</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>18</p></th>
+<td><p>?</p></td>
+<td><p>104</p></td>
+<td><p>?</p></td>
+<td><p>84</p></td>
+<td><p>?</p></td>
+<th><p>38</p></th>
+<td><p>?</p></td>
+<td><p>85</p></td>
+<td><p>?</p></td>
+<td><p>104</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>19</p></th>
+<td><p>GND</p></td>
+<td><p>102,128,...</p></td>
+<td><p>GND</p></td>
+<td><p>81,91,...</p></td>
+<td><p>GND</p></td>
+<th><p>39</p></th>
+<td><p>?</p></td>
+<td><p>84</p></td>
+<td><p>?</p></td>
+<td><p>112</p></td>
+<td><p>?</p></td>
+</tr><tr>
+<th><p>20</p></th>
+<td><p>?</p></td>
+<td><p>101</p></td>
+<td><p>?</p></td>
+<td><p>85</p></td>
+<td><p>?</p></td>
+<th><p>40</p></th>
+<td><p>?</p></td>
+<td><p>103</p></td>
+<td><p>?</p></td>
+<td><p>144</p></td>
+<td><p>?</p></td>
+</tr>
+</table>
+<i><u>Table 1</u><br>
+Connections from Wide-Boy64 AGB 40-pin connector to AGB CPU and Spartan FPGA</i></p>
 </body>
 </html>
