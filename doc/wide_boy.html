@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>Wide-Boy64</title>
+</head>
+<body>
+<h1>Wide-Boy64</h1>
+<h2>Overview</h2>
+<p>I got my hands on a Wide-Boy64 AGB that I found on Ebay. It's in a very good condition.</p>
+<p><img src="img/wideboy64agb.png"><br>
+<i><u>Picture 1</u> Wide-Boy64 AGB</i></p>
+<p>It came with this small cable. I don't know what this is used for.</p>
+<p><img src="img/wideboy64cable.png"><br>
+<i><u>Picture 2</u> Cable that came with the Wide-Boy64</i></p>
+The smaller black connector of this cable fits into the white connector on the front side of the Wide-Boy.
+The bigger white connector fits into the connector on a Wide-Boy64 CGB cartridge port adapter that is used to
+connect a specially prepped Game Boy Color to a Wide-Boy64 CGB. I bought such an adapter from the same seller
+on Ebay from which I got the Wide-Boy64 AGB. Though this adapter obviously can't be used with the AGB version
+of the Wide-Boy. I bought it out of curiosity. The Wide-Boy64 AGB that I have doesn't even have the 40 pin
+connector that you need for that. The connector is not soldered onto the PCB and there is no hole cut for it
+into the front of the shell. I could solder it in myself, but then I would also need to cut a hole for it. I
+don't want to modify the original shell. It would look very ugly when <i>I</i> do it.<p>
+<p>You can't connect any regular Game Boy to a Wide-Boy. The ones you use as an controller for the Wide-Boy
+don't have a Game Boy CPU. They have a different PCB that just connects the cartridge port to the display and
+buttons (and maybe the audio amplifier, not sure about that). So they just act as an I/O device.<p>
+<h2>Components</h2>
+<p>Here is what I found out about the main components inside the Wide-Boy64 AGB. (Higher resolution pictures can
+be found in my <a href="../db/wb64agb_iceboy_1.html">Game Boy database</a>.)</p>
+<p><img src="img/wideboy64agb_components.png"><br>
+<i><u>Picture 3</u> Components of the Wide-Boy64 AGB</i></p>
+<p>The EEPROM in the bottom left (BU9850) is used in many N64 cartridges that allow to save the game. I don't
+know what it is used for in the Wide-Boy. My guess is, they designed it in just in case they need it, but then
+never used it for anything. The Wide-Boy64 AGB does not save any settings. It doesn't even have a menu or
+something. I haven't checked the contents of this EEPROM yet. I expect it to be all 0xFF. Ah, and yes, it is
+connected to the N64 connector at the bottom, so it can be accessed by the N64.</p>
+<p>There is a second place at the top center of the PCB where a Game Boy External Link Port could be soldered
+in. Seems like when the PCB was designed, they haven't decided yet where to put the connector.</p>
+<p>Luckily, the CIC, EEPROM and PROM chips are socketed. This makes it easy to change the region and dump the
+EEPROM and PROM contents. The Flash is not socketed though. I don't know yet if all it's contents can be
+accessed by the N64 or if the FPGA reads some other data than the N64 software from it as well.</p>
+<h2>Spartan bitstream</h2>
+<p>I was able to dump the FPGA bitstream from the PROM with an iCE40HX-8K Breakout Board.</p>
+<p><img src="img/wideboy64agb_prom_dump.png"><br>
+<i><u>Picture 4</u> Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
+<p>The code I used for dumping it on a 1MBit UART can be found <a href="https://sourceforge.net/p/iceboy/reveng/ci/master/tree/wb64agb_prom_dump/dump.sv">here</a>.</p>
+<p>The PROM contains 179160 bits (22395 bytes) and when stored LSB-first it has the following hashes:</p>
+<ul>
+<li>MD5: 536e776798fa2ab103e49cd322fb5669</li>
+<li>SHA256: b41f2e84b0d14a2065dfcc17bfb7d49056a277c9c2f0ace1124c7e48b831b49f</li>
+</ul>
+<h2>CGB Adapter</h2>
+<p>This is the CGB Adapter I bought:</p>
+<p><img src="img/wideboy64cgb_adapter_front.png"><img src="img/wideboy64cgb_adapter_back.png"><br>
+<i><u>Picture 5&6</u> Wide-Boy64 CGB Adapter</i></p>
+<p><img src="img/wideboy64cgb_adapter_pcbfront.png"><img src="img/wideboy64cgb_adapter_pcbback.png"><br>
+<i><u>Picture 7&8</u> Wide-Boy64 CGB Adapter PCB</i></p>
+<p>I have drawn a schematic for the PCB: <a href="dmg_cart_probe.pdf">dmg_cart_probe.pdf</a></p>
+<p>I labelled the pins on the cartridge connector with the signals that they ususally have on a cartridge
+(address, data, ...), not the display and button signals that the Wide-Boy puts onto them. The fact that they
+didn't connect pin 31 (the analog pin) makes me think that this PCB wasn't designed specifically for the
+Wide-Boy in mind. They might have used this for probing the signals between a Game Boy and a cartridge.
+(Notice the silk print on the PCB: "DMG CARTRIDGE PROBE") It wouldn't make any sense to not use pin 31
+otherwise.</p>
+</body>
+</html>
