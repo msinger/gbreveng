@@ -1,10 +1,27 @@
 <html>
 <head>
-<title>Wide-Boy64</title>
+<title>Wide-Boy64 Research</title>
 </head>
 <body>
-<h1>Wide-Boy64</h1>
-<h2>Overview</h2>
+<p><a href="http://iceboy.a-singer.de/">Home</a></p>
+<h1>Wide-Boy64 Research</h1>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#wideboy64cgb">Wide-Boy64 CGB</a><ul>
+<li><a href="#cgbadapter">CGB Adapter</a></li>
+</ul></li>
+<li><a href="#wideboy64agb">Wide-Boy64 AGB</a><ul>
+<li><a href="#agbcomponents">Components</a></li>
+<li><a href="#agbbitstream">Spartan Bitstream</a></li>
+<li><a href="#agb40pin">40-pin connector pinout on Wide-Boy64 AGB</a></li>
+<li><a href="#agbmem">Memories connected to FPGA (and each other) on Wide-Boy64 AGB</a><ul>
+<li><a href="#agbflash">Flash</a></li>
+<li><a href="#agbdram">DRAM</a></li>
+</ul></li>
+<li><a href="#agbvolt">Voltages measured on regulators on Wide-Boy64 AGB</a></li>
+</ul></li>
+</ul>
+<h2 id="overview">Overview</h2>
 <p>I got my hands on a Wide-Boy64 AGB that I found on Ebay. It's in a very good condition.</p>
 <p><img src="img/wideboy64agb.png"><br>
 <i><u>Picture 1</u><br>
@@ -24,11 +41,29 @@ don't want to modify the original shell. It would look very ugly when <i>I</i> d
 <p>You can't connect any regular Game Boy to a Wide-Boy. The ones you use as an controller for the Wide-Boy
 don't have a Game Boy CPU. They have a different PCB that just connects the cartridge port to the display and
 buttons (and maybe the audio amplifier, not sure about that). So they just act as an I/O device.<p>
-<h2>Components</h2>
+<h2 id="wideboy64cgb">Wide-Boy64 CGB</h2>
+<p>Since I don't have the CGB variant of the Wide-Boy64 (yet), I can only describe it's adapter here.</p>
+<h3 id="cgbadapter">CGB Adapter</h3>
+<p>This is the CGB Adapter I bought:</p>
+<p><img src="img/wideboy64cgb_adapter_front.png"><img src="img/wideboy64cgb_adapter_back.png"><br>
+<i><u>Picture 3&4</u><br>
+Wide-Boy64 CGB Adapter</i></p>
+<p><img src="img/wideboy64cgb_adapter_pcbfront.png"><img src="img/wideboy64cgb_adapter_pcbback.png"><br>
+<i><u>Picture 5&6</u><br>
+Wide-Boy64 CGB Adapter PCB</i></p>
+<p>I have drawn a schematic for the PCB: <a href="dmg_cart_probe.pdf">dmg_cart_probe.pdf</a></p>
+<p>I labelled the pins on the cartridge connector with the signals that they ususally have on a cartridge
+(address, data, ...), not the display and button signals that the Wide-Boy puts onto them. The fact that they
+didn't connect pin 31 (the analog pin) makes me think that this PCB wasn't designed specifically for the
+Wide-Boy in mind. They might have used this for probing the signals between a Game Boy and a cartridge.
+(Notice the silk print on the PCB: "DMG CARTRIDGE PROBE") It wouldn't make any sense to not use pin 31
+otherwise.</p>
+<h2 id="wideboy64agb">Wide-Boy64 AGB</h2>
+<h3 id="agbcomponents">Components</h3>
 <p>Here is what I found out about the main components inside the Wide-Boy64 AGB. (Higher resolution pictures can
 be found in my <a href="../db/wb64agb_iceboy_1.html">Game Boy database</a>.)</p>
 <p><img src="img/wideboy64agb_components.png"><br>
-<i><u>Picture 3</u><br>
+<i><u>Picture 7</u><br>
 Components of the Wide-Boy64 AGB</i></p>
 <p>The EEPROM in the bottom left (BU9850) is used in many N64 cartridges that allow to save the game. I don't
 know what it is used for in the Wide-Boy. My guess is, they designed it in just in case they need it, but then
@@ -40,10 +75,13 @@ in. Seems like when the PCB was designed, they haven't decided yet where to put 
 <p>Luckily, the CIC, EEPROM and PROM chips are socketed. This makes it easy to change the region and dump the
 EEPROM and PROM contents. The Flash is not socketed though. I don't know yet if all it's contents can be
 accessed by the N64 or if the FPGA reads some other data than the N64 software from it as well.</p>
-<h2>Spartan bitstream</h2>
+<p>The clock generator (U15) to the left of the FPGA provides a ~48.6 MHz clock to the FPGA pin 72. I drew a
+schematic for that part of the PCB: <a href="wb64agb_clkgen.pdf">wb64agb_clkgen.pdf</a><br>
+Note that the 250 MHz clock output (RCLK) just gets drained through resistor R24.</p>
+<h3 id="agbbitstream">Spartan bitstream</h3>
 <p>I was able to dump the FPGA bitstream from the PROM with an iCE40HX-8K Breakout Board.</p>
 <p><img src="img/wideboy64agb_prom_dump.png"><br>
-<i><u>Picture 4</u><br>
+<i><u>Picture 8</u><br>
 Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
 <p>The code I used for dumping it on a 1MBit UART can be found <a href="https://sourceforge.net/p/iceboy/reveng/ci/master/tree/wb64agb_prom_dump/dump.sv">here</a>.</p>
 <p>The PROM contains 179160 bits (22395 bytes) and when stored LSB-first it has the following hashes:</p>
@@ -51,22 +89,7 @@ Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
 <li>MD5: 536e776798fa2ab103e49cd322fb5669</li>
 <li>SHA256: b41f2e84b0d14a2065dfcc17bfb7d49056a277c9c2f0ace1124c7e48b831b49f</li>
 </ul></p>
-<h2>CGB Adapter</h2>
-<p>This is the CGB Adapter I bought:</p>
-<p><img src="img/wideboy64cgb_adapter_front.png"><img src="img/wideboy64cgb_adapter_back.png"><br>
-<i><u>Picture 5&6</u><br>
-Wide-Boy64 CGB Adapter</i></p>
-<p><img src="img/wideboy64cgb_adapter_pcbfront.png"><img src="img/wideboy64cgb_adapter_pcbback.png"><br>
-<i><u>Picture 7&8</u><br>
-Wide-Boy64 CGB Adapter PCB</i></p>
-<p>I have drawn a schematic for the PCB: <a href="dmg_cart_probe.pdf">dmg_cart_probe.pdf</a></p>
-<p>I labelled the pins on the cartridge connector with the signals that they ususally have on a cartridge
-(address, data, ...), not the display and button signals that the Wide-Boy puts onto them. The fact that they
-didn't connect pin 31 (the analog pin) makes me think that this PCB wasn't designed specifically for the
-Wide-Boy in mind. They might have used this for probing the signals between a Game Boy and a cartridge.
-(Notice the silk print on the PCB: "DMG CARTRIDGE PROBE") It wouldn't make any sense to not use pin 31
-otherwise.</p>
-<h2>40-pin connector pinout on Wide-Boy64 AGB</h2>
+<h3 id="agb40pin">40-pin connector pinout on Wide-Boy64 AGB</h3>
 <p><table border="1">
 <tr>
 <th><p><i>Pin#</i></p></th>
@@ -330,7 +353,7 @@ otherwise.</p>
 <td><p>85</p></td>
 <td><p>I/O</p></td>
 <th><p>40</p></th>
-<td><p>3V Supply</p></td>
+<td><p>3.3 V Supply</p></td>
 <td><p>1,103</p></td>
 <td><p>VDD3</p></td>
 <td><p>128,144,...</p></td>
@@ -339,8 +362,8 @@ otherwise.</p>
 </table>
 <i><u>Table 1</u><br>
 Connections from Wide-Boy64 AGB 40-pin connector to AGB CPU and Spartan FPGA</i></p>
-<h2>Memories connected to FPGA (and each other) on Wide-Boy64 AGB</h2>
-<h3>Flash</h3>
+<h3 id="agbmem">Memories connected to FPGA (and each other) on Wide-Boy64 AGB</h3>
+<h4 id="agbflash">Flash</h4>
 <p><table border="1">
 <tr>
 <th><p><i>Pin#</i></p></th>
@@ -657,7 +680,7 @@ Connections from Wide-Boy64 AGB 40-pin connector to AGB CPU and Spartan FPGA</i>
 </table>
 <i><u>Table 2</u><br>
 Connections from Flash on Wide-Boy64 AGB to Spartan FPGA and DRAM</i></p>
-<h3>DRAM</h3>
+<h4 id="agbdram">DRAM</h4>
 <p><table border="1">
 <tr>
 <th><p><i>Pin#</i></p></th>
@@ -1016,5 +1039,41 @@ Connections from Flash on Wide-Boy64 AGB to Spartan FPGA and DRAM</i></p>
 </table>
 <i><u>Table 3</u><br>
 Connections from DRAM on Wide-Boy64 AGB to Spartan FPGA and Flash</i></p>
+<h3 id="agbvolt">Voltages measured on regulators on Wide-Boy64 AGB</h3>
+<p><table border="1">
+<tr>
+<th><p><i>Pin#</i></p></th>
+<th><p>Name</p></th>
+<th><p>U3</p></th>
+<th><p>U4</p></th>
+<th><p>U5</p></th>
+</tr><tr>
+<th><p>1</p></th>
+<td><p>VIN</p></td>
+<td><p>11.5 V</p></td>
+<td><p>11.5 V</p></td>
+<td><p>5 V</p></td>
+</tr><tr>
+<th><p>2</p></th>
+<td><p>VO</p></td>
+<td><p>2.5 V</p></td>
+<td><p>5 V</p></td>
+<td><p>3.3 V</p></td>
+</tr><tr>
+<th><p>3</p></th>
+<td><p>GND</p></td>
+<td><p>0 V</p></td>
+<td><p>0 V</p></td>
+<td><p>0 V</p></td>
+</tr><tr>
+<th><p>4</p></th>
+<td><p>VADJ/VC</p></td>
+<td><p>1.25 V</p></td>
+<td><p>2.5 V</p></td>
+<td><p>1.25 V</p></td>
+</tr>
+</table>
+<i><u>Table 4</u><br>
+Voltages measured at the three voltage regulators at the bottom of the Wide-Boy64 AGB PCB</i></p>
 </body>
 </html>
