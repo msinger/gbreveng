@@ -5,7 +5,7 @@
 <body>
 <p><a href="http://iceboy.a-singer.de/">Home</a></p>
 <h1>Wide-Boy64 Research</h1>
-<ul>
+<p><ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#wideboy64cgb">Wide-Boy64 CGB</a><ul>
 <li><a href="#cgbadapter">CGB Adapter</a></li>
@@ -20,7 +20,9 @@
 </ul></li>
 <li><a href="#agbvolt">Voltages measured on regulators on Wide-Boy64 AGB</a></li>
 </ul></li>
-</ul>
+<li><a href="#cloning">Ideas for building a Wide-Boy64 clone</a></li>
+<li><a href="#links">Links</a></li>
+</ul></p>
 <h2 id="overview">Overview</h2>
 <p>I got my hands on a Wide-Boy64 AGB that I found on Ebay. It's in a very good condition.</p>
 <p><img src="img/wideboy64agb.png"><br>
@@ -1075,5 +1077,32 @@ Connections from DRAM on Wide-Boy64 AGB to Spartan FPGA and Flash</i></p>
 </table>
 <i><u>Table 4</u><br>
 Voltages measured at the three voltage regulators at the bottom of the Wide-Boy64 AGB PCB</i></p>
+<h2 id="cloning">Ideas for building a Wide-Boy64 clone</h2>
+<p>I think, the upper part of the PCB is easy to copy. There is a
+<a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Portuguese Game Boy Advance Service Manual</a>
+which contains the schematics for a Game Boy Advance. This should help to put together the AGB CPU,
+WRAM, AGB AMP, Cartridge Slot and Link Port. Desoldering the Cartridge Slot from a GBA could be a bit
+of a pain, I haven't tried it yet. I bought them on
+<a href="https://aliexpress.com/item/32867654481.html">AliExpress</a>, but those ones don't have room
+for that switch, unfortunately.</p>
+<p>The Spartan XCS20XL is not produced anymore, but you can still buy some on, again, AliExpress. I
+wasn't able to find those bitstream PROMs, though. If I'm not able to find one that behaves in a
+compatible way, then I would use a second FPGA to emulate the behaviour of the XC17S20XL PROM. This
+FPGA could also emulate the N64 CIC. Then it wouldn't be necessary to sacrifice a cartridge for that.</p>
+<p>A better approach would be to replace the outdated Spartan FPGA, but then this would mean one has to
+implement the decoding of the display signals. The frame buffer interface to the N64 would also have to
+be replicated. I don't know what is easier: Reverse engineering the interface between the Spartan and
+the N64 software inside the flash, or writing the N64 code from scratch as well.</p>
+<h2 id="links">Links</h2>
+<p><ul>
+<li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds060.pdf">Spartan and Spartan-XL FPGA Families Data Sheet</a></li>
+<li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds030.pdf">Spartan/XL Family One-Time ProgrammableConfiguration PROMs (XC17S00/XL)</a></li>
+<li><a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Game Boy Advance service manual and schematics</a></li>
+<li><a href="https://datasheetspdf.com/pdf/368919/NEC/UPD45128163/1">µPD45128163 - 128M-bit Synchronous DRAM</a></li>
+<li><a href="https://datasheetspdf.com/datasheet/LH28F320BJE-PTTL90.html">LH28F320BJE-PTTL90 - Flash Memory 32M</a></li>
+<li><a href="https://www.datasheets360.com/part/detail/mx8350/-7133688394404043430/">MX8350 - 2 in 1 Rambus Clock Generator</a></li>
+<li><a href="https://datasheetspdf.com/datasheet/PQ30RV21.html">PQ30RV21 - Variable Output Low Power-Loss Voltage Regulators</a></li>
+<li><a href="https://datasheetspdf.com/datasheet/PQ05RF21.html">PQ05RF21 - 2A Output, Low Power-Loss Voltage Regulators</a></li>
+</ul></p>
 </body>
 </html>
