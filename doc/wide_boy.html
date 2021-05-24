@@ -13,12 +13,13 @@
 <li><a href="#wideboy64agb">Wide-Boy64 AGB</a><ul>
 <li><a href="#agbcomponents">Components</a></li>
 <li><a href="#agbbitstream">Spartan Bitstream</a></li>
-<li><a href="#agb40pin">40-pin connector pinout on Wide-Boy64 AGB</a></li>
+<li><a href="#agb40pin">40-pin connector (CN3) pinout on Wide-Boy64 AGB</a></li>
 <li><a href="#agbmem">Memories connected to FPGA (and each other) on Wide-Boy64 AGB</a><ul>
 <li><a href="#agbflash">Flash</a></li>
 <li><a href="#agbdram">DRAM</a></li>
 </ul></li>
 <li><a href="#agbvolt">Voltages measured on regulators on Wide-Boy64 AGB</a></li>
+<li><a href="#agbcartcon">N64 cartridge connector on Wide-Boy64 AGB</a></li>
 </ul></li>
 <li><a href="#cloning">Ideas for building a Wide-Boy64 clone</a></li>
 <li><a href="#links">Links</a></li>
@@ -40,7 +41,7 @@ of the Wide-Boy. I bought it out of curiosity. The Wide-Boy64 AGB that I have do
 connector that you need for that. The connector is not soldered onto the PCB and there is no hole cut for it
 into the front of the shell. I could solder it in myself, but then I would also need to cut a hole for it. I
 don't want to modify the original shell. It would look very ugly when <i>I</i> do it.<p>
-<p>You can't connect any regular Game Boy to a Wide-Boy. The ones you use as an controller for the Wide-Boy
+<p>You can't connect any regular Game Boy to a Wide-Boy. The ones you use as a controller for the Wide-Boy
 don't have a Game Boy CPU. They have a different PCB that just connects the cartridge port to the display and
 buttons (and maybe the audio amplifier, not sure about that). So they just act as an I/O device.<p>
 <h2 id="wideboy64cgb">Wide-Boy64 CGB</h2>
@@ -91,7 +92,7 @@ Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
 <li>MD5: 536e776798fa2ab103e49cd322fb5669</li>
 <li>SHA256: b41f2e84b0d14a2065dfcc17bfb7d49056a277c9c2f0ace1124c7e48b831b49f</li>
 </ul></p>
-<h3 id="agb40pin">40-pin connector pinout on Wide-Boy64 AGB</h3>
+<h3 id="agb40pin">40-pin connector (CN3) pinout on Wide-Boy64 AGB</h3>
 <p><table border="1">
 <tr>
 <th><p><i>Pin#</i></p></th>
@@ -363,7 +364,7 @@ Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
 </tr>
 </table>
 <i><u>Table 1</u><br>
-Connections from Wide-Boy64 AGB 40-pin connector to AGB CPU and Spartan FPGA</i></p>
+Connections from Wide-Boy64 AGB 40-pin connector (CN3) to AGB CPU and Spartan FPGA</i></p>
 <h3 id="agbmem">Memories connected to FPGA (and each other) on Wide-Boy64 AGB</h3>
 <h4 id="agbflash">Flash</h4>
 <p><table border="1">
@@ -1077,6 +1078,316 @@ Connections from DRAM on Wide-Boy64 AGB to Spartan FPGA and Flash</i></p>
 </table>
 <i><u>Table 4</u><br>
 Voltages measured at the three voltage regulators at the bottom of the Wide-Boy64 AGB PCB</i></p>
+<h3 id="agbcartcon">N64 cartridge connector on Wide-Boy64 AGB</h3>
+<p><table border="1">
+<tr>
+<th><p><i>Pin#</i></p></th>
+<th><p>Name</p></th>
+<th><p>To CN2</p></th>
+<th colspan="3"><p>To component pin#</p></th>
+<th><p><i>Pin#</i></p></th>
+<th><p>Name</p></th>
+<th><p>To CN2</p></th>
+<th colspan="3"><p>To component pin#</p></th>
+</tr><tr>
+<th><p>1</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+<th><p>26</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+</tr><tr>
+<th><p>2</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+<th><p>27</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+</tr><tr>
+<th><p>3</p></th>
+<td><p>AD15</p></td>
+<td><p>3</p></td>
+<td><p>FPGA</p></td>
+<td><p>139</p></td>
+<td><p>I/O</p></td>
+<th><p>28</p></th>
+<td><p>AD0</p></td>
+<td><p>4</p></td>
+<td><p>FPGA</p></td>
+<td><p>140</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>4</p></th>
+<td><p>AD14</p></td>
+<td><p>5</p></td>
+<td><p>FPGA</p></td>
+<td><p>136</p></td>
+<td><p>I/O</p></td>
+<th><p>29</p></th>
+<td><p>AD1</p></td>
+<td><p>6</p></td>
+<td><p>FPGA</p></td>
+<td><p>138</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>5</p></th>
+<td><p>AD13</p></td>
+<td><p>7</p></td>
+<td><p>FPGA</p></td>
+<td><p>134</p></td>
+<td><p>I/O</p></td>
+<th><p>30</p></th>
+<td><p>AD2</p></td>
+<td><p>8</p></td>
+<td><p>FPGA</p></td>
+<td><p>135</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>6</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+<th><p>31</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+</tr><tr>
+<th><p>7</p></th>
+<td><p>AD12</p></td>
+<td><p>11</p></td>
+<td><p>FPGA</p></td>
+<td><p>132</p></td>
+<td><p>I/O</p></td>
+<th><p>32</p></th>
+<td><p>AD3</p></td>
+<td><p>12</p></td>
+<td><p>FPGA</p></td>
+<td><p>133</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>8</p></th>
+<td><p>!WRITE</p></td>
+<td><p>13</p></td>
+<td><p>FPGA</p></td>
+<td><p>2</p></td>
+<td><p>I/O, GCK1</p></td>
+<th><p>33</p></th>
+<td><p>ALE_L</p></td>
+<td><p>14</p></td>
+<td><p>FPGA</p></td>
+<td><p>143</p></td>
+<td><p>I/O, GCK8</p></td>
+</tr><tr>
+<th><p>9</p></th>
+<td><p>VCC*</p></td>
+<td><p>15,16</p></td>
+<td><p>EEPROM;CIC</p></td>
+<td><p>8;1,16</p></td>
+<td><p>VCC</p></td>
+<th><p>34</p></th>
+<td><p>VCC*</p></td>
+<td><p>15,16</p></td>
+<td><p>EEPROM;CIC</p></td>
+<td><p>8;1,16</p></td>
+<td><p>VCC</p></td>
+</tr><tr>
+<th><p>10</p></th>
+<td><p>!READ</p></td>
+<td><p>17</p></td>
+<td><p>FPGA</p></td>
+<td><p>142</p></td>
+<td><p>I/O</p></td>
+<th><p>35</p></th>
+<td><p>ALE_H</p></td>
+<td><p>18</p></td>
+<td><p>FPGA</p></td>
+<td><p>141</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>11</p></th>
+<td><p>AD11</p></td>
+<td><p>19</p></td>
+<td><p>FPGA</p></td>
+<td><p>130</p></td>
+<td><p>I/O</p></td>
+<th><p>36</p></th>
+<td><p>AD4</p></td>
+<td><p>20</p></td>
+<td><p>FPGA</p></td>
+<td><p>131</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>12</p></th>
+<td><p>AD10</p></td>
+<td><p>21</p></td>
+<td><p>FPGA</p></td>
+<td><p>126</p></td>
+<td><p>I/O</p></td>
+<th><p>37</p></th>
+<td><p>AD5</p></td>
+<td><p>22</p></td>
+<td><p>FPGA</p></td>
+<td><p>129</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>13</p></th>
+<td><p>12V</p></td>
+<td><p>23,24</p></td>
+<td><p>Regs U3;U4</p></td>
+<td><p>1</p></td>
+<td><p>VIN</p></td>
+<th><p>38</p></th>
+<td><p>12V</p></td>
+<td><p>23,24</p></td>
+<td><p>Regs U3;U4</p></td>
+<td><p>1</p></td>
+<td><p>VIN</p></td>
+</tr><tr>
+<th><p>14</p></th>
+<td><p>NC</p></td>
+<td><p>-</p></td>
+<td colspan="3"><p>-</p></td>
+<th><p>39</p></th>
+<td><p>NC</p></td>
+<td><p>-</p></td>
+<td colspan="3"><p>-</p></td>
+</tr><tr>
+<th><p>15</p></th>
+<td><p>AD9</p></td>
+<td><p>25</p></td>
+<td><p>FPGA</p></td>
+<td><p>124</p></td>
+<td><p>I/O</p></td>
+<th><p>40</p></th>
+<td><p>AD6</p></td>
+<td><p>26</p></td>
+<td><p>FPGA</p></td>
+<td><p>125</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>16</p></th>
+<td><p>AD8</p></td>
+<td><p>27</p></td>
+<td><p>FPGA</p></td>
+<td><p>122</p></td>
+<td><p>I/O</p></td>
+<th><p>41</p></th>
+<td><p>AD7</p></td>
+<td><p>28</p></td>
+<td><p>FPGA</p></td>
+<td><p>123</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>17</p></th>
+<td><p>VCC*</p></td>
+<td><p>15,16</p></td>
+<td><p>EEPROM;CIC</p></td>
+<td><p>8;1,16</p></td>
+<td><p>VCC</p></td>
+<th><p>42</p></th>
+<td><p>VCC*</p></td>
+<td><p>15,16</p></td>
+<td><p>EEPROM;CIC</p></td>
+<td><p>8;1,16</p></td>
+<td><p>VCC</p></td>
+</tr><tr>
+<th><p>18</p></th>
+<td><p>CIC_DIO</p></td>
+<td><p>29</p></td>
+<td><p>CIC</p></td>
+<td><p>15</p></td>
+<td><p>DIO</p></td>
+<th><p>43</p></th>
+<td><p>CIC_DCLK</p></td>
+<td><p>30</p></td>
+<td><p>CIC</p></td>
+<td><p>14</p></td>
+<td><p>DCLK</p></td>
+</tr><tr>
+<th><p>19</p></th>
+<td><p>1.6MHZ</p></td>
+<td><p>31</p></td>
+<td><p>EEPROM;CIC</p></td>
+<td><p>3;11</p></td>
+<td><p>CLK_IN</p></td>
+<th><p>44</p></th>
+<td><p>JTAG_CLK_R4300</p></td>
+<td><p>32</p></td>
+<td><p>FPGA</p></td>
+<td><p>120</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>20</p></th>
+<td><p>!COLD_RESET</p></td>
+<td><p>33</p></td>
+<td><p>FPGA;EEPROM;CIC</p></td>
+<td><p>121;6;9</p></td>
+<td><p>I/O;RST</p></td>
+<th><p>45</p></th>
+<td><p>!NMI_R4300</p></td>
+<td><p>34</p></td>
+<td><p>FPGA</p></td>
+<td><p>119</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>21</p></th>
+<td><p>S_DAT</p></td>
+<td><p>35</p></td>
+<td><p>EEPROM</p></td>
+<td><p>5</p></td>
+<td><p>DATA</p></td>
+<th><p>46</p></th>
+<td><p>VIDEO_CLK</p></td>
+<td><p>36</p></td>
+<td><p>FPGA</p></td>
+<td><p>117</p></td>
+<td><p>I/O</p></td>
+</tr><tr>
+<th><p>22</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+<th><p>47</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+</tr><tr>
+<th><p>23</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+<th><p>48</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+</tr><tr>
+<th><p>24</p></th>
+<td><p>LAUDIO</p></td>
+<td><p>39</p></td>
+<td colspan="3"><p>Cap C6</p></td>
+<th><p>49</p></th>
+<td><p>RAUDIO</p></td>
+<td><p>40</p></td>
+<td colspan="3"><p>Cap C7</p></td>
+</tr><tr>
+<th><p>25</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+<th><p>50</p></th>
+<td><p>GND</p></td>
+<td><p>1,2,9,10,37,38</p></td>
+<td colspan="3"><p>GND</p></td>
+</tr>
+</table>
+<i><u>Table 5</u><br>
+Connections from N64 cartridge connector on Wide-Boy64 AGB to CN2 and other components.<br>
+* VCC on the N64 cartridge connector is 3.3 V, but it is not connected to the VCC of the FPGA or the AGB CPU.
+It only powers the CIC and EEPROM.</i></p>
 <h2 id="cloning">Ideas for building a Wide-Boy64 clone</h2>
 <p>I think, the upper part of the PCB is easy to copy. There is a
 <a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Portuguese Game Boy Advance Service Manual</a>
