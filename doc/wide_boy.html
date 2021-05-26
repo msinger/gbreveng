@@ -78,7 +78,7 @@ in. Seems like when the PCB was designed, they haven't decided yet where to put 
 <p>Luckily, the CIC, EEPROM and PROM chips are socketed. This makes it easy to change the region and dump the
 EEPROM and PROM contents. The Flash is not socketed though. I don't know yet if all it's contents can be
 accessed by the N64 or if the FPGA reads some other data than the N64 software from it as well.</p>
-<p>The clock generator (U15) to the left of the FPGA provides a ~48.6 MHz clock to the FPGA pin 72. I drew a
+<p>The clock generator (U15) to the left of the FPGA provides a ~48.6 MHz clock to the FPGA pin 70. I drew a
 schematic for that part of the PCB: <a href="wb64agb_clkgen.pdf">wb64agb_clkgen.pdf</a><br>
 Note that the 250 MHz clock output (RCLK) just gets drained through resistor R24.</p>
 <h3 id="agbbitstream">Spartan bitstream</h3>
@@ -519,8 +519,8 @@ Connections from Wide-Boy64 AGB 40-pin connector (CN3) to AGB CPU and Spartan FP
 </tr><tr>
 <th><p>12</p></th>
 <td><p>RP#</p></td>
-<td><p>74</p></td>
-<td><p>!PROGRAM</p></td>
+<td><p>72</p></td>
+<td><p>DONE</p></td>
 <td colspan="2"><p>-</p></td>
 <th><p>36</p></th>
 <td><p>DQ11</p></td>
@@ -1326,7 +1326,7 @@ Voltages measured at the three voltage regulators at the bottom of the Wide-Boy6
 <td><p>33</p></td>
 <td><p>FPGA;EEPROM;CIC</p></td>
 <td><p>121;6;9</p></td>
-<td><p>I/O;RST</p></td>
+<td><p>I/O;!RST</p></td>
 <th><p>45</p></th>
 <td><p>!NMI_R4300</p></td>
 <td><p>34</p></td>
