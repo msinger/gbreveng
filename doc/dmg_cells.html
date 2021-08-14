@@ -1,0 +1,278 @@
+<html>
+<head>
+<title>DMG Cells</title>
+</head>
+<body>
+<p><a href="http://iceboy.a-singer.de/">Home</a></p>
+<h1>DMG Cells</h1>
+<p><ul>
+<li><a href="#tri_a">TRIBUFFER - Variant A</a></li>
+<li><a href="#tri_b">TRIBUFFER - Variant B</a></li>
+<li><a href="#dlatch">DLATCH</a></li>
+<li><a href="#dff">DFF</a></li>
+<li><a href="#dffr_a">DFFR - Variant A</a></li>
+<li><a href="#dffr_b">DFFR - Variant B</a></li>
+<li><a href="#dffr_b2">DFFR - Variant B+</a></li>
+<li><a href="#dffr_c">DFFR - Variant C</a></li>
+<li><a href="#dffsr">DFFSR</a></li>
+<li><a href="#tffd">TFFD</a></li>
+</ul></p>
+<h2 id="tri_a">TRIBUFFER - Variant A</h2>
+<p>Tri-state buffer.</p>
+<p>This cell comes in two very similar looking shapes: One has an active-high enable input; the other has an
+active-low enable input.</p>
+<p><img src="img/cells/tawu_hope.png"></p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tawu_desc.png"><br>
+<img src="img/cells/hope_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input.</p></td></tr>
+<tr><td><i>ena</i></td>
+<td><p>Active-high enable input. When high, the value at <i>in</i> gets inverted at <i>!out</i>.
+When low, <i>!out</i> is not driven.</p></td></tr>
+<tr><td><i>!ena</i></td>
+<td><p>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!out</i>.
+When high, <i>!out</i> is not driven.</p></td></tr>
+<tr><td><i>!out</i></td>
+<td><p>Inverted tri-state output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="tri_b">TRIBUFFER - Variant B</h2>
+<p>Tri-state buffer.</p>
+<p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
+necessary for it to work.</p>
+<p><i>TODO: Check if there are instances of this cell with active-high enable input.</i></p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/seke_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input. There are two inputs to this cell, which are externally connected to each other (by the
+pink line in the picture).</p></td></tr>
+<tr><td><i>!ena</i></td>
+<td><p>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!out</i>.
+When high, <i>!out</i> is not driven.</p></td></tr>
+<tr><td><i>!out</i></td>
+<td><p>Inverted tri-state output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dlatch">DLATCH</h2>
+<p>Gated data latch.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/zeca_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input.</p></td></tr>
+<tr><td><i>ena</i></td>
+<td><p>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
+as <i>ena</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ena</i> goes
+high again.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dff">DFF</h2>
+<p>Single-edge-triggered data flip-flop.</p>
+<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
+edge of <i>!clk</i>.</p>
+<p>There are instances of this cell that have their <i>!q</i> output stripped off. Those stripped cells can have an
+unrelated net run through the row where the <i>!q</i> output would have been. The cells named MYTU and MOFO are two
+examples of that.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF2</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/luxo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</p></td></tr>
+<tr><td><i>clk</i></td>
+<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!clk</i></td>
+<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dffr_a">DFFR - Variant A</h2>
+<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
+edge of <i>!clk</i>. It doesn't seem to matter which one of the two inputs gets slightly delayed by the inverter,
+it works both ways.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/cyxu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</p></td></tr>
+<tr><td><i>clk</i></td>
+<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!clk</i></td>
+<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!rst</i></td>
+<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dffr_b">DFFR - Variant B</h2>
+<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
+edge of <i>!clk</i>. Sometimes the clock inputs are driven by the <i>q</i> and <i>!q</i> outputs of another flip-flop
+of the same variant.</p>
+<p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
+necessary for it to work.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/dyve_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</p></td></tr>
+<tr><td><i>clk</i></td>
+<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!clk</i></td>
+<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!rst</i></td>
+<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
+the picture).</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dffr_b2">DFFR - Variant B+</h2>
+<p>Positive-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<p>This cell is basically the same as variant B but with an extension at the top. This extension seems
+to generate the inverted clock that is required.</p>
+<p>There are three external connections always made on this cell (see cyan, green and pink lines in the
+picture) that seem to be necessary for it to work. The cyan and green connections feed the positive and
+negative clocks generated by the extension to where they would be connected to if this was a cell of variant
+B without extension. There is not a single instance of this cell that has those two clock connections crossed,
+which means all instances trigger on a positive clock edge.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/caly_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i>.</p></td></tr>
+<tr><td><i>clk</i></td>
+<td><p>Clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop.</p></td></tr>
+<tr><td><i>!rst</i></td>
+<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
+the picture).</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dffr_c">DFFR - Variant C</h2>
+<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
+edge of <i>!clk</i>.</p>
+<p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
+necessary for it to work.</p>
+<p>This variant is similar to variant B, but it is missing the <i>q</i> output. Furthermore, it is one row shorter:
+There is only a single row between <i>!rst</i> and <i>!q</i> instead of two.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/poju_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</p></td></tr>
+<tr><td><i>clk</i></td>
+<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!clk</i></td>
+<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<tr><td><i>!rst</i></td>
+<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
+the picture).</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="dffsr">DFFSR</h2>
+<p>Positive-edge-triggered data flip-flop with active-low asynchronous set and reset.</p>
+<p>There are four external connections always made on this cell (see orange, cyan, green and pink
+lines in the picture) that seem to be necessary for it to work.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF3</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/nybo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i>.</p></td></tr>
+<tr><td><i>clk</i></td>
+<td><p>Clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop.</p></td></tr>
+<tr><td><i>!set</i></td>
+<td><p>Active-low set input. Data inside the flip-flop gets set to 1 when <i>!set</i> is low. There are
+two <i>!set</i> inputs to this cell, which are externally connected to each other (by the orange line in
+the picture).</p></td></tr>
+<tr><td><i>!rst</i></td>
+<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="tffd">TFFD</h2>
+<p>Negative-edge-triggered toggle flip-flop with active-high asynchronous data load.</p>
+<p>This flip-flop is used for counters that can be loaded with a value.</p>
+<p>There are four external connections always made on this cell (see orange, cyan, green and pink
+lines in the picture) that seem to be necessary for it to work.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: COUNT</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/kenu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d</i></td>
+<td><p>Data input. Gets stored in the flip-flop when <i>load</i> is high. There are two <i>d</i> inputs
+to this cell, which are externally connected to each other (by the orange line in the picture).</p></td></tr>
+<tr><td><i>!clk</i></td>
+<td><p>Clock input. On a negative edge the data inside the flip-flop gets inverted.</p></td></tr>
+<tr><td><i>load</i></td>
+<td><p>Active-high load input. Input <i>d</i> gets stored in the flip-flop when <i>load</i> is high. There are
+two <i>load</i> inputs to this cell, which are externally connected to each other (by the cyan line in
+the picture).</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+</body>
+</html>
