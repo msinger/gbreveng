@@ -23,7 +23,8 @@
 <li><a href="#agbcartcon">N64 cartridge connector on Wide-Boy64 AGB</a></li>
 <li><a href="#agbfpgacon">FPGA pin connections on Wide-Boy64 AGB</a></li>
 </ul></li>
-<li><a href="#cloning">Ideas for building a Wide-Boy64 clone</a></li>
+<li><a href="#cloning">Schematics and ideas for building a Wide-Boy64 clone</a></li>
+<li><a href="#misc">Random stuff</a></li>
 <li><a href="#links">Links</a></li>
 </ul></p>
 <h2 id="overview">Overview</h2>
@@ -44,8 +45,8 @@ connector that you need for that. The connector is not soldered onto the PCB and
 into the front of the shell. I could solder it in myself, but then I would also need to cut a hole for it. I
 don't want to modify the original shell. It would look very ugly when <i>I</i> do it.<p>
 <p>You can't connect any regular Game Boy to a Wide-Boy. The ones you use as a controller for the Wide-Boy
-don't have a Game Boy CPU. They have a different PCB that just connects the cartridge port to the display and
-buttons (and maybe the audio amplifier, not sure about that). So they just act as an I/O device.<p>
+don't have a Game Boy CPU. They have a different PCB that just connects the cartridge port to the display,
+buttons and the audio amplifier. So they just act as an I/O device.<p>
 <h2 id="wideboy64cgb">Wide-Boy64 CGB</h2>
 <p>Since I don't have the CGB variant of the Wide-Boy64 (yet), I can only describe it's adapter here.</p>
 <h3 id="cgbadapter">CGB Adapter</h3>
@@ -80,8 +81,8 @@ in. Seems like when the PCB was designed, they haven't decided yet where to put 
 <p>Luckily, the CIC, EEPROM and PROM chips are socketed. This makes it easy to change the region and dump the
 EEPROM and PROM contents. The Flash is not socketed though. I don't know yet if all it's contents can be
 accessed by the N64 or if the FPGA reads some other data than the N64 software from it as well.</p>
-<p>The clock generator (U15) to the left of the FPGA provides a ~48.6 MHz clock to the FPGA pin 70. I drew a
-schematic for that part of the PCB: <a href="wb64agb_clkgen.pdf">wb64agb_clkgen.pdf</a><br>
+<p>The clock generator (U15) to the left of the FPGA provides a ~48.6 MHz clock to the FPGA pin 70. See page 3
+of my schematic of the Wide-Boy64 AGB for details: <a href="wideboy64agb_sch.pdf">wideboy64agb_sch.pdf</a><br>
 Note that the 250 MHz clock output (RCLK) just gets drained through resistor R24.</p>
 <h3 id="agbbitstream">Spartan bitstream</h3>
 <p>I was able to dump the FPGA bitstream from the PROM with an iCE40HX-8K Breakout Board.</p>
@@ -1187,14 +1188,14 @@ Voltages measured at the three voltage regulators at the bottom of the Wide-Boy6
 <th><p>9</p></th>
 <td><p>VCC*</p></td>
 <td><p>15,16</p></td>
-<td><p>EEPROM;CIC</p></td>
-<td><p>8;1,16</p></td>
+<td><p>EEPROM;CIC;U6</p></td>
+<td><p>8;1,16;5</p></td>
 <td><p>VCC</p></td>
 <th><p>34</p></th>
 <td><p>VCC*</p></td>
 <td><p>15,16</p></td>
-<td><p>EEPROM;CIC</p></td>
-<td><p>8;1,16</p></td>
+<td><p>EEPROM;CIC;U6</p></td>
+<td><p>8;1,16;5</p></td>
 <td><p>VCC</p></td>
 </tr><tr>
 <th><p>10</p></th>
@@ -1287,14 +1288,14 @@ Voltages measured at the three voltage regulators at the bottom of the Wide-Boy6
 <th><p>17</p></th>
 <td><p>VCC*</p></td>
 <td><p>15,16</p></td>
-<td><p>EEPROM;CIC</p></td>
-<td><p>8;1,16</p></td>
+<td><p>EEPROM;CIC;U6</p></td>
+<td><p>8;1,16;5</p></td>
 <td><p>VCC</p></td>
 <th><p>42</p></th>
 <td><p>VCC*</p></td>
 <td><p>15,16</p></td>
-<td><p>EEPROM;CIC</p></td>
-<td><p>8;1,16</p></td>
+<td><p>EEPROM;CIC;U6</p></td>
+<td><p>8;1,16;5</p></td>
 <td><p>VCC</p></td>
 </tr><tr>
 <th><p>18</p></th>
@@ -1389,7 +1390,7 @@ Voltages measured at the three voltage regulators at the bottom of the Wide-Boy6
 <i><u>Table 5</u><br>
 Connections from N64 cartridge connector on Wide-Boy64 AGB to CN2 and other components.<br>
 * VCC on the N64 cartridge connector is 3.3 V, but it is not connected to the VCC of the FPGA or the AGB CPU.
-It only powers the CIC and EEPROM.</i></p>
+It only powers the CIC, EEPROM and Reset Controller (U6).</i></p>
 <h3 id="agbfpgacon">FPGA pin connections on Wide-Boy64 AGB</h3>
 <p><table border="1">
 <tr>
@@ -2644,14 +2645,16 @@ It only powers the CIC and EEPROM.</i></p>
 </table>
 <i><u>Table 6</u><br>
 Connections from Spartan FPGA on Wide-Boy64 AGB to other components</i></p>
-<h2 id="cloning">Ideas for building a Wide-Boy64 clone</h2>
-<p>I think, the upper part of the PCB is easy to copy. There is a
+<h2 id="cloning">Schematics and ideas for building a Wide-Boy64 clone</h2>
+<p>I finished drawing the <a href="wideboy64agb_sch.pdf">schematic of the Wide-Boy64 AGB</a>.
+For the parts I don't know the exact values yet, I marked them with a question mark (?). Some values I
+took from the
 <a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Portuguese Game Boy Advance Service Manual</a>
-which contains the schematics for a Game Boy Advance. This should help to put together the AGB CPU,
-WRAM, AGB AMP, Cartridge Slot and Link Port. Desoldering the Cartridge Slot from a GBA could be a bit
-of a pain, I haven't tried it yet. I bought them on
-<a href="https://aliexpress.com/item/32867654481.html">AliExpress</a>, but those ones don't have room
-for that switch, unfortunately.</p>
+where I thought they are most likely the same parts, but I still put a question mark after the value to
+emphasize that I'm not 100% sure about them.</p>
+<p>Desoldering the Cartridge Slot from a GBA could be a bit of a pain, I haven't tried it yet. I bought
+them on <a href="https://aliexpress.com/item/32867654481.html">AliExpress</a>, but those ones don't
+have room for that switch, unfortunately.</p>
 <p>The Spartan XCS20XL is not produced anymore, but you can still buy some on, again, AliExpress. I
 wasn't able to find those bitstream PROMs, though. If I'm not able to find one that behaves in a
 compatible way, then I would use a second FPGA to emulate the behaviour of the XC17S20XL PROM. This
@@ -2660,10 +2663,24 @@ FPGA could also emulate the N64 CIC. Then it wouldn't be necessary to sacrifice 
 implement the decoding of the display signals. The frame buffer interface to the N64 would also have to
 be replicated. I don't know what is easier: Reverse engineering the interface between the Spartan and
 the N64 software inside the flash, or writing the N64 code from scratch as well.</p>
+<h2 id="misc">Random stuff</h2>
+<p>Fun fact: On the Wide-Boy64 AGB PCB, the CIC chip is labelled "CTC".</p>
+<p><img src="img/wideboy64agb_below_cic.png"><br>
+<i><u>Picture 9</u><br>
+Silk print on the Wide-Boy64 AGB PCB under the CIC and EEPROM chips</i></p>
+<p>I assume the correct notation of Wide-Boy64 is with a hyphen between the words and without a space
+before the number, like it is printed on the labels on the front and back side of the device. However
+on the PCB it is written as one word, WIDEBOY AGB. On Wikipedia and many other sites, it is written as
+Wide-Boy 64, with a space before the number. TBH, I just mention the different notations here to make
+this page more likely to show up on Google.</p>
+<p>I don't understand for what reason there is a 4.0 V reset controller (U6) on the Wide-Boy64 AGB,
+watching the 3.3 V comming from the N64. On top of that, they didn't put a capacitor between GND and
+the VOUT pin, like it is recommended in the data sheet of the PST9140N. They put one between GND and
+VCC. They also didn't leave the NC pin unconnected; they connected it to GND.</p>
 <h2 id="links">Links</h2>
 <p><ul>
 <li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds060.pdf">Spartan and Spartan-XL FPGA Families Data Sheet</a></li>
-<li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds030.pdf">Spartan/XL Family One-Time ProgrammableConfiguration PROMs (XC17S00/XL)</a></li>
+<li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds030.pdf">Spartan/XL Family One-Time Programmable Configuration PROMs (XC17S00/XL)</a></li>
 <li><a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Game Boy Advance service manual and schematics</a></li>
 <li><a href="https://datasheetspdf.com/pdf/368919/NEC/UPD45128163/1">µPD45128163 - 128M-bit Synchronous DRAM</a></li>
 <li><a href="https://datasheetspdf.com/datasheet/LH28F320BJE-PTTL90.html">LH28F320BJE-PTTL90 - Flash Memory 32M</a></li>
