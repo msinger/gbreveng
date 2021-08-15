@@ -15,6 +15,34 @@ encountering cells for which the cell zoo JPG wasn't providing the pinout, so I 
 all documented once and for all, to make life easier!</p>
 <p>Please report any errors I made <a href="https://sourceforge.net/p/iceboy/tickets/">here</a>.</p>
 <p><ul>
+<li><a href="#inv_a">INVERTER - Variant A</a></li>
+<li><a href="#inv_b">INVERTER - Variant B</a></li>
+<li><a href="#inv_c">INVERTER - Variant C</a></li>
+<li><a href="#inv_d">INVERTER - Variant D</a></li>
+<li><a href="#inv_e">INVERTER - Variant E</a></li>
+<li><a href="#nand2">NAND2</a></li>
+<li><a href="#nand3">NAND3</a></li>
+<li><a href="#nand4">NAND4</a></li>
+<li><a href="#nand5">NAND5</a></li>
+<li><a href="#nand7">NAND7</a></li>
+<li><a href="#nor2">NOR2</a></li>
+<li><a href="#nor3">NOR3</a></li>
+<li><a href="#nor6">NOR6</a></li>
+<li><a href="#nor8">NOR8</a></li>
+<li><a href="#xnor2">XNOR2</a></li>
+<li><a href="#and2_a">AND2 - Variant A</a></li>
+<li><a href="#and2_b">AND2 - Variant B</a></li>
+<li><a href="#and3">AND3</a></li>
+<li><a href="#and4">AND4</a></li>
+<li><a href="#or2_a">OR2 - Variant A</a></li>
+<li><a href="#or2_b">OR2 - Variant B</a></li>
+<li><a href="#or3">OR3</a></li>
+<li><a href="#or4">OR4</a></li>
+<li><a href="#ao">AO</a></li>
+<li><a href="#aoi4">AOI4</a></li>
+<li><a href="#mux">MUX</a></li>
+<li><a href="#half_add">HALF_ADD</a></li>
+<li><a href="#full_add">FULL_ADD</a></li>
 <li><a href="#tri_a">TRIBUFFER - Variant A</a></li>
 <li><a href="#tri_b">TRIBUFFER - Variant B</a></li>
 <li><a href="#dlatch">DLATCH</a></li>
@@ -35,6 +63,355 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#aibuf">AIBUFFER</a></li>
 <li><a href="#aobuf">AOBUFFER</a></li>
 </ul></p>
+<h2 id="inv_a">INVERTER - Variant A</h2>
+<p>Simple inverter.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tona_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input to inverter.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs inverted <i>in</i>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="inv_b">INVERTER - Variant B</h2>
+<p>Inverter with higher driving strength.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/saha_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input to inverter.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs inverted <i>in</i>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="inv_c">INVERTER - Variant C</h2>
+<p>Inverter with higher driving strength.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/apov_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input to inverter.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs inverted <i>in</i>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="inv_d">INVERTER - Variant D</h2>
+<p>Inverter with higher driving strength.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/beko_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input to inverter.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs inverted <i>in</i>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="inv_e">INVERTER - Variant E</h2>
+<p>Inverter with higher driving strength.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/beva_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in</i></td>
+<td><p>Input to inverter.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs inverted <i>in</i>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nand2">NAND2</h2>
+<p>NAND gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/rylu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to NAND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 && in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nand3">NAND3</h2>
+<p>NAND gate with three inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/lavo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
+<td><p>Inputs to NAND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 && in2 && in3)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nand4">NAND4</h2>
+<p>NAND gate with four inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tuge_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
+<td><p>Inputs to NAND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 && in2 && in3 && in4)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nand5">NAND5</h2>
+<p>NAND gate with fife inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/palo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i></td>
+<td><p>Inputs to NAND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nand7">NAND7</h2>
+<p>NAND gate with seven inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tuna_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i>, <i>in7</i></td>
+<td><p>Inputs to NAND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6 && in7)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nor2">NOR2</h2>
+<p>NOR gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tefa_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to NOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 || in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nor3">NOR3</h2>
+<p>NOR gate with three inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/bapy_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
+<td><p>Inputs to NOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 || in2 || in3)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nor6">NOR6</h2>
+<p>NOR gate with six inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tyro_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i></td>
+<td><p>Inputs to NOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="nor8">NOR8</h2>
+<p>NOR gate with eight inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tulo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i>, <i>in7</i>, <i>in8</i></td>
+<td><p>Inputs to NOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6 || in7 || in8)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="xnor2">XNOR2</h2>
+<p>XNOR gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/nojo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to XNOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 ^ in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="and2_a">AND2 - Variant A</h2>
+<p>AND gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/texo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to AND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 && in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="and2_b">AND2 - Variant B</h2>
+<p>AND gate with two inputs and higher driving strength.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/gexu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to AND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 && in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="and3">AND3</h2>
+<p>AND gate with three inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/toza_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
+<td><p>Inputs to AND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 && in2 && in3)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="and4">AND4</h2>
+<p>AND gate with four inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/texe_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
+<td><p>Inputs to AND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 && in2 && in3 && in4)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="or2_a">OR2 - Variant A</h2>
+<p>OR gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/rute_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to OR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 || in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="or2_b">OR2 - Variant B</h2>
+<p>OR gate with two inputs and higher driving strength.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/lyxe_desc.png"><br>
+<img src="img/cells/asol_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to OR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 || in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="or3">OR3</h2>
+<p>OR gate with three inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/tevy_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
+<td><p>Inputs to OR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 || in2 || in3)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="or4">OR4</h2>
+<p>OR gate with four inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/awet_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
+<td><p>Inputs to OR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 || in2 || in3 || in4)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="ao">AO</h2>
+<p>2-1 AND-OR two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/lagu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i></td>
+<td><p>Inputs to AND gate.</p></td></tr>
+<tr><td><i>c</i></td>
+<td><p>Input to OR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>((a && b) || c)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="aoi4">AOI4</h2>
+<p>2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/waly_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i></td>
+<td><p>Inputs to AND gates.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h))</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="mux">MUX</h2>
+<p>Multiplexer with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/atur_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>d0</i>, <i>d1</i></td>
+<td><p>Data inputs.</p></td></tr>
+<tr><td><i>sel</i></td>
+<td><p>Select input.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <i>d0</i> if <i>sel</i> is high; outputs <i>d1</i> if <i>sel</i> is low.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="half_add">HALF_ADD</h2>
+<p>Half adder.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/fafo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i></td>
+<td><p>Summand inputs.</p></td></tr>
+<tr><td><i>cout</i></td>
+<td><p>Carry output. Outputs <code>(a && b)</code>.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Sum output. Outputs <code>(a ^ b)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="full_add">FULL_ADD</h2>
+<p>Full adder.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/geva_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i></td>
+<td><p>Summand inputs.</p></td></tr>
+<tr><td><i>cin</i></td>
+<td><p>Carry input.</p></td></tr>
+<tr><td><i>cout</i></td>
+<td><p>Carry output. Outputs <code>((a && b) || (cin && (a ^ b)))</code>.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Sum output. Outputs <code>(a ^ b ^ cin)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
 <h2 id="tri_a">TRIBUFFER - Variant A</h2>
 <p>Tri-state buffer.</p>
 <p>This cell comes in two very similar looking shapes: One has an active-high enable input; the other has an
