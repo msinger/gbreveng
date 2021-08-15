@@ -21,6 +21,15 @@ here. This builds on the work of Furrtek, the information found in his
 <li><a href="#dffr_c">DFFR - Variant C</a></li>
 <li><a href="#dffsr">DFFSR</a></li>
 <li><a href="#tffd">TFFD</a></li>
+<li><a href="#iobuf_a">IOBUFFER - Variant A</a></li>
+<li><a href="#iobuf_b">IOBUFFER - Variant B</a></li>
+<li><a href="#iobuf_c">IOBUFFER - Variant C</a></li>
+<li><a href="#ibuf">IBUFFER</a></li>
+<li><a href="#obuf_a">OBUFFER - Variant A</a></li>
+<li><a href="#obuf_b">OBUFFER - Variant B</a></li>
+<li><a href="#osc">OSC</a></li>
+<li><a href="#aibuf">AIBUFFER</a></li>
+<li><a href="#aobuf">AOBUFFER</a></li>
 </ul></p>
 <h2 id="tri_a">TRIBUFFER - Variant A</h2>
 <p>Tri-state buffer.</p>
@@ -277,6 +286,142 @@ the picture).</p></td></tr>
 <td><p>Data output.</p></td></tr>
 <tr><td><i>!q</i></td>
 <td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="iobuf_a">IOBUFFER - Variant A</h2>
+<p>Input/output buffer with open-drain/-source capability.</p>
+<p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the three connections
+face inwards.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/rd_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>drv_low</i></td>
+<td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
+<tr><td><i>!drv_high</i></td>
+<td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
+<tr><td><i>state</i></td>
+<td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="iobuf_b">IOBUFFER - Variant B</h2>
+<p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
+<p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
+face inwards.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/md0_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>drv_low</i></td>
+<td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
+<tr><td><i>!drv_high</i></td>
+<td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
+<tr><td><i>weak_high</i></td>
+<td><p>Pull-up resistor. When high, a pull-up resistor is connected to the I/O pad.</p></td></tr>
+<tr><td><i>state</i></td>
+<td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="iobuf_c">IOBUFFER - Variant C</h2>
+<p>Input/output buffer with open-drain/-source capability and optional pull-down resistor.</p>
+<p>This cell is only used for SCK. In the die shot this picture was taken from, this pin is located at
+the right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/sck_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>drv_low</i></td>
+<td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
+<tr><td><i>!drv_high</i></td>
+<td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
+<tr><td><i>!weak_low</i></td>
+<td><p>Pull-down resistor. When low, a pull-down resistor is connected to the I/O pad.</p></td></tr>
+<tr><td><i>state</i></td>
+<td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="ibuf">IBUFFER</h2>
+<p>Simple non-inverting input buffer.</p>
+<p>This cell is only used for RST, T1 and T2 (and an un-bonded unknown pad in the top-center of the die,
+that is directly connected to the CPU). In the die shot this picture was taken from, these pins (RST, T1 and
+T2) are located at the right-hand side. For consistency across this documentation it is rotated here (not
+mirrored!).</p>
+<p><i>TODO: Figure out if some instances of this cell have pull-up or pull-down resistors.</i></p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/rst_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>state</i></td>
+<td><p>Input state. Reads the current binary level at the input pad.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="obuf_a">OBUFFER - Variant A</h2>
+<p>Simple non-inverting output buffer.</p>
+<p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the connection
+faces inwards.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/ma0_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>drv</i></td>
+<td><p>Drive level. Drives the output pad high or low according to this level. The pad is always actively driven.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="obuf_b">OBUFFER - Variant B</h2>
+<p>Output buffer with open-drain/-source capability.</p>
+<p>This cell is only used for P14 and P15. In the die shot this picture was taken from, these pins are located in
+the bottom right corner. For consistency across this documentation it is rotated here (not mirrored!). Keep
+that in mind, especially for P14, where the <i>!drv_high</i> connection is at the top and <i>drv_low</i> is
+at the bottom.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/p15_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>drv_low</i></td>
+<td><p>Drive low. When high, the output pad is actively driven low.</p></td></tr>
+<tr><td><i>!drv_high</i></td>
+<td><p>Drive high. When low, the output pad is actively driven high.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="osc">OSC</h2>
+<p>Oscillator input and output pads for connecting external crystal.</p>
+<p>This cell is only used for XI/XO. In the die shot this picture was taken from, these pins are located at
+the right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/xi_xo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>clk</i></td>
+<td><p>Clock. Provides the source clock for the system.</p></td></tr>
+<tr><td><i>???</i></td>
+<td><p><i>TODO: Figure out what this is for. Not even sure if this is input or output. Best guesses are: 1. This
+goes high shortly after powering up the device when the clock is considered stable. -OR- 2. This is driven low
+by the CPU core after encountering a STOP instruction, to stop the crystal oscillator (to save power) until a
+button gets pressed.</i></p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="aibuf">AIBUFFER</h2>
+<p>Analog input buffer.</p>
+<p>This cell is only used for VIN. In the die shot this picture was taken from, this pin is located at the
+bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/vin_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>vin</i></td>
+<td><p>Analog input. Reads the current analog level at the input pad.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="aobuf">AOBUFFER</h2>
+<p>Analog output buffer.</p>
+<p>This cell is only used for ROUT and LOUT. In the die shot this picture was taken from, these pins are located
+at the bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/lout_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>vout</i></td>
+<td><p>Analog output. Drives the output pad based on this analog level. The pad is always actively driven.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <hr>
