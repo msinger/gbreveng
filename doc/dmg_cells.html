@@ -28,16 +28,16 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#nand3">NAND3</a></li>
 <li><a href="#nand4">NAND4</a></li>
 <li><a href="#nand5">NAND5</a></li>
+<li><a href="#nand6">NAND6</a></li>
 <li><a href="#nand7">NAND7</a></li>
 </ul></li>
 <li><a href="#nor">NOR gates</a><ul>
 <li><a href="#nor2">NOR2</a></li>
 <li><a href="#nor3">NOR3</a></li>
+<li><a href="#nor4">NOR4</a></li>
+<li><a href="#nor5">NOR5</a></li>
 <li><a href="#nor6">NOR6</a></li>
 <li><a href="#nor8">NOR8</a></li>
-</ul></li>
-<li><a href="#xnor">XNOR gates</a><ul>
-<li><a href="#xnor2">XNOR2</a></li>
 </ul></li>
 <li><a href="#and">AND gates</a><ul>
 <li><a href="#and2_a">AND2 - Variant A</a></li>
@@ -51,10 +51,15 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#or3">OR3</a></li>
 <li><a href="#or4">OR4</a></li>
 </ul></li>
+<li><a href="#xnor">XNOR</a></li>
+<li><a href="#xor">XOR</a></li>
 </ul></li>
 <li><a href="#compound">Compound logic gates</a><ul>
 <li><a href="#ao">AO</a></li>
+<li><a href="#aoi2">AOI2</a></li>
+<li><a href="#aoi3">AOI3</a></li>
 <li><a href="#aoi4">AOI4</a></li>
+<li><a href="#aoi6">AOI6</a></li>
 <li><a href="#mux">MUX</a></li>
 </ul></li>
 <li><a href="#arith">Arithmetic gates</a><ul>
@@ -86,6 +91,9 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#aibuf">AIBUFFER</a></li>
 <li><a href="#aobuf">AOBUFFER</a></li>
 </ul></li>
+<li><a href="#other">Other</a><ul>
+<li><a href="#supply">SUPPLY</a></li>
+</ul></li>
 </ul></p>
 <h2 id="logic">Basic logic gates</h2>
 <h3 id="inv">INVERTER gates</h3>
@@ -104,7 +112,8 @@ all documented once and for all, to make life easier!</p>
 <h4 id="inv_b">INVERTER - Variant B</h4>
 <p>Inverter with higher driving strength.</p>
 <p><table border="0">
-<tr><td><p><img src="img/cells/saha_desc.png"></p></td>
+<tr><td><p><img src="img/cells/saha_desc.png"><br>
+<img src="img/cells/efug_desc.png"></p></td>
 <td><p><table border="1">
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
 <tr><td><i>in</i></td>
@@ -198,6 +207,18 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
+<h4 id="nand6">NAND6</h4>
+<p>NAND gate with six inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/navo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i></td>
+<td><p>Inputs to NAND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
 <h4 id="nand7">NAND7</h4>
 <p>NAND gate with seven inputs.</p>
 <p><table border="0">
@@ -235,6 +256,30 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 || in2 || in3)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
+<h4 id="nor4">NOR4</h4>
+<p>NOR gate with four inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/semy_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
+<td><p>Inputs to NOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 || in2 || in3 || in4)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h4 id="nor5">NOR5</h4>
+<p>NOR gate with five inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/sare_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i></td>
+<td><p>Inputs to NOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
 <h4 id="nor6">NOR6</h4>
 <p>NOR gate with six inputs.</p>
 <p><table border="0">
@@ -257,19 +302,6 @@ all documented once and for all, to make life easier!</p>
 <td><p>Inputs to NOR gate.</p></td></tr>
 <tr><td><i>q</i></td>
 <td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6 || in7 || in8)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
-<h3 id="xnor">XNOR gates</h3>
-<h4 id="xnor2">XNOR2</h4>
-<p>XNOR gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/nojo_desc.png"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
-<tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to XNOR gate.</p></td></tr>
-<tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 ^ in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <h3 id="and">AND gates</h3>
@@ -371,6 +403,30 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 || in2 || in3 || in4)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
+<h3 id="xnor">XNOR</h3>
+<p>XNOR gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/nojo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to XNOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!(in1 ^ in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h3 id="xor">XOR</h3>
+<p>XOR gate with two inputs.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/culu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>in1</i>, <i>in2</i></td>
+<td><p>Inputs to XOR gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>(in1 ^ in2)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
 <h2 id="compound">Compound logic gates</h2>
 <h3 id="ao">AO</h3>
 <p>2-1 AND-OR two-level compound gate.</p>
@@ -387,6 +443,32 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>((a && b) || c)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
+<h3 id="aoi2">AOI2</h3>
+<p>2-2 AND-OR-INVERT two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_2</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/jufy_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i></td>
+<td><p>Inputs to AND gates.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!((a && b) || (c && d))</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h3 id="aoi3">AOI3</h3>
+<p>2-2-2 AND-OR-INVERT two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_3</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/evug_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i></td>
+<td><p>Inputs to AND gates.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!((a && b) || (c && d) || (e && f))</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
 <h3 id="aoi4">AOI4</h3>
 <p>2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
@@ -398,6 +480,20 @@ all documented once and for all, to make life easier!</p>
 <td><p>Inputs to AND gates.</p></td></tr>
 <tr><td><i>q</i></td>
 <td><p>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h))</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h3 id="aoi6">AOI6</h3>
+<p>2-2-2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_6</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/etyr_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i>;
+<i>i</i>, <i>j</i>; <i>k</i>, <i>l</i></td>
+<td><p>Inputs to AND gates.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h) || (i && j) || (k && l))</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <h3 id="mux">MUX</h3>
@@ -839,6 +935,23 @@ at the bottom right. For consistency across this documentation it is rotated her
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
 <tr><td><i>vout</i></td>
 <td><p>Analog output. Drives the output pad based on this analog level. The pad is always actively driven.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h2 id="other">Other</h2>
+<h3 id="supply">SUPPLY</h3>
+<p>Constant supply.</p>
+<p>The outputs of this cell are hardwired to VCC and GND. It is used to provide constant 1 and 0 signals to other
+cells. For example, it is used for the interrupt flags register: The PESU cell feeds a constant 1 into the data
+inputs of flip-flops (LOPE, UBUL, ...). Whenever the clock inputs of those flip-flops get triggered by an interrupt,
+the constant 1 gets clocked in.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/vypo_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>0</i></td>
+<td><p>Constant 0 output. Connects to GND.</p></td></tr>
+<tr><td><i>1</i></td>
+<td><p>Constant 1 output. Connects to VCC.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <hr>
