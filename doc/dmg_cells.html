@@ -15,36 +15,57 @@ encountering cells for which the cell zoo JPG wasn't providing the pinout, so I 
 all documented once and for all, to make life easier!</p>
 <p>Please report any errors I made <a href="https://sourceforge.net/p/iceboy/tickets/">here</a>.</p>
 <p><ul>
+<li><a href="#logic">Basic logic gates</a><ul>
+<li><a href="#inv">INVERTER gates</a><ul>
 <li><a href="#inv_a">INVERTER - Variant A</a></li>
 <li><a href="#inv_b">INVERTER - Variant B</a></li>
 <li><a href="#inv_c">INVERTER - Variant C</a></li>
 <li><a href="#inv_d">INVERTER - Variant D</a></li>
 <li><a href="#inv_e">INVERTER - Variant E</a></li>
+</ul></li>
+<li><a href="#nand">NAND gates</a><ul>
 <li><a href="#nand2">NAND2</a></li>
 <li><a href="#nand3">NAND3</a></li>
 <li><a href="#nand4">NAND4</a></li>
 <li><a href="#nand5">NAND5</a></li>
 <li><a href="#nand7">NAND7</a></li>
+</ul></li>
+<li><a href="#nor">NOR gates</a><ul>
 <li><a href="#nor2">NOR2</a></li>
 <li><a href="#nor3">NOR3</a></li>
 <li><a href="#nor6">NOR6</a></li>
 <li><a href="#nor8">NOR8</a></li>
+</ul></li>
+<li><a href="#xnor">XNOR gates</a><ul>
 <li><a href="#xnor2">XNOR2</a></li>
+</ul></li>
+<li><a href="#and">AND gates</a><ul>
 <li><a href="#and2_a">AND2 - Variant A</a></li>
 <li><a href="#and2_b">AND2 - Variant B</a></li>
 <li><a href="#and3">AND3</a></li>
 <li><a href="#and4">AND4</a></li>
+</ul></li>
+<li><a href="#or">OR gates</a><ul>
 <li><a href="#or2_a">OR2 - Variant A</a></li>
 <li><a href="#or2_b">OR2 - Variant B</a></li>
 <li><a href="#or3">OR3</a></li>
 <li><a href="#or4">OR4</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#compound">Compound logic gates</a><ul>
 <li><a href="#ao">AO</a></li>
 <li><a href="#aoi4">AOI4</a></li>
 <li><a href="#mux">MUX</a></li>
+</ul></li>
+<li><a href="#arith">Arithmetic gates</a><ul>
 <li><a href="#half_add">HALF_ADD</a></li>
 <li><a href="#full_add">FULL_ADD</a></li>
+</ul></li>
+<li><a href="#tri">Tri-state buffers</a><ul>
 <li><a href="#tri_a">TRIBUFFER - Variant A</a></li>
 <li><a href="#tri_b">TRIBUFFER - Variant B</a></li>
+</ul></li>
+<li><a href="#ff">Storage elements</a><ul>
 <li><a href="#dlatch">DLATCH</a></li>
 <li><a href="#dff">DFF</a></li>
 <li><a href="#dffr_a">DFFR - Variant A</a></li>
@@ -53,6 +74,8 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#dffr_c">DFFR - Variant C</a></li>
 <li><a href="#dffsr">DFFSR</a></li>
 <li><a href="#tffd">TFFD</a></li>
+</ul></li>
+<li><a href="#io">I/O buffers</a><ul>
 <li><a href="#iobuf_a">IOBUFFER - Variant A</a></li>
 <li><a href="#iobuf_b">IOBUFFER - Variant B</a></li>
 <li><a href="#iobuf_c">IOBUFFER - Variant C</a></li>
@@ -62,8 +85,11 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#osc">OSC</a></li>
 <li><a href="#aibuf">AIBUFFER</a></li>
 <li><a href="#aobuf">AOBUFFER</a></li>
+</ul></li>
 </ul></p>
-<h2 id="inv_a">INVERTER - Variant A</h2>
+<h2 id="logic">Basic logic gates</h2>
+<h3 id="inv">INVERTER gates</h3>
+<h4 id="inv_a">INVERTER - Variant A</h4>
 <p>Simple inverter.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tona_desc.png"></p></td>
@@ -75,7 +101,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs inverted <i>in</i>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="inv_b">INVERTER - Variant B</h2>
+<h4 id="inv_b">INVERTER - Variant B</h4>
 <p>Inverter with higher driving strength.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/saha_desc.png"></p></td>
@@ -87,7 +113,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs inverted <i>in</i>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="inv_c">INVERTER - Variant C</h2>
+<h4 id="inv_c">INVERTER - Variant C</h4>
 <p>Inverter with higher driving strength.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/apov_desc.png"></p></td>
@@ -99,7 +125,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs inverted <i>in</i>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="inv_d">INVERTER - Variant D</h2>
+<h4 id="inv_d">INVERTER - Variant D</h4>
 <p>Inverter with higher driving strength.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/beko_desc.png"></p></td>
@@ -111,7 +137,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs inverted <i>in</i>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="inv_e">INVERTER - Variant E</h2>
+<h4 id="inv_e">INVERTER - Variant E</h4>
 <p>Inverter with higher driving strength.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/beva_desc.png"></p></td>
@@ -123,7 +149,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs inverted <i>in</i>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nand2">NAND2</h2>
+<h3 id="nand">NAND gates</h3>
+<h4 id="nand2">NAND2</h4>
 <p>NAND gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/rylu_desc.png"></p></td>
@@ -135,7 +162,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 && in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nand3">NAND3</h2>
+<h4 id="nand3">NAND3</h4>
 <p>NAND gate with three inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/lavo_desc.png"></p></td>
@@ -147,7 +174,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 && in2 && in3)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nand4">NAND4</h2>
+<h4 id="nand4">NAND4</h4>
 <p>NAND gate with four inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tuge_desc.png"></p></td>
@@ -159,7 +186,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 && in2 && in3 && in4)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nand5">NAND5</h2>
+<h4 id="nand5">NAND5</h4>
 <p>NAND gate with fife inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/palo_desc.png"></p></td>
@@ -171,7 +198,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nand7">NAND7</h2>
+<h4 id="nand7">NAND7</h4>
 <p>NAND gate with seven inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tuna_desc.png"></p></td>
@@ -183,7 +210,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6 && in7)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nor2">NOR2</h2>
+<h3 id="nor">NOR gates</h3>
+<h4 id="nor2">NOR2</h4>
 <p>NOR gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tefa_desc.png"></p></td>
@@ -195,7 +223,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 || in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nor3">NOR3</h2>
+<h4 id="nor3">NOR3</h4>
 <p>NOR gate with three inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/bapy_desc.png"></p></td>
@@ -207,7 +235,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 || in2 || in3)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nor6">NOR6</h2>
+<h4 id="nor6">NOR6</h4>
 <p>NOR gate with six inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tyro_desc.png"></p></td>
@@ -219,7 +247,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="nor8">NOR8</h2>
+<h4 id="nor8">NOR8</h4>
 <p>NOR gate with eight inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tulo_desc.png"></p></td>
@@ -231,7 +259,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6 || in7 || in8)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="xnor2">XNOR2</h2>
+<h3 id="xnor">XNOR gates</h3>
+<h4 id="xnor2">XNOR2</h4>
 <p>XNOR gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/nojo_desc.png"></p></td>
@@ -243,7 +272,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!(in1 ^ in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="and2_a">AND2 - Variant A</h2>
+<h3 id="and">AND gates</h3>
+<h4 id="and2_a">AND2 - Variant A</h4>
 <p>AND gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/texo_desc.png"></p></td>
@@ -255,7 +285,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 && in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="and2_b">AND2 - Variant B</h2>
+<h4 id="and2_b">AND2 - Variant B</h4>
 <p>AND gate with two inputs and higher driving strength.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/gexu_desc.png"></p></td>
@@ -267,7 +297,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 && in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="and3">AND3</h2>
+<h4 id="and3">AND3</h4>
 <p>AND gate with three inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/toza_desc.png"></p></td>
@@ -279,7 +309,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 && in2 && in3)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="and4">AND4</h2>
+<h4 id="and4">AND4</h4>
 <p>AND gate with four inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/texe_desc.png"></p></td>
@@ -291,7 +321,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 && in2 && in3 && in4)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="or2_a">OR2 - Variant A</h2>
+<h3 id="or">OR gates</h3>
+<h4 id="or2_a">OR2 - Variant A</h4>
 <p>OR gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/rute_desc.png"></p></td>
@@ -303,7 +334,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 || in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="or2_b">OR2 - Variant B</h2>
+<h4 id="or2_b">OR2 - Variant B</h4>
 <p>OR gate with two inputs and higher driving strength.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/lyxe_desc.png"><br>
@@ -316,7 +347,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 || in2)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="or3">OR3</h2>
+<h4 id="or3">OR3</h4>
 <p>OR gate with three inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/tevy_desc.png"></p></td>
@@ -328,7 +359,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 || in2 || in3)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="or4">OR4</h2>
+<h4 id="or4">OR4</h4>
 <p>OR gate with four inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/awet_desc.png"></p></td>
@@ -340,7 +371,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>(in1 || in2 || in3 || in4)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="ao">AO</h2>
+<h2 id="compound">Compound logic gates</h2>
+<h3 id="ao">AO</h3>
 <p>2-1 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
 <p><table border="0">
@@ -355,7 +387,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>((a && b) || c)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="aoi4">AOI4</h2>
+<h3 id="aoi4">AOI4</h3>
 <p>2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
 <p><table border="0">
@@ -368,7 +400,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h))</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="mux">MUX</h2>
+<h3 id="mux">MUX</h3>
 <p>Multiplexer with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/atur_desc.png"></p></td>
@@ -382,7 +414,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Outputs <i>d0</i> if <i>sel</i> is high; outputs <i>d1</i> if <i>sel</i> is low.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="half_add">HALF_ADD</h2>
+<h2 id="arith">Arithmetic gates</h2>
+<h3 id="half_add">HALF_ADD</h3>
 <p>Half adder.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/fafo_desc.png"></p></td>
@@ -396,7 +429,7 @@ all documented once and for all, to make life easier!</p>
 <td><p>Sum output. Outputs <code>(a ^ b)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="full_add">FULL_ADD</h2>
+<h3 id="full_add">FULL_ADD</h3>
 <p>Full adder.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/geva_desc.png"></p></td>
@@ -412,7 +445,8 @@ all documented once and for all, to make life easier!</p>
 <td><p>Sum output. Outputs <code>(a ^ b ^ cin)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="tri_a">TRIBUFFER - Variant A</h2>
+<h2 id="tri">Tri-state buffers</h2>
+<h3 id="tri_a">TRIBUFFER - Variant A</h3>
 <p>Tri-state buffer.</p>
 <p>This cell comes in two very similar looking shapes: One has an active-high enable input; the other has an
 active-low enable input.</p>
@@ -434,7 +468,7 @@ When high, <i>!q</i> is not driven.</p></td></tr>
 <td><p>Inverted tri-state output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="tri_b">TRIBUFFER - Variant B</h2>
+<h3 id="tri_b">TRIBUFFER - Variant B</h3>
 <p>Tri-state buffer.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
 necessary for it to work.</p>
@@ -453,7 +487,8 @@ When high, <i>!q</i> is not driven.</p></td></tr>
 <td><p>Inverted tri-state output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dlatch">DLATCH</h2>
+<h2 id="ff">Storage elements</h2>
+<h3 id="dlatch">DLATCH</h3>
 <p>Gated data latch.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
 <p><table border="0">
@@ -472,7 +507,7 @@ high again.</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dff">DFF</h2>
+<h3 id="dff">DFF</h3>
 <p>Single-edge-triggered data flip-flop.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
@@ -500,7 +535,7 @@ a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dffr_a">DFFR - Variant A</h2>
+<h3 id="dffr_a">DFFR - Variant A</h3>
 <p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
@@ -528,7 +563,7 @@ a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dffr_b">DFFR - Variant B</h2>
+<h3 id="dffr_b">DFFR - Variant B</h3>
 <p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
@@ -560,7 +595,7 @@ the picture).</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dffr_b2">DFFR - Variant B+</h2>
+<h3 id="dffr_b2">DFFR - Variant B+</h3>
 <p>Positive-edge-triggered data flip-flop with active-low asynchronous reset.</p>
 <p>This cell is basically the same as variant B but with an extension at the top. This extension seems
 to generate the inverted clock that is required.</p>
@@ -588,7 +623,7 @@ the picture).</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dffr_c">DFFR - Variant C</h2>
+<h3 id="dffr_c">DFFR - Variant C</h3>
 <p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
@@ -619,7 +654,7 @@ the picture).</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="dffsr">DFFSR</h2>
+<h3 id="dffsr">DFFSR</h3>
 <p>Positive-edge-triggered data flip-flop with active-low asynchronous set and reset.</p>
 <p>There are four external connections always made on this cell (see orange, cyan, green and pink
 lines in the picture) that seem to be necessary for it to work.</p>
@@ -644,7 +679,7 @@ the picture).</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="tffd">TFFD</h2>
+<h3 id="tffd">TFFD</h3>
 <p>Negative-edge-triggered toggle flip-flop with active-high asynchronous data load.</p>
 <p>This flip-flop is used for counters that can be loaded with a value.</p>
 <p>There are four external connections always made on this cell (see orange, cyan, green and pink
@@ -669,7 +704,8 @@ the picture).</p></td></tr>
 <td><p>Inverted data output.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="iobuf_a">IOBUFFER - Variant A</h2>
+<h2 id="io">I/O buffers</h2>
+<h3 id="iobuf_a">IOBUFFER - Variant A</h3>
 <p>Input/output buffer with open-drain/-source capability.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the three connections
 face inwards.</p>
@@ -685,7 +721,7 @@ face inwards.</p>
 <td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="iobuf_b">IOBUFFER - Variant B</h2>
+<h3 id="iobuf_b">IOBUFFER - Variant B</h3>
 <p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
@@ -703,7 +739,7 @@ face inwards.</p>
 <td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="iobuf_c">IOBUFFER - Variant C</h2>
+<h3 id="iobuf_c">IOBUFFER - Variant C</h3>
 <p>Input/output buffer with open-drain/-source capability and optional pull-down resistor.</p>
 <p>This cell is only used for SCK. In the die shot this picture was taken from, this pin is located at
 the right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
@@ -721,7 +757,7 @@ the right-hand side. For consistency across this documentation it is rotated her
 <td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="ibuf">IBUFFER</h2>
+<h3 id="ibuf">IBUFFER</h3>
 <p>Simple non-inverting input buffer.</p>
 <p>This cell is only used for RST, T1 and T2 (and an un-bonded unknown pad in the top-center of the die,
 that is directly connected to the CPU). In the die shot this picture was taken from, these pins (RST, T1 and
@@ -736,7 +772,7 @@ mirrored!).</p>
 <td><p>Input state. Reads the current binary level at the input pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="obuf_a">OBUFFER - Variant A</h2>
+<h3 id="obuf_a">OBUFFER - Variant A</h3>
 <p>Simple non-inverting output buffer.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the connection
 faces inwards.</p>
@@ -748,7 +784,7 @@ faces inwards.</p>
 <td><p>Drive level. Drives the output pad high or low according to this level. The pad is always actively driven.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="obuf_b">OBUFFER - Variant B</h2>
+<h3 id="obuf_b">OBUFFER - Variant B</h3>
 <p>Output buffer with open-drain/-source capability.</p>
 <p>This cell is only used for P14 and P15. In the die shot this picture was taken from, these pins are located in
 the bottom right corner. For consistency across this documentation it is rotated here (not mirrored!). Keep
@@ -764,7 +800,7 @@ at the bottom.</p>
 <td><p>Drive high. When low, the output pad is actively driven high.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="osc">OSC</h2>
+<h3 id="osc">OSC</h3>
 <p>Oscillator input and output pads for connecting external crystal.</p>
 <p>This cell is only used for XI/XO. In the die shot this picture was taken from, these pins are located at
 the right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
@@ -781,7 +817,7 @@ by the CPU core after encountering a STOP instruction, to stop the crystal oscil
 button gets pressed.</i></p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="aibuf">AIBUFFER</h2>
+<h3 id="aibuf">AIBUFFER</h3>
 <p>Analog input buffer.</p>
 <p>This cell is only used for VIN. In the die shot this picture was taken from, this pin is located at the
 bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
@@ -793,7 +829,7 @@ bottom right. For consistency across this documentation it is rotated here (not 
 <td><p>Analog input. Reads the current analog level at the input pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
-<h2 id="aobuf">AOBUFFER</h2>
+<h3 id="aobuf">AOBUFFER</h3>
 <p>Analog output buffer.</p>
 <p>This cell is only used for ROUT and LOUT. In the die shot this picture was taken from, these pins are located
 at the bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
