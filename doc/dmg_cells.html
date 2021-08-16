@@ -56,6 +56,7 @@ all documented once and for all, to make life easier!</p>
 </ul></li>
 <li><a href="#compound">Compound logic gates</a><ul>
 <li><a href="#ao">AO</a></li>
+<li><a href="#oa">OA</a></li>
 <li><a href="#aoi2">AOI2</a></li>
 <li><a href="#aoi3">AOI3</a></li>
 <li><a href="#aoi4">AOI4</a></li>
@@ -441,6 +442,21 @@ all documented once and for all, to make life easier!</p>
 <td><p>Input to OR gate.</p></td></tr>
 <tr><td><i>q</i></td>
 <td><p>Outputs <code>((a && b) || c)</code>.</p></td></tr>
+</table></p></td></tr>
+</table></p>
+<h3 id="oa">OA</h3>
+<p>2-1 OR-AND two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OA3</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/agut_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>a</i>, <i>b</i></td>
+<td><p>Inputs to OR gate.</p></td></tr>
+<tr><td><i>c</i></td>
+<td><p>Input to AND gate.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Outputs <code>((a || b) && c)</code>.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <h3 id="aoi2">AOI2</h3>
