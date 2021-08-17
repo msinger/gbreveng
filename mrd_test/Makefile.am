@@ -55,7 +55,7 @@ mrd_test.bin: mrd_test.asc Makefile
 	$(FIX) -fhg $(FIXFLAGS) $@
 
 %.coff: %.o
-	$(LD) $(LDFLAGS) --oformat coff-lr35902 -o $@ $^
+	$(LD) $(LDFLAGS) --oformat coff-sm83 -o $@ $^
 
 rom.bin: rom.gb Makefile
 	dd if=$< of=$@ bs=128 count=1 skip=2

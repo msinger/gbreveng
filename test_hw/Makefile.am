@@ -49,4 +49,4 @@ test_hw.bin: test_hw.asc Makefile
 	$(FIX) -fhg $(FIXFLAGS) $@
 
 %.coff: %.o
-	$(LD) $(LDFLAGS) --oformat coff-lr35902 -o $@ $^
+	$(LD) $(LDFLAGS) --oformat coff-sm83 -o $@ $^

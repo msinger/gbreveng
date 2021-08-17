@@ -166,30 +166,30 @@ if test -z "$ICEPROG"; then
 fi
 ])dnl
 dnl
-AC_DEFUN([MY_PROG_LR35902_AS],
+AC_DEFUN([MY_PROG_SM83_AS],
 [dnl
-# LR35902 Assembler
-AC_ARG_VAR(AS, [LR35902 assembler (overrides auto detection)])
+# SM83 Assembler
+AC_ARG_VAR(AS, [SM83 assembler (overrides auto detection)])
 if test -z "$AS"; then
-	AC_PATH_PROG(AS, lr35902-gb-coff-as, [])
+	AC_PATH_PROG(AS, sm83-gb-coff-as, [])
 	if test -z "$AS"; then
-		AC_MSG_ERROR([lr35902-gb-coff-as not found])
+		AC_MSG_ERROR([sm83-gb-coff-as not found])
 	fi
 fi
-AC_ARG_VAR(ASFLAGS, [Additional arguments passed to LR35902 assembler])
+AC_ARG_VAR(ASFLAGS, [Additional arguments passed to SM83 assembler])
 ])dnl
 dnl
-AC_DEFUN([MY_PROG_LR35902_LD],
+AC_DEFUN([MY_PROG_SM83_LD],
 [dnl
-# LR35902 Linker
-AC_ARG_VAR(LD, [LR35902 linker (overrides auto detection)])
+# SM83 Linker
+AC_ARG_VAR(LD, [SM83 linker (overrides auto detection)])
 if test -z "$LD"; then
-	AC_PATH_PROG(LD, lr35902-gb-coff-ld, [])
+	AC_PATH_PROG(LD, sm83-gb-coff-ld, [])
 	if test -z "$LD"; then
-		AC_MSG_ERROR([lr35902-gb-coff-ld not found])
+		AC_MSG_ERROR([sm83-gb-coff-ld not found])
 	fi
 fi
-AC_ARG_VAR(LDFLAGS, [Additional arguments passed to LR35902 linker])
+AC_ARG_VAR(LDFLAGS, [Additional arguments passed to SM83 linker])
 ])dnl
 dnl
 AC_DEFUN([MY_PROG_FIX],

@@ -37,4 +37,4 @@ all: $(ROMS:%.s=%.gb)
 	$(FIX) -fhg $(FIXFLAGS) $@
 
 %.coff: common.o %.o
-	$(LD) $(LDFLAGS) --oformat coff-lr35902 -o $@ $^
+	$(LD) $(LDFLAGS) --oformat coff-sm83 -o $@ $^

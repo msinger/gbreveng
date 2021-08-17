@@ -57,7 +57,7 @@ shiva.bin: shiva.asc Makefile
 	$(FIX) -fhg $(FIXFLAGS) $@
 
 %.coff: %.o
-	$(LD) $(LDFLAGS) --oformat coff-lr35902 -o $@ $^
+	$(LD) $(LDFLAGS) --oformat coff-sm83 -o $@ $^
 
 pll.v: Makefile
 	$(ICEPLL) -q -i 12 -o 60 -mf $@

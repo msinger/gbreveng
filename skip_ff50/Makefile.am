@@ -55,7 +55,7 @@ skip_ff50.bin: skip_ff50.asc Makefile
 	$(FIX) -fhg $(FIXFLAGS) $@
 
 %.coff: %.o
-	$(LD) $(LDFLAGS) --oformat coff-lr35902 -o $@ $^
+	$(LD) $(LDFLAGS) --oformat coff-sm83 -o $@ $^
 
 rom.bin: rom.gb Makefile
 	dd if=$< of=$@ bs=256 count=1 skip=1 seek=1
