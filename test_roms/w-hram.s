@@ -14,7 +14,7 @@ loop:
 
 	; write 0xff to HRAM (if data lines are still 0x00, then this means
 	; they are still configured as inputs and driven by cartridge)
-	ldh (c), a
+	ld (c), a
 
 	jr loop
 

@@ -22,7 +22,7 @@ rw_load:
 main:
 .global main
 	ld a, 0x0a
-	ld (0x0000), a
+	ldx (0x0000), a
 	nop
 	ld bc, rw_load
 	ld de, 8
@@ -31,34 +31,34 @@ main:
 
 loop:
 	ld a, 0xef
-	ldh (0x00), a
+	ld (0x00), a
 
 	ld hl, rw
 
-	ldi a, (hl)
+	ld a, (hli)
 	nop
-	ldi a, (hl)
+	ld a, (hli)
 	nop
-	ldi a, (hl)
+	ld a, (hli)
 	nop
-	ldi a, (hl)
+	ld a, (hli)
 
 	nop
 	nop
 	nop
 
 	ld a, 0xdf
-	ldh (0x00), a
+	ld (0x00), a
 
 	ld a, 0xc0
 	nop
 
-	ldi (hl), a
+	ld (hli), a
 	inc a
-	ldi (hl), a
+	ld (hli), a
 	inc a
-	ldi (hl), a
+	ld (hli), a
 	inc a
-	ldi (hl), a
+	ld (hli), a
 
 	jr loop

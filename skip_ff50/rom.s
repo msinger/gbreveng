@@ -35,10 +35,10 @@ _start:
 .global _start
 	di
 	xor a
-	ldh (0xff), a
+	ld (0xff), a
 
 	ld a, 0xff
-	ldh (0x00), a
+	ld (0x00), a
 
 	ld sp, _initial_sp
 
@@ -63,7 +63,7 @@ memcpy:
 	or e
 	ret z
 	ld a, (bc)
-	ldi (hl), a
+	ld (hli), a
 	inc bc
 	dec de
 	jr memcpy

@@ -18,34 +18,34 @@ main:
 .global main
 
 	ld a, 0xef
-	ldh (0x00), a
+	ld (0x00), a
 
 	nop
 	nop
 
-	ldh a, (read + 0)
+	ld a, (read + 0)
 	nop
-	ldh a, (read + 1)
+	ld a, (read + 1)
 	nop
-	ldh a, (read + 2)
+	ld a, (read + 2)
 	nop
-	ldh a, (read + 3)
+	ld a, (read + 3)
 
 	nop
 	nop
 	nop
 
 	ld a, 0xdf
-	ldh (0x00), a
+	ld (0x00), a
 
 	ld a, 0xc0
 
-	ldh (write + 0), a
+	ld (write + 0), a
 	inc a
-	ldh (write + 1), a
+	ld (write + 1), a
 	inc a
-	ldh (write + 2), a
+	ld (write + 2), a
 	inc a
-	ldh (write + 3), a
+	ld (write + 3), a
 
 	jr main

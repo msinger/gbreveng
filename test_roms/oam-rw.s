@@ -17,7 +17,7 @@ rw_load:
 main:
 .global main
 ;	xor a
-;	ldh (0x40), a
+;	ld (0x40), a
 ;	nop
 ;	nop
 
@@ -28,34 +28,34 @@ main:
 
 loop:
 	ld a, 0xef
-	ldh (0x00), a
+	ld (0x00), a
 
 	ld hl, 0xfe00
 
-	ldi a, (hl)
+	ld a, (hli)
 	nop
-	ldi a, (hl)
+	ld a, (hli)
 	nop
-	ldi a, (hl)
+	ld a, (hli)
 	nop
-	ldi a, (hl)
+	ld a, (hli)
 
 	nop
 	nop
 	nop
 
 	ld a, 0xdf
-	ldh (0x00), a
+	ld (0x00), a
 
 	ld a, 0xc0
 	nop
 
-	ldi (hl), a
+	ld (hli), a
 	inc a
-	ldi (hl), a
+	ld (hli), a
 	inc a
-	ldi (hl), a
+	ld (hli), a
 	inc a
-	ldi (hl), a
+	ld (hli), a
 
 	jr loop

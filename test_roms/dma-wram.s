@@ -7,7 +7,7 @@
 main:
 .global main
 ;	xor a
-;	ldh (0x40), a
+;	ld (0x40), a
 ;	nop
 ;	nop
 
@@ -15,14 +15,14 @@ main:
 	ld hl, 0xc000
 fill:
 	dec a
-	ldi (hl), a
+	ld (hli), a
 	jr nz, fill
 
 	ld c, 0x46
 	ld a, h
 
 loop:
-	ldh (c), a    ; start DMA
+	ld (c), a    ; start DMA
 
 	ld l, 40
 wait:

@@ -7,11 +7,11 @@
 main:
 .global main
 	ld a, 0xEF
-	ldh (0x00), a
+	ld (0x00), a
 
 loop:
 	call wait
-	ldh a, (0x00)
+	ld a, (0x00)
 	ld b, a
 	and 0x01
 	call z, right
@@ -46,22 +46,22 @@ wait2:
 	ret
 
 right:
-	ldh a, (0x43)
+	ld a, (0x43)
 	dec a
-	ldh (0x43), a
+	ld (0x43), a
 	ret
 left:
-	ldh a, (0x43)
+	ld a, (0x43)
 	inc a
-	ldh (0x43), a
+	ld (0x43), a
 	ret
 up:
-	ldh a, (0x42)
+	ld a, (0x42)
 	inc a
-	ldh (0x42), a
+	ld (0x42), a
 	ret
 down:
-	ldh a, (0x42)
+	ld a, (0x42)
 	dec a
-	ldh (0x42), a
+	ld (0x42), a
 	ret
