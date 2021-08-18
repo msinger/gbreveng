@@ -46,22 +46,22 @@ during this time:</p>
    0:   31 fe ff        ld sp,0xfffe   ; 3 cycles
    3:   af              xor a          ; 1
    4:   21 ff 9f        ld hl,0x9fff   ; 3                           _
-   7:   32              ldd (hl),a     ; 2                            \
+   7:   32              ld (hld),a     ; 2                            \
    8:   cb 7c           bit 7,h        ; 2                             \--&gt; loop: 57343 cycles
    a:   20 fb           jr nz,0x0007   ; 3 when jumping; 2 otherwise __/
    c:   21 26 ff        ld hl,0xff26   ; 3
    f:   0e 11           ld c,0x11      ; 2
   11:   3e 80           ld a,0x80      ; 2 cycles  &lt;-- ends at cycle #57357
-  13:   32              ldd (hl),a     ; 2         &lt;-- ends at cycle #57359, address lines reflect 0xff26
-  14:   e2              ldh (c),a
+  13:   32              ld (hld),a     ; 2         &lt;-- ends at cycle #57359, address lines reflect 0xff26
+  14:   e2              ld (c),a
   15:   0c              inc c
   16:   3e f3           ld a,0xf3
-  18:   e2              ldh (c),a
-  19:   32              ldd (hl),a
+  18:   e2              ld (c),a
+  19:   32              ld (hld),a
   1a:   3e 77           ld a,0x77
   1c:   77              ld (hl),a
   1d:   3e fc           ld a,0xfc
-  1f:   e0 47           ldh (0x47),a
+  1f:   e0 47           ld (0x47),a
 </pre></p>
 <p>The VRAM access during the loop at 0x7-0xA is not visible on the external memory bus. The first thing that
 can be seen on the externel bus is the operation at 0x13, which writes 0x80 into the APU register 0xff26. The
@@ -80,8 +80,13 @@ Boot ROM instructions at address 0x13 and 0x14</i></p>
 3: Boot ROM checking header sum (executing 0xf1...0xfb)<br>
 4: Executing code in cartridge ROM (startup code of <a href="../test_roms/rom-rw.gb">rom-rw.gb</a>: <a href="../test_roms/common.s">common.s</a>)<br>
 5: Executing code in HRAM (main loop of <a href="../test_roms/rom-rw.gb">rom-rw.gb</a>: <a href="../test_roms/rom-rw.s">rom-rw.s</a>)</i></p>
-<h2>Bus Overview</h2>
-<p>The CPU is master of five distinct memory busses.</p>
+<h2>Memory Overview</h2>
+<p>The patterns that are visible on the two external busses of the chip are depending on which components are accessed
+by the CPU, PPU and DMA. The following table shows the memory map as seen by the CPU. Although in reality this is much
+more spaghetti-ish, I tried to divide the various components into four busses. This grouping is only for describing which
+signal patterns can be seen when a component from any of those groups is accessed. The boot ROM got its own group even
+though it should be logically fit in the "Internal Bus" group, because for some reason it deviates from the patterns
+seen in this group.</p>
 <p><table border="1">
 <tr>
 <th><p><i>mapping</i></p></th>
@@ -89,7 +94,7 @@ Boot ROM instructions at address 0x13 and 0x14</i></p>
 <th bgcolor="#ffffe0"><p>Internal Bus</p></th>
 <th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
 <th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<th bgcolor="#e0ffe0"><p>Hidden Bus</p></th>
+<th bgcolor="#e0ffe0"><p>Boot ROM</p></th>
 </tr><tr>
 <th><p>Boot ROM<br>0x0000-0x00FF</p></th>
 <td><p>&nbsp;</p></td>
@@ -170,8 +175,8 @@ Boot ROM instructions at address 0x13 and 0x14</i></p>
 </tr>
 </table>
 <i><u>Table 1</u><br>
-(*): 0x0000-0x00FF is only mapped to the hidden bus during boot;
-gets cut off when boot ROM writes 0x01 to register 0xFF50<br>
+(*): 0x0000-0x00FF is only mapped to the boot ROM during boot;
+gets cut off when boot ROM code writes 0x01 to register 0xFF50<br>
 (**): 0xE000-0xFDFF is often called the WRAM echo or shadow area; actually the cartridge
 RAM may also respond here, which could lead to short circuits during read operations</i></p>
 <p>On the external bus, A15 serves as a low active ROM chip select. It will only switch to low when the
@@ -211,7 +216,7 @@ the highest priority, the CPU has the lowest.</p>
 <p><table border="1">
 <tr>
 <th><p><i>has access to bus<br>(ordered by priority)</i></p></th>
-<th bgcolor="#e0ffe0"><p>Hidden Bus</p></th>
+<th bgcolor="#e0ffe0"><p>Boot ROM</p></th>
 <th bgcolor="#ffe0e0"><p>External Bus</p></th>
 <th bgcolor="#ffffe0"><p>Internal Bus</p></th>
 <th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
@@ -251,7 +256,7 @@ the highest priority, the CPU has the lowest.</p>
 <th><p>D0-D7 direction</p></th>
 <th><p>D0-D7 output buffer</p></th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
 <td><p>high</p></td>
 <td><p>low</p></td>
 <td><p>high</p></td>
@@ -298,8 +303,8 @@ the highest priority, the CPU has the lowest.</p>
 </tr>
 </table>
 <i><u>Table 4</u><br>
-Signals visible on external bus when CPU accesses any of the five busses (while DMA is not accessing WRAM or cartridge)<br>
-(*): Write access on hidden bus not tested yet</i></p>
+Signals visible on external bus when CPU accesses any of the five groups (while DMA is not accessing WRAM or cartridge)<br>
+(*): Write access on boot ROM not tested yet</i></p>
 <p><table border="1" bgcolor="#e0e0ff">
 <tr>
 <th><p><i>signals visible on<br>ext. video bus during<br>CPU mem access</i></p></th>
@@ -310,7 +315,7 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 <th><p>VD0-VD7 direction</p></th>
 <th><p>VD0-VD7 output buffer</p></th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
 <td><p>high</p></td>
 <td><p>low</p></td>
 <td><p>high</p></td>
@@ -352,8 +357,8 @@ Signals visible on external bus when CPU accesses any of the five busses (while 
 </tr>
 </table>
 <i><u>Table 5</u><br>
-Signals visible on external video bus when CPU accesses any of the five busses (while PPU and DMA are not accessing VRAM)<br>
-(*): Write access on hidden bus not tested yet</i></p>
+Signals visible on external video bus when CPU accesses any of the five groups (while PPU and DMA are not accessing VRAM)<br>
+(*): Write access on boot ROM not tested yet</i></p>
 <p><table border="1" bgcolor="#e0e0ff">
 <tr>
 <th><p><i>signals visible on<br>ext. video bus during<br>PPU mem access</i></p></th>
@@ -386,7 +391,7 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <th><p>A0-A14</p></th>
 <th><p>D0-D7 direction</p></th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
@@ -423,8 +428,8 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 </tr>
 </table>
 <i><u>Table 7</u><br>
-Signals visible on external bus when DMA accesses any of the three/five (*) busses<br>
-(*): Not tested yet if DMA has access to hidden or internal bus</i></p>
+Signals visible on external bus when DMA accesses any of the three/five (*) groups<br>
+(*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
 <p><table border="1" bgcolor="#e0e0ff">
 <tr>
 <th><p><i>signals visible on<br>ext. video bus during<br>DMA mem access</i></p></th>
@@ -434,7 +439,7 @@ Signals visible on external bus when DMA accesses any of the three/five (*) buss
 <th><p>VA0-VA12</p></th>
 <th><p>VD0-VD7 direction</p></th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Hidden Bus (*)</p></th>
+<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
 <td><p>?</p></td>
 <td><p>?</p></td>
 <td><p>?</p></td>
@@ -467,8 +472,8 @@ Signals visible on external bus when DMA accesses any of the three/five (*) buss
 </tr>
 </table>
 <i><u>Table 8</u><br>
-Signals visible on external video bus when DMA accesses any of the three/five (*) busses (while PPU is not accessing VRAM)<br>
-(*): Not tested yet if DMA has access to hidden or internal bus</i></p>
+Signals visible on external video bus when DMA accesses any of the three/five (*) groups (while PPU is not accessing VRAM)<br>
+(*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
 <!--
 CPU write WRAM:
   950ns clk period:
