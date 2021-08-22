@@ -13,7 +13,9 @@ ROMS = \
 	dma-wram.s \
 	dma-vram.s \
 	move-logo.s \
-	disp-test.s
+	disp-test.s \
+	stop.s \
+	halt.s
 
 EXTRA_DIST = common.s $(ROMS)
 
