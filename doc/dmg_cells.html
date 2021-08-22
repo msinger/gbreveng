@@ -923,11 +923,9 @@ the right-hand side. For consistency across this documentation it is rotated her
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
 <tr><td><i>clk</i></td>
 <td><p>Clock. Provides the source clock for the system.</p></td></tr>
-<tr><td><i>???</i></td>
-<td><p><i>TODO: Figure out what this is for. Not even sure if this is input or output. Best guesses are: 1. This
-goes high shortly after powering up the device when the clock is considered stable. -OR- 2. This is driven low
-by the CPU core after encountering a STOP instruction, to stop the crystal oscillator (to save power) until a
-button gets pressed.</i></p></td></tr>
+<tr><td><i>ena</i></td>
+<td><p><i>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction,
+to stop the crystal oscillator (to save power) until a button gets pressed.</i></p></td></tr>
 </table></p></td></tr>
 </table></p>
 <h3 id="aibuf">AIBUFFER</h3>
