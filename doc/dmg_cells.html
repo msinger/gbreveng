@@ -40,14 +40,12 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#nor8">NOR8</a></li>
 </ul></li>
 <li><a href="#and">AND gates</a><ul>
-<li><a href="#and2_a">AND2 - Variant A</a></li>
-<li><a href="#and2_b">AND2 - Variant B</a></li>
+<li><a href="#and2">AND2</a></li>
 <li><a href="#and3">AND3</a></li>
 <li><a href="#and4">AND4</a></li>
 </ul></li>
 <li><a href="#or">OR gates</a><ul>
-<li><a href="#or2_a">OR2 - Variant A</a></li>
-<li><a href="#or2_b">OR2 - Variant B</a></li>
+<li><a href="#or2">OR2</a></li>
 <li><a href="#or3">OR3</a></li>
 <li><a href="#or4">OR4</a></li>
 </ul></li>
@@ -72,6 +70,7 @@ all documented once and for all, to make life easier!</p>
 <li><a href="#tri_b">TRIBUFFER - Variant B</a></li>
 </ul></li>
 <li><a href="#ff">Storage elements</a><ul>
+<li><a href="#srlatch">SR-LATCH</a></li>
 <li><a href="#dlatch">DLATCH</a></li>
 <li><a href="#dff">DFF</a></li>
 <li><a href="#dffr_a">DFFR - Variant A</a></li>
@@ -306,22 +305,10 @@ all documented once and for all, to make life easier!</p>
 </table></p></td></tr>
 </table></p>
 <h3 id="and">AND gates</h3>
-<h4 id="and2_a">AND2 - Variant A</h4>
+<h4 id="and2">AND2</h4>
 <p>AND gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/texo_desc.png"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
-<tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to AND gate.</p></td></tr>
-<tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 && in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
-<h4 id="and2_b">AND2 - Variant B</h4>
-<p>AND gate with two inputs and higher driving strength.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/gexu_desc.png"></p></td>
 <td><p><table border="1">
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
@@ -355,23 +342,10 @@ all documented once and for all, to make life easier!</p>
 </table></p></td></tr>
 </table></p>
 <h3 id="or">OR gates</h3>
-<h4 id="or2_a">OR2 - Variant A</h4>
+<h4 id="or2">OR2</h4>
 <p>OR gate with two inputs.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/rute_desc.png"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
-<tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to OR gate.</p></td></tr>
-<tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 || in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
-<h4 id="or2_b">OR2 - Variant B</h4>
-<p>OR gate with two inputs and higher driving strength.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/lyxe_desc.png"><br>
-<img src="img/cells/asol_desc.png"></p></td>
 <td><p><table border="1">
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
@@ -600,6 +574,30 @@ When high, <i>!q</i> is not driven.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <h2 id="ff">Storage elements</h2>
+<h4 id="srlatch">SR-LATCH</h4>
+<p>Set/reset latch.</p>
+<p>These are wrongly labelled OR and AND gates in the schematics.
+<a href="https://github.com/rgalland">Rgalland</a>
+just figured out the correct function of these cells.</p>
+<p><table border="0">
+<tr><td><p><img src="img/cells/dane_desc.png"><br>
+<img src="img/cells/gugu_desc.png"></p></td>
+<td><p><table border="1">
+<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<tr><td><i>s</i></td>
+<td><p>Set input. When high, latch is set to 1.</p></td></tr>
+<tr><td><i>r</i></td>
+<td><p>Reset input. When high, latch is reset to 0.</p></td></tr>
+<tr><td><i>!s</i></td>
+<td><p>Inverted set input. When low, latch is set to 1.</p></td></tr>
+<tr><td><i>!r</i></td>
+<td><p>Inverted reset input. When low, latch is reset to 0.</p></td></tr>
+<tr><td><i>q</i></td>
+<td><p>Data output.</p></td></tr>
+<tr><td><i>!q</i></td>
+<td><p>Inverted data output.</p></td></tr>
+</table></p></td></tr>
+</table></p>
 <h3 id="dlatch">DLATCH</h3>
 <p>Gated data latch.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
