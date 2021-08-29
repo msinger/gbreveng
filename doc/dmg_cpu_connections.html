@@ -125,10 +125,11 @@ BOGA1MHZ</a></p></td>
 <td><p>Active-high reset input. Fed directly from RST input pad.</p></td>
 </tr><tr>
 <td><p>T14</p></td>
-<td><p>?</p></td>
+<td><p>O</p></td>
 <td><p>CLKIN_A</p></td>
 <td><p>multiple</p></td>
-<td><p>Not sure if input or output. If it is an output and CPU drives it low, it would disable a few of the clocks fed to the CPU. This is also connected to an unknown I/O of the huge cell that implements the external XI/XO pins where the crystal gets connected. So, this signal could also disable the oscillator completely.</p></td>
+<td><p>Crystal oscillator enable. When CPU drives this low, the crystal oscillator gets disabled
+to save power. This happens during STOP mode.</p></td>
 </tr><tr>
 <td><p>T15</p></td>
 <td><p>I</p></td>
