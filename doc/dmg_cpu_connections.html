@@ -16,68 +16,94 @@ It builds on the work of Furrtek, the information found in his
 <h2>SM83 Connections</h2>
 <p><table border="1"><tr>
 <th colspan="2"><p>I/O</p></th>
-<th><p>Label</p></th>
+<th><p>Wire</p></th>
 <th><p>Cell</p></th>
 <th><p>Description</p></th>
 </tr><tr>
 <td><p>T1</p></td>
 <td><p>O</p></td>
-<td><p>FROM_CPU6</p></td>
-<td><p>LEXY.in</p></td>
-<td><p>The output of the inverter LEXY ends at an output pad at the bottom of the die, which is not bonded.</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-78.05,48.71,-78.05,44.44,-55.98,44.44,-55.98,44.55,-49.24,44.55,-49.37,108.48,-103.43,108.45,-103.4,110.63,-105.34,110.63,-105.34,111.71">
+FROM_CPU6</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=lexy&mark[0]=-105.34,111.61">LEXY.in</a></p></td>
+<td><p>The output of the inverter <a href="/dmg_cpu_b_map/?view=lexy">LEXY</a> ends at
+<a href="/dmg_cpu_b_map/?view=-252.8,119.3,-234.2,129.3&mark[0]=-236.81,128.44">an output pad</a>
+at the bottom of the die, which is not bonded.</p></td>
 </tr><tr>
 <td><p>T2</p></td>
 <td><p>I</p></td>
-<td><p>TO_CPU</p></td>
-<td><p>BOWA.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-56.27,47.34,-55.71,47.34,-55.71,44.81,-49.08,44.81,-49.23,146.8,-63.71,146.8,-63.71,167.84,-63.21,167.84,-63.21,169.55,-62.87,169.55,-62.87,174.16,-61.93,174.16">
+TO_CPU</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=bowa&mark[0]=-62.07,174.17">BOWA.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T3.</p></td>
 </tr><tr>
 <td><p>T3</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
-<td><p>BEDO.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-56.2,65.85,-56.2,48.7,-55.55,48.7,-55.55,45.07,-44.47,45.07,-44.56,109.55,-93.7,109.52,-93.7,110.49,-99.7,110.49,-99.7,111.74&line[1]=-93.7,109.52,-93.7,109.13,-109.11,109.13,-109.15,145.62,-111.57,145.62,-111.6,179.96,-114.9,179.96,-114.9,183.2,-127.81,183.2,-127.81,183.74&line[2]=-47.28,109.55,-47.33,146.98,-63.52,146.98,-63.52,167.67,-63.04,167.67,-63.04,169.38,-62.72,169.38,-62.72,172.79,-61.95,172.79&line[3]=-62.38,172.79,-62.38,173.16,-61.95,173.16&line[4]=-48.75,45.07,-48.75,43.4,-71.24,43.38,-71.24,35.55&line[5]=-55.55,47.48,-57.92,47.48">
+unlabeled</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=bedo&mark[0]=-62.05,172.96">BEDO.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T2.</p></td>
 </tr><tr>
 <td><p>T4</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
-<td><p>BEKO.q, BAVY.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.35,51.32,-54.35,49.68,-55.37,49.68,-55.37,45.31,-44.29,45.32,-44.42,147.15,-63.36,147.16,-63.36,167.5,-62.86,167.5,-62.86,169.2,-62.52,169.2,-62.52,170.74,-61.92,170.74&line[1]=-62.52,169.55,-61.92,169.55&line[2]=-63.36,158.41,-61.9,158.41&line[3]=-62.51,158.41,-62.51,158.6,-61.9,158.6&line[4]=-55.37,47.62,-60.01,47.62">
+unlabeled</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=beko&mark[0]=-62.05,169.54">BEKO.q</a>,
+<a href="/dmg_cpu_b_map/?view=bavy&mark[0]=-62.05,170.73">BAVY.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T5.</p></td>
 </tr><tr>
 <td><p>T5</p></td>
 <td><p>I</p></td>
-<td><p>PHI_OUT</p></td>
-<td><p>BUDE.q, BEVA.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.91,47.74,-55.21,47.74,-55.21,45.56,-48.23,45.56,-48.36,147.33,-63.19,147.33,-63.19,167.16,-62.53,167.16,-62.53,168.7,-59.63,168.7,-59.63,169.73,-60.41,169.73&line[1]=-59.63,168.88,-60.41,168.88&line[2]=-62.53,167.52,-61.93,167.52&line[3]=-49.21,147.33,-49.33,234.08,-109.47,234.05,-109.47,238.05,-104.66,238.05,-104.66,240.08&line[4]=-49.26,180.12,-63.02,180.09&line[5]=-62.39,199.3,-62.39,198.49,-62.21,198.49,-62.21,192.9,-62.36,192.9,-62.38,182.7,-63.02,182.7,-63.02,179.97,-111.41,179.96,-111.39,145.38,-103.91,145.38,-103.91,143.64,-103.84,143.64,-103.84,141.31">
+PHI_OUT</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=bude&mark[0]=-62.05,167.52">BUDE.q</a>,
+<a href="/dmg_cpu_b_map/?view=beva&mark[0]=-62.05,168.7">BEVA.q</a></p></td>
 <td><p>A gated 1 MiHz clock. This is the same clock that comes out of the PHI pin of the chip. The CPU can stop this clock by driving T11 low. This is the inverse of T4.</p></td>
 </tr><tr>
 <td><p>T6</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
-<td><p>BOLO.q, BYDA.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.19,54.05,-54.19,49.42,-55.04,49.42,-55.04,45.81,-48.06,45.81,-48.2,147.5,-63.02,147.48,-63.02,163.91,-62.53,163.91,-62.53,165.45,-61.91,165.45&line[1]=-62.53,164.25,-61.91,164.25&&line[2]=-63.02,158.08,-61.91,158.08&line[3]=-62.52,158.08,-62.52,158.25,-61.91,158.25&line[4]=-55.04,47.87,-59.77,47.87">
+unlabeled</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=bolo&mark[0]=-62.05,164.26">BOLO.q</a>,
+<a href="/dmg_cpu_b_map/?view=byda&mark[0]=-62.05,165.46">BYDA.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T7.</p></td>
 </tr><tr>
 <td><p>T7</p></td>
 <td><p>I</p></td>
-<td><p>FROM_CPU5</p></td>
-<td><p>BUFA.q, BYLY.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.63,48.01,-54.87,48.01,-54.87,46.06,-48.74,46.06,-48.88,147.66,-62.84,147.66,-62.84,161.67,-62.52,161.67,-62.52,163.4,-59.63,163.4,-59.63,164.44,-60.41,164.44&line[1]=-59.63,163.58,-60.41,163.58&line[2]=-62.52,162.2,-61.93,162.2&line[3]=-48.88,147.66,-48.91,179.7,-118.75,179.66,-118.75,178.58,-118.7,126.92,-118.65,99.14,-125.66,99.14,-125.66,99.4,-126.35,99.4,-126.35,98.29&line[4]=-118.7,126.92,-108.41,126.91,-108.41,115.34,-81.93,115.35,-81.93,113.3&line[5]=-81.93,115.11,-69.11,115.11,-69.11,115.8&line[6]=-118.75,178.58,-137.65,178.59,-137.65,183.04,-146.8,183.04,-146.8,183.73">
+FROM_CPU5</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=bufa&mark[0]=-62.05,162.2">BUFA.q</a>,
+<a href="/dmg_cpu_b_map/?view=byly&mark[0]=-62.05,163.41">BYLY.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T6.</p></td>
 </tr><tr>
 <td><p>T8</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
-<td><p>BUKE.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.49,48.15,-54.7,48.15,-54.7,46.3,-44.13,46.3,-44.26,147.84,-62.68,147.84,-62.68,159.97,-61.93,159.97&line[1]=-48.36,147.84,-48.41,180.63,-116.7,180.59,-116.7,180.34,-133.04,180.34,-133.04,182.08,-141.5,182.08,-141.5,183.74&line[2]=-116.7,180.34,-116.68,162.77,-123.05,162.77,-123.05,162.39,-124.9,162.39,-124.9,161.91">
+unlabeled</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=buke&mark[0]=-62.05,159.97">BUKE.q</a></p></td>
 <td><p>A gated 4 MiHz clock. The CPU can stop this clock by driving T11 low.</p></td>
 </tr><tr>
 <td><p>T9</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
-<td><p>BOMA.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.88,97.59,-54.84,65.55,-55.97,65.55,-55.95,48.91,-54.37,48.91,-54.37,46.56,-43.95,46.56,-44.09,148,-62.51,148,-62.51,150.74,-58.6,150.74,-58.6,158.09,-57.66,158.09">
+unlabeled</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=boma&mark[0]=-62.05,150.75">BOMA.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T10.</p></td>
 </tr><tr>
 <td><p>T10</p></td>
 <td><p>I</p></td>
-<td><p>BOGA1MHZ</p></td>
-<td><p>BOGA.q</p></td>
+<td><p>
+<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.74,99.57,-54.71,65.37,-55.81,65.37,-55.81,49.13,-54.02,49.13,-54.02,56.83,-54.14,56.83&line[1]=-54.17,49.13,-54.17,46.8,-47.9,46.8,-48.02,146.17,-48.02,148.18,-59.45,148.18,-59.45,151.95&line[2]=-60.4,151.95,-58.43,151.95,-58.43,157.58,-57.66,157.58&line[3]=-59.45,149.72,-60.4,149.72&line[4]=-48.02,146.17,-78.63,146.16,-112.26,146.14,-112.29,181.02,-114.38,181.02,-114.38,183.03,-131.91,183.03,-131.91,186.68,-137.74,186.68&line[5]=-134.84,186.68,-134.84,185.25&line[6]=-137.74,185.25,-137.74,188.3,-138.59,188.3&line[7]=-138.59,189.23,-138.59,188.24,-144.74,188.24,-144.74,185.25&line[8]=-78.63,146.16,-78.63,142.16,-93.6,142.16&line[9]=-94.61,141.31,-94.61,142.84,-93.6,142.84,-93.6,138.74,-93.24,138.74,-93.24,135.02,-92.72,135.02,-92.72,131.35,-92.55,131.35,-92.55,126.38,-92.88,126.38,-92.88,122.57,-64.68,122.59&line[10]=-62.45,121.08,-62.45,123.7,-64.68,123.7,-64.68,118.86,-65.37,118.86,-65.37,117.31">
+BOGA1MHZ</a></p></td>
+<td><p><a href="/dmg_cpu_b_map/?view=boga&mark[0]=-60.29,151.96">BOGA.q</a></p></td>
 <td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T9.</p></td>
 </tr><tr>
 <td><p>T11</p></td>
@@ -88,7 +114,7 @@ It builds on the work of Furrtek, the information found in his
 </tr><tr>
 <td><p>T12</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
+<td><p>unlabeled</p></td>
 <td><p>AFER.q</p></td>
 <td><p>Some type of reset input.</p></td>
 </tr><tr>
@@ -106,13 +132,13 @@ It builds on the work of Furrtek, the information found in his
 </tr><tr>
 <td><p>T15</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
+<td><p>unlabeled</p></td>
 <td><p>TABA.q</p></td>
 <td><p>?</p></td>
 </tr><tr>
 <td><p>T16</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
+<td><p>unlabeled</p></td>
 <td><p>(ext. pad)</p></td>
 <td><p>Directly connected to an input pad at the top of the die, which is not bonded.</p></td>
 </tr><tr>
@@ -130,25 +156,25 @@ It builds on the work of Furrtek, the information found in his
 </tr><tr>
 <td><p>R3</p></td>
 <td><p>I</p></td>
-<td><p>!T1_T2</p></td>
+<td><p><span style="text-decoration:overline">T1</span>T2</p></td>
 <td><p>UNOR.q</p></td>
 <td><p>Maybe used to disable all bus drivers in the CPU when test mode is active.</p></td>
 </tr><tr>
 <td><p>R4</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
+<td><p>unlabeled</p></td>
 <td><p>SYRO.q</p></td>
 <td><p>High when address bus is 0xfexx or 0xffxx.</p></td>
 </tr><tr>
 <td><p>R5</p></td>
 <td><p>I</p></td>
-<td><p>-</p></td>
+<td><p>unlabeled</p></td>
 <td><p>TUTU.q</p></td>
 <td><p>High when address bus is 0x00xx and boot ROM is still visible (*0xff50 == 0x00).</p></td>
 </tr><tr>
 <td><p>R6</p></td>
 <td><p>I</p></td>
-<td><p>T1_!T2</p></td>
+<td><p>T1<span style="text-decoration:overline">T2</span></p></td>
 <td><p>UMUT.q</p></td>
 <td><p>Maybe used to disable all bus drivers in the CPU when test mode is active.</p></td>
 </tr><tr>
