@@ -96,7 +96,7 @@ unlabeled</a></p></td>
 <a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.88,97.59,-54.84,65.55,-55.97,65.55,-55.95,48.91,-54.37,48.91,-54.37,46.56,-43.95,46.56,-44.09,148,-62.51,148,-62.51,150.74,-58.6,150.74,-58.6,158.09,-57.66,158.09">
 unlabeled</a></p></td>
 <td><p><a href="/dmg_cpu_b_map/?view=boma&mark[0]=-62.05,150.75">BOMA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T10.</p></td>
+<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T14 low. This is the inverse of T10.</p></td>
 </tr><tr>
 <td><p>T10</p></td>
 <td><p>I</p></td>
@@ -104,7 +104,7 @@ unlabeled</a></p></td>
 <a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.74,99.57,-54.71,65.37,-55.81,65.37,-55.81,49.13,-54.02,49.13,-54.02,56.83,-54.14,56.83&line[1]=-54.17,49.13,-54.17,46.8,-47.9,46.8,-48.02,146.17,-48.02,148.18,-59.45,148.18,-59.45,151.95&line[2]=-60.4,151.95,-58.43,151.95,-58.43,157.58,-57.66,157.58&line[3]=-59.45,149.72,-60.4,149.72&line[4]=-48.02,146.17,-78.63,146.16,-112.26,146.14,-112.29,181.02,-114.38,181.02,-114.38,183.03,-131.91,183.03,-131.91,186.68,-137.74,186.68&line[5]=-134.84,186.68,-134.84,185.25&line[6]=-137.74,185.25,-137.74,188.3,-138.59,188.3&line[7]=-138.59,189.23,-138.59,188.24,-144.74,188.24,-144.74,185.25&line[8]=-78.63,146.16,-78.63,142.16,-93.6,142.16&line[9]=-94.61,141.31,-94.61,142.84,-93.6,142.84,-93.6,138.74,-93.24,138.74,-93.24,135.02,-92.72,135.02,-92.72,131.35,-92.55,131.35,-92.55,126.38,-92.88,126.38,-92.88,122.57,-64.68,122.59&line[10]=-62.45,121.08,-62.45,123.7,-64.68,123.7,-64.68,118.86,-65.37,118.86,-65.37,117.31">
 BOGA1MHZ</a></p></td>
 <td><p><a href="/dmg_cpu_b_map/?view=boga&mark[0]=-60.29,151.96">BOGA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T9.</p></td>
+<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T14 low. This is the inverse of T9.</p></td>
 </tr><tr>
 <td><p>T11</p></td>
 <td><p>O</p></td>
@@ -113,7 +113,11 @@ BOGA1MHZ</a></p></td>
 CLK_FROM_CPU</a></p></td>
 <td><p><a href="/dmg_cpu_b_map/?view=abol&mark[0]=-56.01,149.73">ABOL.in</a>,
 <a href="/dmg_cpu_b_map/?view=tubo&mark[0]=-60.62,136.05">TUBO.in1</a></p></td>
-<td><p>CPU can drive this low to disable all clocks fed to itself.</p></td>
+<td><p>CPU can drive this low to disable most of the clocks fed to itself. T9 and T10 are the only clocks that are not
+turned off when this signal gets driven low. However, T9 and T10 might have slightly shorter "shorter" phases while this
+signal is high. By "shorter" phases I mean, they are not symetric and have a shorter and a longer phase (and the
+shorter one gets even shorter). The reason is because of BUTO mixing them with the others. Maybe they did this to guarantee a specific
+synchronization between T9/T10 and the other clocks that tick at around the same time as T9/T10.</p></td>
 </tr><tr>
 <td><p>T12</p></td>
 <td><p>I</p></td>
@@ -121,7 +125,7 @@ CLK_FROM_CPU</a></p></td>
 <a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.48,101.63,-54.42,65.09,-46.55,65.1,-46.67,158.94,-56.16,158.94&line[1]=-55.35,158.94,-55.35,156.05,-56.16,156.05">
 unlabeled</a></p></td>
 <td><p><a href="/dmg_cpu_b_map/?view=afer&mark[0]=-56.01,158.95">AFER.q</a></p></td>
-<td><p>Some type of reset input.</p></td>
+<td><p>Synchronous reset input. Synchronized to T9/T10.</p></td>
 </tr><tr>
 <td><p>T13</p></td>
 <td><p>I</p></td>
@@ -129,7 +133,7 @@ unlabeled</a></p></td>
 <a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.35,101.8,-54.29,65.34,-46.38,65.34,-46.44,108.61,-46.5,160.13,-56.16,160.13&line[1]=-55.7,160.13,-55.7,159.98,-56.16,159.98&line[2]=-49.41,160.13,-49.5,234.47,-147.69,234.41,-147.69,238.02,-145.35,238.02,-145.35,239.38&line[3]=-46.44,108.61,-78.88,108.59,-78.88,110.5,-80.56,110.5,-80.58,122.31,-81.26,122.31,-81.25,127.27,-80.92,127.27,-80.93,131.23,-80.77,131.23,-80.77,134.52,-80.94,134.52,-80.94,138.53&line[4]=-75.13,139.84,-75.13,138.53,-81.45,138.53,-81.45,139.84&line[5]=-81.45,138.86,-82.64,138.86,-82.64,139.84">
 RESET</a></p></td>
 <td><p><a href="/dmg_cpu_b_map/?view=-151.22,236.41,-142.16,254.34&mark[0]=-145.35,238.34">RST (ext. pad)</a></p></td>
-<td><p>Active-high reset input. Fed directly from
+<td><p>Active-high asynchronous reset input. Fed directly from
 <a href="/dmg_cpu_b_map/?view=-151.22,236.41,-142.16,254.34&mark[0]=-145.35,238.34">RST input pad</a>.</p></td>
 </tr><tr>
 <td><p>T14</p></td>
