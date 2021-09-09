@@ -116,8 +116,9 @@ CLK_FROM_CPU</a></p></td>
 <td><p>CPU can drive this low to disable most of the clocks fed to itself. T9 and T10 are the only clocks that are not
 turned off when this signal gets driven low. However, T9 and T10 might have slightly shorter "shorter" phases while this
 signal is high. By "shorter" phases I mean, they are not symetric and have a shorter and a longer phase (and the
-shorter one gets even shorter). The reason is because of BUTO mixing them with the others. Maybe they did this to guarantee a specific
-synchronization between T9/T10 and the other clocks that tick at around the same time as T9/T10.</p></td>
+shorter one gets even shorter). This is because of BUTO mixing them with the other clocks when they're active.
+Maybe they did this to guarantee a specific synchronicity between T9/T10 and the other clocks that tick at around the
+same time as T9/T10.</p></td>
 </tr><tr>
 <td><p>T12</p></td>
 <td><p>I</p></td>
@@ -125,7 +126,7 @@ synchronization between T9/T10 and the other clocks that tick at around the same
 <a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.48,101.63,-54.42,65.09,-46.55,65.1,-46.67,158.94,-56.16,158.94&line[1]=-55.35,158.94,-55.35,156.05,-56.16,156.05">
 unlabeled</a></p></td>
 <td><p><a href="/dmg_cpu_b_map/?view=afer&mark[0]=-56.01,158.95">AFER.q</a></p></td>
-<td><p>Synchronous reset input. Synchronized to T9/T10.</p></td>
+<td><p>Active-low synchronous reset input. Synchronized to T9/T10.</p></td>
 </tr><tr>
 <td><p>T13</p></td>
 <td><p>I</p></td>
