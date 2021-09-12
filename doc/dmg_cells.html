@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>DMG-CPU Cells Reference</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <p><a href="http://iceboy.a-singer.de/">Home</a></p>
@@ -1106,10 +1107,12 @@ necessary for it to work.</p>
 of <i>!clk</i>.</p></td></tr>
 <tr><td><i>clk</i></td>
 <td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+a negative edge on the <i>!clk</i> input at the same time. See also
+<a href="dmg_cells2.html#dffr_b_clk">here</a>.</p></td></tr>
 <tr><td><i>!clk</i></td>
 <td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+a positive edge on the <i>clk</i> input at the same time. See also
+<a href="dmg_cells2.html#dffr_b_clk">here</a>.</p></td></tr>
 <tr><td><i>!rst</i></td>
 <td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
 two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
