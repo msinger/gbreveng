@@ -58,6 +58,10 @@ then the content of the FF would never change.</p>
 <i>q</i> falls and <i>!q</i> rises. In the picture above, the <i>!q</i> output (the positive edge) is connected
 to the <i>clk</i> input, so these FFs will have to trigger on the positive edge. There is not a single instance of
 this B+ variant that has their clock extension part at the top connected differently, so they all are pos-edged.</p>
+<h2 id="dffsr_clk">DFFSR clock polarity</h2>
+<p>The clock polarity of the <a href="dmg_cells.html#dffsr">DFFSR cells</a> can be easily inferred by looking at the
+interrupt flags register. All the interrupt signals are active high and are routed directly into the clock input of
+DFFSRs. Case closed.</p>
 <hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </body>
