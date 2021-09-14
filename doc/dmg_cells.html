@@ -1768,8 +1768,9 @@ face inwards.</p>
 </table></p>
 <h3 id="iobuf_c">IOBUFFER - Variant C</h3>
 <p>Input/output buffer with open-drain/-source capability and optional pull-down resistor.</p>
-<p>This cell is only used for SCK. In the die shot this picture was taken from, this pin is located at
-the right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=sck">SCK</a>. In the die shot this picture was taken
+from, this pin is located at the right-hand side. For consistency across this documentation it is rotated
+here (not mirrored!).</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/sck_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
@@ -1786,7 +1787,8 @@ the right-hand side. For consistency across this documentation it is rotated her
 </table></p>
 <h3 id="ibuf">IBUFFER</h3>
 <p>Simple input buffer.</p>
-<p>This cell is only used for RST, T1 and T2 (and an un-bonded unknown pad in the top-center of the die,
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=rst">RST</a>, <a href="/dmg_cpu_b_map/?view=t1">T1</a>
+and <a href="/dmg_cpu_b_map/?view=t2">T2</a> (and an un-bonded unknown pad in the top-center of the die,
 that is directly connected to the CPU). In the die shot this picture was taken from, these pins (RST, T1 and
 T2) are located at the right-hand side. For consistency across this documentation it is rotated here (not
 mirrored!).</p>
@@ -1814,7 +1816,8 @@ faces inwards.</p>
 </table></p>
 <h3 id="obuf_b">OBUFFER - Variant B</h3>
 <p>Output buffer with open-drain/-source capability.</p>
-<p>This cell is only used for P14 and P15. In the die shot this picture was taken from, these pins are located in
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=p14">P14</a> and
+<a href="/dmg_cpu_b_map/?view=p15">P15</a>. In the die shot this picture was taken from, these pins are located in
 the bottom right corner. For consistency across this documentation it is rotated here (not mirrored!). Keep
 that in mind, especially for P14, where the <i>!drv_high</i> connection is at the top and <i>drv_low</i> is
 at the bottom.</p>
@@ -1830,8 +1833,9 @@ at the bottom.</p>
 </table></p>
 <h3 id="osc">OSC</h3>
 <p>Oscillator input and output pads for connecting external crystal.</p>
-<p>This cell is only used for XI/XO. In the die shot this picture was taken from, these pins are located at
-the right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=osc">XI/XO</a>. In the die shot this picture was
+taken from, these pins are located at the right-hand side. For consistency across this documentation it is
+rotated here (not mirrored!).</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/xi_xo_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
@@ -1839,14 +1843,15 @@ the right-hand side. For consistency across this documentation it is rotated her
 <tr><td><i>clk</i></td>
 <td><p>Clock. Provides the source clock for the system.</p></td></tr>
 <tr><td><i>ena</i></td>
-<td><p><i>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction,
-to stop the crystal oscillator (to save power) until a button gets pressed.</i></p></td></tr>
+<td><p>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction,
+to stop the crystal oscillator (to save power) until a button gets pressed.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <h3 id="aibuf">AIBUFFER</h3>
 <p>Analog input buffer.</p>
-<p>This cell is only used for VIN. In the die shot this picture was taken from, this pin is located at the
-bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=vin">VIN</a>. In the die shot this picture was taken
+from, this pin is located at the bottom right. For consistency across this documentation it is rotated here (not
+mirrored!).</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/vin_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
@@ -1857,7 +1862,8 @@ bottom right. For consistency across this documentation it is rotated here (not 
 </table></p>
 <h3 id="aobuf">AOBUFFER</h3>
 <p>Analog output buffer.</p>
-<p>This cell is only used for ROUT and LOUT. In the die shot this picture was taken from, these pins are located
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=rout">ROUT</a> and
+<a href="/dmg_cpu_b_map/?view=lout">LOUT</a>. In the die shot this picture was taken from, these pins are located
 at the bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/lout_desc.png" style="min-width:350px;"></p></td>
@@ -1871,9 +1877,10 @@ at the bottom right. For consistency across this documentation it is rotated her
 <h3 id="supply">SUPPLY</h3>
 <p>Constant supply.</p>
 <p>The outputs of this cell are hardwired to VCC and GND. It is used to provide constant 1 and 0 signals to other
-cells. For example, it is used for the interrupt flags register: The PESU cell feeds a constant 1 into the data
-inputs of flip-flops (LOPE, UBUL, ...). Whenever the clock inputs of those flip-flops get triggered by an interrupt,
-the constant 1 gets clocked in.</p>
+cells. For example, it is used for the interrupt flags register: The <a href="/dmg_cpu_b_map/?view=pesu">PESU</a>
+cell feeds a constant 1 into the data inputs of flip-flops (<a href="/dmg_cpu_b_map/?view=lope">LOPE</a>,
+<a href="/dmg_cpu_b_map/?view=ubul">UBUL</a>, ...). Whenever the clock inputs of those flip-flops get triggered
+by an interrupt, the constant 1 gets clocked in.</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/vypo_desc.png" style="min-width:300px;"></p></td>
 <td><p><table border="1">
