@@ -828,6 +828,7 @@ a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
 edge of <i>!clk</i>. It doesn't seem to matter which one of the two inputs gets slightly delayed by the inverter,
 it works both ways.</p>
+<p><i>TODO: Not really sure about clock input polarity.</i></p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/cyxu_desc.png" style="min-width:300px;"></p></td>
@@ -1443,6 +1444,7 @@ edge of <i>!clk</i>.</p>
 necessary for it to work.</p>
 <p>This variant is similar to variant B, but it is missing the <i>q</i> output. Furthermore, it is one row shorter:
 There is only a single row between <i>!rst</i> and <i>!q</i> instead of two.</p>
+<p><i>TODO: Not really sure about clock input polarity.</i></p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/poju_desc.png" style="min-width:300px;"></p></td>
@@ -1776,6 +1778,7 @@ face inwards.</p>
 <p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
+<p><i>TODO: The P10-P13 pins seem to be inverting when used as inputs, but D0-D7 are not. (SIN, MD0-MD7 might be.)</i></p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/md0_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
@@ -1859,7 +1862,7 @@ mirrored!).</p>
 <a href="/dmg_cpu_b_map/?view=-43.53,129.06,-25.94,138.06">[[unlabeled cell between A10 and A11]]</a>
 </p>
 <h3 id="obuf_a">OBUFFER - Variant A</h3>
-<p>Simple non-inverting output buffer.</p>
+<p>Simple inverting output buffer.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the connection
 faces inwards.</p>
 <p><table border="0">
@@ -1867,7 +1870,8 @@ faces inwards.</p>
 <td><p><table border="1">
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
 <tr><td><i>drv</i></td>
-<td><p>Drive level. Drives the output pad high or low according to this level. The pad is always actively driven.</p></td></tr>
+<td><p>Drive level. Output pad is driven high when <i>drv</i> is low, and it's driven low when <i>drv</i>
+is high. The pad is always actively driven.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <p>Instances:
