@@ -1739,6 +1739,7 @@ the picture).</p></td></tr>
 <p>Input/output buffer with open-drain/-source capability.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the three connections
 face inwards.</p>
+<p><i>TODO: Figure out if input is inverting.</i></p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/rd_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
@@ -1778,7 +1779,7 @@ face inwards.</p>
 <p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
-<p><i>TODO: The P10-P13 pins seem to be inverting when used as inputs, but D0-D7 are not. (SIN, MD0-MD7 might be.)</i></p>
+<p><i>TODO: The MD0-MD7, P10-P13 and SIN pins seem to be inverting when used as inputs, but D0-D7 are not.</i></p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/md0_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
@@ -1787,8 +1788,8 @@ face inwards.</p>
 <td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
 <tr><td><i>!drv_high</i></td>
 <td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
-<tr><td><i>weak_high</i></td>
-<td><p>Pull-up resistor. When high, a pull-up resistor is connected to the I/O pad.</p></td></tr>
+<tr><td><i>!weak_high</i></td>
+<td><p>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</p></td></tr>
 <tr><td><i>state</i></td>
 <td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
 </table></p></td></tr>
@@ -1817,7 +1818,7 @@ face inwards.</p>
 <a href="/dmg_cpu_b_map/?view=sin">SIN</a>
 </p>
 <h3 id="iobuf_c">IOBUFFER - Variant C</h3>
-<p>Input/output buffer with open-drain/-source capability and optional pull-down resistor.</p>
+<p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=sck">SCK</a>. In the die shot this picture was taken
 from, this pin is located at the right-hand side. For consistency across this documentation it is rotated
 here (not mirrored!).</p>
@@ -1829,10 +1830,10 @@ here (not mirrored!).</p>
 <td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
 <tr><td><i>!drv_high</i></td>
 <td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
-<tr><td><i>!weak_low</i></td>
-<td><p>Pull-down resistor. When low, a pull-down resistor is connected to the I/O pad.</p></td></tr>
-<tr><td><i>state</i></td>
-<td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
+<tr><td><i>!weak_high</i></td>
+<td><p>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</p></td></tr>
+<tr><td><i>!in</i></td>
+<td><p>Inverted input state. Reads the inverted binary level at the I/O pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <p>Instances:
