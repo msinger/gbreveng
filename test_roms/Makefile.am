@@ -15,7 +15,8 @@ ROMS = \
 	move-logo.s \
 	disp-test.s \
 	stop.s \
-	halt.s
+	halt.s \
+	sck-in.s
 
 EXTRA_DIST = common.s $(ROMS)
 
