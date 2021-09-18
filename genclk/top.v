@@ -31,12 +31,9 @@
 
 `define CLKREG_WIDTH 4
 
-/* Alternate input method only using buttons. My dip switches went bye bye. */
-`define ALT_INPUT 1
-
 /* Only show the least significant 15 bits of the counter instead of cycling
  * through each byte. */
-`define ONLY16 1
+`define ONLY15 1
 
 (* nolatches *)
 (* top *)
@@ -135,7 +132,7 @@ module top(
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(0),
 		) sw_io[15:0] (
 			.PACKAGE_PIN(sw),
 			.INPUT_CLK(clk),
@@ -144,7 +141,7 @@ module top(
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(0),
 		) btn_io[3:0] (
 			.PACKAGE_PIN(btn),
 			.INPUT_CLK(clk),
@@ -174,20 +171,15 @@ module top(
 
 	assign data_drv = !nrd && !ncs;
 
-`ifdef ONLY16
+`ifdef ONLY15
 	assign led      = { r_count[20], r_r100_at[14:0] };
 `else
 	assign led      = ledreg;
 `endif
 	assign clkout   = r_clkreg[`CLKREG_WIDTH-1];
 
-`ifdef ALT_INPUT
-	assign t1       = btnin[2] && btnin[3];
-	assign t2       = btnin[2] && btnin[3];
-`else
-	assign t1       = swin[14];
-	assign t2       = swin[15];
-`endif
+	assign t1       = btnin[2] && btnin[3] || swin[14];
+	assign t2       = btnin[2] && btnin[3] || swin[15];
 
 	always @(posedge clk)
 		rdrom <= rom[adr_in[6:0]];
@@ -217,18 +209,11 @@ module top(
 			count = r_count + 1;
 		end
 
-`ifdef ALT_INPUT
-		/* Stop the clock only when the total amount of ticks the gameboy got
-		 * is dividable by four, and always add one extra tick. */
-		if (btnin[2] && (r_count[1:0] != 1 && count[1:0] == 1))
-			clocking = 0;
-`else
 		/* Stop the clock only when the total amount of ticks the gameboy got
 		 * is dividable by four (but add up to 3 extra ticks set by DIP
 		 * switches). */
 		if (btnin[2] && (r_count[1:0] != swin[9:8] && count[1:0] == swin[9:8]))
 			clocking = 0;
-`endif
 
 		if (btnin[0]) begin
 			clocking = 0;

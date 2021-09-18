@@ -129,7 +129,7 @@ module top(
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(0),
 		) sw_io[15:0] (
 			.PACKAGE_PIN(sw),
 			.INPUT_CLK(clk),
@@ -138,7 +138,7 @@ module top(
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(0),
 		) btn_io[3:0] (
 			.PACKAGE_PIN(btn),
 			.INPUT_CLK(clk),
