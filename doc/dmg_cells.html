@@ -1840,20 +1840,19 @@ here (not mirrored!).</p>
 <a href="/dmg_cpu_b_map/?view=sck">SCK</a>
 </p>
 <h3 id="ibuf">IBUFFER</h3>
-<p>Simple input buffer.</p>
+<p>Simple inverting input buffer.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=rst">RST</a>, <a href="/dmg_cpu_b_map/?view=t1">T1</a>
 and <a href="/dmg_cpu_b_map/?view=t2">T2</a> (and an un-bonded unknown pad in the top-center of the die,
 that is directly connected to the CPU). In the die shot this picture was taken from, these pins (RST, T1 and
 T2) are located at the right-hand side. For consistency across this documentation it is rotated here (not
 mirrored!).</p>
 <p><i>TODO: Figure out if some instances of this cell have pull-up or pull-down resistors.</i></p>
-<p><i>TODO: The RST pin seems to be inverting, but T1 and T2 are not.</i></p>
 <p><table border="0">
 <tr><td><p><img src="img/cells/rst_desc.png" style="min-width:350px;"></p></td>
 <td><p><table border="1">
 <tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
-<tr><td><i>state</i></td>
-<td><p>Input state. Reads the current binary level at the input pad.</p></td></tr>
+<tr><td><i>!in</i></td>
+<td><p>Inverted input state. Reads the inverted binary level at the input pad.</p></td></tr>
 </table></p></td></tr>
 </table></p>
 <p>Instances:
@@ -1935,7 +1934,7 @@ rotated here (not mirrored!).</p>
 <tr><td><i>clk</i></td>
 <td><p>Clock. Provides the source clock for the system.</p></td></tr>
 <tr><td><i>ena</i></td>
-<td><p>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction,
+<td><p>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction
 to stop the crystal oscillator (to save power) until a button gets pressed.</p></td></tr>
 </table></p></td></tr>
 </table></p>
