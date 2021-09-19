@@ -83,9 +83,9 @@ than done, because I had to lift up the two pins from the PCB first:</p>
 <p>It looks very ugly and indeed it is very ugly. I managed to damage one of the pads, it partially came off the
 PCB. So it won't survive another operation like that. Poor Gameboy endured a lot. This is how the whole setup looks
 now:</p>
-<p><!--<img src="img/.jpg" alt="">--><i>TODO: insert picture here</i></p>
+<p><img src="img/dmg_cpu_reset_test.jpg" alt=""></p>
 <p>When I repeat the experiment from before, each time I pull the test pins T1 and T2 high during Gameboy reset, the
-tick count until address 0x100 is always D, no matter what is was before and no matter how many clock ticks the Gameboy
+tick count until address 0x100 gets read is always tick count D, no matter what it was before and no matter how many clock ticks the Gameboy
 got in the previous iteration. In my opinion, this actually proves that ADYK, AFUR, ALEF and APUK are only properly
 reset when T1 and T2 are high. There is a fifth DFF that is also reset by the
 <span style="text-decoration:overline">T1T2</span> signal, namely AFER, which is responsible for generating a reset signal
