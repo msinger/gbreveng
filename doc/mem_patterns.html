@@ -1,8 +1,36 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>GameBoy Memory Access Patterns</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>img { max-width: 100%; display: inline; }</style>
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.center tr td {
+   text-align: center;
+ }
+</style>
 </head>
 <body>
 <h1>GameBoy Memory Access Patterns</h1>
@@ -27,7 +55,7 @@ to ~40ms. Maybe there is a pull up resistor in the cartridge causing this.</p>
 <p>After flipping the power switch to the <i>on</i> position, the clock, #write and #cs signals, address
 and data lines are ramping up. The #read signal stays low. The #reset line is delayed by about 10ms and
 takes about 50ms to reach its peak.</p>
-<p><img src="img/power_on.png"><br>
+<p><img src="img/power_on.png" alt=""><br>
 <i><u>Picture 1</u> (24M/s)<br>
 1: After power on, signals are ramping up<br>
 2: Boot ROM zero-initializes VRAM<br>
@@ -35,7 +63,7 @@ takes about 50ms to reach its peak.</p>
 4: Boot ROM continues w/o accessing cartridge (scrolling logo down)<br>
 5: Approximated reset ramp (I don't have a relation between this logic diagram and the oscilloscope screen
 below, so take this with a grain of salt)</i></p>
-<p><img src="img/reset_rise.png"><br>
+<p><img src="img/reset_rise.png" alt=""><br>
 <i><u>Picture 2</u><br>
 Rising #reset line</i></p>
 <h2>Boot ROM external bus access</h2>
@@ -44,7 +72,7 @@ I assume a clock cycle starts and ends with a rising edge, although this is prob
 is an exception, because the #clock line is already high when the cycle starts, there is no rising edge. That is
 why the measurement in <i>Picture 1</i> displays only 57357 full cycles. This is the code that gets executed
 during this time:</p>
-<p><pre>
+<pre>
    0:   31 fe ff        ld sp,0xfffe   ; 3 cycles
    3:   af              xor a          ; 1
    4:   21 ff 9f        ld hl,0x9fff   ; 3                           _
@@ -64,7 +92,7 @@ during this time:</p>
   1c:   77              ld (hl),a
   1d:   3e fc           ld a,0xfc
   1f:   e0 47           ld (0x47),a
-</pre></p>
+</pre>
 <p>The VRAM access during the loop at 0x7-0xA is not visible on the external memory bus. The first thing that
 can be seen on the externel bus is the operation at 0x13, which writes 0x80 into the APU register 0xff26. The
 instruction fetch happens at cycle #57358, the write operation at #57359. During this operation, the address
@@ -72,10 +100,10 @@ lines reflect the actual address (0xff26). The #read signal may glitch sometimes
 picture below, these glitches measure 41.67ns. When I use a sample rate of 100M/s, they go down to 20ns and
 sometimes even 10ns. The data lines stay unchanged and #write stays high (deasserted). All reads and writes to
 registers and HRAM (0xff??) seem to behave this way.</p>
-<p><img src="img/boot_rom_wr_ff26.png"><br>
+<p><img src="img/boot_rom_wr_ff26.png" alt=""><br>
 <i><u>Picture 3</u> (24M/s)<br>
 Boot ROM instructions at address 0x13 and 0x14</i></p>
-<p><img src="img/boot_rom-rw_overview.png"><br>
+<p><img src="img/boot_rom-rw_overview.png" alt=""><br>
 <i><u>Picture 4</u> (24M/s)<br>
 1: Boot ROM execution w/o accessing cartridge ROM<br>
 2: Boot ROM comparing Nintendo logo (executing at addresses 0xe0...0xf0)<br>
@@ -89,94 +117,94 @@ more spaghetti-ish, I tried to divide the various components into four busses. T
 signal patterns can be seen when a component from any of those groups is accessed. The boot ROM got its own group even
 though it should be logically fit in the "Internal Bus" group, because for some reason it deviates from the patterns
 seen in this group.</p>
-<p><table border="1">
+<table class="default center">
 <tr>
-<th><p><i>mapping</i></p></th>
-<th bgcolor="#ffe0e0"><p>External Bus</p></th>
-<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<th bgcolor="#e0ffe0"><p>Boot ROM</p></th>
+<th><i>mapping</i></th>
+<th style="background-color:#ffe0e0;">External Bus</th>
+<th style="background-color:#ffffe0;">Internal Bus</th>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
+<th style="background-color:#e0ffe0;">Boot ROM</th>
 </tr><tr>
-<th><p>Boot ROM<br>0x0000-0x00FF</p></th>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X <i>(*)</i></p></td>
+<th>Boot ROM<br>0x0000-0x00FF</th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>X <i>(*)</i></td>
 </tr><tr>
-<th><p>Cartridge ROM<br>0x0000-0x7FFF</p></th>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>Cartridge ROM<br>0x0000-0x7FFF</th>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>Video RAM<br>0x8000-0x9FFF</p></th>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>Video RAM<br>0x8000-0x9FFF</th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>Cartridge RAM<br>0xA000-0xBFFF</p></th>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>Cartridge RAM<br>0xA000-0xBFFF</th>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>Work RAM<br>0xC000-0xDFFF</p></th>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>Work RAM<br>0xC000-0xDFFF</th>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p><i>unused area</i><br>0xE000-0xFDFF</p></th>
-<td align="center"><p>X <i>(**)</i></p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th><i>unused area</i><br>0xE000-0xFDFF</th>
+<td>X <i>(**)</i></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>OAM RAM<br>0xFE00-0xFE9F</p></th>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
+<th>OAM RAM<br>0xFE00-0xFE9F</th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>X</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p><i>unused area</i><br>0xFEA0-0xFEFF</p></th>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>?</p></td>
-<td><p>&nbsp;</p></td>
+<th><i>unused area</i><br>0xFEA0-0xFEFF</th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>?</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>Registers<br>0xFF00-0xFF7F</p></th>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>Registers<br>0xFF00-0xFF7F</th>
+<td>&nbsp;</td>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>Work &amp; Stack RAM<br>0xFF80-0xFFFE</p></th>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>Work &amp; Stack RAM<br>0xFF80-0xFFFE</th>
+<td>&nbsp;</td>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr><tr>
-<th><p>IE Register<br>0xFFFF</p></th>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
+<th>IE Register<br>0xFFFF</th>
+<td>&nbsp;</td>
+<td>X</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
 </tr>
 </table>
-<i><u>Table 1</u><br>
+<p><i><u>Table 1</u><br>
 (*): 0x0000-0x00FF is only mapped to the boot ROM during boot;
 gets cut off when boot ROM code writes 0x01 to register 0xFF50<br>
 (**): 0xE000-0xFDFF is often called the WRAM echo or shadow area; actually the cartridge
@@ -192,288 +220,288 @@ and therefore both RAMs are active.</p>
 <p>When #read is low, D0-D7 are always configured as inputs (driven by the cartridge or WRAM or pulled up by
 a pull-up resistor). When #read is high and a chip select (#cs or A15) is low, D0-D7 are always configured as
 outputs (driven by the GameBoy). There is a short switching period when #read and both chip selects are high.</p>
-<p><table border="1" bgcolor="#ffe0e0">
+<table class="default center" style="background-color:#ffe0e0;">
 <tr>
-<th><p><i>&amp;&amp;</i></p></th>
-<th><p>!(#cs) &amp;&amp; (A15)</p></th>
-<th><p>(#cs) &amp;&amp; (A15)</p></th>
-<th><p>(#cs) &amp;&amp; !(A15)</p></th>
+<th><i>&amp;&amp;</i></th>
+<th>!(#cs) &amp;&amp; (A15)</th>
+<th>(#cs) &amp;&amp; (A15)</th>
+<th>(#cs) &amp;&amp; !(A15)</th>
 </tr><tr>
-<th><p>!(#read)</p></th>
-<td align="center"><p>input &rarr;<br>&nbsp;</p></td>
-<td align="center"><p>&larr; input <i>(*)</i> &rarr;<br>&darr;</p></td>
-<td align="center"><p>&larr; input<br>&nbsp;</p></td>
+<th>!(#read)</th>
+<td>input &rarr;<br>&nbsp;</td>
+<td>&larr; input <i>(*)</i> &rarr;<br>&darr;</td>
+<td>&larr; input<br>&nbsp;</td>
 </tr><tr>
-<th><p>(#read)</p></th>
-<td align="center"><p>&nbsp;<br>output &rarr;</p></td>
-<td align="center"><p>&uarr;<br>&larr; undefined &rarr;</p></td>
-<td align="center"><p>&nbsp;<br>&larr; output</p></td>
+<th>(#read)</th>
+<td>&nbsp;<br>output &rarr;</td>
+<td>&uarr;<br>&larr; undefined &rarr;</td>
+<td>&nbsp;<br>&larr; output</td>
 </tr>
 </table>
-<i><u>Table 2</u><br>
+<p><i><u>Table 2</u><br>
 Arrows: Indicate legal state changes<br>
 (*): The "default" state, when cartridge and WRAM are not accessed</i></p>
 <p>There are two peripherals that also gain access to some of the busses: The PPU and the DMA. The PPU has
 the highest priority, the CPU has the lowest.</p>
-<p><table border="1">
+<table class="default center">
 <tr>
-<th><p><i>has access to bus<br>(ordered by priority)</i></p></th>
-<th bgcolor="#e0ffe0"><p>Boot ROM</p></th>
-<th bgcolor="#ffe0e0"><p>External Bus</p></th>
-<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
+<th><i>has access to bus<br>(ordered by priority)</i></th>
+<th style="background-color:#e0ffe0;">Boot ROM</th>
+<th style="background-color:#ffe0e0;">External Bus</th>
+<th style="background-color:#ffffe0;">Internal Bus</th>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
 </tr><tr>
-<th><p>PPU</p></th>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td><p>&nbsp;</p></td>
-<td align="center"><p>X (ro)</p></td>
-<td align="center"><p>X (ro)</p></td>
+<th>PPU</th>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>X (ro)</td>
+<td>X (ro)</td>
 </tr><tr>
-<th><p>DMA</p></th>
-<td align="center"><p>?</p></td>
-<td align="center"><p>X (ro)</p></td>
-<td align="center"><p>?</p></td>
-<td align="center"><p>X (ro)</p></td>
-<td align="center"><p>X (wo)</p></td>
+<th>DMA</th>
+<td>?</td>
+<td>X (ro)</td>
+<td>?</td>
+<td>X (ro)</td>
+<td>X (wo)</td>
 </tr><tr>
-<th><p>CPU</p></th>
-<td align="center"><p>X</p></td>
-<td align="center"><p>X</p></td>
-<td align="center"><p>X</p></td>
-<td align="center"><p>X</p></td>
-<td align="center"><p>X</p></td>
+<th>CPU</th>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
 </tr>
 </table>
-<i><u>Table 3</u></i></p>
-<p><table border="1" bgcolor="#ffe0e0">
+<p><i><u>Table 3</u></i></p>
+<table class="default" style="background-color:#ffe0e0;">
 <tr>
-<th><p><i>signals visible on<br>external bus during<br>CPU mem access</i></p></th>
-<th><p>#write</p></th>
-<th><p>#read</p></th>
-<th><p>#cs</p></th>
-<th><p>A15</p></th>
-<th><p>A0-A14</p></th>
-<th><p>D0-D7 direction</p></th>
-<th><p>D0-D7 output buffer</p></th>
+<th><i>signals visible on<br>external bus during<br>CPU mem access</i></th>
+<th>#write</th>
+<th>#read</th>
+<th>#cs</th>
+<th>A15</th>
+<th>A0-A14</th>
+<th>D0-D7 direction</th>
+<th>D0-D7 output buffer</th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
-<td><p>high</p></td>
-<td><p>low</p></td>
-<td><p>high</p></td>
-<td><p>high</p></td>
-<td><p>no change TODO: double check; A8 seems to go low when accessing boot ROM</p></td>
-<td><p>input</p></td>
-<td><p>no change</p></td>
+<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td>high</td>
+<td>no change TODO: double check; A8 seems to go low when accessing boot ROM</td>
+<td>input</td>
+<td>no change</td>
 </tr><tr>
-<th bgcolor="#ffe0e0"><p>External Bus</p></th>
-<td><p>w: low<br>r: high</p></td>
-<td><p>w: high<br>r: low</p></td>
-<td><p>high</p></td>
-<td><p>low</p></td>
-<td><p>change</p></td>
-<td><p>w: output<br>r: input</p></td>
-<td><p>w: change<br>r: no change</p></td>
+<th style="background-color:#ffe0e0;">External Bus</th>
+<td>w: low<br>r: high</td>
+<td>w: high<br>r: low</td>
+<td>high</td>
+<td>low</td>
+<td>change</td>
+<td>w: output<br>r: input</td>
+<td>w: change<br>r: no change</td>
 </tr><tr>
-<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
-<td><p>high</p></td>
-<td><p>w: low (glitchy)<br>r: low</p></td>
-<td><p>high</p></td>
-<td><p>high</p></td>
-<td><p><b>change</b></p></td>
-<td><p>input</p></td>
-<td><p>no change</p></td>
+<th style="background-color:#ffffe0;">Internal Bus</th>
+<td>high</td>
+<td>w: low (glitchy)<br>r: low</td>
+<td>high</td>
+<td>high</td>
+<td><b>change</b></td>
+<td>input</td>
+<td>no change</td>
 </tr><tr>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<td><p>high</p></td>
-<td><p>w: low (glitchy)<br>r: low</p></td>
-<td><p>high</p></td>
-<td><p>high</p></td>
-<td><p>no change</p></td>
-<td><p>input</p></td>
-<td><p>no change</p></td>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<td>high</td>
+<td>w: low (glitchy)<br>r: low</td>
+<td>high</td>
+<td>high</td>
+<td>no change</td>
+<td>input</td>
+<td>no change</td>
 </tr><tr>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<td><p>high</p></td>
-<td><p>w: low (glitchy)<br>r: low</p></td>
-<td><p>high</p></td>
-<td><p>high</p></td>
-<td><p><b>change</b></p></td>
-<td><p>input</p></td>
-<td><p>no change</p></td>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
+<td>high</td>
+<td>w: low (glitchy)<br>r: low</td>
+<td>high</td>
+<td>high</td>
+<td><b>change</b></td>
+<td>input</td>
+<td>no change</td>
 </tr>
 </table>
-<i><u>Table 4</u><br>
+<p><i><u>Table 4</u><br>
 Signals visible on external bus when CPU accesses any of the five groups (while DMA is not accessing WRAM or cartridge)<br>
 (*): Write access on boot ROM not tested yet</i></p>
-<p><table border="1" bgcolor="#e0e0ff">
+<table class="default" style="background-color:#e0e0ff;">
 <tr>
-<th><p><i>signals visible on<br>ext. video bus during<br>CPU mem access</i></p></th>
-<th><p>#vwrite</p></th>
-<th><p>#vread</p></th>
-<th><p>#vcs</p></th>
-<th><p>VA0-VA12</p></th>
-<th><p>VD0-VD7 direction</p></th>
-<th><p>VD0-VD7 output buffer</p></th>
+<th><i>signals visible on<br>ext. video bus during<br>CPU mem access</i></th>
+<th>#vwrite</th>
+<th>#vread</th>
+<th>#vcs</th>
+<th>VA0-VA12</th>
+<th>VD0-VD7 direction</th>
+<th>VD0-VD7 output buffer</th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
-<td><p>high</p></td>
-<td><p>low</p></td>
-<td><p>high</p></td>
-<td><p><b>change</b></p></td>
-<td><p>input</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td><b>change</b></td>
+<td>input</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#ffe0e0"><p>External Bus</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>high</p></td>
-<td><p><b>change</b></p></td>
-<td><p>input</p></td>
-<td><p>?</p></td>
+<th style="background-color:#ffe0e0;">External Bus</th>
+<td>?</td>
+<td>?</td>
+<td>high</td>
+<td><b>change</b></td>
+<td>input</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#ffffe0"><p>Internal Bus</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>high</p></td>
-<td><p><b>change</b></p></td>
-<td><p>input</p></td>
-<td><p>?</p></td>
+<th style="background-color:#ffffe0;">Internal Bus</th>
+<td>?</td>
+<td>?</td>
+<td>high</td>
+<td><b>change</b></td>
+<td>input</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<td><p>w: low<br>r: high</p></td>
-<td><p>w: high<br>r: low</p></td>
-<td><p>low</p></td>
-<td><p>change</p></td>
-<td><p>w: output<br>r: input</p></td>
-<td><p>w: change<br>r: ?</p></td>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<td>w: low<br>r: high</td>
+<td>w: high<br>r: low</td>
+<td>low</td>
+<td>change</td>
+<td>w: output<br>r: input</td>
+<td>w: change<br>r: ?</td>
 </tr><tr>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<td><p>high</p></td>
-<td><p>low</p></td>
-<td><p>high</p></td>
-<td><p><b>change</b></p></td>
-<td><p>input</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td><b>change</b></td>
+<td>input</td>
+<td>?</td>
 </tr>
 </table>
-<i><u>Table 5</u><br>
+<p><i><u>Table 5</u><br>
 Signals visible on external video bus when CPU accesses any of the five groups (while PPU and DMA are not accessing VRAM)<br>
 (*): Write access on boot ROM not tested yet</i></p>
-<p><table border="1" bgcolor="#e0e0ff">
+<table class="default" style="background-color:#e0e0ff;">
 <tr>
-<th><p><i>signals visible on<br>ext. video bus during<br>PPU mem access</i></p></th>
-<th><p>#vwrite</p></th>
-<th><p>#vread</p></th>
-<th><p>#vcs</p></th>
-<th><p>VA0-VA12</p></th>
-<th><p>VD0-VD7 direction</p></th>
+<th><i>signals visible on<br>ext. video bus during<br>PPU mem access</i></th>
+<th>#vwrite</th>
+<th>#vread</th>
+<th>#vcs</th>
+<th>VA0-VA12</th>
+<th>VD0-VD7 direction</th>
 </tr><tr>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<td><p>high</p></td>
-<td><p>low</p></td>
-<td><p>low</p></td>
-<td><p>change</p></td>
-<td><p>input (glitchy)</p></td>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<td>high</td>
+<td>low</td>
+<td>low</td>
+<td>change</td>
+<td>input (glitchy)</td>
 </tr><tr>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<td colspan="5" align="center"><p>controlled by DMA or CPU</p></td>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
+<td colspan="5" style="text-align:center;">controlled by DMA or CPU</td>
 </tr>
 </table>
-<i><u>Table 6</u><br>
+<p><i><u>Table 6</u><br>
 Signals visible on external video bus when PPU accesses any of the two busses</i></p>
-<p><table border="1" bgcolor="#ffe0e0">
+<table class="default" style="background-color:#ffe0e0;">
 <tr>
-<th><p><i>signals visible on<br>external bus during<br>DMA mem access</i></p></th>
-<th><p>#write</p></th>
-<th><p>#read</p></th>
-<th><p>#cs</p></th>
-<th><p>A15</p></th>
-<th><p>A0-A14</p></th>
-<th><p>D0-D7 direction</p></th>
+<th><i>signals visible on<br>external bus during<br>DMA mem access</i></th>
+<th>#write</th>
+<th>#read</th>
+<th>#cs</th>
+<th>A15</th>
+<th>A0-A14</th>
+<th>D0-D7 direction</th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#ffe0e0"><p>External Bus</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#ffe0e0;">External Bus</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#ffffe0"><p>Internal Bus (*)</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#ffffe0;">Internal Bus (*)</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<td colspan="6" align="center"><p>controlled by CPU</p></td>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<td colspan="6" style="text-align:center;">controlled by CPU</td>
 </tr><tr>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr>
 </table>
-<i><u>Table 7</u><br>
+<p><i><u>Table 7</u><br>
 Signals visible on external bus when DMA accesses any of the three/five (*) groups<br>
 (*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
-<p><table border="1" bgcolor="#e0e0ff">
+<table class="default" style="background-color:#e0e0ff;">
 <tr>
-<th><p><i>signals visible on<br>ext. video bus during<br>DMA mem access</i></p></th>
-<th><p>#vwrite</p></th>
-<th><p>#vread</p></th>
-<th><p>#vcs</p></th>
-<th><p>VA0-VA12</p></th>
-<th><p>VD0-VD7 direction</p></th>
+<th><i>signals visible on<br>ext. video bus during<br>DMA mem access</i></th>
+<th>#vwrite</th>
+<th>#vread</th>
+<th>#vcs</th>
+<th>VA0-VA12</th>
+<th>VD0-VD7 direction</th>
 </tr><tr>
-<th bgcolor="#e0ffe0"><p>Boot ROM (*)</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#ffe0e0"><p>External Bus</p></th>
-<td colspan="5" align="center"><p>controlled by PPU or CPU</p></td>
+<th style="background-color:#ffe0e0;">External Bus</th>
+<td colspan="5" style="text-align:center;">controlled by PPU or CPU</td>
 </tr><tr>
-<th bgcolor="#ffffe0"><p>Internal Bus (*)</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#ffffe0;">Internal Bus (*)</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#e0e0ff"><p>External Video Bus</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0e0ff;">External Video Bus</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th bgcolor="#e0ffff"><p>Internal Video Bus</p></th>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
-<td><p>?</p></td>
+<th style="background-color:#e0ffff;">Internal Video Bus</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr>
 </table>
-<i><u>Table 8</u><br>
+<p><i><u>Table 8</u><br>
 Signals visible on external video bus when DMA accesses any of the three/five (*) groups (while PPU is not accessing VRAM)<br>
 (*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
 <!--

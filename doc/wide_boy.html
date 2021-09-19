@@ -1,14 +1,39 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Wide-Boy64 Research</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>img { max-width: 100%; display: inline; }</style>
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
 </head>
 <body>
 <p><a href="http://iceboy.a-singer.de/">Home</a></p>
 <hr>
 <h1>Wide-Boy64 Research</h1>
-<p><ul>
+<ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#wideboy64cgb">Wide-Boy64 CGB</a><ul>
 <li><a href="#cgbadapter">CGB Adapter</a></li>
@@ -28,14 +53,14 @@
 <li><a href="#cloning">Schematics and ideas for building a Wide-Boy64 clone</a></li>
 <li><a href="#misc">Random stuff</a></li>
 <li><a href="#links">Links</a></li>
-</ul></p>
+</ul>
 <h2 id="overview">Overview</h2>
 <p>I got my hands on a Wide-Boy64 AGB that I found on Ebay. It's in a very good condition.</p>
-<p><img src="img/wideboy64agb.png"><br>
+<p><img src="img/wideboy64agb.png" alt=""><br>
 <i><u>Picture 1</u><br>
 Wide-Boy64 AGB</i></p>
 <p>It came with this small cable. I don't know what this is used for.</p>
-<p><img src="img/wideboy64cable.png"><br>
+<p><img src="img/wideboy64cable.png" alt=""><br>
 <i><u>Picture 2</u><br>
 Cable that came with the Wide-Boy64</i></p>
 The smaller black connector of this cable fits into the white connector on the front side of the Wide-Boy.
@@ -53,10 +78,10 @@ buttons and the audio amplifier. So they just act as an I/O device.<p>
 <p>Since I don't have the CGB variant of the Wide-Boy64 (yet), I can only describe it's adapter here.</p>
 <h3 id="cgbadapter">CGB Adapter</h3>
 <p>This is the CGB Adapter I bought:</p>
-<p><img src="img/wideboy64cgb_adapter_front.png"><img src="img/wideboy64cgb_adapter_back.png"><br>
+<p><img src="img/wideboy64cgb_adapter_front.png" alt=""><img src="img/wideboy64cgb_adapter_back.png" alt=""><br>
 <i><u>Picture 3&4</u><br>
 Wide-Boy64 CGB Adapter</i></p>
-<p><img src="img/wideboy64cgb_adapter_pcbfront.png"><img src="img/wideboy64cgb_adapter_pcbback.png"><br>
+<p><img src="img/wideboy64cgb_adapter_pcbfront.png" alt=""><img src="img/wideboy64cgb_adapter_pcbback.png" alt=""><br>
 <i><u>Picture 5&6</u><br>
 Wide-Boy64 CGB Adapter PCB</i></p>
 <p>I have drawn a schematic for the PCB: <a href="dmg_cart_probe.pdf">dmg_cart_probe.pdf</a></p>
@@ -70,7 +95,7 @@ otherwise.</p>
 <h3 id="agbcomponents">Components</h3>
 <p>Here is what I found out about the main components inside the Wide-Boy64 AGB. (Higher resolution pictures can
 be found in my <a href="../db/wb64agb_iceboy_1.html">Game Boy database</a>.)</p>
-<p><img src="img/wideboy64agb_components.png"><br>
+<p><img src="img/wideboy64agb_components.png" alt=""><br>
 <i><u>Picture 7</u><br>
 Components of the Wide-Boy64 AGB</i></p>
 <p>The EEPROM in the bottom left (BU9850) is used in many N64 cartridges that allow to save the game. I don't
@@ -88,2564 +113,2564 @@ of my schematic of the Wide-Boy64 AGB for details: <a href="wideboy64agb_sch.pdf
 Note that the 250 MHz clock output (RCLK) just gets drained through resistor R24.</p>
 <h3 id="agbbitstream">Spartan bitstream</h3>
 <p>I was able to dump the FPGA bitstream from the PROM with an iCE40HX-8K Breakout Board.</p>
-<p><img src="img/wideboy64agb_prom_dump.png"><br>
+<p><img src="img/wideboy64agb_prom_dump.png" alt=""><br>
 <i><u>Picture 8</u><br>
 Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
 <p>The code I used for dumping it on a 1MBit UART can be found <a href="https://sourceforge.net/p/iceboy/reveng/ci/master/tree/wb64agb_prom_dump/dump.sv">here</a>.</p>
 <p>The PROM contains 179160 bits (22395 bytes) and when stored LSB-first it has the following hashes:</p>
-<p><ul>
+<ul>
 <li>MD5: 536e776798fa2ab103e49cd322fb5669</li>
 <li>SHA256: b41f2e84b0d14a2065dfcc17bfb7d49056a277c9c2f0ace1124c7e48b831b49f</li>
-</ul></p>
+</ul>
 <h3 id="agb40pin">40-pin connector (CN3) pinout on Wide-Boy64 AGB</h3>
-<p><table border="1">
+<table class="default">
 <tr>
-<th><p><i>Pin#</i></p></th>
-<th><p>Usage</p></th>
-<th colspan="2"><p>To CPU</p></th>
-<th colspan="2"><p>To FPGA</p></th>
-<th><p><i>Pin#</i></p></th>
-<th><p>Usage</p></th>
-<th colspan="2"><p>To CPU</p></th>
-<th colspan="2"><p>To FPGA</p></th>
+<th><i>Pin#</i></th>
+<th>Usage</th>
+<th colspan="2">To CPU</th>
+<th colspan="2">To FPGA</th>
+<th><i>Pin#</i></th>
+<th>Usage</th>
+<th colspan="2">To CPU</th>
+<th colspan="2">To FPGA</th>
 </tr><tr>
-<th><p>1</p></th>
-<td><p>Audio R</p></td>
-<td><p>6</p></td>
-<td><p>SO1</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>21</p></th>
-<td><p>LCD Data B2</p></td>
-<td><p>100</p></td>
-<td><p>LDB2</p></td>
-<td><p>86</p></td>
-<td><p>I/O</p></td>
+<th>1</th>
+<td>Audio R</td>
+<td>6</td>
+<td>SO1</td>
+<td colspan="2">-</td>
+<th>21</th>
+<td>LCD Data B2</td>
+<td>100</td>
+<td>LDB2</td>
+<td>86</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>2</p></th>
-<td><p>Audio L</p></td>
-<td><p>7</p></td>
-<td><p>SO2</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>22</p></th>
-<td><p>LCD Data B3</p></td>
-<td><p>99</p></td>
-<td><p>LDB3</p></td>
-<td><p>87</p></td>
-<td><p>I/O</p></td>
+<th>2</th>
+<td>Audio L</td>
+<td>7</td>
+<td>SO2</td>
+<td colspan="2">-</td>
+<th>22</th>
+<td>LCD Data B3</td>
+<td>99</td>
+<td>LDB3</td>
+<td>87</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>3</p></th>
-<td><p>Button B</p></td>
-<td><p>5</p></td>
-<td><p>P1</p></td>
-<td><p>61</p></td>
-<td><p>I/O</p></td>
-<th><p>23</p></th>
-<td><p>LCD Data B4</p></td>
-<td><p>98</p></td>
-<td><p>LDB4</p></td>
-<td><p>88</p></td>
-<td><p>I/O (D4)</p></td>
+<th>3</th>
+<td>Button B</td>
+<td>5</td>
+<td>P1</td>
+<td>61</td>
+<td>I/O</td>
+<th>23</th>
+<td>LCD Data B4</td>
+<td>98</td>
+<td>LDB4</td>
+<td>88</td>
+<td>I/O (D4)</td>
 </tr><tr>
-<th><p>4</p></th>
-<td><p>Button A</p></td>
-<td><p>4</p></td>
-<td><p>P0</p></td>
-<td><p>62</p></td>
-<td><p>I/O</p></td>
-<th><p>24</p></th>
-<td><p>LCD Data B5</p></td>
-<td><p>97</p></td>
-<td><p>LDB5</p></td>
-<td><p>89</p></td>
-<td><p>I/O</p></td>
+<th>4</th>
+<td>Button A</td>
+<td>4</td>
+<td>P0</td>
+<td>62</td>
+<td>I/O</td>
+<th>24</th>
+<td>LCD Data B5</td>
+<td>97</td>
+<td>LDB5</td>
+<td>89</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>5</p></th>
-<td><p>Button R</p></td>
-<td><p>3</p></td>
-<td><p>P8</p></td>
-<td><p>63</p></td>
-<td><p>I/O</p></td>
-<th><p>25</p></th>
-<td><p>LCD Data G1</p></td>
-<td><p>96</p></td>
-<td><p>LDG1</p></td>
-<td><p>92</p></td>
-<td><p>I/O (D3)</p></td>
+<th>5</th>
+<td>Button R</td>
+<td>3</td>
+<td>P8</td>
+<td>63</td>
+<td>I/O</td>
+<th>25</th>
+<td>LCD Data G1</td>
+<td>96</td>
+<td>LDG1</td>
+<td>92</td>
+<td>I/O (D3)</td>
 </tr><tr>
-<th><p>6</p></th>
-<td><p>Button Start</p></td>
-<td><p>127</p></td>
-<td><p>P3</p></td>
-<td><p>65</p></td>
-<td><p>I/O</p></td>
-<th><p>26</p></th>
-<td><p>LCD Data G2</p></td>
-<td><p>95</p></td>
-<td><p>LDG2</p></td>
-<td><p>93</p></td>
-<td><p>I/O</p></td>
+<th>6</th>
+<td>Button Start</td>
+<td>127</td>
+<td>P3</td>
+<td>65</td>
+<td>I/O</td>
+<th>26</th>
+<td>LCD Data G2</td>
+<td>95</td>
+<td>LDG2</td>
+<td>93</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>7</p></th>
-<td><p>Button Select</p></td>
-<td><p>126</p></td>
-<td><p>P2</p></td>
-<td><p>66</p></td>
-<td><p>I/O</p></td>
-<th><p>27</p></th>
-<td><p>LCD Data G3</p></td>
-<td><p>94</p></td>
-<td><p>LDG3</p></td>
-<td><p>94</p></td>
-<td><p>I/O</p></td>
+<th>7</th>
+<td>Button Select</td>
+<td>126</td>
+<td>P2</td>
+<td>66</td>
+<td>I/O</td>
+<th>27</th>
+<td>LCD Data G3</td>
+<td>94</td>
+<td>LDG3</td>
+<td>94</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>8</p></th>
-<td><p>Button D-Right</p></td>
-<td><p>123</p></td>
-<td><p>P4</p></td>
-<td><p>67</p></td>
-<td><p>I/O</p></td>
-<th><p>28</p></th>
-<td><p>GND</p></td>
-<td><p>102,128,...</p></td>
-<td><p>GND</p></td>
-<td><p>81,91,...</p></td>
-<td><p>GND</p></td>
+<th>8</th>
+<td>Button D-Right</td>
+<td>123</td>
+<td>P4</td>
+<td>67</td>
+<td>I/O</td>
+<th>28</th>
+<td>GND</td>
+<td>102,128,...</td>
+<td>GND</td>
+<td>81,91,...</td>
+<td>GND</td>
 </tr><tr>
-<th><p>9</p></th>
-<td><p>Button D-Down</p></td>
-<td><p>122</p></td>
-<td><p>P7</p></td>
-<td><p>68</p></td>
-<td><p>I/O</p></td>
-<th><p>29</p></th>
-<td><p>LCD Data G4</p></td>
-<td><p>93</p></td>
-<td><p>LDG4</p></td>
-<td><p>95</p></td>
-<td><p>I/O</p></td>
+<th>9</th>
+<td>Button D-Down</td>
+<td>122</td>
+<td>P7</td>
+<td>68</td>
+<td>I/O</td>
+<th>29</th>
+<td>LCD Data G4</td>
+<td>93</td>
+<td>LDG4</td>
+<td>95</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>10</p></th>
-<td><p>Button D-Left</p></td>
-<td><p>121</p></td>
-<td><p>P5</p></td>
-<td><p>69</p></td>
-<td><p>I/O</p></td>
-<th><p>30</p></th>
-<td><p>LCD Data G5</p></td>
-<td><p>92</p></td>
-<td><p>LDG5</p></td>
-<td><p>96</p></td>
-<td><p>I/O (D2)</p></td>
+<th>10</th>
+<td>Button D-Left</td>
+<td>121</td>
+<td>P5</td>
+<td>69</td>
+<td>I/O</td>
+<th>30</th>
+<td>LCD Data G5</td>
+<td>92</td>
+<td>LDG5</td>
+<td>96</td>
+<td>I/O (D2)</td>
 </tr><tr>
-<th><p>11</p></th>
-<td><p>Button D-Up</p></td>
-<td><p>120</p></td>
-<td><p>P6</p></td>
-<td><p>75</p></td>
-<td><p>I/O (D7)</p></td>
-<th><p>31</p></th>
-<td><p>LCD Data R1</p></td>
-<td><p>91</p></td>
-<td><p>LDR1</p></td>
-<td><p>97</p></td>
-<td><p>I/O</p></td>
+<th>11</th>
+<td>Button D-Up</td>
+<td>120</td>
+<td>P6</td>
+<td>75</td>
+<td>I/O (D7)</td>
+<th>31</th>
+<td>LCD Data R1</td>
+<td>91</td>
+<td>LDR1</td>
+<td>97</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>12</p></th>
-<td><p>Button L</p></td>
-<td><p>119</p></td>
-<td><p>P9</p></td>
-<td><p>77</p></td>
-<td><p>I/O</p></td>
-<th><p>32</p></th>
-<td><p>LCD Data R2</p></td>
-<td><p>90</p></td>
-<td><p>LDR2</p></td>
-<td><p>98</p></td>
-<td><p>I/O</p></td>
+<th>12</th>
+<td>Button L</td>
+<td>119</td>
+<td>P9</td>
+<td>77</td>
+<td>I/O</td>
+<th>32</th>
+<td>LCD Data R2</td>
+<td>90</td>
+<td>LDR2</td>
+<td>98</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>13</p></th>
-<td><p>LCD VSHD Enable?</p></td>
-<td><p>118</p></td>
-<td><p>R10</p></td>
-<td><p>78</p></td>
-<td><p>I/O</p></td>
-<th><p>33</p></th>
-<td><p>LCD Data R3</p></td>
-<td><p>89</p></td>
-<td><p>LDR3</p></td>
-<td><p>99</p></td>
-<td><p>I/O</p></td>
+<th>13</th>
+<td>LCD VSHD Enable?</td>
+<td>118</td>
+<td>R10</td>
+<td>78</td>
+<td>I/O</td>
+<th>33</th>
+<td>LCD Data R3</td>
+<td>89</td>
+<td>LDR3</td>
+<td>99</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>14</p></th>
-<td><p>AGB-REG Switch?</p></td>
-<td><p>108</p></td>
-<td><p>REVC</p></td>
-<td><p>79</p></td>
-<td><p>I/O (D6)</p></td>
-<th><p>34</p></th>
-<td><p>LCD Data R4</p></td>
-<td><p>88</p></td>
-<td><p>LDR4</p></td>
-<td><p>101</p></td>
-<td><p>I/O (D1)</p></td>
+<th>14</th>
+<td>AGB-REG Switch?</td>
+<td>108</td>
+<td>REVC</td>
+<td>79</td>
+<td>I/O (D6)</td>
+<th>34</th>
+<td>LCD Data R4</td>
+<td>88</td>
+<td>LDR4</td>
+<td>101</td>
+<td>I/O (D1)</td>
 </tr><tr>
-<th><p>15</p></th>
-<td><p>LCD Mode?</p></td>
-<td><p>107</p></td>
-<td><p>MOD</p></td>
-<td><p>80</p></td>
-<td><p>I/O</p></td>
-<th><p>35</p></th>
-<td><p>LCD Data R5</p></td>
-<td><p>87</p></td>
-<td><p>LDR5</p></td>
-<td><p>102</p></td>
-<td><p>I/O</p></td>
+<th>15</th>
+<td>LCD Mode?</td>
+<td>107</td>
+<td>MOD</td>
+<td>80</td>
+<td>I/O</td>
+<th>35</th>
+<td>LCD Data R5</td>
+<td>87</td>
+<td>LDR5</td>
+<td>102</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>16</p></th>
-<td><p>LCD SPS?</p></td>
-<td><p>106</p></td>
-<td><p>SPS</p></td>
-<td><p>82</p></td>
-<td><p>I/O</p></td>
-<th><p>36</p></th>
-<td><p>GND</p></td>
-<td><p>102,128,...</p></td>
-<td><p>GND</p></td>
-<td><p>81,91,...</p></td>
-<td><p>GND</p></td>
+<th>16</th>
+<td>LCD SPS?</td>
+<td>106</td>
+<td>SPS</td>
+<td>82</td>
+<td>I/O</td>
+<th>36</th>
+<td>GND</td>
+<td>102,128,...</td>
+<td>GND</td>
+<td>81,91,...</td>
+<td>GND</td>
 </tr><tr>
-<th><p>17</p></th>
-<td><p>LCD CLS?</p></td>
-<td><p>105</p></td>
-<td><p>CLS</p></td>
-<td><p>83</p></td>
-<td><p>I/O</p></td>
-<th><p>37</p></th>
-<td><p>LCD PS?</p></td>
-<td><p>86</p></td>
-<td><p>PS</p></td>
-<td><p>103</p></td>
-<td><p>I/O</p></td>
+<th>17</th>
+<td>LCD CLS?</td>
+<td>105</td>
+<td>CLS</td>
+<td>83</td>
+<td>I/O</td>
+<th>37</th>
+<td>LCD PS?</td>
+<td>86</td>
+<td>PS</td>
+<td>103</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>18</p></th>
-<td><p>LCD SPL?</p></td>
-<td><p>104</p></td>
-<td><p>SPL</p></td>
-<td><p>84</p></td>
-<td><p>I/O (D5)</p></td>
-<th><p>38</p></th>
-<td><p>LCD LP?</p></td>
-<td><p>85</p></td>
-<td><p>LP</p></td>
-<td><p>104</p></td>
-<td><p>I/O</p></td>
+<th>18</th>
+<td>LCD SPL?</td>
+<td>104</td>
+<td>SPL</td>
+<td>84</td>
+<td>I/O (D5)</td>
+<th>38</th>
+<td>LCD LP?</td>
+<td>85</td>
+<td>LP</td>
+<td>104</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>19</p></th>
-<td><p>GND</p></td>
-<td><p>102,128,...</p></td>
-<td><p>GND</p></td>
-<td><p>81,91,...</p></td>
-<td><p>GND</p></td>
-<th><p>39</p></th>
-<td><p>LCD Data Clock?</p></td>
-<td><p>84</p></td>
-<td><p>DCK</p></td>
-<td><p>112</p></td>
-<td><p>I/O, GCK7</p></td>
+<th>19</th>
+<td>GND</td>
+<td>102,128,...</td>
+<td>GND</td>
+<td>81,91,...</td>
+<td>GND</td>
+<th>39</th>
+<td>LCD Data Clock?</td>
+<td>84</td>
+<td>DCK</td>
+<td>112</td>
+<td>I/O, GCK7</td>
 </tr><tr>
-<th><p>20</p></th>
-<td><p>LCD Data B1</p></td>
-<td><p>101</p></td>
-<td><p>LDB1</p></td>
-<td><p>85</p></td>
-<td><p>I/O</p></td>
-<th><p>40</p></th>
-<td><p>3.3 V Supply</p></td>
-<td><p>1,103</p></td>
-<td><p>VDD3</p></td>
-<td><p>128,144,...</p></td>
-<td><p>VCC</p></td>
+<th>20</th>
+<td>LCD Data B1</td>
+<td>101</td>
+<td>LDB1</td>
+<td>85</td>
+<td>I/O</td>
+<th>40</th>
+<td>3.3 V Supply</td>
+<td>1,103</td>
+<td>VDD3</td>
+<td>128,144,...</td>
+<td>VCC</td>
 </tr>
 </table>
-<i><u>Table 1</u><br>
+<p><i><u>Table 1</u><br>
 Connections from Wide-Boy64 AGB 40-pin connector (CN3) to AGB CPU and Spartan FPGA</i></p>
 <h3 id="agbmem">Memories connected to FPGA (and each other) on Wide-Boy64 AGB</h3>
 <h4 id="agbflash">Flash</h4>
-<p><table border="1">
+<table class="default">
 <tr>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th colspan="2"><p>To FPGA</p></th>
-<th colspan="2"><p>To DRAM</p></th>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th colspan="2"><p>To FPGA</p></th>
-<th colspan="2"><p>To DRAM</p></th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th colspan="2">To FPGA</th>
+<th colspan="2">To DRAM</th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th colspan="2">To FPGA</th>
+<th colspan="2">To DRAM</th>
 </tr><tr>
-<th><p>1</p></th>
-<td><p>A15</p></td>
-<td><p>21</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>25</p></th>
-<td><p>A0</p></td>
-<td><p>3</p></td>
-<td><p>I/O</p></td>
-<td><p>23</p></td>
-<td><p>A0</p></td>
+<th>1</th>
+<td>A15</td>
+<td>21</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>25</th>
+<td>A0</td>
+<td>3</td>
+<td>I/O</td>
+<td>23</td>
+<td>A0</td>
 </tr><tr>
-<th><p>2</p></th>
-<td><p>A14</p></td>
-<td><p>20</p></td>
-<td><p>I/O</p></td>
-<td><p>21</p></td>
-<td><p>BA1(A12)</p></td>
-<th><p>26</p></th>
-<td><p>CE#</p></td>
-<td><p>28</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
+<th>2</th>
+<td>A14</td>
+<td>20</td>
+<td>I/O</td>
+<td>21</td>
+<td>BA1(A12)</td>
+<th>26</th>
+<td>CE#</td>
+<td>28</td>
+<td>I/O</td>
+<td colspan="2">-</td>
 </tr><tr>
-<th><p>3</p></th>
-<td><p>A13</p></td>
-<td><p>19</p></td>
-<td><p>I/O</p></td>
-<td><p>20</p></td>
-<td><p>BA0(A13)</p></td>
-<th><p>27</p></th>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>41,46,...</p></td>
-<td><p>VSS,VSSQ</p></td>
+<th>3</th>
+<td>A13</td>
+<td>19</td>
+<td>I/O</td>
+<td>20</td>
+<td>BA0(A13)</td>
+<th>27</th>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
+<td>41,46,...</td>
+<td>VSS,VSSQ</td>
 </tr><tr>
-<th><p>4</p></th>
-<td><p>A12</p></td>
-<td><p>16</p></td>
-<td><p>I/O</p></td>
-<td><p>36</p></td>
-<td><p>NC</p></td>
-<th><p>28</p></th>
-<td><p>OE#</p></td>
-<td><p>29</p></td>
-<td><p>I/O</p></td>
-<td><p>17</p></td>
-<td><p>!CAS</p></td>
+<th>4</th>
+<td>A12</td>
+<td>16</td>
+<td>I/O</td>
+<td>36</td>
+<td>NC</td>
+<th>28</th>
+<td>OE#</td>
+<td>29</td>
+<td>I/O</td>
+<td>17</td>
+<td>!CAS</td>
 </tr><tr>
-<th><p>5</p></th>
-<td><p>A11</p></td>
-<td><p>15</p></td>
-<td><p>I/O</p></td>
-<td><p>35</p></td>
-<td><p>A11</p></td>
-<th><p>29</p></th>
-<td><p>DQ0</p></td>
-<td><p>47</p></td>
-<td><p>I/O</p></td>
-<td><p>2</p></td>
-<td><p>DQ0</p></td>
+<th>5</th>
+<td>A11</td>
+<td>15</td>
+<td>I/O</td>
+<td>35</td>
+<td>A11</td>
+<th>29</th>
+<td>DQ0</td>
+<td>47</td>
+<td>I/O</td>
+<td>2</td>
+<td>DQ0</td>
 </tr><tr>
-<th><p>6</p></th>
-<td><p>A10</p></td>
-<td><p>14</p></td>
-<td><p>I/O</p></td>
-<td><p>22</p></td>
-<td><p>A10</p></td>
-<th><p>30</p></th>
-<td><p>DQ8</p></td>
-<td><p>58</p></td>
-<td><p>I/O</p></td>
-<td><p>42</p></td>
-<td><p>DQ8</p></td>
+<th>6</th>
+<td>A10</td>
+<td>14</td>
+<td>I/O</td>
+<td>22</td>
+<td>A10</td>
+<th>30</th>
+<td>DQ8</td>
+<td>58</td>
+<td>I/O</td>
+<td>42</td>
+<td>DQ8</td>
 </tr><tr>
-<th><p>7</p></th>
-<td><p>A9</p></td>
-<td><p>13</p></td>
-<td><p>I/O</p></td>
-<td><p>34</p></td>
-<td><p>A9</p></td>
-<th><p>31</p></th>
-<td><p>DQ1</p></td>
-<td><p>46</p></td>
-<td><p>I/O</p></td>
-<td><p>4</p></td>
-<td><p>DQ1</p></td>
+<th>7</th>
+<td>A9</td>
+<td>13</td>
+<td>I/O</td>
+<td>34</td>
+<td>A9</td>
+<th>31</th>
+<td>DQ1</td>
+<td>46</td>
+<td>I/O</td>
+<td>4</td>
+<td>DQ1</td>
 </tr><tr>
-<th><p>8</p></th>
-<td><p>A8</p></td>
-<td><p>12</p></td>
-<td><p>I/O</p></td>
-<td><p>33</p></td>
-<td><p>A8</p></td>
-<th><p>32</p></th>
-<td><p>DQ9</p></td>
-<td><p>57</p></td>
-<td><p>I/O</p></td>
-<td><p>44</p></td>
-<td><p>DQ9</p></td>
+<th>8</th>
+<td>A8</td>
+<td>12</td>
+<td>I/O</td>
+<td>33</td>
+<td>A8</td>
+<th>32</th>
+<td>DQ9</td>
+<td>57</td>
+<td>I/O</td>
+<td>44</td>
+<td>DQ9</td>
 </tr><tr>
-<th><p>9</p></th>
-<td><p>A19</p></td>
-<td><p>25</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>33</p></th>
-<td><p>DQ2</p></td>
-<td><p>43</p></td>
-<td><p>I/O</p></td>
-<td><p>5</p></td>
-<td><p>DQ2</p></td>
+<th>9</th>
+<td>A19</td>
+<td>25</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>33</th>
+<td>DQ2</td>
+<td>43</td>
+<td>I/O</td>
+<td>5</td>
+<td>DQ2</td>
 </tr><tr>
-<th><p>10</p></th>
-<td><p>A20</p></td>
-<td><p>26</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>34</p></th>
-<td><p>DQ10</p></td>
-<td><p>56</p></td>
-<td><p>I/O</p></td>
-<td><p>45</p></td>
-<td><p>DQ10</p></td>
+<th>10</th>
+<td>A20</td>
+<td>26</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>34</th>
+<td>DQ10</td>
+<td>56</td>
+<td>I/O</td>
+<td>45</td>
+<td>DQ10</td>
 </tr><tr>
-<th><p>11</p></th>
-<td><p>WE#</p></td>
-<td><p>30</p></td>
-<td><p>I/O</p></td>
-<td><p>16</p></td>
-<td><p>!WE</p></td>
-<th><p>35</p></th>
-<td><p>DQ3</p></td>
-<td><p>42</p></td>
-<td><p>I/O</p></td>
-<td><p>7</p></td>
-<td><p>DQ3</p></td>
+<th>11</th>
+<td>WE#</td>
+<td>30</td>
+<td>I/O</td>
+<td>16</td>
+<td>!WE</td>
+<th>35</th>
+<td>DQ3</td>
+<td>42</td>
+<td>I/O</td>
+<td>7</td>
+<td>DQ3</td>
 </tr><tr>
-<th><p>12</p></th>
-<td><p>RP#</p></td>
-<td><p>72</p></td>
-<td><p>DONE</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>36</p></th>
-<td><p>DQ11</p></td>
-<td><p>52</p></td>
-<td><p>I/O</p></td>
-<td><p>47</p></td>
-<td><p>DQ11</p></td>
+<th>12</th>
+<td>RP#</td>
+<td>72</td>
+<td>DONE</td>
+<td colspan="2">-</td>
+<th>36</th>
+<td>DQ11</td>
+<td>52</td>
+<td>I/O</td>
+<td>47</td>
+<td>DQ11</td>
 </tr><tr>
-<th><p>13</p></th>
-<td><p>VCCW</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>1,3,...</p></td>
-<td><p>VCC,VCCQ</p></td>
-<th><p>37</p></th>
-<td><p>VCC</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>1,3,...</p></td>
-<td><p>VCC,VCCQ</p></td>
+<th>13</th>
+<td>VCCW</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>1,3,...</td>
+<td>VCC,VCCQ</td>
+<th>37</th>
+<td>VCC</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>1,3,...</td>
+<td>VCC,VCCQ</td>
 </tr><tr>
-<th><p>14</p></th>
-<td><p>WP#</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>1,3,...</p></td>
-<td><p>VCC,VCCQ</p></td>
-<th><p>38</p></th>
-<td><p>DQ4</p></td>
-<td><p>41</p></td>
-<td><p>I/O</p></td>
-<td><p>8</p></td>
-<td><p>DQ4</p></td>
+<th>14</th>
+<td>WP#</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>1,3,...</td>
+<td>VCC,VCCQ</td>
+<th>38</th>
+<td>DQ4</td>
+<td>41</td>
+<td>I/O</td>
+<td>8</td>
+<td>DQ4</td>
 </tr><tr>
-<th><p>15</p></th>
-<td><p>RY/BY#</p></td>
-<td colspan="2"><p>-</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>39</p></th>
-<td><p>DQ12</p></td>
-<td><p>51</p></td>
-<td><p>I/O</p></td>
-<td><p>48</p></td>
-<td><p>DQ12</p></td>
+<th>15</th>
+<td>RY/BY#</td>
+<td colspan="2">-</td>
+<td colspan="2">-</td>
+<th>39</th>
+<td>DQ12</td>
+<td>51</td>
+<td>I/O</td>
+<td>48</td>
+<td>DQ12</td>
 </tr><tr>
-<th><p>16</p></th>
-<td><p>A18</p></td>
-<td><p>24</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>40</p></th>
-<td><p>DQ5</p></td>
-<td><p>39</p></td>
-<td><p>I/O, GCK3</p></td>
-<td><p>10</p></td>
-<td><p>DQ5</p></td>
+<th>16</th>
+<td>A18</td>
+<td>24</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>40</th>
+<td>DQ5</td>
+<td>39</td>
+<td>I/O, GCK3</td>
+<td>10</td>
+<td>DQ5</td>
 </tr><tr>
-<th><p>17</p></th>
-<td><p>A17</p></td>
-<td><p>23</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>41</p></th>
-<td><p>DQ13</p></td>
-<td><p>50</p></td>
-<td><p>I/O</p></td>
-<td><p>50</p></td>
-<td><p>DQ13</p></td>
+<th>17</th>
+<td>A17</td>
+<td>23</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>41</th>
+<td>DQ13</td>
+<td>50</td>
+<td>I/O</td>
+<td>50</td>
+<td>DQ13</td>
 </tr><tr>
-<th><p>18</p></th>
-<td><p>A7</p></td>
-<td><p>11</p></td>
-<td><p>I/O, TMS</p></td>
-<td><p>32</p></td>
-<td><p>A7</p></td>
-<th><p>42</p></th>
-<td><p>DQ6</p></td>
-<td><p>33</p></td>
-<td><p>I/O, GCK2</p></td>
-<td><p>11</p></td>
-<td><p>DQ6</p></td>
+<th>18</th>
+<td>A7</td>
+<td>11</td>
+<td>I/O, TMS</td>
+<td>32</td>
+<td>A7</td>
+<th>42</th>
+<td>DQ6</td>
+<td>33</td>
+<td>I/O, GCK2</td>
+<td>11</td>
+<td>DQ6</td>
 </tr><tr>
-<th><p>19</p></th>
-<td><p>A6</p></td>
-<td><p>10</p></td>
-<td><p>I/O</p></td>
-<td><p>31</p></td>
-<td><p>A6</p></td>
-<th><p>43</p></th>
-<td><p>DQ14</p></td>
-<td><p>49</p></td>
-<td><p>I/O</p></td>
-<td><p>51</p></td>
-<td><p>DQ14</p></td>
+<th>19</th>
+<td>A6</td>
+<td>10</td>
+<td>I/O</td>
+<td>31</td>
+<td>A6</td>
+<th>43</th>
+<td>DQ14</td>
+<td>49</td>
+<td>I/O</td>
+<td>51</td>
+<td>DQ14</td>
 </tr><tr>
-<th><p>20</p></th>
-<td><p>A5</p></td>
-<td><p>9</p></td>
-<td><p>I/O</p></td>
-<td><p>30</p></td>
-<td><p>A5</p></td>
-<th><p>44</p></th>
-<td><p>DQ7</p></td>
-<td><p>32</p></td>
-<td><p>I/O</p></td>
-<td><p>13</p></td>
-<td><p>DQ7</p></td>
+<th>20</th>
+<td>A5</td>
+<td>9</td>
+<td>I/O</td>
+<td>30</td>
+<td>A5</td>
+<th>44</th>
+<td>DQ7</td>
+<td>32</td>
+<td>I/O</td>
+<td>13</td>
+<td>DQ7</td>
 </tr><tr>
-<th><p>21</p></th>
-<td><p>A4</p></td>
-<td><p>7</p></td>
-<td><p>I/O, TCK</p></td>
-<td><p>29</p></td>
-<td><p>A4</p></td>
-<th><p>45</p></th>
-<td><p>DQ15/A-1</p></td>
-<td><p>48</p></td>
-<td><p>I/O</p></td>
-<td><p>53</p></td>
-<td><p>DQ15</p></td>
+<th>21</th>
+<td>A4</td>
+<td>7</td>
+<td>I/O, TCK</td>
+<td>29</td>
+<td>A4</td>
+<th>45</th>
+<td>DQ15/A-1</td>
+<td>48</td>
+<td>I/O</td>
+<td>53</td>
+<td>DQ15</td>
 </tr><tr>
-<th><p>22</p></th>
-<td><p>A3</p></td>
-<td><p>6</p></td>
-<td><p>I/O, TDI</p></td>
-<td><p>26</p></td>
-<td><p>A3</p></td>
-<th><p>46</p></th>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>41,46,...</p></td>
-<td><p>VSS,VSSQ</p></td>
+<th>22</th>
+<td>A3</td>
+<td>6</td>
+<td>I/O, TDI</td>
+<td>26</td>
+<td>A3</td>
+<th>46</th>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
+<td>41,46,...</td>
+<td>VSS,VSSQ</td>
 </tr><tr>
-<th><p>23</p></th>
-<td><p>A2</p></td>
-<td><p>5</p></td>
-<td><p>I/O</p></td>
-<td><p>25</p></td>
-<td><p>A2</p></td>
-<th><p>47</p></th>
-<td><p>BYTE#</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>1,3,...</p></td>
-<td><p>VCC,VCCQ</p></td>
+<th>23</th>
+<td>A2</td>
+<td>5</td>
+<td>I/O</td>
+<td>25</td>
+<td>A2</td>
+<th>47</th>
+<td>BYTE#</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>1,3,...</td>
+<td>VCC,VCCQ</td>
 </tr><tr>
-<th><p>24</p></th>
-<td><p>A1</p></td>
-<td><p>4</p></td>
-<td><p>I/O</p></td>
-<td><p>24</p></td>
-<td><p>A1</p></td>
-<th><p>48</p></th>
-<td><p>A16</p></td>
-<td><p>22</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
+<th>24</th>
+<td>A1</td>
+<td>4</td>
+<td>I/O</td>
+<td>24</td>
+<td>A1</td>
+<th>48</th>
+<td>A16</td>
+<td>22</td>
+<td>I/O</td>
+<td colspan="2">-</td>
 </tr>
 </table>
-<i><u>Table 2</u><br>
+<p><i><u>Table 2</u><br>
 Connections from Flash on Wide-Boy64 AGB to Spartan FPGA and DRAM</i></p>
 <h4 id="agbdram">DRAM</h4>
-<p><table border="1">
+<table class="default">
 <tr>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th colspan="2"><p>To FPGA</p></th>
-<th colspan="2"><p>To Flash</p></th>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th colspan="2"><p>To FPGA</p></th>
-<th colspan="2"><p>To Flash</p></th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th colspan="2">To FPGA</th>
+<th colspan="2">To Flash</th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th colspan="2">To FPGA</th>
+<th colspan="2">To Flash</th>
 </tr><tr>
-<th><p>1</p></th>
-<td><p>VCC</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
-<th><p>28</p></th>
-<td><p>VSS</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
+<th>1</th>
+<td>VCC</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
+<th>28</th>
+<td>VSS</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
 </tr><tr>
-<th><p>2</p></th>
-<td><p>DQ0</p></td>
-<td><p>47</p></td>
-<td><p>I/O</p></td>
-<td><p>29</p></td>
-<td><p>DQ0</p></td>
-<th><p>29</p></th>
-<td><p>A4</p></td>
-<td><p>7</p></td>
-<td><p>I/O, TCK</p></td>
-<td><p>21</p></td>
-<td><p>A4</p></td>
+<th>2</th>
+<td>DQ0</td>
+<td>47</td>
+<td>I/O</td>
+<td>29</td>
+<td>DQ0</td>
+<th>29</th>
+<td>A4</td>
+<td>7</td>
+<td>I/O, TCK</td>
+<td>21</td>
+<td>A4</td>
 </tr><tr>
-<th><p>3</p></th>
-<td><p>VCCQ</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
-<th><p>30</p></th>
-<td><p>A5</p></td>
-<td><p>9</p></td>
-<td><p>I/O</p></td>
-<td><p>20</p></td>
-<td><p>A5</p></td>
+<th>3</th>
+<td>VCCQ</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
+<th>30</th>
+<td>A5</td>
+<td>9</td>
+<td>I/O</td>
+<td>20</td>
+<td>A5</td>
 </tr><tr>
-<th><p>4</p></th>
-<td><p>DQ1</p></td>
-<td><p>46</p></td>
-<td><p>I/O</p></td>
-<td><p>31</p></td>
-<td><p>DQ1</p></td>
-<th><p>31</p></th>
-<td><p>A6</p></td>
-<td><p>10</p></td>
-<td><p>I/O</p></td>
-<td><p>19</p></td>
-<td><p>A6</p></td>
+<th>4</th>
+<td>DQ1</td>
+<td>46</td>
+<td>I/O</td>
+<td>31</td>
+<td>DQ1</td>
+<th>31</th>
+<td>A6</td>
+<td>10</td>
+<td>I/O</td>
+<td>19</td>
+<td>A6</td>
 </tr><tr>
-<th><p>5</p></th>
-<td><p>DQ2</p></td>
-<td><p>43</p></td>
-<td><p>I/O</p></td>
-<td><p>33</p></td>
-<td><p>DQ2</p></td>
-<th><p>32</p></th>
-<td><p>A7</p></td>
-<td><p>11</p></td>
-<td><p>I/O, TMS</p></td>
-<td><p>18</p></td>
-<td><p>A7</p></td>
+<th>5</th>
+<td>DQ2</td>
+<td>43</td>
+<td>I/O</td>
+<td>33</td>
+<td>DQ2</td>
+<th>32</th>
+<td>A7</td>
+<td>11</td>
+<td>I/O, TMS</td>
+<td>18</td>
+<td>A7</td>
 </tr><tr>
-<th><p>6</p></th>
-<td><p>VSSQ</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<th><p>33</p></th>
-<td><p>A8</p></td>
-<td><p>12</p></td>
-<td><p>I/O</p></td>
-<td><p>8</p></td>
-<td><p>A8</p></td>
+<th>6</th>
+<td>VSSQ</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
+<th>33</th>
+<td>A8</td>
+<td>12</td>
+<td>I/O</td>
+<td>8</td>
+<td>A8</td>
 </tr><tr>
-<th><p>7</p></th>
-<td><p>DQ3</p></td>
-<td><p>42</p></td>
-<td><p>I/O</p></td>
-<td><p>35</p></td>
-<td><p>DQ3</p></td>
-<th><p>34</p></th>
-<td><p>A9</p></td>
-<td><p>13</p></td>
-<td><p>I/O</p></td>
-<td><p>7</p></td>
-<td><p>A9</p></td>
+<th>7</th>
+<td>DQ3</td>
+<td>42</td>
+<td>I/O</td>
+<td>35</td>
+<td>DQ3</td>
+<th>34</th>
+<td>A9</td>
+<td>13</td>
+<td>I/O</td>
+<td>7</td>
+<td>A9</td>
 </tr><tr>
-<th><p>8</p></th>
-<td><p>DQ4</p></td>
-<td><p>41</p></td>
-<td><p>I/O</p></td>
-<td><p>38</p></td>
-<td><p>DQ4</p></td>
-<th><p>35</p></th>
-<td><p>A11</p></td>
-<td><p>15</p></td>
-<td><p>I/O</p></td>
-<td><p>5</p></td>
-<td><p>A11</p></td>
+<th>8</th>
+<td>DQ4</td>
+<td>41</td>
+<td>I/O</td>
+<td>38</td>
+<td>DQ4</td>
+<th>35</th>
+<td>A11</td>
+<td>15</td>
+<td>I/O</td>
+<td>5</td>
+<td>A11</td>
 </tr><tr>
-<th><p>9</p></th>
-<td><p>VCCQ</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
-<th><p>36</p></th>
-<td><p>NC</p></td>
-<td><p>16</p></td>
-<td><p>I/O</p></td>
-<td><p>4</p></td>
-<td><p>A12</p></td>
+<th>9</th>
+<td>VCCQ</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
+<th>36</th>
+<td>NC</td>
+<td>16</td>
+<td>I/O</td>
+<td>4</td>
+<td>A12</td>
 </tr><tr>
-<th><p>10</p></th>
-<td><p>DQ5</p></td>
-<td><p>39</p></td>
-<td><p>I/O, GCK3</p></td>
-<td><p>40</p></td>
-<td><p>DQ5</p></td>
-<th><p>37</p></th>
-<td><p>CKE</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
+<th>10</th>
+<td>DQ5</td>
+<td>39</td>
+<td>I/O, GCK3</td>
+<td>40</td>
+<td>DQ5</td>
+<th>37</th>
+<td>CKE</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
 </tr><tr>
-<th><p>11</p></th>
-<td><p>DQ6</p></td>
-<td><p>33</p></td>
-<td><p>I/O, GCK2</p></td>
-<td><p>42</p></td>
-<td><p>DQ6</p></td>
-<th><p>38</p></th>
-<td><p>CLK</p></td>
-<td><p>106</p></td>
-<td><p>I/O, GCK6 (DOUT)</p></td>
-<td colspan="2"><p>-</p></td>
+<th>11</th>
+<td>DQ6</td>
+<td>33</td>
+<td>I/O, GCK2</td>
+<td>42</td>
+<td>DQ6</td>
+<th>38</th>
+<td>CLK</td>
+<td>106</td>
+<td>I/O, GCK6 (DOUT)</td>
+<td colspan="2">-</td>
 </tr><tr>
-<th><p>12</p></th>
-<td><p>VSSQ</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<th><p>39</p></th>
-<td><p>UDQM</p></td>
-<td><p>113</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
+<th>12</th>
+<td>VSSQ</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
+<th>39</th>
+<td>UDQM</td>
+<td>113</td>
+<td>I/O</td>
+<td colspan="2">-</td>
 </tr><tr>
-<th><p>13</p></th>
-<td><p>DQ7</p></td>
-<td><p>32</p></td>
-<td><p>I/O</p></td>
-<td><p>44</p></td>
-<td><p>DQ7</p></td>
-<th><p>40</p></th>
-<td><p>NC</p></td>
-<td colspan="2"><p>-</p></td>
-<td colspan="2"><p>-</p></td>
+<th>13</th>
+<td>DQ7</td>
+<td>32</td>
+<td>I/O</td>
+<td>44</td>
+<td>DQ7</td>
+<th>40</th>
+<td>NC</td>
+<td colspan="2">-</td>
+<td colspan="2">-</td>
 </tr><tr>
-<th><p>14</p></th>
-<td><p>VCC</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
-<th><p>41</p></th>
-<td><p>VSS</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
+<th>14</th>
+<td>VCC</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
+<th>41</th>
+<td>VSS</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
 </tr><tr>
-<th><p>15</p></th>
-<td><p>LDQM</p></td>
-<td><p>115</p></td>
-<td><p>I/O (CS1)</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>42</p></th>
-<td><p>DQ8</p></td>
-<td><p>58</p></td>
-<td><p>I/O</p></td>
-<td><p>30</p></td>
-<td><p>DQ8</p></td>
+<th>15</th>
+<td>LDQM</td>
+<td>115</td>
+<td>I/O (CS1)</td>
+<td colspan="2">-</td>
+<th>42</th>
+<td>DQ8</td>
+<td>58</td>
+<td>I/O</td>
+<td>30</td>
+<td>DQ8</td>
 </tr><tr>
-<th><p>16</p></th>
-<td><p>!WE</p></td>
-<td><p>30</p></td>
-<td><p>I/O</p></td>
-<td><p>11</p></td>
-<td><p>WE#</p></td>
-<th><p>43</p></th>
-<td><p>VCCQ</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
+<th>16</th>
+<td>!WE</td>
+<td>30</td>
+<td>I/O</td>
+<td>11</td>
+<td>WE#</td>
+<th>43</th>
+<td>VCCQ</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
 </tr><tr>
-<th><p>17</p></th>
-<td><p>!CAS</p></td>
-<td><p>29</p></td>
-<td><p>I/O</p></td>
-<td><p>28</p></td>
-<td><p>OE#</p></td>
-<th><p>44</p></th>
-<td><p>DQ9</p></td>
-<td><p>57</p></td>
-<td><p>I/O</p></td>
-<td><p>32</p></td>
-<td><p>DQ9</p></td>
+<th>17</th>
+<td>!CAS</td>
+<td>29</td>
+<td>I/O</td>
+<td>28</td>
+<td>OE#</td>
+<th>44</th>
+<td>DQ9</td>
+<td>57</td>
+<td>I/O</td>
+<td>32</td>
+<td>DQ9</td>
 </tr><tr>
-<th><p>18</p></th>
-<td><p>!RAS</p></td>
-<td><p>111</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>45</p></th>
-<td><p>DQ10</p></td>
-<td><p>56</p></td>
-<td><p>I/O</p></td>
-<td><p>34</p></td>
-<td><p>DQ10</p></td>
+<th>18</th>
+<td>!RAS</td>
+<td>111</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>45</th>
+<td>DQ10</td>
+<td>56</td>
+<td>I/O</td>
+<td>34</td>
+<td>DQ10</td>
 </tr><tr>
-<th><p>19</p></th>
-<td><p>!CS</p></td>
-<td><p>31</p></td>
-<td><p>I/O</p></td>
-<td colspan="2"><p>-</p></td>
-<th><p>46</p></th>
-<td><p>VSSQ</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
+<th>19</th>
+<td>!CS</td>
+<td>31</td>
+<td>I/O</td>
+<td colspan="2">-</td>
+<th>46</th>
+<td>VSSQ</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
 </tr><tr>
-<th><p>20</p></th>
-<td><p>BA0(A13)</p></td>
-<td><p>19</p></td>
-<td><p>I/O</p></td>
-<td><p>3</p></td>
-<td><p>A13</p></td>
-<th><p>47</p></th>
-<td><p>DQ11</p></td>
-<td><p>52</p></td>
-<td><p>I/O</p></td>
-<td><p>36</p></td>
-<td><p>DQ11</p></td>
+<th>20</th>
+<td>BA0(A13)</td>
+<td>19</td>
+<td>I/O</td>
+<td>3</td>
+<td>A13</td>
+<th>47</th>
+<td>DQ11</td>
+<td>52</td>
+<td>I/O</td>
+<td>36</td>
+<td>DQ11</td>
 </tr><tr>
-<th><p>21</p></th>
-<td><p>BA1(A12)</p></td>
-<td><p>20</p></td>
-<td><p>I/O</p></td>
-<td><p>2</p></td>
-<td><p>A14</p></td>
-<th><p>48</p></th>
-<td><p>DQ12</p></td>
-<td><p>51</p></td>
-<td><p>I/O</p></td>
-<td><p>39</p></td>
-<td><p>DQ12</p></td>
+<th>21</th>
+<td>BA1(A12)</td>
+<td>20</td>
+<td>I/O</td>
+<td>2</td>
+<td>A14</td>
+<th>48</th>
+<td>DQ12</td>
+<td>51</td>
+<td>I/O</td>
+<td>39</td>
+<td>DQ12</td>
 </tr><tr>
-<th><p>22</p></th>
-<td><p>A10</p></td>
-<td><p>14</p></td>
-<td><p>I/O</p></td>
-<td><p>6</p></td>
-<td><p>A10</p></td>
-<th><p>49</p></th>
-<td><p>VCCQ</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
+<th>22</th>
+<td>A10</td>
+<td>14</td>
+<td>I/O</td>
+<td>6</td>
+<td>A10</td>
+<th>49</th>
+<td>VCCQ</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
 </tr><tr>
-<th><p>23</p></th>
-<td><p>A0</p></td>
-<td><p>3</p></td>
-<td><p>I/O</p></td>
-<td><p>25</p></td>
-<td><p>A0</p></td>
-<th><p>50</p></th>
-<td><p>DQ13</p></td>
-<td><p>50</p></td>
-<td><p>I/O</p></td>
-<td><p>41</p></td>
-<td><p>DQ13</p></td>
+<th>23</th>
+<td>A0</td>
+<td>3</td>
+<td>I/O</td>
+<td>25</td>
+<td>A0</td>
+<th>50</th>
+<td>DQ13</td>
+<td>50</td>
+<td>I/O</td>
+<td>41</td>
+<td>DQ13</td>
 </tr><tr>
-<th><p>24</p></th>
-<td><p>A1</p></td>
-<td><p>4</p></td>
-<td><p>I/O</p></td>
-<td><p>24</p></td>
-<td><p>A1</p></td>
-<th><p>51</p></th>
-<td><p>DQ14</p></td>
-<td><p>49</p></td>
-<td><p>I/O</p></td>
-<td><p>43</p></td>
-<td><p>DQ14</p></td>
+<th>24</th>
+<td>A1</td>
+<td>4</td>
+<td>I/O</td>
+<td>24</td>
+<td>A1</td>
+<th>51</th>
+<td>DQ14</td>
+<td>49</td>
+<td>I/O</td>
+<td>43</td>
+<td>DQ14</td>
 </tr><tr>
-<th><p>25</p></th>
-<td><p>A2</p></td>
-<td><p>5</p></td>
-<td><p>I/O</p></td>
-<td><p>23</p></td>
-<td><p>A2</p></td>
-<th><p>52</p></th>
-<td><p>VSSQ</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
+<th>25</th>
+<td>A2</td>
+<td>5</td>
+<td>I/O</td>
+<td>23</td>
+<td>A2</td>
+<th>52</th>
+<td>VSSQ</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
 </tr><tr>
-<th><p>26</p></th>
-<td><p>A3</p></td>
-<td><p>6</p></td>
-<td><p>I/O, TDI</p></td>
-<td><p>22</p></td>
-<td><p>A3</p></td>
-<th><p>53</p></th>
-<td><p>DQ15</p></td>
-<td><p>48</p></td>
-<td><p>I/O</p></td>
-<td><p>45</p></td>
-<td><p>DQ15/A-1</p></td>
+<th>26</th>
+<td>A3</td>
+<td>6</td>
+<td>I/O, TDI</td>
+<td>22</td>
+<td>A3</td>
+<th>53</th>
+<td>DQ15</td>
+<td>48</td>
+<td>I/O</td>
+<td>45</td>
+<td>DQ15/A-1</td>
 </tr><tr>
-<th><p>27</p></th>
-<td><p>VCC</p></td>
-<td><p>144,...</p></td>
-<td><p>VCC</p></td>
-<td><p>37,13,...</p></td>
-<td><p>VCC,VCCW</p></td>
-<th><p>54</p></th>
-<td><p>VSS</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
-<td><p>27,...</p></td>
-<td><p>GND</p></td>
+<th>27</th>
+<td>VCC</td>
+<td>144,...</td>
+<td>VCC</td>
+<td>37,13,...</td>
+<td>VCC,VCCW</td>
+<th>54</th>
+<td>VSS</td>
+<td>27,...</td>
+<td>GND</td>
+<td>27,...</td>
+<td>GND</td>
 </tr>
 </table>
-<i><u>Table 3</u><br>
+<p><i><u>Table 3</u><br>
 Connections from DRAM on Wide-Boy64 AGB to Spartan FPGA and Flash</i></p>
 <h3 id="agbvolt">Voltages measured on regulators on Wide-Boy64 AGB</h3>
-<p><table border="1">
+<table class="default">
 <tr>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th><p>U3</p></th>
-<th><p>U4</p></th>
-<th><p>U5</p></th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th>U3</th>
+<th>U4</th>
+<th>U5</th>
 </tr><tr>
-<th><p>1</p></th>
-<td><p>VIN</p></td>
-<td><p>11.5 V</p></td>
-<td><p>11.5 V</p></td>
-<td><p>5 V</p></td>
+<th>1</th>
+<td>VIN</td>
+<td>11.5 V</td>
+<td>11.5 V</td>
+<td>5 V</td>
 </tr><tr>
-<th><p>2</p></th>
-<td><p>VO</p></td>
-<td><p>2.5 V</p></td>
-<td><p>5 V</p></td>
-<td><p>3.3 V</p></td>
+<th>2</th>
+<td>VO</td>
+<td>2.5 V</td>
+<td>5 V</td>
+<td>3.3 V</td>
 </tr><tr>
-<th><p>3</p></th>
-<td><p>GND</p></td>
-<td><p>0 V</p></td>
-<td><p>0 V</p></td>
-<td><p>0 V</p></td>
+<th>3</th>
+<td>GND</td>
+<td>0 V</td>
+<td>0 V</td>
+<td>0 V</td>
 </tr><tr>
-<th><p>4</p></th>
-<td><p>VADJ/VC</p></td>
-<td><p>1.25 V</p></td>
-<td><p>2.5 V</p></td>
-<td><p>1.25 V</p></td>
+<th>4</th>
+<td>VADJ/VC</td>
+<td>1.25 V</td>
+<td>2.5 V</td>
+<td>1.25 V</td>
 </tr>
 </table>
-<i><u>Table 4</u><br>
+<p><i><u>Table 4</u><br>
 Voltages measured at the three voltage regulators at the bottom of the Wide-Boy64 AGB PCB</i></p>
 <h3 id="agbcartcon">N64 cartridge connector on Wide-Boy64 AGB</h3>
-<p><table border="1">
+<table class="default">
 <tr>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th><p>To CN2</p></th>
-<th colspan="3"><p>To component pin#</p></th>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th><p>To CN2</p></th>
-<th colspan="3"><p>To component pin#</p></th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th>To CN2</th>
+<th colspan="3">To component pin#</th>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th>To CN2</th>
+<th colspan="3">To component pin#</th>
 </tr><tr>
-<th><p>1</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
-<th><p>26</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
+<th>1</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
+<th>26</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
 </tr><tr>
-<th><p>2</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
-<th><p>27</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
+<th>2</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
+<th>27</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
 </tr><tr>
-<th><p>3</p></th>
-<td><p>AD15</p></td>
-<td><p>3</p></td>
-<td><p>FPGA</p></td>
-<td><p>139</p></td>
-<td><p>I/O</p></td>
-<th><p>28</p></th>
-<td><p>AD0</p></td>
-<td><p>4</p></td>
-<td><p>FPGA</p></td>
-<td><p>140</p></td>
-<td><p>I/O</p></td>
+<th>3</th>
+<td>AD15</td>
+<td>3</td>
+<td>FPGA</td>
+<td>139</td>
+<td>I/O</td>
+<th>28</th>
+<td>AD0</td>
+<td>4</td>
+<td>FPGA</td>
+<td>140</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>4</p></th>
-<td><p>AD14</p></td>
-<td><p>5</p></td>
-<td><p>FPGA</p></td>
-<td><p>136</p></td>
-<td><p>I/O</p></td>
-<th><p>29</p></th>
-<td><p>AD1</p></td>
-<td><p>6</p></td>
-<td><p>FPGA</p></td>
-<td><p>138</p></td>
-<td><p>I/O</p></td>
+<th>4</th>
+<td>AD14</td>
+<td>5</td>
+<td>FPGA</td>
+<td>136</td>
+<td>I/O</td>
+<th>29</th>
+<td>AD1</td>
+<td>6</td>
+<td>FPGA</td>
+<td>138</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>5</p></th>
-<td><p>AD13</p></td>
-<td><p>7</p></td>
-<td><p>FPGA</p></td>
-<td><p>134</p></td>
-<td><p>I/O</p></td>
-<th><p>30</p></th>
-<td><p>AD2</p></td>
-<td><p>8</p></td>
-<td><p>FPGA</p></td>
-<td><p>135</p></td>
-<td><p>I/O</p></td>
+<th>5</th>
+<td>AD13</td>
+<td>7</td>
+<td>FPGA</td>
+<td>134</td>
+<td>I/O</td>
+<th>30</th>
+<td>AD2</td>
+<td>8</td>
+<td>FPGA</td>
+<td>135</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>6</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
-<th><p>31</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
+<th>6</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
+<th>31</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
 </tr><tr>
-<th><p>7</p></th>
-<td><p>AD12</p></td>
-<td><p>11</p></td>
-<td><p>FPGA</p></td>
-<td><p>132</p></td>
-<td><p>I/O</p></td>
-<th><p>32</p></th>
-<td><p>AD3</p></td>
-<td><p>12</p></td>
-<td><p>FPGA</p></td>
-<td><p>133</p></td>
-<td><p>I/O</p></td>
+<th>7</th>
+<td>AD12</td>
+<td>11</td>
+<td>FPGA</td>
+<td>132</td>
+<td>I/O</td>
+<th>32</th>
+<td>AD3</td>
+<td>12</td>
+<td>FPGA</td>
+<td>133</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>8</p></th>
-<td><p>!WRITE</p></td>
-<td><p>13</p></td>
-<td><p>FPGA</p></td>
-<td><p>2</p></td>
-<td><p>I/O, GCK1</p></td>
-<th><p>33</p></th>
-<td><p>ALE_L</p></td>
-<td><p>14</p></td>
-<td><p>FPGA</p></td>
-<td><p>143</p></td>
-<td><p>I/O, GCK8</p></td>
+<th>8</th>
+<td>!WRITE</td>
+<td>13</td>
+<td>FPGA</td>
+<td>2</td>
+<td>I/O, GCK1</td>
+<th>33</th>
+<td>ALE_L</td>
+<td>14</td>
+<td>FPGA</td>
+<td>143</td>
+<td>I/O, GCK8</td>
 </tr><tr>
-<th><p>9</p></th>
-<td><p>VCC*</p></td>
-<td><p>15,16</p></td>
-<td><p>EEPROM;CIC;U6</p></td>
-<td><p>8;1,16;5</p></td>
-<td><p>VCC</p></td>
-<th><p>34</p></th>
-<td><p>VCC*</p></td>
-<td><p>15,16</p></td>
-<td><p>EEPROM;CIC;U6</p></td>
-<td><p>8;1,16;5</p></td>
-<td><p>VCC</p></td>
+<th>9</th>
+<td>VCC*</td>
+<td>15,16</td>
+<td>EEPROM;CIC;U6</td>
+<td>8;1,16;5</td>
+<td>VCC</td>
+<th>34</th>
+<td>VCC*</td>
+<td>15,16</td>
+<td>EEPROM;CIC;U6</td>
+<td>8;1,16;5</td>
+<td>VCC</td>
 </tr><tr>
-<th><p>10</p></th>
-<td><p>!READ</p></td>
-<td><p>17</p></td>
-<td><p>FPGA</p></td>
-<td><p>142</p></td>
-<td><p>I/O</p></td>
-<th><p>35</p></th>
-<td><p>ALE_H</p></td>
-<td><p>18</p></td>
-<td><p>FPGA</p></td>
-<td><p>141</p></td>
-<td><p>I/O</p></td>
+<th>10</th>
+<td>!READ</td>
+<td>17</td>
+<td>FPGA</td>
+<td>142</td>
+<td>I/O</td>
+<th>35</th>
+<td>ALE_H</td>
+<td>18</td>
+<td>FPGA</td>
+<td>141</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>11</p></th>
-<td><p>AD11</p></td>
-<td><p>19</p></td>
-<td><p>FPGA</p></td>
-<td><p>130</p></td>
-<td><p>I/O</p></td>
-<th><p>36</p></th>
-<td><p>AD4</p></td>
-<td><p>20</p></td>
-<td><p>FPGA</p></td>
-<td><p>131</p></td>
-<td><p>I/O</p></td>
+<th>11</th>
+<td>AD11</td>
+<td>19</td>
+<td>FPGA</td>
+<td>130</td>
+<td>I/O</td>
+<th>36</th>
+<td>AD4</td>
+<td>20</td>
+<td>FPGA</td>
+<td>131</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>12</p></th>
-<td><p>AD10</p></td>
-<td><p>21</p></td>
-<td><p>FPGA</p></td>
-<td><p>126</p></td>
-<td><p>I/O</p></td>
-<th><p>37</p></th>
-<td><p>AD5</p></td>
-<td><p>22</p></td>
-<td><p>FPGA</p></td>
-<td><p>129</p></td>
-<td><p>I/O</p></td>
+<th>12</th>
+<td>AD10</td>
+<td>21</td>
+<td>FPGA</td>
+<td>126</td>
+<td>I/O</td>
+<th>37</th>
+<td>AD5</td>
+<td>22</td>
+<td>FPGA</td>
+<td>129</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>13</p></th>
-<td><p>12V</p></td>
-<td><p>23,24</p></td>
-<td><p>Regs U3;U4</p></td>
-<td><p>1</p></td>
-<td><p>VIN</p></td>
-<th><p>38</p></th>
-<td><p>12V</p></td>
-<td><p>23,24</p></td>
-<td><p>Regs U3;U4</p></td>
-<td><p>1</p></td>
-<td><p>VIN</p></td>
+<th>13</th>
+<td>12V</td>
+<td>23,24</td>
+<td>Regs U3;U4</td>
+<td>1</td>
+<td>VIN</td>
+<th>38</th>
+<td>12V</td>
+<td>23,24</td>
+<td>Regs U3;U4</td>
+<td>1</td>
+<td>VIN</td>
 </tr><tr>
-<th><p>14</p></th>
-<td><p>NC</p></td>
-<td><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-<th><p>39</p></th>
-<td><p>NC</p></td>
-<td><p>-</p></td>
-<td colspan="3"><p>-</p></td>
+<th>14</th>
+<td>NC</td>
+<td>-</td>
+<td colspan="3">-</td>
+<th>39</th>
+<td>NC</td>
+<td>-</td>
+<td colspan="3">-</td>
 </tr><tr>
-<th><p>15</p></th>
-<td><p>AD9</p></td>
-<td><p>25</p></td>
-<td><p>FPGA</p></td>
-<td><p>124</p></td>
-<td><p>I/O</p></td>
-<th><p>40</p></th>
-<td><p>AD6</p></td>
-<td><p>26</p></td>
-<td><p>FPGA</p></td>
-<td><p>125</p></td>
-<td><p>I/O</p></td>
+<th>15</th>
+<td>AD9</td>
+<td>25</td>
+<td>FPGA</td>
+<td>124</td>
+<td>I/O</td>
+<th>40</th>
+<td>AD6</td>
+<td>26</td>
+<td>FPGA</td>
+<td>125</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>16</p></th>
-<td><p>AD8</p></td>
-<td><p>27</p></td>
-<td><p>FPGA</p></td>
-<td><p>122</p></td>
-<td><p>I/O</p></td>
-<th><p>41</p></th>
-<td><p>AD7</p></td>
-<td><p>28</p></td>
-<td><p>FPGA</p></td>
-<td><p>123</p></td>
-<td><p>I/O</p></td>
+<th>16</th>
+<td>AD8</td>
+<td>27</td>
+<td>FPGA</td>
+<td>122</td>
+<td>I/O</td>
+<th>41</th>
+<td>AD7</td>
+<td>28</td>
+<td>FPGA</td>
+<td>123</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>17</p></th>
-<td><p>VCC*</p></td>
-<td><p>15,16</p></td>
-<td><p>EEPROM;CIC;U6</p></td>
-<td><p>8;1,16;5</p></td>
-<td><p>VCC</p></td>
-<th><p>42</p></th>
-<td><p>VCC*</p></td>
-<td><p>15,16</p></td>
-<td><p>EEPROM;CIC;U6</p></td>
-<td><p>8;1,16;5</p></td>
-<td><p>VCC</p></td>
+<th>17</th>
+<td>VCC*</td>
+<td>15,16</td>
+<td>EEPROM;CIC;U6</td>
+<td>8;1,16;5</td>
+<td>VCC</td>
+<th>42</th>
+<td>VCC*</td>
+<td>15,16</td>
+<td>EEPROM;CIC;U6</td>
+<td>8;1,16;5</td>
+<td>VCC</td>
 </tr><tr>
-<th><p>18</p></th>
-<td><p>CIC_DIO</p></td>
-<td><p>29</p></td>
-<td><p>CIC</p></td>
-<td><p>15</p></td>
-<td><p>DIO</p></td>
-<th><p>43</p></th>
-<td><p>CIC_DCLK</p></td>
-<td><p>30</p></td>
-<td><p>CIC</p></td>
-<td><p>14</p></td>
-<td><p>DCLK</p></td>
+<th>18</th>
+<td>CIC_DIO</td>
+<td>29</td>
+<td>CIC</td>
+<td>15</td>
+<td>DIO</td>
+<th>43</th>
+<td>CIC_DCLK</td>
+<td>30</td>
+<td>CIC</td>
+<td>14</td>
+<td>DCLK</td>
 </tr><tr>
-<th><p>19</p></th>
-<td><p>1.6MHZ</p></td>
-<td><p>31</p></td>
-<td><p>EEPROM;CIC</p></td>
-<td><p>3;11</p></td>
-<td><p>CLK_IN</p></td>
-<th><p>44</p></th>
-<td><p>JTAG_CLK_R4300</p></td>
-<td><p>32</p></td>
-<td><p>FPGA</p></td>
-<td><p>120</p></td>
-<td><p>I/O</p></td>
+<th>19</th>
+<td>1.6MHZ</td>
+<td>31</td>
+<td>EEPROM;CIC</td>
+<td>3;11</td>
+<td>CLK_IN</td>
+<th>44</th>
+<td>JTAG_CLK_R4300</td>
+<td>32</td>
+<td>FPGA</td>
+<td>120</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>20</p></th>
-<td><p>!COLD_RESET</p></td>
-<td><p>33</p></td>
-<td><p>FPGA;EEPROM;CIC</p></td>
-<td><p>121;6;9</p></td>
-<td><p>I/O;!RST</p></td>
-<th><p>45</p></th>
-<td><p>!NMI_R4300</p></td>
-<td><p>34</p></td>
-<td><p>FPGA</p></td>
-<td><p>119</p></td>
-<td><p>I/O</p></td>
+<th>20</th>
+<td>!COLD_RESET</td>
+<td>33</td>
+<td>FPGA;EEPROM;CIC</td>
+<td>121;6;9</td>
+<td>I/O;!RST</td>
+<th>45</th>
+<td>!NMI_R4300</td>
+<td>34</td>
+<td>FPGA</td>
+<td>119</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>21</p></th>
-<td><p>S_DAT</p></td>
-<td><p>35</p></td>
-<td><p>EEPROM</p></td>
-<td><p>5</p></td>
-<td><p>DATA</p></td>
-<th><p>46</p></th>
-<td><p>VIDEO_CLK</p></td>
-<td><p>36</p></td>
-<td><p>FPGA</p></td>
-<td><p>117</p></td>
-<td><p>I/O</p></td>
+<th>21</th>
+<td>S_DAT</td>
+<td>35</td>
+<td>EEPROM</td>
+<td>5</td>
+<td>DATA</td>
+<th>46</th>
+<td>VIDEO_CLK</td>
+<td>36</td>
+<td>FPGA</td>
+<td>117</td>
+<td>I/O</td>
 </tr><tr>
-<th><p>22</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
-<th><p>47</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
+<th>22</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
+<th>47</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
 </tr><tr>
-<th><p>23</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
-<th><p>48</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
+<th>23</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
+<th>48</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
 </tr><tr>
-<th><p>24</p></th>
-<td><p>LAUDIO</p></td>
-<td><p>39</p></td>
-<td colspan="3"><p>Cap C6</p></td>
-<th><p>49</p></th>
-<td><p>RAUDIO</p></td>
-<td><p>40</p></td>
-<td colspan="3"><p>Cap C7</p></td>
+<th>24</th>
+<td>LAUDIO</td>
+<td>39</td>
+<td colspan="3">Cap C6</td>
+<th>49</th>
+<td>RAUDIO</td>
+<td>40</td>
+<td colspan="3">Cap C7</td>
 </tr><tr>
-<th><p>25</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
-<th><p>50</p></th>
-<td><p>GND</p></td>
-<td><p>1,2,9,10,37,38</p></td>
-<td colspan="3"><p>GND</p></td>
+<th>25</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
+<th>50</th>
+<td>GND</td>
+<td>1,2,9,10,37,38</td>
+<td colspan="3">GND</td>
 </tr>
 </table>
-<i><u>Table 5</u><br>
+<p><i><u>Table 5</u><br>
 Connections from N64 cartridge connector on Wide-Boy64 AGB to CN2 and other components.<br>
 * VCC on the N64 cartridge connector is 3.3 V, but it is not connected to the VCC of the FPGA or the AGB CPU.
 It only powers the CIC, EEPROM and Reset Controller (U6).</i></p>
 <h3 id="agbfpgacon">FPGA pin connections on Wide-Boy64 AGB</h3>
-<p><table border="1">
+<table class="default">
 <tr>
-<th><p><i>Pin#</i></p></th>
-<th><p>Name</p></th>
-<th><p>Usage</p></th>
-<th colspan="3"><p>To component pin#</p></th>
-<th colspan="3"><p>To component pin#</p></th>
-<th colspan="3"><p>To component pin#</p></th>
-</tr><tr>
-<th><p>1</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>2</p></th>
-<td><p>I/O, GCK1</p></td>
-<td><p>N64 !WRITE</p></td>
-<td><p>N64 connector</p></td>
-<td><p>8</p></td>
-<td><p>!WRITE</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>3</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A0</p></td>
-<td><p>Flash</p></td>
-<td><p>25</p></td>
-<td><p>A0</p></td>
-<td><p>DRAM</p></td>
-<td><p>23</p></td>
-<td><p>A0</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>4</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A1</p></td>
-<td><p>Flash</p></td>
-<td><p>24</p></td>
-<td><p>A1</p></td>
-<td><p>DRAM</p></td>
-<td><p>24</p></td>
-<td><p>A1</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>5</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A2</p></td>
-<td><p>Flash</p></td>
-<td><p>23</p></td>
-<td><p>A2</p></td>
-<td><p>DRAM</p></td>
-<td><p>25</p></td>
-<td><p>A2</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>6</p></th>
-<td><p>I/O, TDI</p></td>
-<td><p>Flash/DRAM A3</p></td>
-<td><p>Flash</p></td>
-<td><p>22</p></td>
-<td><p>A3</p></td>
-<td><p>DRAM</p></td>
-<td><p>26</p></td>
-<td><p>A3</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>7</p></th>
-<td><p>I/O, TCK</p></td>
-<td><p>Flash/DRAM A4</p></td>
-<td><p>Flash</p></td>
-<td><p>21</p></td>
-<td><p>A4</p></td>
-<td><p>DRAM</p></td>
-<td><p>29</p></td>
-<td><p>A4</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>8</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>9</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A5</p></td>
-<td><p>Flash</p></td>
-<td><p>20</p></td>
-<td><p>A5</p></td>
-<td><p>DRAM</p></td>
-<td><p>30</p></td>
-<td><p>A5</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>10</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A6</p></td>
-<td><p>Flash</p></td>
-<td><p>19</p></td>
-<td><p>A6</p></td>
-<td><p>DRAM</p></td>
-<td><p>31</p></td>
-<td><p>A6</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>11</p></th>
-<td><p>I/O, TMS</p></td>
-<td><p>Flash/DRAM A7</p></td>
-<td><p>Flash</p></td>
-<td><p>18</p></td>
-<td><p>A7</p></td>
-<td><p>DRAM</p></td>
-<td><p>32</p></td>
-<td><p>A7</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>12</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A8</p></td>
-<td><p>Flash</p></td>
-<td><p>8</p></td>
-<td><p>A8</p></td>
-<td><p>DRAM</p></td>
-<td><p>33</p></td>
-<td><p>A8</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>13</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A9</p></td>
-<td><p>Flash</p></td>
-<td><p>7</p></td>
-<td><p>A9</p></td>
-<td><p>DRAM</p></td>
-<td><p>34</p></td>
-<td><p>A9</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>14</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A10</p></td>
-<td><p>Flash</p></td>
-<td><p>6</p></td>
-<td><p>A10</p></td>
-<td><p>DRAM</p></td>
-<td><p>22</p></td>
-<td><p>A10</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>15</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A11</p></td>
-<td><p>Flash</p></td>
-<td><p>5</p></td>
-<td><p>A11</p></td>
-<td><p>DRAM</p></td>
-<td><p>35</p></td>
-<td><p>A11</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>16</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A12</p></td>
-<td><p>Flash</p></td>
-<td><p>4</p></td>
-<td><p>A12</p></td>
-<td><p>DRAM</p></td>
-<td><p>36</p></td>
-<td><p>NC</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>17</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>18</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>19</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM A13</p></td>
-<td><p>Flash</p></td>
-<td><p>3</p></td>
-<td><p>A13</p></td>
-<td><p>DRAM</p></td>
-<td><p>20</p></td>
-<td><p>BA0(A13)</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>20</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A14; DRAM A12</p></td>
-<td><p>Flash</p></td>
-<td><p>2</p></td>
-<td><p>A14</p></td>
-<td><p>DRAM</p></td>
-<td><p>21</p></td>
-<td><p>BA1(A12)</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>21</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A15</p></td>
-<td><p>Flash</p></td>
-<td><p>1</p></td>
-<td><p>A15</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>22</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A16</p></td>
-<td><p>Flash</p></td>
-<td><p>48</p></td>
-<td><p>A16</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>23</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A17</p></td>
-<td><p>Flash</p></td>
-<td><p>17</p></td>
-<td><p>A17</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>24</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A18</p></td>
-<td><p>Flash</p></td>
-<td><p>16</p></td>
-<td><p>A18</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>25</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A19</p></td>
-<td><p>Flash</p></td>
-<td><p>9</p></td>
-<td><p>A19</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>26</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash A20</p></td>
-<td><p>Flash</p></td>
-<td><p>10</p></td>
-<td><p>A20</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>27</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>28</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash !CE</p></td>
-<td><p>Flash</p></td>
-<td><p>26</p></td>
-<td><p>CE#</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>29</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash !OE; DRAM !CAS</p></td>
-<td><p>Flash</p></td>
-<td><p>28</p></td>
-<td><p>OE#</p></td>
-<td><p>DRAM</p></td>
-<td><p>17</p></td>
-<td><p>!CAS</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>30</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM !WE</p></td>
-<td><p>Flash</p></td>
-<td><p>11</p></td>
-<td><p>WE#</p></td>
-<td><p>DRAM</p></td>
-<td><p>16</p></td>
-<td><p>!WE</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>31</p></th>
-<td><p>I/O</p></td>
-<td><p>DRAM !CS</p></td>
-<td colspan="3"><p>-</p></td>
-<td><p>DRAM</p></td>
-<td><p>19</p></td>
-<td><p>!CS</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>32</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ7</p></td>
-<td><p>Flash</p></td>
-<td><p>44</p></td>
-<td><p>DQ7</p></td>
-<td><p>DRAM</p></td>
-<td><p>13</p></td>
-<td><p>DQ7</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>33</p></th>
-<td><p>I/O, GCK2</p></td>
-<td><p>Flash/DRAM DQ6</p></td>
-<td><p>Flash</p></td>
-<td><p>42</p></td>
-<td><p>DQ6</p></td>
-<td><p>DRAM</p></td>
-<td><p>11</p></td>
-<td><p>DQ6</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>34</p></th>
-<td><p>M1</p></td>
-<td><p>Cfg. Mode (NC; M1=high)</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>35</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>36</p></th>
-<td><p>M0</p></td>
-<td><p>Cfg. Mode (M0=low)</p></td>
-<td colspan="3"><p>GND</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>37</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>38</p></th>
-<td><p>!PWRDWN</p></td>
-<td><p>(Never Power Down)</p></td>
-<td colspan="3"><p>VCC</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>39</p></th>
-<td><p>I/O, GCK3</p></td>
-<td><p>Flash/DRAM DQ5</p></td>
-<td><p>Flash</p></td>
-<td><p>40</p></td>
-<td><p>DQ5</p></td>
-<td><p>DRAM</p></td>
-<td><p>10</p></td>
-<td><p>DQ5</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>40</p></th>
-<td><p>I/O (HDC)</p></td>
-<td><p>?</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>Testpoint CP1</p></td>
-</tr><tr>
-<th><p>41</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ4</p></td>
-<td><p>Flash</p></td>
-<td><p>38</p></td>
-<td><p>DQ4</p></td>
-<td><p>DRAM</p></td>
-<td><p>8</p></td>
-<td><p>DQ4</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>42</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ3</p></td>
-<td><p>Flash</p></td>
-<td><p>35</p></td>
-<td><p>DQ3</p></td>
-<td><p>DRAM</p></td>
-<td><p>7</p></td>
-<td><p>DQ3</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>43</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ2</p></td>
-<td><p>Flash</p></td>
-<td><p>33</p></td>
-<td><p>DQ2</p></td>
-<td><p>DRAM</p></td>
-<td><p>5</p></td>
-<td><p>DQ2</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>44</p></th>
-<td><p>I/O (!LDC)</p></td>
-<td><p>PROM !CE</p></td>
-<td><p>PROM</p></td>
-<td><p>4</p></td>
-<td><p>!CE</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>45</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>46</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ1</p></td>
-<td><p>Flash</p></td>
-<td><p>31</p></td>
-<td><p>DQ1</p></td>
-<td><p>DRAM</p></td>
-<td><p>4</p></td>
-<td><p>DQ1</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>47</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ0</p></td>
-<td><p>Flash</p></td>
-<td><p>29</p></td>
-<td><p>DQ0</p></td>
-<td><p>DRAM</p></td>
-<td><p>2</p></td>
-<td><p>DQ0</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>48</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ15</p></td>
-<td><p>Flash</p></td>
-<td><p>45</p></td>
-<td><p>DQ15/A-1</p></td>
-<td><p>DRAM</p></td>
-<td><p>53</p></td>
-<td><p>DQ15</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>49</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ14</p></td>
-<td><p>Flash</p></td>
-<td><p>43</p></td>
-<td><p>DQ14</p></td>
-<td><p>DRAM</p></td>
-<td><p>51</p></td>
-<td><p>DQ14</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>50</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ13</p></td>
-<td><p>Flash</p></td>
-<td><p>41</p></td>
-<td><p>DQ13</p></td>
-<td><p>DRAM</p></td>
-<td><p>50</p></td>
-<td><p>DQ13</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>51</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ12</p></td>
-<td><p>Flash</p></td>
-<td><p>39</p></td>
-<td><p>DQ12</p></td>
-<td><p>DRAM</p></td>
-<td><p>48</p></td>
-<td><p>DQ12</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>52</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ11</p></td>
-<td><p>Flash</p></td>
-<td><p>36</p></td>
-<td><p>DQ11</p></td>
-<td><p>DRAM</p></td>
-<td><p>47</p></td>
-<td><p>DQ11</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>53</p></th>
-<td><p>I/O (!INIT)</p></td>
-<td><p>PROM OE</p></td>
-<td><p>PROM</p></td>
-<td><p>3</p></td>
-<td><p>OE/!RESET</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>54</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>55</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>56</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ10</p></td>
-<td><p>Flash</p></td>
-<td><p>34</p></td>
-<td><p>DQ10</p></td>
-<td><p>DRAM</p></td>
-<td><p>45</p></td>
-<td><p>DQ10</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>57</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ9</p></td>
-<td><p>Flash</p></td>
-<td><p>32</p></td>
-<td><p>DQ9</p></td>
-<td><p>DRAM</p></td>
-<td><p>44</p></td>
-<td><p>DQ9</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>58</p></th>
-<td><p>I/O</p></td>
-<td><p>Flash/DRAM DQ8</p></td>
-<td><p>Flash</p></td>
-<td><p>30</p></td>
-<td><p>DQ8</p></td>
-<td><p>DRAM</p></td>
-<td><p>42</p></td>
-<td><p>DQ8</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>59</p></th>
-<td><p>I/O</p></td>
-<td><p>AGB-AMP !Standby?</p></td>
-<td><p>AGB-AMP</p></td>
-<td><p>12</p></td>
-<td><p>!STB</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>60</p></th>
-<td><p>I/O</p></td>
-<td><p>?</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>Testpoint CP2</p></td>
-</tr><tr>
-<th><p>61</p></th>
-<td><p>I/O</p></td>
-<td><p>Button B</p></td>
-<td><p>CPU</p></td>
-<td><p>5</p></td>
-<td><p>P1</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>3</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>62</p></th>
-<td><p>I/O</p></td>
-<td><p>Button A</p></td>
-<td><p>CPU</p></td>
-<td><p>4</p></td>
-<td><p>P0</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>4</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>63</p></th>
-<td><p>I/O</p></td>
-<td><p>Button R</p></td>
-<td><p>CPU</p></td>
-<td><p>3</p></td>
-<td><p>P8</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>5</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>64</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>65</p></th>
-<td><p>I/O</p></td>
-<td><p>Button Start</p></td>
-<td><p>CPU</p></td>
-<td><p>127</p></td>
-<td><p>P3</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>6</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>66</p></th>
-<td><p>I/O</p></td>
-<td><p>Button Select</p></td>
-<td><p>CPU</p></td>
-<td><p>126</p></td>
-<td><p>P2</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>7</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>67</p></th>
-<td><p>I/O</p></td>
-<td><p>Button D-Right</p></td>
-<td><p>CPU</p></td>
-<td><p>123</p></td>
-<td><p>P4</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>8</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>68</p></th>
-<td><p>I/O</p></td>
-<td><p>Button D-Down</p></td>
-<td><p>CPU</p></td>
-<td><p>122</p></td>
-<td><p>P7</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>9</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>69</p></th>
-<td><p>I/O</p></td>
-<td><p>Button D-Left</p></td>
-<td><p>CPU</p></td>
-<td><p>121</p></td>
-<td><p>P5</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>10</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>70</p></th>
-<td><p>I/O, GCK4</p></td>
-<td><p>48.681812 MHz</p></td>
-<td><p>MX8350 (U15)</p></td>
-<td><p>3</p></td>
-<td><p>VCLK</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>71</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>72</p></th>
-<td><p>DONE</p></td>
-<td><p>Flash !RESET</p></td>
-<td><p>Flash</p></td>
-<td><p>12</p></td>
-<td><p>RP#</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>Testpoint CP5</p></td>
-</tr><tr>
-<th><p>73</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>74</p></th>
-<td><p>!PROGRAM</p></td>
-<td><p>48.681812 MHz Enable</p></td>
-<td><p>MX8350 (U15)</p></td>
-<td><p>14</p></td>
-<td><p>!RESET</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>75</p></th>
-<td><p>I/O (D7)</p></td>
-<td><p>Button D-Up</p></td>
-<td><p>CPU</p></td>
-<td><p>120</p></td>
-<td><p>P6</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>11</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>76</p></th>
-<td><p>I/O, GCK5</p></td>
-<td><p>?</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>Testpoint CP3</p></td>
-</tr><tr>
-<th><p>77</p></th>
-<td><p>I/O</p></td>
-<td><p>Button L</p></td>
-<td><p>CPU</p></td>
-<td><p>119</p></td>
-<td><p>P9</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>12</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>78</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD VSHD Enable?</p></td>
-<td><p>CPU</p></td>
-<td><p>118</p></td>
-<td><p>R10</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>13</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>79</p></th>
-<td><p>I/O (D6)</p></td>
-<td><p>AGB-REG Switch?</p></td>
-<td><p>CPU</p></td>
-<td><p>108</p></td>
-<td><p>REVC</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>14</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>80</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Mode?</p></td>
-<td><p>CPU</p></td>
-<td><p>107</p></td>
-<td><p>MOD</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>15</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>81</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>82</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD SPS?</p></td>
-<td><p>CPU</p></td>
-<td><p>106</p></td>
-<td><p>SPS</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>16</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>83</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD CLS?</p></td>
-<td><p>CPU</p></td>
-<td><p>105</p></td>
-<td><p>CLS</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>17</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>84</p></th>
-<td><p>I/O (D5)</p></td>
-<td><p>LCD SPL?</p></td>
-<td><p>CPU</p></td>
-<td><p>104</p></td>
-<td><p>SPL</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>18</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>85</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data B1</p></td>
-<td><p>CPU</p></td>
-<td><p>101</p></td>
-<td><p>LDB1</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>20</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>86</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data B2</p></td>
-<td><p>CPU</p></td>
-<td><p>100</p></td>
-<td><p>LDB2</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>21</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>87</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data B3</p></td>
-<td><p>CPU</p></td>
-<td><p>99</p></td>
-<td><p>LDB3</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>22</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>88</p></th>
-<td><p>I/O (D4)</p></td>
-<td><p>LCD Data B4</p></td>
-<td><p>CPU</p></td>
-<td><p>98</p></td>
-<td><p>LDB4</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>23</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>89</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data B5</p></td>
-<td><p>CPU</p></td>
-<td><p>97</p></td>
-<td><p>LDB5</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>24</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>90</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>91</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>92</p></th>
-<td><p>I/O (D3)</p></td>
-<td><p>LCD Data G1</p></td>
-<td><p>CPU</p></td>
-<td><p>96</p></td>
-<td><p>LDG1</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>25</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>93</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data G2</p></td>
-<td><p>CPU</p></td>
-<td><p>95</p></td>
-<td><p>LDG2</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>26</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>94</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data G3</p></td>
-<td><p>CPU</p></td>
-<td><p>94</p></td>
-<td><p>LDG3</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>27</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>95</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data G4</p></td>
-<td><p>CPU</p></td>
-<td><p>93</p></td>
-<td><p>LDG4</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>29</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>96</p></th>
-<td><p>I/O (D2)</p></td>
-<td><p>LCD Data G5</p></td>
-<td><p>CPU</p></td>
-<td><p>92</p></td>
-<td><p>LDG5</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>30</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>97</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data R1</p></td>
-<td><p>CPU</p></td>
-<td><p>91</p></td>
-<td><p>LDR1</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>31</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>98</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data R2</p></td>
-<td><p>CPU</p></td>
-<td><p>90</p></td>
-<td><p>LDR2</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>32</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>99</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data R3</p></td>
-<td><p>CPU</p></td>
-<td><p>89</p></td>
-<td><p>LDR3</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>33</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>100</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>101</p></th>
-<td><p>I/O (D1)</p></td>
-<td><p>LCD Data R4</p></td>
-<td><p>CPU</p></td>
-<td><p>88</p></td>
-<td><p>LDR4</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>34</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>102</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD Data R5</p></td>
-<td><p>CPU</p></td>
-<td><p>87</p></td>
-<td><p>LDR5</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>35</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>103</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD PS?</p></td>
-<td><p>CPU</p></td>
-<td><p>86</p></td>
-<td><p>PS</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>37</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>104</p></th>
-<td><p>I/O</p></td>
-<td><p>LCD LP?</p></td>
-<td><p>CPU</p></td>
-<td><p>85</p></td>
-<td><p>LP</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>38</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>105</p></th>
-<td><p>I/O (D0, DIN)</p></td>
-<td><p>PROM DATA</p></td>
-<td><p>PROM</p></td>
-<td><p>1</p></td>
-<td><p>DATA</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>106</p></th>
-<td><p>I/O, GCK6 (DOUT)</p></td>
-<td><p>DRAM CLK</p></td>
-<td colspan="3"><p>-</p></td>
-<td><p>DRAM</p></td>
-<td><p>38</p></td>
-<td><p>CLK</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>107</p></th>
-<td><p>CCLK</p></td>
-<td><p>PROM CLK</p></td>
-<td><p>PROM</p></td>
-<td><p>2</p></td>
-<td><p>CLK</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>108</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>109</p></th>
-<td><p>O, TDO</p></td>
-<td><p>?</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>Testpoint CP4</p></td>
-</tr><tr>
-<th><p>110</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>111</p></th>
-<td><p>I/O</p></td>
-<td><p>DRAM !RAS</p></td>
-<td colspan="3"><p>-</p></td>
-<td><p>DRAM</p></td>
-<td><p>18</p></td>
-<td><p>!RAS</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>112</p></th>
-<td><p>I/O, GCK7</p></td>
-<td><p>LCD Data Clock?</p></td>
-<td><p>CPU</p></td>
-<td><p>84</p></td>
-<td><p>DCK</p></td>
-<td><p>CN3</p></td>
-<td colspan="2"><p>39</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>113</p></th>
-<td><p>I/O</p></td>
-<td><p>DRAM UDQM</p></td>
-<td colspan="3"><p>-</p></td>
-<td><p>DRAM</p></td>
-<td><p>39</p></td>
-<td><p>UDQM</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>114</p></th>
-<td><p>I/O</p></td>
-<td><p>CPU !RESET</p></td>
-<td><p>D4</p></td>
-<td colspan="2"><p>K</p></td>
-<td colspan="3"><p>R6</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>115</p></th>
-<td><p>I/O (CS1)</p></td>
-<td><p>DRAM LDQM</p></td>
-<td colspan="3"><p>-</p></td>
-<td><p>DRAM</p></td>
-<td><p>15</p></td>
-<td><p>LDQM</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>116</p></th>
-<td><p>I/O</p></td>
-<td><p>Voltage stable?</p></td>
-<td><p>U6</p></td>
-<td><p>4</p></td>
-<td><p>VOUT</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>117</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 VIDEO_CLK</p></td>
-<td><p>N64 connector</p></td>
-<td><p>46</p></td>
-<td><p>VIDEO_CLK</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>118</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>119</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 !NMI_R4300</p></td>
-<td><p>N64 connector</p></td>
-<td><p>45</p></td>
-<td><p>!NMI_R4300</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>120</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 JTAG_CLK_R4300</p></td>
-<td><p>N64 connector</p></td>
-<td><p>44</p></td>
-<td><p>!JTAG_CLK_R4300</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>121</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 !COLD_RESET</p></td>
-<td><p>N64 connector</p></td>
-<td><p>20</p></td>
-<td><p>!COLD_RESET</p></td>
-<td><p>EEPROM</p></td>
-<td><p>6</p></td>
-<td><p>!RST</p></td>
-<td><p>CIC</p></td>
-<td><p>9</p></td>
-<td><p>!RST</p></td>
-</tr><tr>
-<th><p>122</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD8</p></td>
-<td><p>N64 connector</p></td>
-<td><p>16</p></td>
-<td><p>AD8</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>123</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD7</p></td>
-<td><p>N64 connector</p></td>
-<td><p>41</p></td>
-<td><p>AD7</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>124</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD9</p></td>
-<td><p>N64 connector</p></td>
-<td><p>15</p></td>
-<td><p>AD9</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>125</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD6</p></td>
-<td><p>N64 connector</p></td>
-<td><p>40</p></td>
-<td><p>AD6</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>126</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD10</p></td>
-<td><p>N64 connector</p></td>
-<td><p>12</p></td>
-<td><p>AD10</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>127</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>128</p></th>
-<td colspan="11"><p>VCC</p></td>
-</tr><tr>
-<th><p>129</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD5</p></td>
-<td><p>N64 connector</p></td>
-<td><p>37</p></td>
-<td><p>AD5</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>130</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD11</p></td>
-<td><p>N64 connector</p></td>
-<td><p>11</p></td>
-<td><p>AD11</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>131</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD4</p></td>
-<td><p>N64 connector</p></td>
-<td><p>36</p></td>
-<td><p>AD4</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>132</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD12</p></td>
-<td><p>N64 connector</p></td>
-<td><p>7</p></td>
-<td><p>AD12</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>133</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD3</p></td>
-<td><p>N64 connector</p></td>
-<td><p>32</p></td>
-<td><p>AD3</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>134</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD13</p></td>
-<td><p>N64 connector</p></td>
-<td><p>5</p></td>
-<td><p>AD13</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>135</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD2</p></td>
-<td><p>N64 connector</p></td>
-<td><p>30</p></td>
-<td><p>AD2</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>136</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD14</p></td>
-<td><p>N64 connector</p></td>
-<td><p>4</p></td>
-<td><p>AD14</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>137</p></th>
-<td colspan="11"><p>GND</p></td>
-</tr><tr>
-<th><p>138</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD1</p></td>
-<td><p>N64 connector</p></td>
-<td><p>29</p></td>
-<td><p>AD1</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>139</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD15</p></td>
-<td><p>N64 connector</p></td>
-<td><p>3</p></td>
-<td><p>AD15</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>140</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 AD0</p></td>
-<td><p>N64 connector</p></td>
-<td><p>28</p></td>
-<td><p>AD0</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>141</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 ALE_H</p></td>
-<td><p>N64 connector</p></td>
-<td><p>35</p></td>
-<td><p>ALE_H</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>142</p></th>
-<td><p>I/O</p></td>
-<td><p>N64 !READ</p></td>
-<td><p>N64 connector</p></td>
-<td><p>10</p></td>
-<td><p>!READ</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>143</p></th>
-<td><p>I/O, GCK8</p></td>
-<td><p>N64 ALE_L</p></td>
-<td><p>N64 connector</p></td>
-<td><p>33</p></td>
-<td><p>ALE_L</p></td>
-<td colspan="3"><p>-</p></td>
-<td colspan="3"><p>-</p></td>
-</tr><tr>
-<th><p>144</p></th>
-<td colspan="11"><p>VCC</p></td>
+<th><i>Pin#</i></th>
+<th>Name</th>
+<th>Usage</th>
+<th colspan="3">To component pin#</th>
+<th colspan="3">To component pin#</th>
+<th colspan="3">To component pin#</th>
+</tr><tr>
+<th>1</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>2</th>
+<td>I/O, GCK1</td>
+<td>N64 !WRITE</td>
+<td>N64 connector</td>
+<td>8</td>
+<td>!WRITE</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>3</th>
+<td>I/O</td>
+<td>Flash/DRAM A0</td>
+<td>Flash</td>
+<td>25</td>
+<td>A0</td>
+<td>DRAM</td>
+<td>23</td>
+<td>A0</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>4</th>
+<td>I/O</td>
+<td>Flash/DRAM A1</td>
+<td>Flash</td>
+<td>24</td>
+<td>A1</td>
+<td>DRAM</td>
+<td>24</td>
+<td>A1</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>5</th>
+<td>I/O</td>
+<td>Flash/DRAM A2</td>
+<td>Flash</td>
+<td>23</td>
+<td>A2</td>
+<td>DRAM</td>
+<td>25</td>
+<td>A2</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>6</th>
+<td>I/O, TDI</td>
+<td>Flash/DRAM A3</td>
+<td>Flash</td>
+<td>22</td>
+<td>A3</td>
+<td>DRAM</td>
+<td>26</td>
+<td>A3</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>7</th>
+<td>I/O, TCK</td>
+<td>Flash/DRAM A4</td>
+<td>Flash</td>
+<td>21</td>
+<td>A4</td>
+<td>DRAM</td>
+<td>29</td>
+<td>A4</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>8</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>9</th>
+<td>I/O</td>
+<td>Flash/DRAM A5</td>
+<td>Flash</td>
+<td>20</td>
+<td>A5</td>
+<td>DRAM</td>
+<td>30</td>
+<td>A5</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>10</th>
+<td>I/O</td>
+<td>Flash/DRAM A6</td>
+<td>Flash</td>
+<td>19</td>
+<td>A6</td>
+<td>DRAM</td>
+<td>31</td>
+<td>A6</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>11</th>
+<td>I/O, TMS</td>
+<td>Flash/DRAM A7</td>
+<td>Flash</td>
+<td>18</td>
+<td>A7</td>
+<td>DRAM</td>
+<td>32</td>
+<td>A7</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>12</th>
+<td>I/O</td>
+<td>Flash/DRAM A8</td>
+<td>Flash</td>
+<td>8</td>
+<td>A8</td>
+<td>DRAM</td>
+<td>33</td>
+<td>A8</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>13</th>
+<td>I/O</td>
+<td>Flash/DRAM A9</td>
+<td>Flash</td>
+<td>7</td>
+<td>A9</td>
+<td>DRAM</td>
+<td>34</td>
+<td>A9</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>14</th>
+<td>I/O</td>
+<td>Flash/DRAM A10</td>
+<td>Flash</td>
+<td>6</td>
+<td>A10</td>
+<td>DRAM</td>
+<td>22</td>
+<td>A10</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>15</th>
+<td>I/O</td>
+<td>Flash/DRAM A11</td>
+<td>Flash</td>
+<td>5</td>
+<td>A11</td>
+<td>DRAM</td>
+<td>35</td>
+<td>A11</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>16</th>
+<td>I/O</td>
+<td>Flash A12</td>
+<td>Flash</td>
+<td>4</td>
+<td>A12</td>
+<td>DRAM</td>
+<td>36</td>
+<td>NC</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>17</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>18</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>19</th>
+<td>I/O</td>
+<td>Flash/DRAM A13</td>
+<td>Flash</td>
+<td>3</td>
+<td>A13</td>
+<td>DRAM</td>
+<td>20</td>
+<td>BA0(A13)</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>20</th>
+<td>I/O</td>
+<td>Flash A14; DRAM A12</td>
+<td>Flash</td>
+<td>2</td>
+<td>A14</td>
+<td>DRAM</td>
+<td>21</td>
+<td>BA1(A12)</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>21</th>
+<td>I/O</td>
+<td>Flash A15</td>
+<td>Flash</td>
+<td>1</td>
+<td>A15</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>22</th>
+<td>I/O</td>
+<td>Flash A16</td>
+<td>Flash</td>
+<td>48</td>
+<td>A16</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>23</th>
+<td>I/O</td>
+<td>Flash A17</td>
+<td>Flash</td>
+<td>17</td>
+<td>A17</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>24</th>
+<td>I/O</td>
+<td>Flash A18</td>
+<td>Flash</td>
+<td>16</td>
+<td>A18</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>25</th>
+<td>I/O</td>
+<td>Flash A19</td>
+<td>Flash</td>
+<td>9</td>
+<td>A19</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>26</th>
+<td>I/O</td>
+<td>Flash A20</td>
+<td>Flash</td>
+<td>10</td>
+<td>A20</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>27</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>28</th>
+<td>I/O</td>
+<td>Flash !CE</td>
+<td>Flash</td>
+<td>26</td>
+<td>CE#</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>29</th>
+<td>I/O</td>
+<td>Flash !OE; DRAM !CAS</td>
+<td>Flash</td>
+<td>28</td>
+<td>OE#</td>
+<td>DRAM</td>
+<td>17</td>
+<td>!CAS</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>30</th>
+<td>I/O</td>
+<td>Flash/DRAM !WE</td>
+<td>Flash</td>
+<td>11</td>
+<td>WE#</td>
+<td>DRAM</td>
+<td>16</td>
+<td>!WE</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>31</th>
+<td>I/O</td>
+<td>DRAM !CS</td>
+<td colspan="3">-</td>
+<td>DRAM</td>
+<td>19</td>
+<td>!CS</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>32</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ7</td>
+<td>Flash</td>
+<td>44</td>
+<td>DQ7</td>
+<td>DRAM</td>
+<td>13</td>
+<td>DQ7</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>33</th>
+<td>I/O, GCK2</td>
+<td>Flash/DRAM DQ6</td>
+<td>Flash</td>
+<td>42</td>
+<td>DQ6</td>
+<td>DRAM</td>
+<td>11</td>
+<td>DQ6</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>34</th>
+<td>M1</td>
+<td>Cfg. Mode (NC; M1=high)</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>35</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>36</th>
+<td>M0</td>
+<td>Cfg. Mode (M0=low)</td>
+<td colspan="3">GND</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>37</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>38</th>
+<td>!PWRDWN</td>
+<td>(Never Power Down)</td>
+<td colspan="3">VCC</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>39</th>
+<td>I/O, GCK3</td>
+<td>Flash/DRAM DQ5</td>
+<td>Flash</td>
+<td>40</td>
+<td>DQ5</td>
+<td>DRAM</td>
+<td>10</td>
+<td>DQ5</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>40</th>
+<td>I/O (HDC)</td>
+<td>?</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+<td colspan="3">Testpoint CP1</td>
+</tr><tr>
+<th>41</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ4</td>
+<td>Flash</td>
+<td>38</td>
+<td>DQ4</td>
+<td>DRAM</td>
+<td>8</td>
+<td>DQ4</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>42</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ3</td>
+<td>Flash</td>
+<td>35</td>
+<td>DQ3</td>
+<td>DRAM</td>
+<td>7</td>
+<td>DQ3</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>43</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ2</td>
+<td>Flash</td>
+<td>33</td>
+<td>DQ2</td>
+<td>DRAM</td>
+<td>5</td>
+<td>DQ2</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>44</th>
+<td>I/O (!LDC)</td>
+<td>PROM !CE</td>
+<td>PROM</td>
+<td>4</td>
+<td>!CE</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>45</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>46</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ1</td>
+<td>Flash</td>
+<td>31</td>
+<td>DQ1</td>
+<td>DRAM</td>
+<td>4</td>
+<td>DQ1</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>47</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ0</td>
+<td>Flash</td>
+<td>29</td>
+<td>DQ0</td>
+<td>DRAM</td>
+<td>2</td>
+<td>DQ0</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>48</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ15</td>
+<td>Flash</td>
+<td>45</td>
+<td>DQ15/A-1</td>
+<td>DRAM</td>
+<td>53</td>
+<td>DQ15</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>49</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ14</td>
+<td>Flash</td>
+<td>43</td>
+<td>DQ14</td>
+<td>DRAM</td>
+<td>51</td>
+<td>DQ14</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>50</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ13</td>
+<td>Flash</td>
+<td>41</td>
+<td>DQ13</td>
+<td>DRAM</td>
+<td>50</td>
+<td>DQ13</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>51</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ12</td>
+<td>Flash</td>
+<td>39</td>
+<td>DQ12</td>
+<td>DRAM</td>
+<td>48</td>
+<td>DQ12</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>52</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ11</td>
+<td>Flash</td>
+<td>36</td>
+<td>DQ11</td>
+<td>DRAM</td>
+<td>47</td>
+<td>DQ11</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>53</th>
+<td>I/O (!INIT)</td>
+<td>PROM OE</td>
+<td>PROM</td>
+<td>3</td>
+<td>OE/!RESET</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>54</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>55</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>56</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ10</td>
+<td>Flash</td>
+<td>34</td>
+<td>DQ10</td>
+<td>DRAM</td>
+<td>45</td>
+<td>DQ10</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>57</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ9</td>
+<td>Flash</td>
+<td>32</td>
+<td>DQ9</td>
+<td>DRAM</td>
+<td>44</td>
+<td>DQ9</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>58</th>
+<td>I/O</td>
+<td>Flash/DRAM DQ8</td>
+<td>Flash</td>
+<td>30</td>
+<td>DQ8</td>
+<td>DRAM</td>
+<td>42</td>
+<td>DQ8</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>59</th>
+<td>I/O</td>
+<td>AGB-AMP !Standby?</td>
+<td>AGB-AMP</td>
+<td>12</td>
+<td>!STB</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>60</th>
+<td>I/O</td>
+<td>?</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+<td colspan="3">Testpoint CP2</td>
+</tr><tr>
+<th>61</th>
+<td>I/O</td>
+<td>Button B</td>
+<td>CPU</td>
+<td>5</td>
+<td>P1</td>
+<td>CN3</td>
+<td colspan="2">3</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>62</th>
+<td>I/O</td>
+<td>Button A</td>
+<td>CPU</td>
+<td>4</td>
+<td>P0</td>
+<td>CN3</td>
+<td colspan="2">4</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>63</th>
+<td>I/O</td>
+<td>Button R</td>
+<td>CPU</td>
+<td>3</td>
+<td>P8</td>
+<td>CN3</td>
+<td colspan="2">5</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>64</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>65</th>
+<td>I/O</td>
+<td>Button Start</td>
+<td>CPU</td>
+<td>127</td>
+<td>P3</td>
+<td>CN3</td>
+<td colspan="2">6</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>66</th>
+<td>I/O</td>
+<td>Button Select</td>
+<td>CPU</td>
+<td>126</td>
+<td>P2</td>
+<td>CN3</td>
+<td colspan="2">7</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>67</th>
+<td>I/O</td>
+<td>Button D-Right</td>
+<td>CPU</td>
+<td>123</td>
+<td>P4</td>
+<td>CN3</td>
+<td colspan="2">8</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>68</th>
+<td>I/O</td>
+<td>Button D-Down</td>
+<td>CPU</td>
+<td>122</td>
+<td>P7</td>
+<td>CN3</td>
+<td colspan="2">9</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>69</th>
+<td>I/O</td>
+<td>Button D-Left</td>
+<td>CPU</td>
+<td>121</td>
+<td>P5</td>
+<td>CN3</td>
+<td colspan="2">10</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>70</th>
+<td>I/O, GCK4</td>
+<td>48.681812 MHz</td>
+<td>MX8350 (U15)</td>
+<td>3</td>
+<td>VCLK</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>71</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>72</th>
+<td>DONE</td>
+<td>Flash !RESET</td>
+<td>Flash</td>
+<td>12</td>
+<td>RP#</td>
+<td colspan="3">-</td>
+<td colspan="3">Testpoint CP5</td>
+</tr><tr>
+<th>73</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>74</th>
+<td>!PROGRAM</td>
+<td>48.681812 MHz Enable</td>
+<td>MX8350 (U15)</td>
+<td>14</td>
+<td>!RESET</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>75</th>
+<td>I/O (D7)</td>
+<td>Button D-Up</td>
+<td>CPU</td>
+<td>120</td>
+<td>P6</td>
+<td>CN3</td>
+<td colspan="2">11</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>76</th>
+<td>I/O, GCK5</td>
+<td>?</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+<td colspan="3">Testpoint CP3</td>
+</tr><tr>
+<th>77</th>
+<td>I/O</td>
+<td>Button L</td>
+<td>CPU</td>
+<td>119</td>
+<td>P9</td>
+<td>CN3</td>
+<td colspan="2">12</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>78</th>
+<td>I/O</td>
+<td>LCD VSHD Enable?</td>
+<td>CPU</td>
+<td>118</td>
+<td>R10</td>
+<td>CN3</td>
+<td colspan="2">13</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>79</th>
+<td>I/O (D6)</td>
+<td>AGB-REG Switch?</td>
+<td>CPU</td>
+<td>108</td>
+<td>REVC</td>
+<td>CN3</td>
+<td colspan="2">14</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>80</th>
+<td>I/O</td>
+<td>LCD Mode?</td>
+<td>CPU</td>
+<td>107</td>
+<td>MOD</td>
+<td>CN3</td>
+<td colspan="2">15</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>81</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>82</th>
+<td>I/O</td>
+<td>LCD SPS?</td>
+<td>CPU</td>
+<td>106</td>
+<td>SPS</td>
+<td>CN3</td>
+<td colspan="2">16</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>83</th>
+<td>I/O</td>
+<td>LCD CLS?</td>
+<td>CPU</td>
+<td>105</td>
+<td>CLS</td>
+<td>CN3</td>
+<td colspan="2">17</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>84</th>
+<td>I/O (D5)</td>
+<td>LCD SPL?</td>
+<td>CPU</td>
+<td>104</td>
+<td>SPL</td>
+<td>CN3</td>
+<td colspan="2">18</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>85</th>
+<td>I/O</td>
+<td>LCD Data B1</td>
+<td>CPU</td>
+<td>101</td>
+<td>LDB1</td>
+<td>CN3</td>
+<td colspan="2">20</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>86</th>
+<td>I/O</td>
+<td>LCD Data B2</td>
+<td>CPU</td>
+<td>100</td>
+<td>LDB2</td>
+<td>CN3</td>
+<td colspan="2">21</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>87</th>
+<td>I/O</td>
+<td>LCD Data B3</td>
+<td>CPU</td>
+<td>99</td>
+<td>LDB3</td>
+<td>CN3</td>
+<td colspan="2">22</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>88</th>
+<td>I/O (D4)</td>
+<td>LCD Data B4</td>
+<td>CPU</td>
+<td>98</td>
+<td>LDB4</td>
+<td>CN3</td>
+<td colspan="2">23</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>89</th>
+<td>I/O</td>
+<td>LCD Data B5</td>
+<td>CPU</td>
+<td>97</td>
+<td>LDB5</td>
+<td>CN3</td>
+<td colspan="2">24</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>90</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>91</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>92</th>
+<td>I/O (D3)</td>
+<td>LCD Data G1</td>
+<td>CPU</td>
+<td>96</td>
+<td>LDG1</td>
+<td>CN3</td>
+<td colspan="2">25</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>93</th>
+<td>I/O</td>
+<td>LCD Data G2</td>
+<td>CPU</td>
+<td>95</td>
+<td>LDG2</td>
+<td>CN3</td>
+<td colspan="2">26</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>94</th>
+<td>I/O</td>
+<td>LCD Data G3</td>
+<td>CPU</td>
+<td>94</td>
+<td>LDG3</td>
+<td>CN3</td>
+<td colspan="2">27</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>95</th>
+<td>I/O</td>
+<td>LCD Data G4</td>
+<td>CPU</td>
+<td>93</td>
+<td>LDG4</td>
+<td>CN3</td>
+<td colspan="2">29</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>96</th>
+<td>I/O (D2)</td>
+<td>LCD Data G5</td>
+<td>CPU</td>
+<td>92</td>
+<td>LDG5</td>
+<td>CN3</td>
+<td colspan="2">30</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>97</th>
+<td>I/O</td>
+<td>LCD Data R1</td>
+<td>CPU</td>
+<td>91</td>
+<td>LDR1</td>
+<td>CN3</td>
+<td colspan="2">31</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>98</th>
+<td>I/O</td>
+<td>LCD Data R2</td>
+<td>CPU</td>
+<td>90</td>
+<td>LDR2</td>
+<td>CN3</td>
+<td colspan="2">32</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>99</th>
+<td>I/O</td>
+<td>LCD Data R3</td>
+<td>CPU</td>
+<td>89</td>
+<td>LDR3</td>
+<td>CN3</td>
+<td colspan="2">33</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>100</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>101</th>
+<td>I/O (D1)</td>
+<td>LCD Data R4</td>
+<td>CPU</td>
+<td>88</td>
+<td>LDR4</td>
+<td>CN3</td>
+<td colspan="2">34</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>102</th>
+<td>I/O</td>
+<td>LCD Data R5</td>
+<td>CPU</td>
+<td>87</td>
+<td>LDR5</td>
+<td>CN3</td>
+<td colspan="2">35</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>103</th>
+<td>I/O</td>
+<td>LCD PS?</td>
+<td>CPU</td>
+<td>86</td>
+<td>PS</td>
+<td>CN3</td>
+<td colspan="2">37</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>104</th>
+<td>I/O</td>
+<td>LCD LP?</td>
+<td>CPU</td>
+<td>85</td>
+<td>LP</td>
+<td>CN3</td>
+<td colspan="2">38</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>105</th>
+<td>I/O (D0, DIN)</td>
+<td>PROM DATA</td>
+<td>PROM</td>
+<td>1</td>
+<td>DATA</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>106</th>
+<td>I/O, GCK6 (DOUT)</td>
+<td>DRAM CLK</td>
+<td colspan="3">-</td>
+<td>DRAM</td>
+<td>38</td>
+<td>CLK</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>107</th>
+<td>CCLK</td>
+<td>PROM CLK</td>
+<td>PROM</td>
+<td>2</td>
+<td>CLK</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>108</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>109</th>
+<td>O, TDO</td>
+<td>?</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+<td colspan="3">Testpoint CP4</td>
+</tr><tr>
+<th>110</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>111</th>
+<td>I/O</td>
+<td>DRAM !RAS</td>
+<td colspan="3">-</td>
+<td>DRAM</td>
+<td>18</td>
+<td>!RAS</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>112</th>
+<td>I/O, GCK7</td>
+<td>LCD Data Clock?</td>
+<td>CPU</td>
+<td>84</td>
+<td>DCK</td>
+<td>CN3</td>
+<td colspan="2">39</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>113</th>
+<td>I/O</td>
+<td>DRAM UDQM</td>
+<td colspan="3">-</td>
+<td>DRAM</td>
+<td>39</td>
+<td>UDQM</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>114</th>
+<td>I/O</td>
+<td>CPU !RESET</td>
+<td>D4</td>
+<td colspan="2">K</td>
+<td colspan="3">R6</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>115</th>
+<td>I/O (CS1)</td>
+<td>DRAM LDQM</td>
+<td colspan="3">-</td>
+<td>DRAM</td>
+<td>15</td>
+<td>LDQM</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>116</th>
+<td>I/O</td>
+<td>Voltage stable?</td>
+<td>U6</td>
+<td>4</td>
+<td>VOUT</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>117</th>
+<td>I/O</td>
+<td>N64 VIDEO_CLK</td>
+<td>N64 connector</td>
+<td>46</td>
+<td>VIDEO_CLK</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>118</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>119</th>
+<td>I/O</td>
+<td>N64 !NMI_R4300</td>
+<td>N64 connector</td>
+<td>45</td>
+<td>!NMI_R4300</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>120</th>
+<td>I/O</td>
+<td>N64 JTAG_CLK_R4300</td>
+<td>N64 connector</td>
+<td>44</td>
+<td>!JTAG_CLK_R4300</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>121</th>
+<td>I/O</td>
+<td>N64 !COLD_RESET</td>
+<td>N64 connector</td>
+<td>20</td>
+<td>!COLD_RESET</td>
+<td>EEPROM</td>
+<td>6</td>
+<td>!RST</td>
+<td>CIC</td>
+<td>9</td>
+<td>!RST</td>
+</tr><tr>
+<th>122</th>
+<td>I/O</td>
+<td>N64 AD8</td>
+<td>N64 connector</td>
+<td>16</td>
+<td>AD8</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>123</th>
+<td>I/O</td>
+<td>N64 AD7</td>
+<td>N64 connector</td>
+<td>41</td>
+<td>AD7</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>124</th>
+<td>I/O</td>
+<td>N64 AD9</td>
+<td>N64 connector</td>
+<td>15</td>
+<td>AD9</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>125</th>
+<td>I/O</td>
+<td>N64 AD6</td>
+<td>N64 connector</td>
+<td>40</td>
+<td>AD6</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>126</th>
+<td>I/O</td>
+<td>N64 AD10</td>
+<td>N64 connector</td>
+<td>12</td>
+<td>AD10</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>127</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>128</th>
+<td colspan="11">VCC</td>
+</tr><tr>
+<th>129</th>
+<td>I/O</td>
+<td>N64 AD5</td>
+<td>N64 connector</td>
+<td>37</td>
+<td>AD5</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>130</th>
+<td>I/O</td>
+<td>N64 AD11</td>
+<td>N64 connector</td>
+<td>11</td>
+<td>AD11</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>131</th>
+<td>I/O</td>
+<td>N64 AD4</td>
+<td>N64 connector</td>
+<td>36</td>
+<td>AD4</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>132</th>
+<td>I/O</td>
+<td>N64 AD12</td>
+<td>N64 connector</td>
+<td>7</td>
+<td>AD12</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>133</th>
+<td>I/O</td>
+<td>N64 AD3</td>
+<td>N64 connector</td>
+<td>32</td>
+<td>AD3</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>134</th>
+<td>I/O</td>
+<td>N64 AD13</td>
+<td>N64 connector</td>
+<td>5</td>
+<td>AD13</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>135</th>
+<td>I/O</td>
+<td>N64 AD2</td>
+<td>N64 connector</td>
+<td>30</td>
+<td>AD2</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>136</th>
+<td>I/O</td>
+<td>N64 AD14</td>
+<td>N64 connector</td>
+<td>4</td>
+<td>AD14</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>137</th>
+<td colspan="11">GND</td>
+</tr><tr>
+<th>138</th>
+<td>I/O</td>
+<td>N64 AD1</td>
+<td>N64 connector</td>
+<td>29</td>
+<td>AD1</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>139</th>
+<td>I/O</td>
+<td>N64 AD15</td>
+<td>N64 connector</td>
+<td>3</td>
+<td>AD15</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>140</th>
+<td>I/O</td>
+<td>N64 AD0</td>
+<td>N64 connector</td>
+<td>28</td>
+<td>AD0</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>141</th>
+<td>I/O</td>
+<td>N64 ALE_H</td>
+<td>N64 connector</td>
+<td>35</td>
+<td>ALE_H</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>142</th>
+<td>I/O</td>
+<td>N64 !READ</td>
+<td>N64 connector</td>
+<td>10</td>
+<td>!READ</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>143</th>
+<td>I/O, GCK8</td>
+<td>N64 ALE_L</td>
+<td>N64 connector</td>
+<td>33</td>
+<td>ALE_L</td>
+<td colspan="3">-</td>
+<td colspan="3">-</td>
+</tr><tr>
+<th>144</th>
+<td colspan="11">VCC</td>
 </tr>
 </table>
-<i><u>Table 6</u><br>
+<p><i><u>Table 6</u><br>
 Connections from Spartan FPGA on Wide-Boy64 AGB to other components</i></p>
 <h2 id="cloning">Schematics and ideas for building a Wide-Boy64 clone</h2>
 <p>I finished drawing the <a href="wideboy64agb_sch.pdf">schematic of the Wide-Boy64 AGB</a>.
@@ -2667,7 +2692,7 @@ be replicated. I don't know what is easier: Reverse engineering the interface be
 the N64 software inside the flash, or writing the N64 code from scratch as well.</p>
 <h2 id="misc">Random stuff</h2>
 <p>Fun fact: On the Wide-Boy64 AGB PCB, the CIC chip is labelled "CTC".</p>
-<p><img src="img/wideboy64agb_below_cic.png"><br>
+<p><img src="img/wideboy64agb_below_cic.png" alt=""><br>
 <i><u>Picture 9</u><br>
 Silk print on the Wide-Boy64 AGB PCB under the CIC and EEPROM chips</i></p>
 <p>I assume the correct notation of Wide-Boy64 is with a hyphen between the words and without a space
@@ -2680,7 +2705,7 @@ watching the 3.3 V comming from the N64. On top of that, they didn't put a capac
 the VOUT pin, like it is recommended in the data sheet of the PST9140N. They put one between GND and
 VCC. They also didn't leave the NC pin unconnected; they connected it to GND.</p>
 <h2 id="links">Links</h2>
-<p><ul>
+<ul>
 <li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds060.pdf">Spartan and Spartan-XL FPGA Families Data Sheet</a></li>
 <li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds030.pdf">Spartan/XL Family One-Time Programmable Configuration PROMs (XC17S00/XL)</a></li>
 <li><a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Game Boy Advance service manual and schematics</a></li>
@@ -2690,7 +2715,7 @@ VCC. They also didn't leave the NC pin unconnected; they connected it to GND.</p
 <li><a href="https://datasheetspdf.com/datasheet/PQ30RV21.html">PQ30RV21 - Variable Output Low Power-Loss Voltage Regulators</a></li>
 <li><a href="https://datasheetspdf.com/datasheet/PQ05RF21.html">PQ05RF21 - 2A Output, Low Power-Loss Voltage Regulators</a></li>
 <li><a href="https://www.alldatasheet.com/datasheet-pdf/pdf/93094/MITSUMI/PST9140.html">PST9140 - System Reset</a></li>
-</ul></p>
+</ul>
 <hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </body>

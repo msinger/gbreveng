@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>DMG-CPU Cell Examination</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>img { max-width: 100%; display: inline; }</style>
@@ -20,8 +22,8 @@ the schematic that makes no sense to me at first. This way I don't have to go th
 <h2 id="dffr_b_clk">DFFR - Variant B clock polarity</h2>
 <p>The clock polarity of the <a href="dmg_cells.html#dffr_b">variant B of DFFR cells</a> can be inferred
 using these cells:</p>
-<p><table border="0"><tr><td><p><img src="img/cells/esut_eros_dape.png"></p></td>
-<td><p><img src="img/cells/esut_eros_dape_sch.png"></p></td></tr></table></p>
+<table><tr><td><img src="img/cells/esut_eros_dape.png" alt=""></td>
+<td><img src="img/cells/esut_eros_dape_sch.png" alt=""></td></tr></table>
 <p>This is a 3 bit counter implemented like this: The clock inputs of
 <a href="/dmg_cpu_b_map/?view=eros">EROS</a> are driven by <i>q</i> and <i>!q</i> of
 <a href="/dmg_cpu_b_map/?view=esut">ESUT</a>. The clock inputs of
@@ -42,8 +44,8 @@ circuit, but we can use <a href="#dffr_b2_clk">this one</a>.</p>
 <h2 id="dffr_b2_clk">DFFR - Variant B+ clock polarity</h2>
 <p>The clock polarity of the <a href="dmg_cells.html#dffr_b2">variant B+ of DFFR cells</a> can be inferred
 using these cells:</p>
-<p><table border="0"><tr><td><p><img src="img/cells/bese_cuxy_bego_dybe.png"></p></td>
-<td><p><img src="img/cells/bese_cuxy_bego_dybe_sch.png"></p></td></tr></table></p>
+<table><tr><td><img src="img/cells/bese_cuxy_bego_dybe.png" alt=""></td>
+<td><img src="img/cells/bese_cuxy_bego_dybe_sch.png" alt=""></td></tr></table>
 <p>This is a 4 bit counter implemented like this: The <i>!q</i> output of
 <a href="/dmg_cpu_b_map/?view=bese">BESE</a> is driving the clock input of
 <a href="/dmg_cpu_b_map/?view=cuxy">CUXY</a>. The <i>!q</i> output of

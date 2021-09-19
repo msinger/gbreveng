@@ -1,8 +1,33 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>DMG-CPU SM83 Core Connections</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>img { max-width: 100%; display: inline; }</style>
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
 </head>
 <body>
 <p><a href="http://iceboy.a-singer.de/">Home</a></p>
@@ -14,504 +39,504 @@ It builds on the work of Furrtek, the information found in his
 <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a> repository.</p>
 <p>Please report any errors I made <a href="https://github.com/msinger/gbreveng/issues">here</a>.</p>
 <h2>SM83 "Pinout"</h2>
-<p><img src="img/cells/cpu_desc.png"></p>
+<p><img src="img/cells/cpu_desc.png" alt=""></p>
 <h2>SM83 Connections</h2>
-<p><table border="1"><tr>
-<th colspan="2"><p>I/O</p></th>
-<th><p>Wire</p></th>
-<th><p>Cell</p></th>
-<th><p>Description</p></th>
+<table class="default"><tr>
+<th colspan="2">I/O</th>
+<th>Wire</th>
+<th>Cell</th>
+<th>Description</th>
 </tr><tr>
-<td><p>T1</p></td>
-<td><p>O</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-78.05,48.71,-78.05,44.44,-55.98,44.44,-55.98,44.55,-49.24,44.55,-49.37,108.48,-103.43,108.45,-103.4,110.63,-105.34,110.63,-105.34,111.71">
-FROM_CPU6</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=lexy&mark[0]=-105.34,111.61">LEXY.in</a></p></td>
-<td><p>The output of the inverter <a href="/dmg_cpu_b_map/?view=lexy">LEXY</a> ends at
-<a href="/dmg_cpu_b_map/?view=-252.8,119.3,-234.2,129.3&mark[0]=-236.81,128.44">an output pad</a>
-at the bottom of the die, which is not bonded.</p></td>
+<td>T1</td>
+<td>O</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-78.05,48.71,-78.05,44.44,-55.98,44.44,-55.98,44.55,-49.24,44.55,-49.37,108.48,-103.43,108.45,-103.4,110.63,-105.34,110.63,-105.34,111.71">
+FROM_CPU6</a></td>
+<td><a href="/dmg_cpu_b_map/?view=lexy&mark%5b0%5d=-105.34,111.61">LEXY.in</a></td>
+<td>The output of the inverter <a href="/dmg_cpu_b_map/?view=lexy">LEXY</a> ends at
+<a href="/dmg_cpu_b_map/?view=-252.8,119.3,-234.2,129.3&mark%5b0%5d=-236.81,128.44">an output pad</a>
+at the bottom of the die, which is not bonded.</td>
 </tr><tr>
-<td><p>T2</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-56.27,47.34,-55.71,47.34,-55.71,44.81,-49.08,44.81,-49.23,146.8,-63.71,146.8,-63.71,167.84,-63.21,167.84,-63.21,169.55,-62.87,169.55,-62.87,174.16,-61.93,174.16">
-TO_CPU</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=bowa&mark[0]=-62.07,174.17">BOWA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T3.</p></td>
+<td>T2</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-56.27,47.34,-55.71,47.34,-55.71,44.81,-49.08,44.81,-49.23,146.8,-63.71,146.8,-63.71,167.84,-63.21,167.84,-63.21,169.55,-62.87,169.55,-62.87,174.16,-61.93,174.16">
+TO_CPU</a></td>
+<td><a href="/dmg_cpu_b_map/?view=bowa&mark%5b0%5d=-62.07,174.17">BOWA.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T3.</td>
 </tr><tr>
-<td><p>T3</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-56.2,65.85,-56.2,48.7,-55.55,48.7,-55.55,45.07,-44.47,45.07,-44.56,109.55,-93.7,109.52,-93.7,110.49,-99.7,110.49,-99.7,111.74&line[1]=-93.7,109.52,-93.7,109.13,-109.11,109.13,-109.15,145.62,-111.57,145.62,-111.6,179.96,-114.9,179.96,-114.9,183.2,-127.81,183.2,-127.81,183.74&line[2]=-47.28,109.55,-47.33,146.98,-63.52,146.98,-63.52,167.67,-63.04,167.67,-63.04,169.38,-62.72,169.38,-62.72,172.79,-61.95,172.79&line[3]=-62.38,172.79,-62.38,173.16,-61.95,173.16&line[4]=-48.75,45.07,-48.75,43.4,-71.24,43.38,-71.24,35.55&line[5]=-55.55,47.48,-57.92,47.48">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=bedo&mark[0]=-62.05,172.96">BEDO.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T2.</p></td>
+<td>T3</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-56.2,65.85,-56.2,48.7,-55.55,48.7,-55.55,45.07,-44.47,45.07,-44.56,109.55,-93.7,109.52,-93.7,110.49,-99.7,110.49,-99.7,111.74&line%5b1%5d=-93.7,109.52,-93.7,109.13,-109.11,109.13,-109.15,145.62,-111.57,145.62,-111.6,179.96,-114.9,179.96,-114.9,183.2,-127.81,183.2,-127.81,183.74&line%5b2%5d=-47.28,109.55,-47.33,146.98,-63.52,146.98,-63.52,167.67,-63.04,167.67,-63.04,169.38,-62.72,169.38,-62.72,172.79,-61.95,172.79&line%5b3%5d=-62.38,172.79,-62.38,173.16,-61.95,173.16&line%5b4%5d=-48.75,45.07,-48.75,43.4,-71.24,43.38,-71.24,35.55&line%5b5%5d=-55.55,47.48,-57.92,47.48">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=bedo&mark%5b0%5d=-62.05,172.96">BEDO.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T2.</td>
 </tr><tr>
-<td><p>T4</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.35,51.32,-54.35,49.68,-55.37,49.68,-55.37,45.31,-44.29,45.32,-44.42,147.15,-63.36,147.16,-63.36,167.5,-62.86,167.5,-62.86,169.2,-62.52,169.2,-62.52,170.74,-61.92,170.74&line[1]=-62.52,169.55,-61.92,169.55&line[2]=-63.36,158.41,-61.9,158.41&line[3]=-62.51,158.41,-62.51,158.6,-61.9,158.6&line[4]=-55.37,47.62,-60.01,47.62">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=beko&mark[0]=-62.05,169.54">BEKO.q</a>,
-<a href="/dmg_cpu_b_map/?view=bavy&mark[0]=-62.05,170.73">BAVY.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T5.</p></td>
+<td>T4</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.35,51.32,-54.35,49.68,-55.37,49.68,-55.37,45.31,-44.29,45.32,-44.42,147.15,-63.36,147.16,-63.36,167.5,-62.86,167.5,-62.86,169.2,-62.52,169.2,-62.52,170.74,-61.92,170.74&line%5b1%5d=-62.52,169.55,-61.92,169.55&line%5b2%5d=-63.36,158.41,-61.9,158.41&line%5b3%5d=-62.51,158.41,-62.51,158.6,-61.9,158.6&line%5b4%5d=-55.37,47.62,-60.01,47.62">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=beko&mark%5b0%5d=-62.05,169.54">BEKO.q</a>,
+<a href="/dmg_cpu_b_map/?view=bavy&mark%5b0%5d=-62.05,170.73">BAVY.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T5.</td>
 </tr><tr>
-<td><p>T5</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.91,47.74,-55.21,47.74,-55.21,45.56,-48.23,45.56,-48.36,147.33,-63.19,147.33,-63.19,167.16,-62.53,167.16,-62.53,168.7,-59.63,168.7,-59.63,169.73,-60.41,169.73&line[1]=-59.63,168.88,-60.41,168.88&line[2]=-62.53,167.52,-61.93,167.52&line[3]=-49.21,147.33,-49.33,234.08,-109.47,234.05,-109.47,238.05,-104.66,238.05,-104.66,240.08&line[4]=-49.26,180.12,-63.02,180.09&line[5]=-62.39,199.3,-62.39,198.49,-62.21,198.49,-62.21,192.9,-62.36,192.9,-62.38,182.7,-63.02,182.7,-63.02,179.97,-111.41,179.96,-111.39,145.38,-103.91,145.38,-103.91,143.64,-103.84,143.64,-103.84,141.31">
-PHI_OUT</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=bude&mark[0]=-62.05,167.52">BUDE.q</a>,
-<a href="/dmg_cpu_b_map/?view=beva&mark[0]=-62.05,168.7">BEVA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. This is the same clock that comes out of the PHI pin of the chip. The CPU can stop this clock by driving T11 low. This is the inverse of T4.</p></td>
+<td>T5</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-59.91,47.74,-55.21,47.74,-55.21,45.56,-48.23,45.56,-48.36,147.33,-63.19,147.33,-63.19,167.16,-62.53,167.16,-62.53,168.7,-59.63,168.7,-59.63,169.73,-60.41,169.73&line%5b1%5d=-59.63,168.88,-60.41,168.88&line%5b2%5d=-62.53,167.52,-61.93,167.52&line%5b3%5d=-49.21,147.33,-49.33,234.08,-109.47,234.05,-109.47,238.05,-104.66,238.05,-104.66,240.08&line%5b4%5d=-49.26,180.12,-63.02,180.09&line%5b5%5d=-62.39,199.3,-62.39,198.49,-62.21,198.49,-62.21,192.9,-62.36,192.9,-62.38,182.7,-63.02,182.7,-63.02,179.97,-111.41,179.96,-111.39,145.38,-103.91,145.38,-103.91,143.64,-103.84,143.64,-103.84,141.31">
+PHI_OUT</a></td>
+<td><a href="/dmg_cpu_b_map/?view=bude&mark%5b0%5d=-62.05,167.52">BUDE.q</a>,
+<a href="/dmg_cpu_b_map/?view=beva&mark%5b0%5d=-62.05,168.7">BEVA.q</a></td>
+<td>A gated 1 MiHz clock. This is the same clock that comes out of the PHI pin of the chip. The CPU can stop this clock by driving T11 low. This is the inverse of T4.</td>
 </tr><tr>
-<td><p>T6</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.19,54.05,-54.19,49.42,-55.04,49.42,-55.04,45.81,-48.06,45.81,-48.2,147.5,-63.02,147.48,-63.02,163.91,-62.53,163.91,-62.53,165.45,-61.91,165.45&line[1]=-62.53,164.25,-61.91,164.25&&line[2]=-63.02,158.08,-61.91,158.08&line[3]=-62.52,158.08,-62.52,158.25,-61.91,158.25&line[4]=-55.04,47.87,-59.77,47.87">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=bolo&mark[0]=-62.05,164.26">BOLO.q</a>,
-<a href="/dmg_cpu_b_map/?view=byda&mark[0]=-62.05,165.46">BYDA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T7.</p></td>
+<td>T6</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.19,54.05,-54.19,49.42,-55.04,49.42,-55.04,45.81,-48.06,45.81,-48.2,147.5,-63.02,147.48,-63.02,163.91,-62.53,163.91,-62.53,165.45,-61.91,165.45&line%5b1%5d=-62.53,164.25,-61.91,164.25&&line%5b2%5d=-63.02,158.08,-61.91,158.08&line%5b3%5d=-62.52,158.08,-62.52,158.25,-61.91,158.25&line%5b4%5d=-55.04,47.87,-59.77,47.87">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=bolo&mark%5b0%5d=-62.05,164.26">BOLO.q</a>,
+<a href="/dmg_cpu_b_map/?view=byda&mark%5b0%5d=-62.05,165.46">BYDA.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T7.</td>
 </tr><tr>
-<td><p>T7</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.63,48.01,-54.87,48.01,-54.87,46.06,-48.74,46.06,-48.88,147.66,-62.84,147.66,-62.84,161.67,-62.52,161.67,-62.52,163.4,-59.63,163.4,-59.63,164.44,-60.41,164.44&line[1]=-59.63,163.58,-60.41,163.58&line[2]=-62.52,162.2,-61.93,162.2&line[3]=-48.88,147.66,-48.91,179.7,-118.75,179.66,-118.75,178.58,-118.7,126.92,-118.65,99.14,-125.66,99.14,-125.66,99.4,-126.35,99.4,-126.35,98.29&line[4]=-118.7,126.92,-108.41,126.91,-108.41,115.34,-81.93,115.35,-81.93,113.3&line[5]=-81.93,115.11,-69.11,115.11,-69.11,115.8&line[6]=-118.75,178.58,-137.65,178.59,-137.65,183.04,-146.8,183.04,-146.8,183.73">
-FROM_CPU5</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=bufa&mark[0]=-62.05,162.2">BUFA.q</a>,
-<a href="/dmg_cpu_b_map/?view=byly&mark[0]=-62.05,163.41">BYLY.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T6.</p></td>
+<td>T7</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-59.63,48.01,-54.87,48.01,-54.87,46.06,-48.74,46.06,-48.88,147.66,-62.84,147.66,-62.84,161.67,-62.52,161.67,-62.52,163.4,-59.63,163.4,-59.63,164.44,-60.41,164.44&line%5b1%5d=-59.63,163.58,-60.41,163.58&line%5b2%5d=-62.52,162.2,-61.93,162.2&line%5b3%5d=-48.88,147.66,-48.91,179.7,-118.75,179.66,-118.75,178.58,-118.7,126.92,-118.65,99.14,-125.66,99.14,-125.66,99.4,-126.35,99.4,-126.35,98.29&line%5b4%5d=-118.7,126.92,-108.41,126.91,-108.41,115.34,-81.93,115.35,-81.93,113.3&line%5b5%5d=-81.93,115.11,-69.11,115.11,-69.11,115.8&line%5b6%5d=-118.75,178.58,-137.65,178.59,-137.65,183.04,-146.8,183.04,-146.8,183.73">
+FROM_CPU5</a></td>
+<td><a href="/dmg_cpu_b_map/?view=bufa&mark%5b0%5d=-62.05,162.2">BUFA.q</a>,
+<a href="/dmg_cpu_b_map/?view=byly&mark%5b0%5d=-62.05,163.41">BYLY.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low. This is the inverse of T6.</td>
 </tr><tr>
-<td><p>T8</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.49,48.15,-54.7,48.15,-54.7,46.3,-44.13,46.3,-44.26,147.84,-62.68,147.84,-62.68,159.97,-61.93,159.97&line[1]=-48.36,147.84,-48.41,180.63,-116.7,180.59,-116.7,180.34,-133.04,180.34,-133.04,182.08,-141.5,182.08,-141.5,183.74&line[2]=-116.7,180.34,-116.68,162.77,-123.05,162.77,-123.05,162.39,-124.9,162.39,-124.9,161.91">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=buke&mark[0]=-62.05,159.97">BUKE.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low.</p></td>
+<td>T8</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-59.49,48.15,-54.7,48.15,-54.7,46.3,-44.13,46.3,-44.26,147.84,-62.68,147.84,-62.68,159.97,-61.93,159.97&line%5b1%5d=-48.36,147.84,-48.41,180.63,-116.7,180.59,-116.7,180.34,-133.04,180.34,-133.04,182.08,-141.5,182.08,-141.5,183.74&line%5b2%5d=-116.7,180.34,-116.68,162.77,-123.05,162.77,-123.05,162.39,-124.9,162.39,-124.9,161.91">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=buke&mark%5b0%5d=-62.05,159.97">BUKE.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T11 low.</td>
 </tr><tr>
-<td><p>T9</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.88,97.59,-54.84,65.55,-55.97,65.55,-55.95,48.91,-54.37,48.91,-54.37,46.56,-43.95,46.56,-44.09,148,-62.51,148,-62.51,150.74,-58.6,150.74,-58.6,158.09,-57.66,158.09">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=boma&mark[0]=-62.05,150.75">BOMA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T14 low. This is the inverse of T10.</p></td>
+<td>T9</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.88,97.59,-54.84,65.55,-55.97,65.55,-55.95,48.91,-54.37,48.91,-54.37,46.56,-43.95,46.56,-44.09,148,-62.51,148,-62.51,150.74,-58.6,150.74,-58.6,158.09,-57.66,158.09">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=boma&mark%5b0%5d=-62.05,150.75">BOMA.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T14 low. This is the inverse of T10.</td>
 </tr><tr>
-<td><p>T10</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.74,99.57,-54.71,65.37,-55.81,65.37,-55.81,49.13,-54.02,49.13,-54.02,56.83,-54.14,56.83&line[1]=-54.17,49.13,-54.17,46.8,-47.9,46.8,-48.02,146.17,-48.02,148.18,-59.45,148.18,-59.45,151.95&line[2]=-60.4,151.95,-58.43,151.95,-58.43,157.58,-57.66,157.58&line[3]=-59.45,149.72,-60.4,149.72&line[4]=-48.02,146.17,-78.63,146.16,-112.26,146.14,-112.29,181.02,-114.38,181.02,-114.38,183.03,-131.91,183.03,-131.91,186.68,-137.74,186.68&line[5]=-134.84,186.68,-134.84,185.25&line[6]=-137.74,185.25,-137.74,188.3,-138.59,188.3&line[7]=-138.59,189.23,-138.59,188.24,-144.74,188.24,-144.74,185.25&line[8]=-78.63,146.16,-78.63,142.16,-93.6,142.16&line[9]=-94.61,141.31,-94.61,142.84,-93.6,142.84,-93.6,138.74,-93.24,138.74,-93.24,135.02,-92.72,135.02,-92.72,131.35,-92.55,131.35,-92.55,126.38,-92.88,126.38,-92.88,122.57,-64.68,122.59&line[10]=-62.45,121.08,-62.45,123.7,-64.68,123.7,-64.68,118.86,-65.37,118.86,-65.37,117.31">
-BOGA1MHZ</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=boga&mark[0]=-60.29,151.96">BOGA.q</a></p></td>
-<td><p>A gated 1 MiHz clock. The CPU can stop this clock by driving T14 low. This is the inverse of T9.</p></td>
+<td>T10</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.74,99.57,-54.71,65.37,-55.81,65.37,-55.81,49.13,-54.02,49.13,-54.02,56.83,-54.14,56.83&line%5b1%5d=-54.17,49.13,-54.17,46.8,-47.9,46.8,-48.02,146.17,-48.02,148.18,-59.45,148.18,-59.45,151.95&line%5b2%5d=-60.4,151.95,-58.43,151.95,-58.43,157.58,-57.66,157.58&line%5b3%5d=-59.45,149.72,-60.4,149.72&line%5b4%5d=-48.02,146.17,-78.63,146.16,-112.26,146.14,-112.29,181.02,-114.38,181.02,-114.38,183.03,-131.91,183.03,-131.91,186.68,-137.74,186.68&line%5b5%5d=-134.84,186.68,-134.84,185.25&line%5b6%5d=-137.74,185.25,-137.74,188.3,-138.59,188.3&line%5b7%5d=-138.59,189.23,-138.59,188.24,-144.74,188.24,-144.74,185.25&line%5b8%5d=-78.63,146.16,-78.63,142.16,-93.6,142.16&line%5b9%5d=-94.61,141.31,-94.61,142.84,-93.6,142.84,-93.6,138.74,-93.24,138.74,-93.24,135.02,-92.72,135.02,-92.72,131.35,-92.55,131.35,-92.55,126.38,-92.88,126.38,-92.88,122.57,-64.68,122.59&line%5b10%5d=-62.45,121.08,-62.45,123.7,-64.68,123.7,-64.68,118.86,-65.37,118.86,-65.37,117.31">
+BOGA1MHZ</a></td>
+<td><a href="/dmg_cpu_b_map/?view=boga&mark%5b0%5d=-60.29,151.96">BOGA.q</a></td>
+<td>A gated 1 MiHz clock. The CPU can stop this clock by driving T14 low. This is the inverse of T9.</td>
 </tr><tr>
-<td><p>T11</p></td>
-<td><p>O</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.62,99.44,-54.56,64.83,-46.72,64.84,-46.79,123.8,-46.83,149.73,-56.13,149.72&line[1]=-46.79,123.8,-58.73,123.8,-58.75,135.73,-60.61,135.73,-60.61,136.17">
-CLK_FROM_CPU</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=abol&mark[0]=-56.01,149.73">ABOL.in</a>,
-<a href="/dmg_cpu_b_map/?view=tubo&mark[0]=-60.62,136.05">TUBO.in1</a></p></td>
-<td><p>CPU can drive this low to disable most of the clocks fed to itself. T9 and T10 are the only clocks that are not
+<td>T11</td>
+<td>O</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.62,99.44,-54.56,64.83,-46.72,64.84,-46.79,123.8,-46.83,149.73,-56.13,149.72&line%5b1%5d=-46.79,123.8,-58.73,123.8,-58.75,135.73,-60.61,135.73,-60.61,136.17">
+CLK_FROM_CPU</a></td>
+<td><a href="/dmg_cpu_b_map/?view=abol&mark%5b0%5d=-56.01,149.73">ABOL.in</a>,
+<a href="/dmg_cpu_b_map/?view=tubo&mark%5b0%5d=-60.62,136.05">TUBO.in1</a></td>
+<td>CPU can drive this low to disable most of the clocks fed to itself. T9 and T10 are the only clocks that are not
 turned off when this signal gets driven low. However, T9 and T10 might have slightly shorter "shorter" phases while this
 signal is high. By "shorter" phases I mean, they are not symetric and have a shorter and a longer phase (and the
 shorter one gets even shorter). This is because of BUTO mixing them with the other clocks when they're active.
 Maybe they did this to guarantee a specific synchronicity between T9/T10 and the other clocks that tick at around the
-same time as T9/T10.</p></td>
+same time as T9/T10.</td>
 </tr><tr>
-<td><p>T12</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.48,101.63,-54.42,65.09,-46.55,65.1,-46.67,158.94,-56.16,158.94&line[1]=-55.35,158.94,-55.35,156.05,-56.16,156.05">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=afer&mark[0]=-56.01,158.95">AFER.q</a></p></td>
-<td><p>Active-low synchronous reset input. Synchronized to T9/T10.</p></td>
+<td>T12</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.48,101.63,-54.42,65.09,-46.55,65.1,-46.67,158.94,-56.16,158.94&line%5b1%5d=-55.35,158.94,-55.35,156.05,-56.16,156.05">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=afer&mark%5b0%5d=-56.01,158.95">AFER.q</a></td>
+<td>Active-low synchronous reset input. Synchronized to T9/T10.</td>
 </tr><tr>
-<td><p>T13</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.35,101.8,-54.29,65.34,-46.38,65.34,-46.44,108.61,-46.5,160.13,-56.16,160.13&line[1]=-55.7,160.13,-55.7,159.98,-56.16,159.98&line[2]=-49.41,160.13,-49.5,234.47,-147.69,234.41,-147.69,238.02,-145.35,238.02,-145.35,239.38&line[3]=-46.44,108.61,-78.88,108.59,-78.88,110.5,-80.56,110.5,-80.58,122.31,-81.26,122.31,-81.25,127.27,-80.92,127.27,-80.93,131.23,-80.77,131.23,-80.77,134.52,-80.94,134.52,-80.94,138.53&line[4]=-75.13,139.84,-75.13,138.53,-81.45,138.53,-81.45,139.84&line[5]=-81.45,138.86,-82.64,138.86,-82.64,139.84">
-RESET</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=-151.22,236.41,-142.16,254.34&mark[0]=-145.35,238.34">RST (ext. pad)</a></p></td>
-<td><p>Active-high asynchronous reset input. Fed directly from
-<a href="/dmg_cpu_b_map/?view=-151.22,236.41,-142.16,254.34&mark[0]=-145.35,238.34">RST input pad</a>.</p></td>
+<td>T13</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.35,101.8,-54.29,65.34,-46.38,65.34,-46.44,108.61,-46.5,160.13,-56.16,160.13&line%5b1%5d=-55.7,160.13,-55.7,159.98,-56.16,159.98&line%5b2%5d=-49.41,160.13,-49.5,234.47,-147.69,234.41,-147.69,238.02,-145.35,238.02,-145.35,239.38&line%5b3%5d=-46.44,108.61,-78.88,108.59,-78.88,110.5,-80.56,110.5,-80.58,122.31,-81.26,122.31,-81.25,127.27,-80.92,127.27,-80.93,131.23,-80.77,131.23,-80.77,134.52,-80.94,134.52,-80.94,138.53&line%5b4%5d=-75.13,139.84,-75.13,138.53,-81.45,138.53,-81.45,139.84&line%5b5%5d=-81.45,138.86,-82.64,138.86,-82.64,139.84">
+RESET</a></td>
+<td><a href="/dmg_cpu_b_map/?view=-151.22,236.41,-142.16,254.34&mark%5b0%5d=-145.35,238.34">RST (ext. pad)</a></td>
+<td>Active-high asynchronous reset input. Fed directly from
+<a href="/dmg_cpu_b_map/?view=-151.22,236.41,-142.16,254.34&mark%5b0%5d=-145.35,238.34">RST input pad</a>.</td>
 </tr><tr>
-<td><p>T14</p></td>
-<td><p>O</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.23,103.63,-54.16,65.58,-46.2,65.59,-46.27,109.67,-46.32,150.07,-56.14,150.07&line[1]=-48.2,150.07,-48.3,234.34,-121.43,234.3,-121.43,238.04,-117.45,238.04,-117.45,240.91&line[2]=-46.27,109.67,-82.09,109.66,-82.09,110.5,-81.42,110.5,-81.44,122.32,-81.95,122.32,-81.95,127.28,-81.77,127.28,-81.77,130.81,-81.61,130.81,-81.61,134.55,-81.95,134.55,-81.95,139.02,-82.12,139.02,-82.12,139.85">
-CLKIN_A</a></p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?view=-120.88,135.5,-52.5,254.45&mark[0]=-117.45,238.34&mark[1]=-82.12,139.71&mark[2]=-56.02,150.08">
-multiple</a></p></td>
-<td><p>Crystal oscillator enable. When CPU drives this low, the crystal oscillator gets disabled
-to save power. This happens during STOP mode.</p></td>
+<td>T14</td>
+<td>O</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.23,103.63,-54.16,65.58,-46.2,65.59,-46.27,109.67,-46.32,150.07,-56.14,150.07&line%5b1%5d=-48.2,150.07,-48.3,234.34,-121.43,234.3,-121.43,238.04,-117.45,238.04,-117.45,240.91&line%5b2%5d=-46.27,109.67,-82.09,109.66,-82.09,110.5,-81.42,110.5,-81.44,122.32,-81.95,122.32,-81.95,127.28,-81.77,127.28,-81.77,130.81,-81.61,130.81,-81.61,134.55,-81.95,134.55,-81.95,139.02,-82.12,139.02,-82.12,139.85">
+CLKIN_A</a></td>
+<td>
+<a href="/dmg_cpu_b_map/?view=-120.88,135.5,-52.5,254.45&mark%5b0%5d=-117.45,238.34&mark%5b1%5d=-82.12,139.71&mark%5b2%5d=-56.02,150.08">
+multiple</a></td>
+<td>Crystal oscillator enable. When CPU drives this low, the crystal oscillator gets disabled
+to save power. This happens during STOP mode.</td>
 </tr><tr>
-<td><p>T15</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-54.09,101.92,-54.03,65.84,-47.75,65.84,-47.81,126.99,-47.87,160.66,-56.16,160.66&line[1]=-47.81,126.99,-59.41,126.99,-59.41,135.09,-60.43,135.09,-60.43,136.16">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=taba&mark[0]=-60.42,136.06">TABA.q</a></p></td>
-<td><p>?</p></td>
+<td>T15</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-54.09,101.92,-54.03,65.84,-47.75,65.84,-47.81,126.99,-47.87,160.66,-56.16,160.66&line%5b1%5d=-47.81,126.99,-59.41,126.99,-59.41,135.09,-60.43,135.09,-60.43,136.16">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=taba&mark%5b0%5d=-60.42,136.06">TABA.q</a></td>
+<td>?</td>
 </tr><tr>
-<td><p>T16</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-66.23,104.5,-66.23,105.13,-54.6,105.15,-54.6,105,-47.63,105,-47.67,133.03,-42.7,133.04,-42.7,132.16,-40.83,132.16">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=-43.53,129.06,-25.94,138.06&mark[0]=-41.91,132.19">(ext. pad)</a></p></td>
-<td><p>Directly connected to <a href="/dmg_cpu_b_map/?view=-43.53,129.06,-25.94,138.06&mark[0]=-41.91,132.19">an input
-pad</a> at the top of the die, which is not bonded.</p></td>
+<td>T16</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-66.23,104.5,-66.23,105.13,-54.6,105.15,-54.6,105,-47.63,105,-47.67,133.03,-42.7,133.04,-42.7,132.16,-40.83,132.16">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=-43.53,129.06,-25.94,138.06&mark%5b0%5d=-41.91,132.19">(ext. pad)</a></td>
+<td>Directly connected to <a href="/dmg_cpu_b_map/?view=-43.53,129.06,-25.94,138.06&mark%5b0%5d=-41.91,132.19">an input
+pad</a> at the top of the die, which is not bonded.</td>
 </tr><tr>
-<td><p>R1</p></td>
-<td><p>O</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-66.49,104.47,-66.49,104.65,-66.44,104.77,-66.44,104.98,-66.38,105.08,-66.38,107.82,-72.75,107.81,-72.75,111.3,-81.59,111.3,-81.59,111.75&line[1]=-80.22,111.3,-80.22,114.98,-79.72,114.98,-79.72,118.98,-79.04,118.98,-79.04,122.95,-79.38,122.95,-79.38,127.13,-80.23,127.13,-80.23,131.23,-80.07,131.23,-80.07,134.68,-80.76,134.68,-80.76,138.88,-80.94,138.88,-80.94,139.84">
-CPU_RAW_RD</a></p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?view=-82.22,110.81,-78.25,141.09&mark[0]=-80.23,111.63&mark[1]=-81.59,111.63&mark[2]=-80.95,139.72">
-multiple</a></p></td>
-<td><p>Active-high memory RD signal from CPU.</p></td>
+<td>R1</td>
+<td>O</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-66.49,104.47,-66.49,104.65,-66.44,104.77,-66.44,104.98,-66.38,105.08,-66.38,107.82,-72.75,107.81,-72.75,111.3,-81.59,111.3,-81.59,111.75&line%5b1%5d=-80.22,111.3,-80.22,114.98,-79.72,114.98,-79.72,118.98,-79.04,118.98,-79.04,122.95,-79.38,122.95,-79.38,127.13,-80.23,127.13,-80.23,131.23,-80.07,131.23,-80.07,134.68,-80.76,134.68,-80.76,138.88,-80.94,138.88,-80.94,139.84">
+CPU_RAW_RD</a></td>
+<td>
+<a href="/dmg_cpu_b_map/?view=-82.22,110.81,-78.25,141.09&mark%5b0%5d=-80.23,111.63&mark%5b1%5d=-81.59,111.63&mark%5b2%5d=-80.95,139.72">
+multiple</a></td>
+<td>Active-high memory RD signal from CPU.</td>
 </tr><tr>
-<td><p>R2</p></td>
-<td><p>O</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-66.6,104.47,-66.6,104.63,-66.66,104.75,-66.66,105.02,-66.57,105.15,-66.57,109.4,-80.22,109.4&line[1]=-80.73,111.74,-80.73,109.98,-80.22,109.98,-80.22,108.71,-112.7,108.69,-112.65,40.66,-85.59,40.67,-85.59,37.2,-89.89,37.18,-89.89,35.56&line[2]=-66.57,109.4,-49.35,109.42,-49.39,151.77,-56.13,151.78">
-FROM_CPU3</a></p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?view=-91.75,33,-52.5,154.69&mark[0]=-89.89,35.68&mark[1]=-80.73,111.63&mark[2]=-56,151.78">
-multiple</a></p></td>
-<td><p>Active-high memory WR signal from CPU.</p></td>
+<td>R2</td>
+<td>O</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-66.6,104.47,-66.6,104.63,-66.66,104.75,-66.66,105.02,-66.57,105.15,-66.57,109.4,-80.22,109.4&line%5b1%5d=-80.73,111.74,-80.73,109.98,-80.22,109.98,-80.22,108.71,-112.7,108.69,-112.65,40.66,-85.59,40.67,-85.59,37.2,-89.89,37.18,-89.89,35.56&line%5b2%5d=-66.57,109.4,-49.35,109.42,-49.39,151.77,-56.13,151.78">
+FROM_CPU3</a></td>
+<td>
+<a href="/dmg_cpu_b_map/?view=-91.75,33,-52.5,154.69&mark%5b0%5d=-89.89,35.68&mark%5b1%5d=-80.73,111.63&mark%5b2%5d=-56,151.78">
+multiple</a></td>
+<td>Active-high memory WR signal from CPU.</td>
 </tr><tr>
-<td><p>R3</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-66.79,104.47,-66.79,104.51,-66.84,104.64,-66.84,105.09,-66.73,105.23,-66.73,108.85,-108.93,108.82,-109.98,108.82,-115.25,108.82,-115.3,146.02,-111.73,146.01,-111.77,179.39,-89.02,179.41,-89.02,181.54,-88.16,181.54,-88.16,186.52,-88.69,186.52,-88.69,192.61,-88.18,192.61,-88.18,198.72,-87.51,198.72,-87.51,203.7,-97.25,203.7,-97.25,206.36,-143.39,206.33,-143.4,213.2,-143.75,213.2,-143.75,218.27,-143.41,218.27,-143.41,221.35,-143.58,221.35,-143.59,227.28,-143.43,227.28,-143.43,229.15&line[1]=-88.69,191.9,-102.7,191.88,-103.55,191.88,-103.55,193.7&line[2]=-102.7,191.88,-102.7,187.41,-120.81,187.41,-120.81,185.26&line[3]=-120.81,186.08,-151.06,186.07,-151.06,185.23&line[4]=-117.9,187.41,-117.9,189.26&line[5]=-116.2,187.41,-116.2,189.26&line[6]=-88.16,182.82,-75.01,182.82,-75.02,192.33,-73.13,192.33,-73.13,193.72&line[7]=-109.98,108.82,-109.9,40.02,-86.8,40.05,-86.8,37.31&line[8]=-101.34,31.27,-101.34,32.9,-103.56,32.9,-103.56,37.31,-71.09,37.31,-71.09,32.92,-70.91,32.92,-70.91,28.23,-70.38,28.23,-70.38,28.09,-70.05,28.09,-70.05,27.41&line[9]=-108.93,108.82,-108.98,145.62,-98.78,145.62,-98.78,143.88,-84.19,143.89,-84.19,141.31&line[10]=-84.19,142.02,-76.32,142.02&line[11]=-76.32,141.33,-76.32,143.34,-72.91,143.34,-62.15,143.35,-62.15,139.26,-61.63,139.26,-61.63,135.72,-61.29,135.72,-61.29,130.98,-60.95,130.98,-60.95,123.11,-61.11,123.11,-61.11,118.49,-61.77,118.49,-61.77,115.12&line[12]=-62.29,113.27,-62.29,115.24,-83.8,115.23,-84.15,115.23,-84.15,111.3,-99.89,111.3,-99.89,111.74&line[13]=-83.8,115.23,-83.8,118.81,-84.15,118.81,-84.15,122.99,-85.86,122.99,-85.86,127.01,-86.04,127.01,-86.04,128.41&line[14]=-86.04,127.56,-87.06,127.56,-87.06,128.41&line[15]=-61.63,139.22,-59.76,139.22,-59.76,137.68&line[16]=-72.91,143.34,-72.91,141.34&line[17]=-79.74,142.02,-79.74,141.34&line[18]=-80.59,142.02,-80.59,141.34&line[19]=-98.78,144.59,-46.98,144.63,-46.99,153.83,-56.13,153.84&line[20]=-62.29,115.12,-59.55,115.12,-59.55,115.81&line[21]=-60.23,115.12,-60.23,113.28&line[22]=-61.25,115.12,-61.25,113.28">
-<span style="text-decoration:overline">T1</span>T2</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=unor&mark[0]=-76.33,141.46">UNOR.q</a></p></td>
-<td><p>Maybe used to disable all bus drivers in the CPU when test mode is active.</p></td>
+<td>R3</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-66.79,104.47,-66.79,104.51,-66.84,104.64,-66.84,105.09,-66.73,105.23,-66.73,108.85,-108.93,108.82,-109.98,108.82,-115.25,108.82,-115.3,146.02,-111.73,146.01,-111.77,179.39,-89.02,179.41,-89.02,181.54,-88.16,181.54,-88.16,186.52,-88.69,186.52,-88.69,192.61,-88.18,192.61,-88.18,198.72,-87.51,198.72,-87.51,203.7,-97.25,203.7,-97.25,206.36,-143.39,206.33,-143.4,213.2,-143.75,213.2,-143.75,218.27,-143.41,218.27,-143.41,221.35,-143.58,221.35,-143.59,227.28,-143.43,227.28,-143.43,229.15&line%5b1%5d=-88.69,191.9,-102.7,191.88,-103.55,191.88,-103.55,193.7&line%5b2%5d=-102.7,191.88,-102.7,187.41,-120.81,187.41,-120.81,185.26&line%5b3%5d=-120.81,186.08,-151.06,186.07,-151.06,185.23&line%5b4%5d=-117.9,187.41,-117.9,189.26&line%5b5%5d=-116.2,187.41,-116.2,189.26&line%5b6%5d=-88.16,182.82,-75.01,182.82,-75.02,192.33,-73.13,192.33,-73.13,193.72&line%5b7%5d=-109.98,108.82,-109.9,40.02,-86.8,40.05,-86.8,37.31&line%5b8%5d=-101.34,31.27,-101.34,32.9,-103.56,32.9,-103.56,37.31,-71.09,37.31,-71.09,32.92,-70.91,32.92,-70.91,28.23,-70.38,28.23,-70.38,28.09,-70.05,28.09,-70.05,27.41&line%5b9%5d=-108.93,108.82,-108.98,145.62,-98.78,145.62,-98.78,143.88,-84.19,143.89,-84.19,141.31&line%5b10%5d=-84.19,142.02,-76.32,142.02&line%5b11%5d=-76.32,141.33,-76.32,143.34,-72.91,143.34,-62.15,143.35,-62.15,139.26,-61.63,139.26,-61.63,135.72,-61.29,135.72,-61.29,130.98,-60.95,130.98,-60.95,123.11,-61.11,123.11,-61.11,118.49,-61.77,118.49,-61.77,115.12&line%5b12%5d=-62.29,113.27,-62.29,115.24,-83.8,115.23,-84.15,115.23,-84.15,111.3,-99.89,111.3,-99.89,111.74&line%5b13%5d=-83.8,115.23,-83.8,118.81,-84.15,118.81,-84.15,122.99,-85.86,122.99,-85.86,127.01,-86.04,127.01,-86.04,128.41&line%5b14%5d=-86.04,127.56,-87.06,127.56,-87.06,128.41&line%5b15%5d=-61.63,139.22,-59.76,139.22,-59.76,137.68&line%5b16%5d=-72.91,143.34,-72.91,141.34&line%5b17%5d=-79.74,142.02,-79.74,141.34&line%5b18%5d=-80.59,142.02,-80.59,141.34&line%5b19%5d=-98.78,144.59,-46.98,144.63,-46.99,153.83,-56.13,153.84&line%5b20%5d=-62.29,115.12,-59.55,115.12,-59.55,115.81&line%5b21%5d=-60.23,115.12,-60.23,113.28&line%5b22%5d=-61.25,115.12,-61.25,113.28">
+<span style="text-decoration:overline">T1</span>T2</a></td>
+<td><a href="/dmg_cpu_b_map/?view=unor&mark%5b0%5d=-76.33,141.46">UNOR.q</a></td>
+<td>Maybe used to disable all bus drivers in the CPU when test mode is active.</td>
 </tr><tr>
-<td><p>R4</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-67,104.47,-67,105.13,-67.08,105.23,-67.08,107.96,-45.23,107.97,-45.16,43.77,-76.73,43.77,-76.73,36.76,-86.65,36.76,-86.65,33.46,-88.69,33.46,-88.69,31.29">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=syro&mark[0]=-88.7,31.4">SYRO.q</a></p></td>
-<td><p>High when address bus is 0xfexx or 0xffxx.</p></td>
+<td>R4</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-67,104.47,-67,105.13,-67.08,105.23,-67.08,107.96,-45.23,107.97,-45.16,43.77,-76.73,43.77,-76.73,36.76,-86.65,36.76,-86.65,33.46,-88.69,33.46,-88.69,31.29">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=syro&mark%5b0%5d=-88.7,31.4">SYRO.q</a></td>
+<td>High when address bus is 0xfexx or 0xffxx.</td>
 </tr><tr>
-<td><p>R5</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-67.19,104.47,-67.19,105.07,-67.25,105.15,-67.25,107.96,-110.14,107.93,-115.58,107.91,-115.65,148.48,-105.4,148.48,-105.4,147.11,-97.38,147.12,-97.38,148.84,-84.48,148.84,-84.48,166.45,-83.87,166.45&line[1]=-110.14,107.93,-110.08,39.77,-90.15,39.78,-90.15,38.29&line[2]=-93.99,35.55,-93.99,38.29,-88.52,38.29,-88.52,33.21,-86.48,33.21,-86.48,31.29">
-unlabeled</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=tutu&mark[0]=-93.99,35.66">TUTU.q</a></p></td>
-<td><p>High when address bus is 0x00xx and boot ROM is still visible (*0xff50 == 0x00).</p></td>
+<td>R5</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-67.19,104.47,-67.19,105.07,-67.25,105.15,-67.25,107.96,-110.14,107.93,-115.58,107.91,-115.65,148.48,-105.4,148.48,-105.4,147.11,-97.38,147.12,-97.38,148.84,-84.48,148.84,-84.48,166.45,-83.87,166.45&line%5b1%5d=-110.14,107.93,-110.08,39.77,-90.15,39.78,-90.15,38.29&line%5b2%5d=-93.99,35.55,-93.99,38.29,-88.52,38.29,-88.52,33.21,-86.48,33.21,-86.48,31.29">
+unlabeled</a></td>
+<td><a href="/dmg_cpu_b_map/?view=tutu&mark%5b0%5d=-93.99,35.66">TUTU.q</a></td>
+<td>High when address bus is 0x00xx and boot ROM is still visible (*0xff50 == 0x00).</td>
 </tr><tr>
-<td><p>R6</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-67.54,104.47,-67.54,105.09,-67.43,105.23,-67.43,108.09,-48.99,108.09,-49.05,144.9,-73.07,144.87,-110.7,144.85,-110.73,180.84,-116.62,180.84,-116.62,182.76,-120.98,182.76,-120.98,183.75&line[1]=-116.62,180.89,-120.63,180.89,-120.61,148.32,-105.91,148.31,-105.91,146.95,-97.21,146.94,-97.21,148.66,-84.35,148.66,-84.37,165.95,-83.89,165.95&line[2]=-73.07,144.87,-73.07,143.52,-74.62,143.52,-74.62,141.33&line[3]=-73.07,143.91,-60.1,143.91,-60.1,139.1,-59.93,139.1,-59.93,135.34,-60.6,135.34,-60.6,131.23,-62.13,131.23,-62.13,123.87,-62.8,123.87,-62.8,118.02,-78.35,118,-78.35,114.66,-79.54,114.66,-79.54,113.27&line[4]=-78.67,114.66,-78.67,115.8">
-T1<span style="text-decoration:overline">T2</span></a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=umut&mark[0]=-74.63,141.47">UMUT.q</a></p></td>
-<td><p>Maybe used to disable all bus drivers in the CPU when test mode is active.</p></td>
+<td>R6</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-67.54,104.47,-67.54,105.09,-67.43,105.23,-67.43,108.09,-48.99,108.09,-49.05,144.9,-73.07,144.87,-110.7,144.85,-110.73,180.84,-116.62,180.84,-116.62,182.76,-120.98,182.76,-120.98,183.75&line%5b1%5d=-116.62,180.89,-120.63,180.89,-120.61,148.32,-105.91,148.31,-105.91,146.95,-97.21,146.94,-97.21,148.66,-84.35,148.66,-84.37,165.95,-83.89,165.95&line%5b2%5d=-73.07,144.87,-73.07,143.52,-74.62,143.52,-74.62,141.33&line%5b3%5d=-73.07,143.91,-60.1,143.91,-60.1,139.1,-59.93,139.1,-59.93,135.34,-60.6,135.34,-60.6,131.23,-62.13,131.23,-62.13,123.87,-62.8,123.87,-62.8,118.02,-78.35,118,-78.35,114.66,-79.54,114.66,-79.54,113.27&line%5b4%5d=-78.67,114.66,-78.67,115.8">
+T1<span style="text-decoration:overline">T2</span></a></td>
+<td><a href="/dmg_cpu_b_map/?view=umut&mark%5b0%5d=-74.63,141.47">UMUT.q</a></td>
+<td>Maybe used to disable all bus drivers in the CPU when test mode is active.</td>
 </tr><tr>
-<td><p>R7</p></td>
-<td><p>O</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-67.79,104.47,-67.79,105.16,-67.76,105.26,-67.76,108.34,-45.4,108.34,-45.32,43.63,-76.48,43.63,-76.48,36.89,-85.95,36.89,-85.95,35.55&line[1]=-45.58,108.34,-45.63,154.84,-56.14,154.86">
-FROM_CPU4</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=texo&mark[0]=-85.96,35.68">TEXO.in1</a>,
-<a href="/dmg_cpu_b_map/?view=agut&mark[0]=-56.03,154.86">AGUT.in3</a></p></td>
-<td><p>?</p></td>
+<td>R7</td>
+<td>O</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-67.79,104.47,-67.79,105.16,-67.76,105.26,-67.76,108.34,-45.4,108.34,-45.32,43.63,-76.48,43.63,-76.48,36.89,-85.95,36.89,-85.95,35.55&line%5b1%5d=-45.58,108.34,-45.63,154.84,-56.14,154.86">
+FROM_CPU4</a></td>
+<td><a href="/dmg_cpu_b_map/?view=texo&mark%5b0%5d=-85.96,35.68">TEXO.in1</a>,
+<a href="/dmg_cpu_b_map/?view=agut&mark%5b0%5d=-56.03,154.86">AGUT.in3</a></td>
+<td>?</td>
 </tr><tr>
-<td><p>R8</p></td>
-<td><p>?</p></td>
-<td><p>-</p></td>
-<td><p>-</p></td>
-<td><p>Not connected.</p></td>
+<td>R8</td>
+<td>?</td>
+<td>-</td>
+<td>-</td>
+<td>Not connected.</td>
 </tr><tr>
-<td><p>R9</p></td>
-<td><p>?</p></td>
-<td><p>-</p></td>
-<td><p>-</p></td>
-<td><p>Not connected.</p></td>
+<td>R9</td>
+<td>?</td>
+<td>-</td>
+<td>-</td>
+<td>Not connected.</td>
 </tr><tr>
-<td><p>R10</p></td>
-<td><p>?</p></td>
-<td><p>-</p></td>
-<td><p>-</p></td>
-<td><p>Not connected.</p></td>
+<td>R10</td>
+<td>?</td>
+<td>-</td>
+<td>-</td>
+<td>Not connected.</td>
 </tr><tr>
-<td><p>R11</p></td>
-<td><p>?</p></td>
-<td><p>-</p></td>
-<td><p>-</p></td>
-<td><p>Not connected.</p></td>
+<td>R11</td>
+<td>?</td>
+<td>-</td>
+<td>-</td>
+<td>Not connected.</td>
 </tr><tr>
-<td><p>R12</p></td>
-<td><p>?</p></td>
-<td><p>-</p></td>
-<td><p>-</p></td>
-<td><p>Not connected.</p></td>
+<td>R12</td>
+<td>?</td>
+<td>-</td>
+<td>-</td>
+<td>Not connected.</td>
 </tr><tr>
-<td><p>R13</p></td>
-<td><p>?</p></td>
-<td><p>-</p></td>
-<td><p>-</p></td>
-<td><p>Not connected.</p></td>
+<td>R13</td>
+<td>?</td>
+<td>-</td>
+<td>-</td>
+<td>Not connected.</td>
 </tr><tr>
-<td><p>R14</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ0_ACK</p></td>
-<td><p>LETY.in</p></td>
-<td><p>Active-high. Acknowledges IRQ0 (V-Blank).</p></td>
+<td>R14</td>
+<td>O</td>
+<td>CPU_IRQ0_ACK</td>
+<td>LETY.in</td>
+<td>Active-high. Acknowledges IRQ0 (V-Blank).</td>
 </tr><tr>
-<td><p>R15</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ0_TRIG</p></td>
-<td><p>LOPE.q</p></td>
-<td><p>Active-high. Triggers IRQ0 (V-Blank).</p></td>
+<td>R15</td>
+<td>I</td>
+<td>CPU_IRQ0_TRIG</td>
+<td>LOPE.q</td>
+<td>Active-high. Triggers IRQ0 (V-Blank).</td>
 </tr><tr>
-<td><p>R16</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ1_ACK</p></td>
-<td><p>LEJA.in</p></td>
-<td><p>Active-high. Acknowledges IRQ1 (Status).</p></td>
+<td>R16</td>
+<td>O</td>
+<td>CPU_IRQ1_ACK</td>
+<td>LEJA.in</td>
+<td>Active-high. Acknowledges IRQ1 (Status).</td>
 </tr><tr>
-<td><p>R17</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ1_TRIG</p></td>
-<td><p>LALU.q</p></td>
-<td><p>Active-high. Triggers IRQ1 (Status).</p></td>
+<td>R17</td>
+<td>I</td>
+<td>CPU_IRQ1_TRIG</td>
+<td>LALU.q</td>
+<td>Active-high. Triggers IRQ1 (Status).</td>
 </tr><tr>
-<td><p>R18</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ2_ACK</p></td>
-<td><p>LESA.in</p></td>
-<td><p>Active-high. Acknowledges IRQ2 (Timer).</p></td>
+<td>R18</td>
+<td>O</td>
+<td>CPU_IRQ2_ACK</td>
+<td>LESA.in</td>
+<td>Active-high. Acknowledges IRQ2 (Timer).</td>
 </tr><tr>
-<td><p>R19</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ2_TRIG</p></td>
-<td><p>NYBO.q</p></td>
-<td><p>Active-high. Triggers IRQ2 (Timer).</p></td>
+<td>R19</td>
+<td>I</td>
+<td>CPU_IRQ2_TRIG</td>
+<td>NYBO.q</td>
+<td>Active-high. Triggers IRQ2 (Timer).</td>
 </tr><tr>
-<td><p>R20</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ3_ACK</p></td>
-<td><p>LUFE.in</p></td>
-<td><p>Active-high. Acknowledges IRQ3 (Serial).</p></td>
+<td>R20</td>
+<td>O</td>
+<td>CPU_IRQ3_ACK</td>
+<td>LUFE.in</td>
+<td>Active-high. Acknowledges IRQ3 (Serial).</td>
 </tr><tr>
-<td><p>R21</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ3_TRIG</p></td>
-<td><p>UBUL.q</p></td>
-<td><p>Active-high. Triggers IRQ3 (Serial).</p></td>
+<td>R21</td>
+<td>I</td>
+<td>CPU_IRQ3_TRIG</td>
+<td>UBUL.q</td>
+<td>Active-high. Triggers IRQ3 (Serial).</td>
 </tr><tr>
-<td><p>R22</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ4_ACK</p></td>
-<td><p>LAMO.in</p></td>
-<td><p>Active-high. Acknowledges IRQ4 (Joypad).</p></td>
+<td>R22</td>
+<td>O</td>
+<td>CPU_IRQ4_ACK</td>
+<td>LAMO.in</td>
+<td>Active-high. Acknowledges IRQ4 (Joypad).</td>
 </tr><tr>
-<td><p>R23</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ4_TRIG</p></td>
-<td><p>ULAK.q</p></td>
-<td><p>Active-high. Triggers IRQ4 (Joypad).</p></td>
+<td>R23</td>
+<td>I</td>
+<td>CPU_IRQ4_TRIG</td>
+<td>ULAK.q</td>
+<td>Active-high. Triggers IRQ4 (Joypad).</td>
 </tr><tr>
-<td><p>R24</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ5_ACK</p></td>
-<td><p>-</p></td>
-<td><p>Active-high. Acknowledges IRQ5. Not connected.</p></td>
+<td>R24</td>
+<td>O</td>
+<td>CPU_IRQ5_ACK</td>
+<td>-</td>
+<td>Active-high. Acknowledges IRQ5. Not connected.</td>
 </tr><tr>
-<td><p>R25</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ5_TRIG</p></td>
-<td><p>GND</p></td>
-<td><p>Active-high. Triggers IRQ5. Hardwired to GND.</p></td>
+<td>R25</td>
+<td>I</td>
+<td>CPU_IRQ5_TRIG</td>
+<td>GND</td>
+<td>Active-high. Triggers IRQ5. Hardwired to GND.</td>
 </tr><tr>
-<td><p>R26</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ6_ACK</p></td>
-<td><p>-</p></td>
-<td><p>Active-high. Acknowledges IRQ6. Not connected.</p></td>
+<td>R26</td>
+<td>O</td>
+<td>CPU_IRQ6_ACK</td>
+<td>-</td>
+<td>Active-high. Acknowledges IRQ6. Not connected.</td>
 </tr><tr>
-<td><p>R27</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ6_TRIG</p></td>
-<td><p>GND</p></td>
-<td><p>Active-high. Triggers IRQ6. Hardwired to GND.</p></td>
+<td>R27</td>
+<td>I</td>
+<td>CPU_IRQ6_TRIG</td>
+<td>GND</td>
+<td>Active-high. Triggers IRQ6. Hardwired to GND.</td>
 </tr><tr>
-<td><p>R28</p></td>
-<td><p>O</p></td>
-<td><p>CPU_IRQ7_ACK</p></td>
-<td><p>-</p></td>
-<td><p>Active-high. Acknowledges IRQ7. Not connected.</p></td>
+<td>R28</td>
+<td>O</td>
+<td>CPU_IRQ7_ACK</td>
+<td>-</td>
+<td>Active-high. Acknowledges IRQ7. Not connected.</td>
 </tr><tr>
-<td><p>R29</p></td>
-<td><p>I</p></td>
-<td><p>CPU_IRQ7_TRIG</p></td>
-<td><p>GND</p></td>
-<td><p>Active-high. Triggers IRQ7. Hardwired to GND.</p></td>
+<td>R29</td>
+<td>I</td>
+<td>CPU_IRQ7_TRIG</td>
+<td>GND</td>
+<td>Active-high. Triggers IRQ7. Hardwired to GND.</td>
 </tr><tr>
-<td><p>B1</p></td>
-<td><p>I/O</p></td>
-<td><p>D0</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D0.</p></td>
+<td>B1</td>
+<td>I/O</td>
+<td>D0</td>
+<td>multiple</td>
+<td>Data bus D0.</td>
 </tr><tr>
-<td><p>B2</p></td>
-<td><p>I/O</p></td>
-<td><p>D1</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D1.</p></td>
+<td>B2</td>
+<td>I/O</td>
+<td>D1</td>
+<td>multiple</td>
+<td>Data bus D1.</td>
 </tr><tr>
-<td><p>B3</p></td>
-<td><p>I/O</p></td>
-<td><p>D2</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D2.</p></td>
+<td>B3</td>
+<td>I/O</td>
+<td>D2</td>
+<td>multiple</td>
+<td>Data bus D2.</td>
 </tr><tr>
-<td><p>B4</p></td>
-<td><p>I/O</p></td>
-<td><p>D3</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D3.</p></td>
+<td>B4</td>
+<td>I/O</td>
+<td>D3</td>
+<td>multiple</td>
+<td>Data bus D3.</td>
 </tr><tr>
-<td><p>B5</p></td>
-<td><p>I/O</p></td>
-<td><p>D4</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D4.</p></td>
+<td>B5</td>
+<td>I/O</td>
+<td>D4</td>
+<td>multiple</td>
+<td>Data bus D4.</td>
 </tr><tr>
-<td><p>B6</p></td>
-<td><p>I/O</p></td>
-<td><p>D5</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D5.</p></td>
+<td>B6</td>
+<td>I/O</td>
+<td>D5</td>
+<td>multiple</td>
+<td>Data bus D5.</td>
 </tr><tr>
-<td><p>B7</p></td>
-<td><p>I/O</p></td>
-<td><p>D6</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D6.</p></td>
+<td>B7</td>
+<td>I/O</td>
+<td>D6</td>
+<td>multiple</td>
+<td>Data bus D6.</td>
 </tr><tr>
-<td><p>B8</p></td>
-<td><p>I/O</p></td>
-<td><p>D7</p></td>
-<td><p>multiple</p></td>
-<td><p>Data bus D7.</p></td>
+<td>B8</td>
+<td>I/O</td>
+<td>D7</td>
+<td>multiple</td>
+<td>Data bus D7.</td>
 </tr><tr>
-<td><p>B9</p></td>
-<td><p>O</p></td>
-<td><p>A15</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A15.</p></td>
+<td>B9</td>
+<td>O</td>
+<td>A15</td>
+<td>multiple</td>
+<td>Address bus A15.</td>
 </tr><tr>
-<td><p>B10</p></td>
-<td><p>O</p></td>
-<td><p>A14</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A14.</p></td>
+<td>B10</td>
+<td>O</td>
+<td>A14</td>
+<td>multiple</td>
+<td>Address bus A14.</td>
 </tr><tr>
-<td><p>B11</p></td>
-<td><p>O</p></td>
-<td><p>A13</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A13.</p></td>
+<td>B11</td>
+<td>O</td>
+<td>A13</td>
+<td>multiple</td>
+<td>Address bus A13.</td>
 </tr><tr>
-<td><p>B12</p></td>
-<td><p>O</p></td>
-<td><p>A12</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A12.</p></td>
+<td>B12</td>
+<td>O</td>
+<td>A12</td>
+<td>multiple</td>
+<td>Address bus A12.</td>
 </tr><tr>
-<td><p>B13</p></td>
-<td><p>O</p></td>
-<td><p>A11</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A11.</p></td>
+<td>B13</td>
+<td>O</td>
+<td>A11</td>
+<td>multiple</td>
+<td>Address bus A11.</td>
 </tr><tr>
-<td><p>B14</p></td>
-<td><p>O</p></td>
-<td><p>A10</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A10.</p></td>
+<td>B14</td>
+<td>O</td>
+<td>A10</td>
+<td>multiple</td>
+<td>Address bus A10.</td>
 </tr><tr>
-<td><p>B15</p></td>
-<td><p>O</p></td>
-<td><p>A9</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A9.</p></td>
+<td>B15</td>
+<td>O</td>
+<td>A9</td>
+<td>multiple</td>
+<td>Address bus A9.</td>
 </tr><tr>
-<td><p>B16</p></td>
-<td><p>O</p></td>
-<td><p>A8</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A8.</p></td>
+<td>B16</td>
+<td>O</td>
+<td>A8</td>
+<td>multiple</td>
+<td>Address bus A8.</td>
 </tr><tr>
-<td><p>B17</p></td>
-<td><p>O</p></td>
-<td><p>A7</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A7.</p></td>
+<td>B17</td>
+<td>O</td>
+<td>A7</td>
+<td>multiple</td>
+<td>Address bus A7.</td>
 </tr><tr>
-<td><p>B18</p></td>
-<td><p>O</p></td>
-<td><p>A6</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A6.</p></td>
+<td>B18</td>
+<td>O</td>
+<td>A6</td>
+<td>multiple</td>
+<td>Address bus A6.</td>
 </tr><tr>
-<td><p>B19</p></td>
-<td><p>O</p></td>
-<td><p>A5</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A5.</p></td>
+<td>B19</td>
+<td>O</td>
+<td>A5</td>
+<td>multiple</td>
+<td>Address bus A5.</td>
 </tr><tr>
-<td><p>B20</p></td>
-<td><p>O</p></td>
-<td><p>A4</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A4.</p></td>
+<td>B20</td>
+<td>O</td>
+<td>A4</td>
+<td>multiple</td>
+<td>Address bus A4.</td>
 </tr><tr>
-<td><p>B21</p></td>
-<td><p>O</p></td>
-<td><p>A3</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A3.</p></td>
+<td>B21</td>
+<td>O</td>
+<td>A3</td>
+<td>multiple</td>
+<td>Address bus A3.</td>
 </tr><tr>
-<td><p>B22</p></td>
-<td><p>O</p></td>
-<td><p>A2</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A2.</p></td>
+<td>B22</td>
+<td>O</td>
+<td>A2</td>
+<td>multiple</td>
+<td>Address bus A2.</td>
 </tr><tr>
-<td><p>B23</p></td>
-<td><p>O</p></td>
-<td><p>A1</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A1.</p></td>
+<td>B23</td>
+<td>O</td>
+<td>A1</td>
+<td>multiple</td>
+<td>Address bus A1.</td>
 </tr><tr>
-<td><p>B24</p></td>
-<td><p>O</p></td>
-<td><p>A0</p></td>
-<td><p>multiple</p></td>
-<td><p>Address bus A0.</p></td>
+<td>B24</td>
+<td>O</td>
+<td>A0</td>
+<td>multiple</td>
+<td>Address bus A0.</td>
 </tr><tr>
-<td><p>B25</p></td>
-<td><p>I</p></td>
-<td><p>
-<a href="/dmg_cpu_b_map/?wires=0&view=line[]&line[0]=-59.06,104.45,-59.06,105.01,-84.85,104.98,-84.85,101.98,-119.69,101.96,-119.77,180.08,-128.41,180.07,-128.41,182.46,-145.93,182.45,-145.93,183.74">
-TO_CPU2</a></p></td>
-<td><p><a href="/dmg_cpu_b_map/?view=awob&mark[0]=-145.94,183.64">AWOB.q</a></p></td>
-<td><p>Wakes CPU from STOP mode.</p></td>
-</tr></table></p>
+<td>B25</td>
+<td>I</td>
+<td>
+<a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-59.06,104.45,-59.06,105.01,-84.85,104.98,-84.85,101.98,-119.69,101.96,-119.77,180.08,-128.41,180.07,-128.41,182.46,-145.93,182.45,-145.93,183.74">
+TO_CPU2</a></td>
+<td><a href="/dmg_cpu_b_map/?view=awob&mark%5b0%5d=-145.94,183.64">AWOB.q</a></td>
+<td>Wakes CPU from STOP mode.</td>
+</tr></table>
 <hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </body>

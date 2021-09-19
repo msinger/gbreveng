@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Weird DMG-CPU Reset Behaviour</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>img { max-width: 100%; display: inline; }</style>
@@ -24,11 +26,11 @@ the clock and reset the Gameboy by pressing buttons. But the FPGA would count ho
 and delay the stopping of the clock each time I press the stop button to ensure that the Gameboy receives a total number
 of ticks that is always dividable by four. It still counted how many ticks were necessary to reach address 0x100.</p>
 <p>Now I repeated the following procedure:</p>
-<p><ol><li>Start Gameboy clock</li>
+<ol><li>Start Gameboy clock</li>
 <li>Wait until it reached address 0x100</li>
 <li>Stop Gameboy clock (but always at a tick number that is dividable by four)</li>
 <li>Reset Gameboy</li>
-<li>Repeat</li></ol></p>
+<li>Repeat</li></ol>
 <p>Having the number of ticks dividable by four on each iteration, caused the number of ticks until it reached
 address 0x100 to be always the same amount. Like if this "imaginary" two bit counter is always stopping in the
 same state, because it always gets the right amount of ticks to do so.</p>
@@ -36,10 +38,10 @@ same state, because it always gets the right amount of ticks to do so.</p>
 it wraps around after four iterations. It turned out that this is exactly how it behaves. Lets explain this by
 an example:</p>
 <p>These are the four possible tick counts it takes for reaching address 0x100:</p>
-<p><ul><li>23,571,402 (0x167ABCA)</li>
+<ul><li>23,571,402 (0x167ABCA)</li>
 <li>23,571,403 (0x167ABCB)</li>
 <li>23,571,404 (0x167ABCC)</li>
-<li>23,571,405 (0x167ABCD)</li></ul></p>
+<li>23,571,405 (0x167ABCD)</li></ul>
 <p>For simplicity, lets just call them by their least significant hex digits they end in: A, B, C and D</p>
 <p>When, for example, we measured tick count B and have fed the Gameboy with exactly 0x2000000 ticks (which is
 dividable by four) until we stop the clock and reset the Gameboy, we will measure tick count B again next time we
@@ -54,10 +56,10 @@ of the DMG-CPU B</a>. I was eager to find out what it was that kept counting dur
 0 and 1 of the DIV register, but all bits in this register are reset by the same reset source. So it couldn't be
 it. My second suspect was the clock divider made out of the cells ADYK, AFUR, ALEF and APUK on the left hand side
 of page 1:</p>
-<p><img src="img/cells/adyk_afur_alef_apuk_sch.png"></p>
+<p><img src="img/cells/adyk_afur_alef_apuk_sch.png" alt=""></p>
 <p>These four DFFs are reset by the signal <span style="text-decoration:overline">T1T2</span> coming from
 here:</p>
-<p><img src="img/cells/t1t2_sch.png"></p>
+<p><img src="img/cells/t1t2_sch.png" alt=""></p>
 <p>According to this, the four DFFs are reset when T1=T2=0 and RESET=1. The pins T1 and T2 are always connected
 to GND. So it looks like these four DFFs (ADYK, AFUR, ALEF and APUK) are also reset and can't be responsible for
 what we've seen in the experiment. (At least, that's what I thought.)</p>
@@ -77,11 +79,11 @@ on two years ago. So I had quickly modified my test code to check if this is act
 I can control two extra output pins with a button press. They are normally low, and when I press the button, they
 go high until I release it again. I did this for controlling the T1 and T2 test pins of course. This is easier said
 than done, because I had to lift up the two pins from the PCB first:</p>
-<p><img src="img/dmg_cpu_b_t1_t2_lift.jpg"></p>
+<p><img src="img/dmg_cpu_b_t1_t2_lift.jpg" alt=""></p>
 <p>It looks very ugly and indeed it is very ugly. I managed to damage one of the pads, it partially came off the
 PCB. So it won't survive another operation like that. Poor Gameboy endured a lot. This is how the whole setup looks
 now:</p>
-<p><!--<img src="img/.jpg">--><i>TODO: insert picture here</i></p>
+<p><!--<img src="img/.jpg" alt="">--><i>TODO: insert picture here</i></p>
 <p>When I repeat the experiment from before, each time I pull the test pins T1 and T2 high during Gameboy reset, the
 tick count until address 0x100 is always D, no matter what is was before and no matter how many clock ticks the Gameboy
 got in the previous iteration. In my opinion, this actually proves that ADYK, AFUR, ALEF and APUK are only properly

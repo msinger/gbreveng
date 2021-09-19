@@ -1,8 +1,33 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>DMG-CPU Cells Reference</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>img { max-width: 100%; display: inline; }</style>
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
 </head>
 <body>
 <p><a href="http://iceboy.a-singer.de/">Home</a></p>
@@ -16,609 +41,633 @@ It builds on the work of Furrtek, the information found in his
 encountering cells for which the cell zoo JPG wasn't providing the pinout, so I wanted to have them
 all documented once and for all, to make life easier!</p>
 <p>Please report any errors I made <a href="https://github.com/msinger/gbreveng/issues">here</a>.</p>
-<p><ul>
-<li><a href="#logic">Basic logic gates</a><ul>
-<li><a href="#inv">INVERTER gates</a><ul>
-<li><a href="#inv_a">INVERTER - Variant A</a></li>
-<li><a href="#inv_b">INVERTER - Variant B</a></li>
-<li><a href="#inv_c">INVERTER - Variant C</a></li>
-<li><a href="#inv_d">INVERTER - Variant D</a></li>
-<li><a href="#inv_e">INVERTER - Variant E</a></li>
-</ul></li>
-<li><a href="#nand">NAND gates</a><ul>
-<li><a href="#nand2">NAND2</a></li>
-<li><a href="#nand3">NAND3</a></li>
-<li><a href="#nand4">NAND4</a></li>
-<li><a href="#nand5">NAND5</a></li>
-<li><a href="#nand6">NAND6</a></li>
-<li><a href="#nand7">NAND7</a></li>
-</ul></li>
-<li><a href="#nor">NOR gates</a><ul>
-<li><a href="#nor2">NOR2</a></li>
-<li><a href="#nor3">NOR3</a></li>
-<li><a href="#nor4">NOR4</a></li>
-<li><a href="#nor5">NOR5</a></li>
-<li><a href="#nor6">NOR6</a></li>
-<li><a href="#nor8">NOR8</a></li>
-</ul></li>
-<li><a href="#and">AND gates</a><ul>
-<li><a href="#and2">AND2</a></li>
-<li><a href="#and3">AND3</a></li>
-<li><a href="#and4">AND4</a></li>
-</ul></li>
-<li><a href="#or">OR gates</a><ul>
-<li><a href="#or2">OR2</a></li>
-<li><a href="#or3">OR3</a></li>
-<li><a href="#or4">OR4</a></li>
-</ul></li>
-<li><a href="#xnor">XNOR</a></li>
-<li><a href="#xor">XOR</a></li>
-</ul></li>
-<li><a href="#compound">Compound logic gates</a><ul>
-<li><a href="#ao">AO</a></li>
-<li><a href="#oa">OA</a></li>
-<li><a href="#aoi2">AOI2</a></li>
-<li><a href="#aoi3">AOI3</a></li>
-<li><a href="#aoi4">AOI4</a></li>
-<li><a href="#aoi6">AOI6</a></li>
-<li><a href="#mux">MUX</a></li>
-</ul></li>
-<li><a href="#arith">Arithmetic gates</a><ul>
-<li><a href="#half_add">HALF_ADD</a></li>
-<li><a href="#full_add">FULL_ADD</a></li>
-</ul></li>
-<li><a href="#tri">Tri-state buffers</a><ul>
-<li><a href="#tri_a">TRIBUFFER - Variant A</a></li>
-<li><a href="#tri_b">TRIBUFFER - Variant B</a></li>
-</ul></li>
-<li><a href="#ff">Storage elements</a><ul>
-<li><a href="#srlatch">SR-LATCH</a></li>
-<li><a href="#dlatch">DLATCH</a></li>
-<li><a href="#dff">DFF</a></li>
-<li><a href="#dffr_a">DFFR - Variant A</a></li>
-<li><a href="#dffr_b">DFFR - Variant B</a></li>
-<li><a href="#dffr_b2">DFFR - Variant B+</a></li>
-<li><a href="#dffr_c">DFFR - Variant C</a></li>
-<li><a href="#dffsr">DFFSR</a></li>
-<li><a href="#tffd">TFFD</a></li>
-</ul></li>
-<li><a href="#io">I/O buffers</a><ul>
-<li><a href="#iobuf_a">IOBUFFER - Variant A</a></li>
-<li><a href="#iobuf_b">IOBUFFER - Variant B</a></li>
-<li><a href="#iobuf_c">IOBUFFER - Variant C</a></li>
-<li><a href="#ibuf">IBUFFER</a></li>
-<li><a href="#obuf_a">OBUFFER - Variant A</a></li>
-<li><a href="#obuf_b">OBUFFER - Variant B</a></li>
-<li><a href="#osc">OSC</a></li>
-<li><a href="#aibuf">AIBUFFER</a></li>
-<li><a href="#aobuf">AOBUFFER</a></li>
-</ul></li>
-<li><a href="#other">Other</a><ul>
-<li><a href="#supply">SUPPLY</a></li>
-</ul></li>
-</ul></p>
+<ul>
+ <li><a href="#logic">Basic logic gates</a>
+  <ul>
+   <li><a href="#inv">INVERTER gates</a>
+    <ul>
+     <li><a href="#inv_a">INVERTER - Variant A</a></li>
+     <li><a href="#inv_b">INVERTER - Variant B</a></li>
+     <li><a href="#inv_c">INVERTER - Variant C</a></li>
+     <li><a href="#inv_d">INVERTER - Variant D</a></li>
+     <li><a href="#inv_e">INVERTER - Variant E</a></li>
+    </ul>
+   </li>
+   <li><a href="#nand">NAND gates</a>
+    <ul>
+     <li><a href="#nand2">NAND2</a></li>
+     <li><a href="#nand3">NAND3</a></li>
+     <li><a href="#nand4">NAND4</a></li>
+     <li><a href="#nand5">NAND5</a></li>
+     <li><a href="#nand6">NAND6</a></li>
+     <li><a href="#nand7">NAND7</a></li>
+    </ul>
+   </li>
+   <li><a href="#nor">NOR gates</a>
+    <ul>
+     <li><a href="#nor2">NOR2</a></li>
+     <li><a href="#nor3">NOR3</a></li>
+     <li><a href="#nor4">NOR4</a></li>
+     <li><a href="#nor5">NOR5</a></li>
+     <li><a href="#nor6">NOR6</a></li>
+     <li><a href="#nor8">NOR8</a></li>
+    </ul>
+   </li>
+   <li><a href="#and">AND gates</a>
+    <ul>
+     <li><a href="#and2">AND2</a></li>
+     <li><a href="#and3">AND3</a></li>
+     <li><a href="#and4">AND4</a></li>
+    </ul>
+   </li>
+   <li><a href="#or">OR gates</a>
+    <ul>
+     <li><a href="#or2">OR2</a></li>
+     <li><a href="#or3">OR3</a></li>
+     <li><a href="#or4">OR4</a></li>
+    </ul>
+   </li>
+   <li><a href="#xnor">XNOR</a></li>
+   <li><a href="#xor">XOR</a></li>
+  </ul>
+ </li>
+ <li><a href="#compound">Compound logic gates</a>
+  <ul>
+   <li><a href="#ao">AO</a></li>
+   <li><a href="#oa">OA</a></li>
+   <li><a href="#aoi2">AOI2</a></li>
+   <li><a href="#aoi3">AOI3</a></li>
+   <li><a href="#aoi4">AOI4</a></li>
+   <li><a href="#aoi6">AOI6</a></li>
+   <li><a href="#mux">MUX</a></li>
+  </ul>
+ </li>
+ <li><a href="#arith">Arithmetic gates</a>
+  <ul>
+   <li><a href="#half_add">HALF_ADD</a></li>
+   <li><a href="#full_add">FULL_ADD</a></li>
+  </ul>
+ </li>
+ <li><a href="#tri">Tri-state buffers</a>
+  <ul>
+   <li><a href="#tri_a">TRIBUFFER - Variant A</a></li>
+   <li><a href="#tri_b">TRIBUFFER - Variant B</a></li>
+  </ul>
+ </li>
+ <li><a href="#ff">Storage elements</a>
+  <ul>
+   <li><a href="#srlatch">SR-LATCH</a></li>
+   <li><a href="#dlatch">DLATCH</a></li>
+   <li><a href="#dff">DFF</a></li>
+   <li><a href="#dffr_a">DFFR - Variant A</a></li>
+   <li><a href="#dffr_b">DFFR - Variant B</a></li>
+   <li><a href="#dffr_b2">DFFR - Variant B+</a></li>
+   <li><a href="#dffr_c">DFFR - Variant C</a></li>
+   <li><a href="#dffsr">DFFSR</a></li>
+   <li><a href="#tffd">TFFD</a></li>
+  </ul>
+ </li>
+ <li><a href="#io">I/O buffers</a>
+  <ul>
+   <li><a href="#iobuf_a">IOBUFFER - Variant A</a></li>
+   <li><a href="#iobuf_b">IOBUFFER - Variant B</a></li>
+   <li><a href="#iobuf_c">IOBUFFER - Variant C</a></li>
+   <li><a href="#ibuf">IBUFFER</a></li>
+   <li><a href="#obuf_a">OBUFFER - Variant A</a></li>
+   <li><a href="#obuf_b">OBUFFER - Variant B</a></li>
+   <li><a href="#osc">OSC</a></li>
+   <li><a href="#aibuf">AIBUFFER</a></li>
+   <li><a href="#aobuf">AOBUFFER</a></li>
+  </ul>
+ </li>
+ <li><a href="#other">Other</a>
+  <ul>
+   <li><a href="#supply">SUPPLY</a></li>
+  </ul>
+ </li>
+</ul>
 <h2 id="logic">Basic logic gates</h2>
 <h3 id="inv">INVERTER gates</h3>
 <h4 id="inv_a">INVERTER - Variant A</h4>
 <p>Simple inverter.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tona_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tona_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input to inverter.</p></td></tr>
+<td>Input to inverter.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs inverted <i>in</i>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs inverted <i>in</i>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="inv_b">INVERTER - Variant B</h4>
 <p>Inverter with higher driving strength.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/saha_desc.png" style="min-width:300px;"><br>
-<img src="img/cells/efug_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/saha_desc.png" style="min-width:300px;" alt=""><br>
+<img src="img/cells/efug_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input to inverter.</p></td></tr>
+<td>Input to inverter.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs inverted <i>in</i>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs inverted <i>in</i>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="inv_c">INVERTER - Variant C</h4>
 <p>Inverter with higher driving strength.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/apov_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/apov_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input to inverter.</p></td></tr>
+<td>Input to inverter.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs inverted <i>in</i>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs inverted <i>in</i>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="inv_d">INVERTER - Variant D</h4>
 <p>Inverter with higher driving strength.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/beko_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/beko_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input to inverter.</p></td></tr>
+<td>Input to inverter.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs inverted <i>in</i>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs inverted <i>in</i>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="inv_e">INVERTER - Variant E</h4>
 <p>Inverter with higher driving strength.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/beva_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/beva_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input to inverter.</p></td></tr>
+<td>Input to inverter.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs inverted <i>in</i>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs inverted <i>in</i>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="nand">NAND gates</h3>
 <h4 id="nand2">NAND2</h4>
 <p>NAND gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/rylu_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/rylu_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to NAND gate.</p></td></tr>
+<td>Inputs to NAND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 && in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 && in2)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nand3">NAND3</h4>
 <p>NAND gate with three inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/lavo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/lavo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
-<td><p>Inputs to NAND gate.</p></td></tr>
+<td>Inputs to NAND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 && in2 && in3)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 && in2 && in3)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nand4">NAND4</h4>
 <p>NAND gate with four inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tuge_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tuge_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
-<td><p>Inputs to NAND gate.</p></td></tr>
+<td>Inputs to NAND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 && in2 && in3 && in4)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 && in2 && in3 && in4)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nand5">NAND5</h4>
 <p>NAND gate with fife inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/palo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/palo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th><p>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i></td>
-<td><p>Inputs to NAND gate.</p></td></tr>
+<td>Inputs to NAND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 && in2 && in3 && in4 && in5)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nand6">NAND6</h4>
 <p>NAND gate with six inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/navo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/navo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i></td>
-<td><p>Inputs to NAND gate.</p></td></tr>
+<td>Inputs to NAND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nand7">NAND7</h4>
 <p>NAND gate with seven inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tuna_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tuna_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i>, <i>in7</i></td>
-<td><p>Inputs to NAND gate.</p></td></tr>
+<td>Inputs to NAND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6 && in7)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 && in2 && in3 && in4 && in5 && in6 && in7)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="nor">NOR gates</h3>
 <h4 id="nor2">NOR2</h4>
 <p>NOR gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tefa_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tefa_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to NOR gate.</p></td></tr>
+<td>Inputs to NOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 || in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 || in2)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nor3">NOR3</h4>
 <p>NOR gate with three inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/bapy_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/bapy_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
-<td><p>Inputs to NOR gate.</p></td></tr>
+<td>Inputs to NOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 || in2 || in3)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 || in2 || in3)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nor4">NOR4</h4>
 <p>NOR gate with four inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/semy_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/semy_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
-<td><p>Inputs to NOR gate.</p></td></tr>
+<td>Inputs to NOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 || in2 || in3 || in4)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 || in2 || in3 || in4)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nor5">NOR5</h4>
 <p>NOR gate with five inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/sare_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/sare_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i></td>
-<td><p>Inputs to NOR gate.</p></td></tr>
+<td>Inputs to NOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 || in2 || in3 || in4 || in5)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nor6">NOR6</h4>
 <p>NOR gate with six inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tyro_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tyro_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i></td>
-<td><p>Inputs to NOR gate.</p></td></tr>
+<td>Inputs to NOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="nor8">NOR8</h4>
 <p>NOR gate with eight inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tulo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tulo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i>, <i>in5</i>, <i>in6</i>, <i>in7</i>, <i>in8</i></td>
-<td><p>Inputs to NOR gate.</p></td></tr>
+<td>Inputs to NOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6 || in7 || in8)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 || in2 || in3 || in4 || in5 || in6 || in7 || in8)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="and">AND gates</h3>
 <h4 id="and2">AND2</h4>
 <p>AND gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/texo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/texo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to AND gate.</p></td></tr>
+<td>Inputs to AND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 && in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 && in2)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="and3">AND3</h4>
 <p>AND gate with three inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/toza_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/toza_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
-<td><p>Inputs to AND gate.</p></td></tr>
+<td>Inputs to AND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 && in2 && in3)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 && in2 && in3)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="and4">AND4</h4>
 <p>AND gate with four inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/texe_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/texe_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
-<td><p>Inputs to AND gate.</p></td></tr>
+<td>Inputs to AND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 && in2 && in3 && in4)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 && in2 && in3 && in4)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="or">OR gates</h3>
 <h4 id="or2">OR2</h4>
 <p>OR gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/rute_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/rute_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to OR gate.</p></td></tr>
+<td>Inputs to OR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 || in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 || in2)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="or3">OR3</h4>
 <p>OR gate with three inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tevy_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/tevy_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i></td>
-<td><p>Inputs to OR gate.</p></td></tr>
+<td>Inputs to OR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 || in2 || in3)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 || in2 || in3)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h4 id="or4">OR4</h4>
 <p>OR gate with four inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/awet_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/awet_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i>, <i>in3</i>, <i>in4</i></td>
-<td><p>Inputs to OR gate.</p></td></tr>
+<td>Inputs to OR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 || in2 || in3 || in4)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 || in2 || in3 || in4)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="xnor">XNOR</h3>
 <p>XNOR gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/nojo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/nojo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to XNOR gate.</p></td></tr>
+<td>Inputs to XNOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!(in1 ^ in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!(in1 ^ in2)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="xor">XOR</h3>
 <p>XOR gate with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/culu_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/culu_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in1</i>, <i>in2</i></td>
-<td><p>Inputs to XOR gate.</p></td></tr>
+<td>Inputs to XOR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>(in1 ^ in2)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>(in1 ^ in2)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h2 id="compound">Compound logic gates</h2>
 <h3 id="ao">AO</h3>
 <p>2-1 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/lagu_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/lagu_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i></td>
-<td><p>Inputs to AND gate.</p></td></tr>
+<td>Inputs to AND gate.</td></tr>
 <tr><td><i>c</i></td>
-<td><p>Input to OR gate.</p></td></tr>
+<td>Input to OR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>((a && b) || c)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>((a && b) || c)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="oa">OA</h3>
 <p>2-1 OR-AND two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OA3</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/agut_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/agut_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i></td>
-<td><p>Inputs to OR gate.</p></td></tr>
+<td>Inputs to OR gate.</td></tr>
 <tr><td><i>c</i></td>
-<td><p>Input to AND gate.</p></td></tr>
+<td>Input to AND gate.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>((a || b) && c)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>((a || b) && c)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="aoi2">AOI2</h3>
 <p>2-2 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_2</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/jufy_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/jufy_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i></td>
-<td><p>Inputs to AND gates.</p></td></tr>
+<td>Inputs to AND gates.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!((a && b) || (c && d))</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!((a && b) || (c && d))</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="aoi3">AOI3</h3>
 <p>2-2-2 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_3</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/evug_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/evug_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i></td>
-<td><p>Inputs to AND gates.</p></td></tr>
+<td>Inputs to AND gates.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!((a && b) || (c && d) || (e && f))</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!((a && b) || (c && d) || (e && f))</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="aoi4">AOI4</h3>
 <p>2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/waly_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/waly_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i></td>
-<td><p>Inputs to AND gates.</p></td></tr>
+<td>Inputs to AND gates.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h))</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h))</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="aoi6">AOI6</h3>
 <p>2-2-2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_6</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/etyr_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/etyr_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i>;
 <i>i</i>, <i>j</i>; <i>k</i>, <i>l</i></td>
-<td><p>Inputs to AND gates.</p></td></tr>
+<td>Inputs to AND gates.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h) || (i && j) || (k && l))</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h) || (i && j) || (k && l))</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="mux">MUX</h3>
 <p>Multiplexer with two inputs.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/atur_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/atur_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d0</i>, <i>d1</i></td>
-<td><p>Data inputs.</p></td></tr>
+<td>Data inputs.</td></tr>
 <tr><td><i>sel</i></td>
-<td><p>Select input.</p></td></tr>
+<td>Select input.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Outputs <i>d0</i> if <i>sel</i> is high; outputs <i>d1</i> if <i>sel</i> is low.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Outputs <i>d0</i> if <i>sel</i> is high; outputs <i>d1</i> if <i>sel</i> is low.</td></tr>
+</table></td></tr>
+</table>
 <h2 id="arith">Arithmetic gates</h2>
 <h3 id="half_add">HALF_ADD</h3>
 <p>Half adder.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/fafo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/fafo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i></td>
-<td><p>Summand inputs.</p></td></tr>
+<td>Summand inputs.</td></tr>
 <tr><td><i>cout</i></td>
-<td><p>Carry output. Outputs <code>(a && b)</code>.</p></td></tr>
+<td>Carry output. Outputs <code>(a && b)</code>.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Sum output. Outputs <code>(a ^ b)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Sum output. Outputs <code>(a ^ b)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="full_add">FULL_ADD</h3>
 <p>Full adder.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/geva_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/geva_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i></td>
-<td><p>Summand inputs.</p></td></tr>
+<td>Summand inputs.</td></tr>
 <tr><td><i>cin</i></td>
-<td><p>Carry input.</p></td></tr>
+<td>Carry input.</td></tr>
 <tr><td><i>cout</i></td>
-<td><p>Carry output. Outputs <code>((a && b) || (cin && (a ^ b)))</code>.</p></td></tr>
+<td>Carry output. Outputs <code>((a && b) || (cin && (a ^ b)))</code>.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Sum output. Outputs <code>(a ^ b ^ cin)</code>.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Sum output. Outputs <code>(a ^ b ^ cin)</code>.</td></tr>
+</table></td></tr>
+</table>
 <h2 id="tri">Tri-state buffers</h2>
 <h3 id="tri_a">TRIBUFFER - Variant A</h3>
 <p>Tri-state buffer.</p>
 <p>This cell comes in two very similar looking shapes: One has an active-high enable input; the other has an
 active-low enable input.</p>
-<p><img src="img/cells/tawu_hope.png"></p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/tawu_desc.png" style="min-width:300px;"><br>
-<img src="img/cells/hope_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<p><img src="img/cells/tawu_hope.png" alt=""></p>
+<table>
+<tr><td><img src="img/cells/tawu_desc.png" style="min-width:300px;" alt=""><br>
+<img src="img/cells/hope_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input.</p></td></tr>
+<td>Input.</td></tr>
 <tr><td><i>ena</i></td>
-<td><p>Active-high enable input. When high, the value at <i>in</i> gets inverted at <i>!q</i>.
-When low, <i>!q</i> is not driven.</p></td></tr>
+<td>Active-high enable input. When high, the value at <i>in</i> gets inverted at <i>!q</i>.
+When low, <i>!q</i> is not driven.</td></tr>
 <tr><td><i>!ena</i></td>
-<td><p>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!q</i>.
-When high, <i>!q</i> is not driven.</p></td></tr>
+<td>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!q</i>.
+When high, <i>!q</i> is not driven.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted tri-state output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted tri-state output.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="tri_b">TRIBUFFER - Variant B</h3>
 <p>Tri-state buffer.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
 necessary for it to work.</p>
 <p><i>TODO: Check if there are instances of this cell with active-high enable input.</i></p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/seke_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/seke_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>in</i></td>
-<td><p>Input. There are two inputs to this cell, which are externally connected to each other (by the
-pink line in the picture).</p></td></tr>
+<td>Input. There are two inputs to this cell, which are externally connected to each other (by the
+pink line in the picture).</td></tr>
 <tr><td><i>!ena</i></td>
-<td><p>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!q</i>.
-When high, <i>!q</i> is not driven.</p></td></tr>
+<td>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!q</i>.
+When high, <i>!q</i> is not driven.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted tri-state output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted tri-state output.</td></tr>
+</table></td></tr>
+</table>
 <h2 id="ff">Storage elements</h2>
 <h4 id="srlatch">SR-LATCH</h4>
 <p>Set/reset latch.</p>
 <p>These are wrongly labelled OR and AND gates in the schematics.
 <a href="https://github.com/rgalland">Rgalland</a>
 just figured out the correct function of these cells.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/dane_desc.png" style="min-width:300px;"><br>
-<img src="img/cells/gugu_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/dane_desc.png" style="min-width:300px;" alt=""><br>
+<img src="img/cells/gugu_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>s</i></td>
-<td><p>Set input. When high, latch is set to 1.</p></td></tr>
+<td>Set input. When high, latch is set to 1.</td></tr>
 <tr><td><i>r</i></td>
-<td><p>Reset input. When high, latch is reset to 0.</p></td></tr>
+<td>Reset input. When high, latch is reset to 0.</td></tr>
 <tr><td><i>!s</i></td>
-<td><p>Inverted set input. When low, latch is set to 1.</p></td></tr>
+<td>Inverted set input. When low, latch is set to 1.</td></tr>
 <tr><td><i>!r</i></td>
-<td><p>Inverted reset input. When low, latch is reset to 0.</p></td></tr>
+<td>Inverted reset input. When low, latch is reset to 0.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="dlatch">DLATCH</h3>
 <p>Gated data latch.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/zeca_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/zeca_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input.</p></td></tr>
+<td>Data input.</td></tr>
 <tr><td><i>ena</i></td>
-<td><p>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
+<td>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
 as <i>ena</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ena</i> goes
-high again.</p></td></tr>
+high again.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <h3 id="dff">DFF</h3>
 <p>Single-edge-triggered data flip-flop.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
@@ -628,25 +677,25 @@ edge of <i>!clk</i>.</p>
 unrelated net run through the row where the <i>!q</i> output would have been. The cells named MYTU and MOFO are two
 examples of that.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF2</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/luxo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/luxo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</p></td></tr>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</td></tr>
 <tr><td><i>clk</i></td>
-<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</td></tr>
 <tr><td><i>!clk</i></td>
-<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances with <i>!q</i>:
 <a href="/dmg_cpu_b_map/?view=abeg">ABEG</a>
 <a href="/dmg_cpu_b_map/?view=abop">ABOP</a>
@@ -830,27 +879,27 @@ edge of <i>!clk</i>. It doesn't seem to matter which one of the two inputs gets 
 it works both ways.</p>
 <p><i>TODO: Not really sure about clock input polarity.</i></p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/cyxu_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/cyxu_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</p></td></tr>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</td></tr>
 <tr><td><i>clk</i></td>
-<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</td></tr>
 <tr><td><i>!clk</i></td>
-<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</td></tr>
 <tr><td><i>!rst</i></td>
-<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</p></td></tr>
+<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=adek">ADEK</a>
 <a href="/dmg_cpu_b_map/?view=adyk">ADYK</a>
@@ -1100,31 +1149,31 @@ of the same variant.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
 necessary for it to work.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/dyve_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/dyve_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</p></td></tr>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</td></tr>
 <tr><td><i>clk</i></td>
-<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
 a negative edge on the <i>!clk</i> input at the same time. See also
-<a href="dmg_cells2.html#dffr_b_clk">here</a>.</p></td></tr>
+<a href="dmg_cells2.html#dffr_b_clk">here</a>.</td></tr>
 <tr><td><i>!clk</i></td>
-<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
 a positive edge on the <i>clk</i> input at the same time. See also
-<a href="dmg_cells2.html#dffr_b_clk">here</a>.</p></td></tr>
+<a href="dmg_cells2.html#dffr_b_clk">here</a>.</td></tr>
 <tr><td><i>!rst</i></td>
-<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
 two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
-the picture).</p></td></tr>
+the picture).</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=afer">AFER</a>
 <a href="/dmg_cpu_b_map/?view=cagy">CAGY</a>
@@ -1148,25 +1197,25 @@ negative clocks generated by the extension to where they would be connected to i
 B without extension. There is not a single instance of this cell that has those two clock connections crossed,
 which means all instances trigger on a positive clock edge.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/caly_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/caly_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i>.</p></td></tr>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i>.</td></tr>
 <tr><td><i>clk</i></td>
-<td><p>Clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. See also
-<a href="dmg_cells2.html#dffr_b2_clk">here</a>.</p></td></tr>
+<td>Clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. See also
+<a href="dmg_cells2.html#dffr_b2_clk">here</a>.</td></tr>
 <tr><td><i>!rst</i></td>
-<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
 two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
-the picture).</p></td></tr>
+the picture).</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=abel">ABEL</a>
 <a href="/dmg_cpu_b_map/?view=acef">ACEF</a>
@@ -1446,27 +1495,27 @@ necessary for it to work.</p>
 There is only a single row between <i>!rst</i> and <i>!q</i> instead of two.</p>
 <p><i>TODO: Not really sure about clock input polarity.</i></p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/poju_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/poju_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</p></td></tr>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</td></tr>
 <tr><td><i>clk</i></td>
-<td><p>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</p></td></tr>
+<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</td></tr>
 <tr><td><i>!clk</i></td>
-<td><p>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</p></td></tr>
+<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</td></tr>
 <tr><td><i>!rst</i></td>
-<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
 two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
-the picture).</p></td></tr>
+the picture).</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=defa">DEFA</a>
 <a href="/dmg_cpu_b_map/?view=dele">DELE</a>
@@ -1504,27 +1553,27 @@ the picture).</p></td></tr>
 <p>There are four external connections always made on this cell (see orange, cyan, green and pink
 lines in the picture) that seem to be necessary for it to work.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF3</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/nybo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/nybo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i>.</p></td></tr>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i>.</td></tr>
 <tr><td><i>clk</i></td>
-<td><p>Clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. See also
-<a href="dmg_cells2.html#dffsr_clk">here</a>.</p></td></tr>
+<td>Clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. See also
+<a href="dmg_cells2.html#dffsr_clk">here</a>.</td></tr>
 <tr><td><i>!set</i></td>
-<td><p>Active-low set input. Data inside the flip-flop gets set to 1 when <i>!set</i> is low. There are
+<td>Active-low set input. Data inside the flip-flop gets set to 1 when <i>!set</i> is low. There are
 two <i>!set</i> inputs to this cell, which are externally connected to each other (by the orange line in
-the picture).</p></td></tr>
+the picture).</td></tr>
 <tr><td><i>!rst</i></td>
-<td><p>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</p></td></tr>
+<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=axan">AXAN</a>
 <a href="/dmg_cpu_b_map/?view=agez">AGEZ</a>
@@ -1616,25 +1665,25 @@ the picture).</p></td></tr>
 <p>There are four external connections always made on this cell (see orange, cyan, green and pink
 lines in the picture) that seem to be necessary for it to work.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: COUNT</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/kenu_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/kenu_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td><p>Data input. Gets stored in the flip-flop when <i>load</i> is high. There are two <i>d</i> inputs
-to this cell, which are externally connected to each other (by the orange line in the picture).</p></td></tr>
+<td>Data input. Gets stored in the flip-flop when <i>load</i> is high. There are two <i>d</i> inputs
+to this cell, which are externally connected to each other (by the orange line in the picture).</td></tr>
 <tr><td><i>!clk</i></td>
-<td><p>Clock input. On a negative edge the data inside the flip-flop gets inverted.</p></td></tr>
+<td>Clock input. On a negative edge the data inside the flip-flop gets inverted.</td></tr>
 <tr><td><i>load</i></td>
-<td><p>Active-high load input. Input <i>d</i> gets stored in the flip-flop when <i>load</i> is high. There are
+<td>Active-high load input. Input <i>d</i> gets stored in the flip-flop when <i>load</i> is high. There are
 two <i>load</i> inputs to this cell, which are externally connected to each other (by the cyan line in
-the picture).</p></td></tr>
+the picture).</td></tr>
 <tr><td><i>q</i></td>
-<td><p>Data output.</p></td></tr>
+<td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
-<td><p>Inverted data output.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=akyd">AKYD</a>
 <a href="/dmg_cpu_b_map/?view=bacy">BACY</a>
@@ -1740,18 +1789,18 @@ the picture).</p></td></tr>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the three connections
 face inwards.</p>
 <p><i>TODO: Figure out if input is inverting.</i></p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/rd_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/rd_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>drv_low</i></td>
-<td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
+<td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
 <tr><td><i>!drv_high</i></td>
-<td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
+<td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><i>state</i></td>
-<td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Input state. Reads the current binary level at the I/O pad.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=a0">A0</a>
 <a href="/dmg_cpu_b_map/?view=a1">A1</a>
@@ -1780,20 +1829,20 @@ face inwards.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
 <p><i>TODO: The MD0-MD7, P10-P13 and SIN pins seem to be inverting when used as inputs, but D0-D7 are not.</i></p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/md0_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/md0_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>drv_low</i></td>
-<td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
+<td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
 <tr><td><i>!drv_high</i></td>
-<td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
+<td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><i>!weak_high</i></td>
-<td><p>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</p></td></tr>
+<td>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</td></tr>
 <tr><td><i>state</i></td>
-<td><p>Input state. Reads the current binary level at the I/O pad.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Input state. Reads the current binary level at the I/O pad.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=d0">D0</a>
 <a href="/dmg_cpu_b_map/?view=d1">D1</a>
@@ -1822,20 +1871,20 @@ face inwards.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=sck">SCK</a>. In the die shot this picture was taken
 from, this pin is located at the right-hand side. For consistency across this documentation it is rotated
 here (not mirrored!).</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/sck_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/sck_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>drv_low</i></td>
-<td><p>Drive low. When high, the I/O pad is actively driven low.</p></td></tr>
+<td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
 <tr><td><i>!drv_high</i></td>
-<td><p>Drive high. When low, the I/O pad is actively driven high.</p></td></tr>
+<td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><i>!weak_high</i></td>
-<td><p>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</p></td></tr>
+<td>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</td></tr>
 <tr><td><i>!in</i></td>
-<td><p>Inverted input state. Reads the inverted binary level at the I/O pad.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=sck">SCK</a>
 </p>
@@ -1847,14 +1896,14 @@ that is directly connected to the CPU). In the die shot this picture was taken f
 T2) are located at the right-hand side. For consistency across this documentation it is rotated here (not
 mirrored!).</p>
 <p><i>TODO: Figure out if some instances of this cell have pull-up or pull-down resistors.</i></p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/rst_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/rst_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>!in</i></td>
-<td><p>Inverted input state. Reads the inverted binary level at the input pad.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Inverted input state. Reads the inverted binary level at the input pad.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=rst">RST</a>
 <a href="/dmg_cpu_b_map/?view=t1">T1</a>
@@ -1865,15 +1914,15 @@ mirrored!).</p>
 <p>Simple inverting output buffer.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the connection
 faces inwards.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/ma0_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/ma0_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>!out</i></td>
-<td><p>Output level. Output pad is driven high when <i>!out</i> is low, and it's driven low when <i>!out</i>
-is high. The pad is always actively driven.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Output level. Output pad is driven high when <i>!out</i> is low, and it's driven low when <i>!out</i>
+is high. The pad is always actively driven.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=cp">CP</a>
 <a href="/dmg_cpu_b_map/?view=cpg">CPG</a>
@@ -1908,16 +1957,16 @@ is high. The pad is always actively driven.</p></td></tr>
 the bottom right corner. For consistency across this documentation it is rotated here (not mirrored!). Keep
 that in mind, especially for P14, where the <i>!drv_high</i> connection is at the top and <i>drv_low</i> is
 at the bottom.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/p15_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/p15_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>drv_low</i></td>
-<td><p>Drive low. When high, the output pad is actively driven low.</p></td></tr>
+<td>Drive low. When high, the output pad is actively driven low.</td></tr>
 <tr><td><i>!drv_high</i></td>
-<td><p>Drive high. When low, the output pad is actively driven high.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Drive high. When low, the output pad is actively driven high.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=p14">P14</a>
 <a href="/dmg_cpu_b_map/?view=p15">P15</a>
@@ -1927,17 +1976,17 @@ at the bottom.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=osc">XI/XO</a>. In the die shot this picture was
 taken from, these pins are located at the right-hand side. For consistency across this documentation it is
 rotated here (not mirrored!).</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/xi_xo_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/xi_xo_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>clk</i></td>
-<td><p>Clock. Provides the source clock for the system.</p></td></tr>
+<td>Clock. Provides the source clock for the system.</td></tr>
 <tr><td><i>ena</i></td>
-<td><p>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction
-to stop the crystal oscillator (to save power) until a button gets pressed.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Enable oscillator. This is driven low by the CPU core after encountering a STOP instruction
+to stop the crystal oscillator (to save power) until a button gets pressed.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=osc">XI/XO</a>
 </p>
@@ -1946,14 +1995,14 @@ to stop the crystal oscillator (to save power) until a button gets pressed.</p><
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=vin">VIN</a>. In the die shot this picture was taken
 from, this pin is located at the bottom right. For consistency across this documentation it is rotated here (not
 mirrored!).</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/vin_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/vin_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>vin</i></td>
-<td><p>Analog input. Reads the current analog level at the input pad.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Analog input. Reads the current analog level at the input pad.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=vin">VIN</a>
 </p>
@@ -1962,14 +2011,14 @@ mirrored!).</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=rout">ROUT</a> and
 <a href="/dmg_cpu_b_map/?view=lout">LOUT</a>. In the die shot this picture was taken from, these pins are located
 at the bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/lout_desc.png" style="min-width:350px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/lout_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>vout</i></td>
-<td><p>Analog output. Drives the output pad based on this analog level. The pad is always actively driven.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Analog output. Drives the output pad based on this analog level. The pad is always actively driven.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=lout">LOUT</a>
 <a href="/dmg_cpu_b_map/?view=rout">ROUT</a>
@@ -1982,16 +2031,16 @@ cells. For example, it is used for the interrupt flags register: The <a href="/d
 cell feeds a constant 1 into the data inputs of flip-flops (<a href="/dmg_cpu_b_map/?view=lope">LOPE</a>,
 <a href="/dmg_cpu_b_map/?view=ubul">UBUL</a>, ...). Whenever the clock inputs of those flip-flops get triggered
 by an interrupt, the constant 1 gets clocked in.</p>
-<p><table border="0">
-<tr><td><p><img src="img/cells/vypo_desc.png" style="min-width:300px;"></p></td>
-<td><p><table border="1">
-<tr><th><p>I/O</p></th><th><p>Description</p></th></tr>
+<table>
+<tr><td><img src="img/cells/vypo_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>0</i></td>
-<td><p>Constant 0 output. Connects to GND.</p></td></tr>
+<td>Constant 0 output. Connects to GND.</td></tr>
 <tr><td><i>1</i></td>
-<td><p>Constant 1 output. Connects to VCC.</p></td></tr>
-</table></p></td></tr>
-</table></p>
+<td>Constant 1 output. Connects to VCC.</td></tr>
+</table></td></tr>
+</table>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=pesu">PESU</a>
 <a href="/dmg_cpu_b_map/?view=runy">RUNY</a>
