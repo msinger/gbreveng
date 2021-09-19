@@ -64,6 +64,14 @@ this B+ variant that has their clock extension part at the top connected differe
 <p>The clock polarity of the <a href="dmg_cells.html#dffsr">DFFSR cells</a> can be easily inferred by looking at the
 interrupt flags register. All the interrupt signals are active high and are routed directly into the clock input of
 DFFSRs. Case closed.</p>
+<h2 id="ibuf_resistors">IBUFFER pull-up resistors</h2>
+<p>I noticed that all I/O buffers that have switchable pull-up resistors have these windings in the background
+at the same spot:</p>
+<p><img src="img/cells/sin_windings.png" alt=""></p>
+<p>I beleive that these windings are the actual resistors. I have measured the pull-ups of P10-P13. They are
+around 20 kOhm. I measured T1 and T2 as well and wasn't able to detect any pull-ups or pull-downs. The input buffers
+T1 and T2 don't have these windings. So I guess that !RST and the unbonded pin between A10 and A11 don't have
+any resistors as well. For the latter one this is a bit odd though, since it is obviously floating then.</p>
 <hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </body>
