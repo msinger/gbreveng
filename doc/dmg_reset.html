@@ -90,6 +90,46 @@ got in the previous iteration. In my opinion, this actually proves that ADYK, AF
 reset when T1 and T2 are high. There is a fifth DFF that is also reset by the
 <span style="text-decoration:overline">T1T2</span> signal, namely AFER, which is responsible for generating a reset signal
 that is synchronized to the BOGA1MHZ clock.</p>
+<p>I simulated the clock generating cells with Icarus. Resetting these four registers isn't necessary to get the correct
+clocks. Here are 32 timing diagrams, the 16 different starting combinations of the DFFs with the 4 MiHz XI input starting
+low, and another 16 with XI starting high:<br>
+<img src="img/sim/dmg_clock_reset0.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset1.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset2.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset3.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset4.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset5.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset6.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset7.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset8.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset9.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset10.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset11.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset12.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset13.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset14.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset15.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset16.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset17.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset18.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset19.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset20.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset21.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset22.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset23.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset24.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset25.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset26.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset27.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset28.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset29.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset30.png" alt=""><br>
+<img src="img/sim/dmg_clock_reset31.png" alt=""><br>
+They always end up in this "stair case" pattern, no matter their starting conditions. Please note that for this to work
+AFUR and APUK must trigger on the negative edge of their input clock. See
+<a href="https://github.com/furrtek/DMG-CPU-Inside/issues/10">issue #10</a>.</p>
+<p>So maybe it was intentional to not reset these DFFs and they kept the option to pull T1 and T2 up, just in case
+something went wrong. One possible benfit could be that the PHI clock stays phase coherent across resets.</p>
 <hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </body>
