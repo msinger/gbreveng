@@ -584,7 +584,7 @@ all documented once and for all, to make life easier!</p>
 </table>
 <h2 id="tri">Tri-state buffers</h2>
 <h3 id="tri_a">TRIBUFFER - Variant A</h3>
-<p>Tri-state buffer.</p>
+<p>Tri-state buffer, inverting.</p>
 <p>This cell comes in two very similar looking shapes: One has an active-high enable input; the other has an
 active-low enable input.</p>
 <p><img src="img/cells/tawu_hope.png" alt=""></p>
@@ -606,10 +606,9 @@ When high, <i>!q</i> is not driven.</td></tr>
 </table></td></tr>
 </table>
 <h3 id="tri_b">TRIBUFFER - Variant B</h3>
-<p>Tri-state buffer.</p>
+<p>Tri-state buffer, non-inverting with active-low enable input.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
 necessary for it to work.</p>
-<p><i>TODO: Check if there are instances of this cell with active-high enable input.</i></p>
 <table>
 <tr><td><img src="img/cells/seke_desc.png" style="min-width:300px;" alt=""></td>
 <td><table class="default">
@@ -618,10 +617,10 @@ necessary for it to work.</p>
 <td>Input. There are two inputs to this cell, which are externally connected to each other (by the
 pink line in the picture).</td></tr>
 <tr><td><i>!ena</i></td>
-<td>Active-low enable input. When low, the value at <i>in</i> gets inverted at <i>!q</i>.
-When high, <i>!q</i> is not driven.</td></tr>
-<tr><td><i>!q</i></td>
-<td>Inverted tri-state output.</td></tr>
+<td>Active-low enable input. When low, the value at <i>in</i> gets passed through to <i>q</i>.
+When high, <i>q</i> is not driven.</td></tr>
+<tr><td><i>q</i></td>
+<td>Tri-state output. (Not inverted!)</td></tr>
 </table></td></tr>
 </table>
 <p>Instances:
