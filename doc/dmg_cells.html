@@ -1845,7 +1845,6 @@ the picture).</td></tr>
 <p>Input/output buffer with open-drain/-source capability.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the three connections
 face inwards.</p>
-<p><i>TODO: Figure out if input is inverting.</i></p>
 <table>
 <tr><td><img src="img/cells/rd_desc.png" style="min-width:350px;" alt=""></td>
 <td><table class="default">
@@ -1854,8 +1853,8 @@ face inwards.</p>
 <td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
 <tr><td><i>!drv_high</i></td>
 <td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
-<tr><td><i>state</i></td>
-<td>Input state. Reads the current binary level at the I/O pad.</td></tr>
+<tr><td><i>!in</i></td>
+<td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
 <p>Instances:
@@ -1885,7 +1884,6 @@ face inwards.</p>
 <p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
-<p><i>TODO: The MD0-MD7, P10-P13 and SIN pins seem to be inverting when used as inputs, but D0-D7 are not.</i></p>
 <table>
 <tr><td><img src="img/cells/md0_desc.png" style="min-width:350px;" alt=""></td>
 <td><table class="default">
@@ -1896,8 +1894,8 @@ face inwards.</p>
 <td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><i>!weak_high</i></td>
 <td>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</td></tr>
-<tr><td><i>state</i></td>
-<td>Input state. Reads the current binary level at the I/O pad.</td></tr>
+<tr><td><i>!in</i></td>
+<td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
 <p>Instances:
