@@ -93,12 +93,14 @@ all documented once and for all, to make life easier!</p>
  </li>
  <li><a href="#compound">Compound logic gates</a>
   <ul>
-   <li><a href="#ao">AO</a></li>
-   <li><a href="#oa">OA</a></li>
+   <li><a href="#aoi1">AOI1</a></li>
    <li><a href="#aoi2">AOI2</a></li>
    <li><a href="#aoi3">AOI3</a></li>
    <li><a href="#aoi4">AOI4</a></li>
    <li><a href="#aoi6">AOI6</a></li>
+   <li><a href="#ao">AO</a></li>
+   <li><a href="#oa">OA</a></li>
+   <li><a href="#muxi">MUXI</a></li>
    <li><a href="#mux">MUX</a></li>
   </ul>
  </li>
@@ -454,11 +456,11 @@ all documented once and for all, to make life easier!</p>
 </table></td></tr>
 </table>
 <h2 id="compound">Compound logic gates</h2>
-<h3 id="ao">AO</h3>
-<p>2-1 AND-OR two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
+<h3 id="aoi1">AOI1</h3>
+<p>2-1 AND-OR-INVERT two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: NAO</p>
 <table>
-<tr><td><img src="img/cells/lagu_desc.png" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/cufe_desc.png" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>a</i>, <i>b</i></td>
@@ -466,22 +468,7 @@ all documented once and for all, to make life easier!</p>
 <tr><td><i>c</i></td>
 <td>Input to OR gate.</td></tr>
 <tr><td><i>q</i></td>
-<td>Outputs <code>((a && b) || c)</code>.</td></tr>
-</table></td></tr>
-</table>
-<h3 id="oa">OA</h3>
-<p>2-1 OR-AND two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OA3</p>
-<table>
-<tr><td><img src="img/cells/agut_desc.png" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>a</i>, <i>b</i></td>
-<td>Inputs to OR gate.</td></tr>
-<tr><td><i>c</i></td>
-<td>Input to AND gate.</td></tr>
-<tr><td><i>q</i></td>
-<td>Outputs <code>((a || b) && c)</code>.</td></tr>
+<td>Outputs <code>!((a && b) || c)</code>.</td></tr>
 </table></td></tr>
 </table>
 <h3 id="aoi2">AOI2</h3>
@@ -535,6 +522,50 @@ all documented once and for all, to make life easier!</p>
 <td>Inputs to AND gates.</td></tr>
 <tr><td><i>q</i></td>
 <td>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h) || (i && j) || (k && l))</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="ao">AO</h3>
+<p>2-1 AND-OR two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
+<table>
+<tr><td><img src="img/cells/lagu_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>a</i>, <i>b</i></td>
+<td>Inputs to AND gate.</td></tr>
+<tr><td><i>c</i></td>
+<td>Input to OR gate.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs <code>((a && b) || c)</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="oa">OA</h3>
+<p>2-1 OR-AND two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OA3</p>
+<table>
+<tr><td><img src="img/cells/agut_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>a</i>, <i>b</i></td>
+<td>Inputs to OR gate.</td></tr>
+<tr><td><i>c</i></td>
+<td>Input to AND gate.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs <code>((a || b) && c)</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="muxi">MUXI</h3>
+<p>Inverting multiplexer with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/petu_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>d0</i>, <i>d1</i></td>
+<td>Data inputs.</td></tr>
+<tr><td><i>sel</i></td>
+<td>Select input.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs inverted <i>d0</i> if <i>sel</i> is high; outputs inverted <i>d1</i> if <i>sel</i> is low.</td></tr>
 </table></td></tr>
 </table>
 <h3 id="mux">MUX</h3>
