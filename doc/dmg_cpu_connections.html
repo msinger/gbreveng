@@ -143,9 +143,9 @@ CLK_FROM_CPU</a></td>
 <td>CPU can drive this low to disable most of the clocks fed to itself. T9 and T10 are the only clocks that are not
 turned off when this signal gets driven low. However, T9 and T10 might have slightly shorter "shorter" phases while this
 signal is high. By "shorter" phases I mean, they are not symetric and have a shorter and a longer phase (and the
-shorter one gets even shorter). This is because of BUTO mixing them with the other clocks when they're active.
-Maybe they did this to guarantee a specific synchronicity between T9/T10 and the other clocks that tick at around the
-same time as T9/T10.</td>
+shorter one gets even shorter). This is because of <a href="/dmg_cpu_b_map/?view=buto">BUTO</a> mixing them with the
+other clocks when they're active. Maybe they did this to guarantee a specific synchronicity between T9/T10 and the other
+clocks that tick at around the same time as T9/T10.</td>
 </tr><tr>
 <td>T12</td>
 <td>I</td>
@@ -172,8 +172,8 @@ CLKIN_A</a></td>
 <td>
 <a href="/dmg_cpu_b_map/?view=-120.88,135.5,-52.5,254.45&mark%5b0%5d=-117.45,238.34&mark%5b1%5d=-82.12,139.71&mark%5b2%5d=-56.02,150.08">
 multiple</a></td>
-<td>Crystal oscillator enable. When CPU drives this low, the crystal oscillator gets disabled
-to save power. This happens during STOP mode.</td>
+<td>Crystal oscillator enable. When CPU drives this low, the <a href="/dmg_cpu_b_map/?view=osc">crystal oscillator</a>
+gets disabled to save power. This happens during STOP mode.</td>
 </tr><tr>
 <td>T15</td>
 <td>I</td>
@@ -252,9 +252,10 @@ FROM_CPU4</a></td>
 <td><a href="/dmg_cpu_b_map/?view=texo&mark%5b0%5d=-85.96,35.68">TEXO.in1</a>,
 <a href="/dmg_cpu_b_map/?view=agut&mark%5b0%5d=-56.03,154.86">AGUT.in3</a></td>
 <td>Active-high memory request? Has to be high during memory cycles (read or write). This causes one of the chip
-select signals (CS, MCS, A15) to be asserted in the right moment. Has to be low if no memory cycle is going on,
-otherwise the chip select will be asserted even if R1 and R2 are low. During write cycles, this signal is also
-needed for driving the internal data bus onto the I/O pads. During read cycles, this signal is also needed for
+select signals (<a href="/dmg_cpu_b_map/?view=cs">CS</a>, <a href="/dmg_cpu_b_map/?view=mcs">MCS</a>,
+<a href="/dmg_cpu_b_map/?view=a15">A15</a>) to be asserted in the right moment. Has to be low if no memory cycle
+is going on, otherwise the chip select will be asserted even if R1 and R2 are low. During write cycles, this signal
+is also needed for driving the internal data bus onto the I/O pads. During read cycles, this signal is also needed for
 latching the I/O pads and driving the latched data onto the internal data bus.</td>
 </tr><tr>
 <td>R8</td>
