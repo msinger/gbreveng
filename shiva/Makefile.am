@@ -60,4 +60,4 @@ shiva.bin: shiva.asc Makefile
 	$(LD) $(LDFLAGS) --oformat coff-sm83 -o $@ $^
 
 pll.v: Makefile
-	$(ICEPLL) -q -i 12 -o 60 -mf $@
+	$(ICEPLL) -q -i 12 -o 66 -mf $@

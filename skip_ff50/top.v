@@ -9,8 +9,10 @@
  *    voltage translator.
  * 3. Hook up all data lines D0-D7, #wr, #rd, address lines A0-A14 and the ROM
  *    chip select A15 to the FPGA.
+ * 4. Optional: Lift T1 and T2 test pins from DMG CPU and connect them to
+ *    FPGA.
  *
- * Startup:
+ * Startup (without T1 and T2 connected):
  * 1. Switch off GameBoy and FPGA board (unplug USB).
  * 2. Set DipSW 0-5 inputs on FPGA to HHLHLH (from bit 5 to bit 0). Bits 5-0
  *    represent the value 53. This gets substracted from the FIRST_INSTR clock
@@ -18,12 +20,35 @@
  *    clock tick that gets overclocked. The value 53 targets the first tick of
  *    the second cycle of the last INC HL instruction of the boot ROM. It causes
  *    the PC to jump to 0x1fe and HL gets set to 0x1ff instead of getting
- *    incremented to 0x14d.
+ *    incremented to 0x14d. (53 can vary by a little bit, depending on the
+ *    device I guess. Just play around with the lower bits of the switches.)
  * 3. Power up FPGA.
  * 4. Switch on GameBoy. It won't start because it doesn't get clocked yet.
  * 5. Press SW1. GameBoy should start running.
  * 6. After the chime, the first byte of the boot ROM should be displayed by
  *    the LEDs 0-7 (00110001).
+ *
+ * Startup (with T1 and T2 connected):
+ * 1. Switch on GameBoy and FPGA board in any order.
+ * 2. Set DipSW 0-5 inputs on FPGA to HHLHLL (from bit 5 to bit 0). Bits 5-0
+ *    represent the value 52. This gets substracted from the FIRST_INSTR clock
+ *    ticks defined below. These bits can be used for fine tuning the exact
+ *    clock tick that gets overclocked. The value 52 targets the first tick of
+ *    the second cycle of the last INC HL instruction of the boot ROM. It causes
+ *    the PC to jump to 0x1fe and HL gets set to 0x1ff instead of getting
+ *    incremented to 0x14d.
+ * 3. Press SW3. GameBoy gets fully reset with T1 and T2 high.
+ * 4. Press SW1. GameBoy should start running.
+ * 5. After the chime, the first byte of the boot ROM should be displayed by
+ *    the LEDs 0-7 (00110001).
+ *
+ * Buttons:
+ *  SW0: Reset FPGA state machine.
+ *  SW1: Start clock.
+ *  SW2: Stop clock.
+ *  SW3: Reset GameBoy.
+ *
+ * If you can't get it working, try cranking up the PLL output clock.
  */
 
 /* Number of clock ticks until first instruction at 0x100 gets fetched. */
@@ -52,6 +77,8 @@ module top(
 		input  wire [15:0] sw,
 		output wire [15:0] led,
 		input  wire [3:0]  btn,
+		output wire        t1 = 1,
+		output wire        t2 = 1,
 	);
 
 	wire        clk;

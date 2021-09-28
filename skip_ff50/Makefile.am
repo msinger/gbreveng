@@ -66,4 +66,4 @@ rom.hex: rom.bin Makefile
 	od -An -v -tx1 -w16 $< >$@
 
 pll.v: Makefile
-	$(ICEPLL) -q -i 12 -o 60 -mf $@
+	$(ICEPLL) -q -i 12 -o 66 -mf $@
