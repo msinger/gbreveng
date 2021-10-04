@@ -1,10 +1,10 @@
 `default_nettype none
 
-`define COUNTER_WIDTH           5
+`define COUNTER_WIDTH           7
 `define NUM_COUNTERS            2
 `define NUM_COUNTER_COMPARATORS 5
-`define NUM_BUS_COMPARATORS     4
-`define NUM_ROUTES              8
+`define NUM_BUS_COMPARATORS     1
+`define NUM_ROUTES              6
 
 (* nolatches *)
 (* top *)
@@ -1058,8 +1058,78 @@ module top(
 	reg  [9:0] rec_adr;
 	wire [9:0] rec_adr_new;
 	wire       rec_adr_set;
+	reg  rec_running;
 	wire rec_trigger;
 	wire [`NUM_ROUTES-1:0] rec_capture;
+	wire [`NUM_ROUTES-1:0] rec_start;
+	wire [`NUM_ROUTES-1:0] rec_stop;
+	wire rec_cap_trig, rec_start_trig, rec_stop_trig;
+
+	dp_reg #(`NUM_ROUTES) rec_start_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(rec_start),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[0]}}),
+	);
+
+	dp_reg #(`NUM_ROUTES) rec_stop_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(rec_stop),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[1]}}),
+	);
+
+	dp_reg #(`NUM_ROUTES) rec_capture_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(rec_capture),
+
+		.svalue_in(atom[`NUM_ROUTES-1:0]),
+		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[2]}}),
+	);
+
+	dp_reg rec_start_trig_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(rec_start_trig),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[3]),
+		.svalue_mask(rec_trigger),
+	);
+
+	dp_reg rec_stop_trig_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(rec_stop_trig),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[4]),
+		.svalue_mask(rec_trigger),
+	);
+
+	dp_reg rec_cap_trig_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+
+		.fvalue_out(rec_cap_trig),
+		.fvalue_mask(1),
+
+		.svalue_in(data_cpu_out[5]),
+		.svalue_mask(rec_trigger),
+	);
 
 	dp_reg #(11) rec_adr_reg(
 		.fclk(pllclk),
@@ -1071,30 +1141,26 @@ module top(
 		.fvalue_in(11'b0xxxxxxxxxx),
 
 		.svalue_in({ 1'b1, atom[9:0] }),
-		.svalue_mask({11{rec_trigger && data_cpu_out[0]}}),
-	);
-
-	dp_reg #(`NUM_ROUTES) rec_capture_reg(
-		.fclk(pllclk),
-		.sclk(cpuclk),
-		.frst(f_reset),
-
-		.fvalue_out(rec_capture),
-
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[1]}}),
+		.svalue_mask({11{rec_trigger && data_cpu_out[7]}}),
 	);
 
 	assign rec_trigger = wr_cpu && cs_cpu_rec;
 
 	always @(posedge pllclk) begin
-		if (rec_capture & route) begin
+		if (rec_running && ((rec_capture & route) || rec_cap_trig)) begin
 			recram[rec_adr] <= { 1'b0, pa_in[0], dut_in[29:0] };
 			rec_adr         <= rec_adr + 1;
 		end
 
 		if (rec_adr_set)
 			rec_adr <= rec_adr_new;
+
+		if (((rec_start & route) || rec_start_trig) && ((rec_stop & route) || rec_stop_trig))
+			rec_running <= !rec_running;
+		if ((rec_start & route) || rec_start_trig)
+			rec_running <= 1;
+		if ((rec_stop & route) || rec_stop_trig)
+			rec_running <= 0;
 	end
 
 endmodule
