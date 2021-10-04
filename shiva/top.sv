@@ -1,208 +1,202 @@
 `default_nettype none
 
-`define COUNTER_WIDTH           7
-`define NUM_COUNTERS            2
-`define NUM_COUNTER_COMPARATORS 5
-`define NUM_BUS_COMPARATORS     1
-`define NUM_ROUTES              6
-
 (* nolatches *)
 (* top *)
 module top(
-		input  wire        clk12m,        /* 12 MHz clock input */
-		input  wire        clk16m,        /* 16 MiHz clock input */
-		output wire        clk16m_en = 0, /* 16 MiHz clock enable */
+		input  logic            clk12m,        /* 12 MHz clock input */
+		input  logic            clk16m,        /* 16 MiHz clock input */
+		output logic            clk16m_en = 0, /* 16 MiHz clock enable */
 
-		output reg  [15:0] led,
-		input  wire [15:0] sw,
-		input  wire [3:0]  btn,
+		output logic     [15:0] led,
+		input  logic     [15:0] sw,
+		input  logic     [3:0]  btn,
 
-		inout  wire [7:0]  ft245_d,
-		input  wire        ft245_n_rxf,
-		input  wire        ft245_n_txe,
-		output wire        ft245_n_rd,
-		output wire        ft245_n_wr,
-		output wire        ft245_siwu,
+		inout  tri logic [7:0]  ft245_d,
+		input  logic            ft245_n_rxf,
+		input  logic            ft245_n_txe,
+		output logic            ft245_n_rd,
+		output logic            ft245_n_wr,
+		output logic            ft245_siwu,
 
-		output wire        chl = 0,       /* left audio PWM channel */
-		output wire        chr = 0,       /* right audio PWM channel */
-		output wire        chm = 0,       /* mono audio PWM channel */
+		output logic            chl = 0,       /* left audio PWM channel */
+		output logic            chr = 0,       /* right audio PWM channel */
+		output logic            chm = 0,       /* mono audio PWM channel */
 
-		input  wire        p10,
-		input  wire        p11,
-		input  wire        p12,
-		input  wire        p13,
-		output wire        p14 = 1,
-		output wire        p15 = 1,
+		input  logic            p10,
+		input  logic            p11,
+		input  logic            p12,
+		input  logic            p13,
+		output logic            p14 = 1,
+		output logic            p15 = 1,
 
-		output wire [20:0] madr       = 0,
-		output wire [7:0]  mdata      = 'hff,
-		output wire        n_mrd      = 1,
-		output wire        n_mwr      = 1,
-		output wire        n_prog     = 1,
-		output wire        n_mcs_rom  = 1,
-		output wire        n_mcs_xram = 1,
-		output wire        n_mcs_wram = 1,
-		output wire        n_mcs_crom = 1,
-		output wire        n_mcs_cram = 1,
-		output wire        mphi       = 1,
-		inout  wire        n_mreset,
-		output wire        n_moe      = 0,
-		output wire        n_moed     = 0,
-		output wire        mdir       = 1,
+		output logic     [20:0] madr       = 0,
+		output logic     [7:0]  mdata      = '1,
+		output logic            n_mrd      = 1,
+		output logic            n_mwr      = 1,
+		output logic            n_prog     = 1,
+		output logic            n_mcs_rom  = 1,
+		output logic            n_mcs_xram = 1,
+		output logic            n_mcs_wram = 1,
+		output logic            n_mcs_crom = 1,
+		output logic            n_mcs_cram = 1,
+		output logic            mphi       = 1,
+		inout  tri logic        n_mreset,
+		output logic            n_moe      = 0,
+		output logic            n_moed     = 0,
+		output logic            mdir       = 1,
 
-		input  wire [14:0] adr,
-		inout  wire [7:0]  data,
-		input  wire        n_rd,
-		input  wire        n_wr,
-		input  wire        n_cs_rom,
-		input  wire        n_cs_xram,
-		input  wire        phi,
-		inout  wire        n_reset,
-		output wire        n_soe,
-		output wire        sdir,
+		input  logic     [14:0] adr,
+		inout  tri logic [7:0]  data,
+		input  logic            n_rd,
+		input  logic            n_wr,
+		input  logic            n_cs_rom,
+		input  logic            n_cs_xram,
+		input  logic            phi,
+		inout  tri logic        n_reset,
+		output logic            n_soe,
+		output logic            sdir,
 
-		output wire [13:0] vadr  = 0,
-		output wire [7:0]  vdata = 'hff,
-		output wire        n_vrd = 1,
-		output wire        n_vwr = 1,
-		output wire        n_vcs = 1,
+		output logic     [13:0] vadr  = 0,
+		output logic     [7:0]  vdata = '1,
+		output logic            n_vrd = 1,
+		output logic            n_vwr = 1,
+		output logic            n_vcs = 1,
 
-		inout  wire [7:0]  pa,
-		output wire        n_pa_oe = 0,
-		output wire        pa_dir  = 1,
+		inout  logic     [7:0]  pa,
+		output logic            n_pa_oe = 0,
+		output logic            pa_dir  = 1,
 
-		output wire [7:0]  pb      = 1,
-		output wire        n_pb_oe = 0,
-		output wire        pb_dir  = 1,
+		output logic     [7:0]  pb      = 1,
+		output logic            n_pb_oe = 0,
+		output logic            pb_dir  = 1,
 
-		input  wire        sin,
-		output wire        sout = 0,
+		input  logic            sin,
+		output logic            sout = 0,
 
-		input  wire        sd_sw,
-		input  wire        sd_clk,
-		input  wire        sd_cmd,
-		input  wire [3:0]  sd_data,
+		input  logic            sd_sw,
+		input  logic            sd_clk,
+		input  logic            sd_cmd,
+		input  logic     [3:0]  sd_data,
 
-		output wire        lcd_hsync  = 0,
-		output wire        lcd_vsync  = 0,
-		output wire        lcd_latch  = 0,
-		output wire        lcd_altsig = 0,
-		output wire        lcd_ctrl   = 0,
-		output wire        lcd_clk    = 0,
-		output wire [1:0]  lcd_data   = 0,
+		output logic            lcd_hsync  = 0,
+		output logic            lcd_vsync  = 0,
+		output logic            lcd_latch  = 0,
+		output logic            lcd_altsig = 0,
+		output logic            lcd_ctrl   = 0,
+		output logic            lcd_clk    = 0,
+		output logic     [1:0]  lcd_data   = 0
 	);
 
-	genvar i;
+	localparam int COUNTER_WIDTH           = 7;
+	localparam int NUM_COUNTERS            = 2;
+	localparam int NUM_COUNTER_COMPARATORS = 5;
+	localparam int NUM_BUS_COMPARATORS     = 1;
+	localparam int NUM_ROUTES              = 6;
 
-	wire pllclk;
-	wire cpuclk;
+	logic pllclk;
+	logic cpuclk;
 
-`define rst_assert  0
-`define rst_release 1
-`define rst_done    2
-	(* onehot *)
-	reg  [1:0] r_reset_state         = 0, reset_state;
-	reg  [3:0] r_reset_ticks         = 0, reset_ticks;
-	reg  [3:0] r_initial_reset_ticks = 0, initial_reset_ticks;
-	reg        r_initial_reset_done  = 0, initial_reset_done;
-	reg        r_reset_done          = 0, reset_done;
-	wire       f_reset;
+	logic [1:0] r_reset_state         = 0, reset_state;
+	logic [3:0] r_reset_ticks         = 0, reset_ticks;
+	logic [3:0] r_initial_reset_ticks = 0, initial_reset_ticks;
+	logic       r_initial_reset_done  = 0, initial_reset_done;
+	logic       r_reset_done          = 0, reset_done;
+	logic       f_reset;
 	cdc f_reset_cdc(pllclk, !reset_done, f_reset);
 
-	wire [15:0] sw_in,  sw_ext;
-	wire [3:0]  btn_in, btn_ext;
+	logic [15:0] sw_in,  sw_ext;
+	logic [3:0]  btn_in, btn_ext;
 	cdc #(1) sw_cdc[15:0](cpuclk, sw_ext,  sw_in);
 	cdc #(1) btn_cdc[3:0](cpuclk, btn_ext, btn_in);
 
-	wire [7:0] ft245_d_out, ft245_d_in;
-	wire       ft245_dir_out;
-	wire       ft245_n_rxf_in, ft245_n_rxf_ext;
-	wire       ft245_n_txe_in, ft245_n_txe_ext;
-	wire       ft245_rd_out, ft245_wr_out;
-	wire       ft245_siwu_out;
+	logic [7:0] ft245_d_out, ft245_d_in;
+	logic       ft245_dir_out;
+	logic       ft245_n_rxf_in, ft245_n_rxf_ext;
+	logic       ft245_n_txe_in, ft245_n_txe_ext;
+	logic       ft245_rd_out, ft245_wr_out;
+	logic       ft245_siwu_out;
 	cdc #(1) ft245_n_rxf_cdc(cpuclk, ft245_n_rxf_ext, ft245_n_rxf_in);
 	cdc #(1) ft245_n_txe_cdc(cpuclk, ft245_n_txe_ext, ft245_n_txe_in);
 
-	wire [15:0] adr_cpu;
+	logic [15:0] adr_cpu;
 
-	wire rd_cpu, wr_cpu;
+	logic rd_cpu, wr_cpu;
 
-	reg  cs_cpu_sysram, cs_cpu_dutram, cs_cpu_recram;
-	reg  cs_cpu_led0, cs_cpu_led1;
-	reg  cs_cpu_sw0, cs_cpu_sw1;
-	reg  cs_cpu_io_if, cs_cpu_io_ie;
-	reg  cs_cpu_atom;
-	reg  cs_cpu_ones_set;
-	reg  cs_cpu_rec;
-	reg  cs_cpu_pa;
-	reg  cs_cpu_dut;
+	logic cs_cpu_sysram, cs_cpu_dutram, cs_cpu_recram;
+	logic cs_cpu_led0, cs_cpu_led1;
+	logic cs_cpu_sw0, cs_cpu_sw1;
+	logic cs_cpu_io_if, cs_cpu_io_ie;
+	logic cs_cpu_atom;
+	logic cs_cpu_ones_set;
+	logic cs_cpu_rec;
+	logic cs_cpu_pa;
+	logic cs_cpu_dut;
 
-	reg  [`NUM_COUNTERS-1:0] cs_cpu_counter;
+	logic [NUM_COUNTERS-1:0] cs_cpu_counter;
 
-	wire [7:0] data_cpu_out;
-	reg  [7:0] data_cpu_in;
-	wand [7:0] data_cpu_in_wand;
-	wire [7:0] data_cpureg_out;
-	reg  [7:0] data_sysram_out;
-	reg  [7:0] data_dutram_out;
-	reg  [31:0] data_recram_out;
-	wire [7:0] data_dbg_out;
+	logic      [7:0]  data_cpu_out;
+	logic      [7:0]  data_cpu_in;
+	wand logic [7:0]  data_cpu_in_wand;
+	logic      [7:0]  data_cpureg_out;
+	logic      [7:0]  data_sysram_out;
+	logic      [7:0]  data_dutram_out;
+	logic      [31:0] data_recram_out;
+	logic      [7:0]  data_dbg_out;
 
-	wire [7:0]  data_pa_in;
-	wire [7:0]  data_pa_out;
-	reg  [7:0]  pa_out;
-	wire [7:0]  pa_ext, pa_in;
-	wire        pa_set_sig, pa_reset_sig;
-	wor  [7:0]  pa_set_mask, pa_reset_mask;
-	wire        pa_trigger;
-	reg         r_pa_trigger;
-	wire        pa_trigger_set_set, pa_trigger_reset_set;
-	wire [`NUM_ROUTES-1:0] pa_trigger_set, pa_trigger_reset;
+	logic     [7:0] data_pa_in;
+	logic     [7:0] data_pa_out;
+	logic     [7:0] pa_out;
+	logic     [7:0] pa_ext, pa_in;
+	logic           pa_set_sig, pa_reset_sig;
+	wor logic [7:0] pa_set_mask, pa_reset_mask;
+	logic           pa_trigger;
+	logic           r_pa_trigger;
+	logic           pa_trigger_set_set, pa_trigger_reset_set;
+	logic [NUM_ROUTES-1:0] pa_trigger_set, pa_trigger_reset;
 	cdc #(1) pa_cdc[7:0](pllclk, pa_ext, pa_in);
 
-	reg  [31:0] atom;
+	logic [31:0] atom;
 
-	wire                   ones_set_trigger;
-	wire [`NUM_ROUTES-1:0] ones_set;
+	logic                  ones_set_trigger;
+	logic [NUM_ROUTES-1:0] ones_set;
 
-	wor  [`NUM_ROUTES-1:0] route;
-	reg  [`NUM_ROUTES-1:0] piped_route;
+	wor logic [NUM_ROUTES-1:0] route;
+	logic     [NUM_ROUTES-1:0] piped_route;
 
-	wire [15:0] pc, sp;
-	wire [7:4]  flags;
-	wire [7:0]  dbg_probe;
-	wire        halt, no_inc, ime;
-	wire        ddrv_dbg;
+	logic [15:0] pc, sp;
+	logic [7:4]  flags;
+	logic [7:0]  dbg_probe;
+	logic        halt, no_inc, ime;
+	logic        ddrv_dbg;
 
-	wire [7:0] dbg_data_rx;
-	wire       dbg_data_rx_seq;
-	wire       dbg_data_rx_ack;
-	wire [7:0] dbg_data_tx;
-	wire       dbg_data_tx_seq;
-	wire       dbg_data_tx_ack;
+	logic [7:0] dbg_data_rx;
+	logic       dbg_data_rx_seq;
+	logic       dbg_data_rx_ack;
+	logic [7:0] dbg_data_tx;
+	logic       dbg_data_tx_seq;
+	logic       dbg_data_tx_ack;
 
-	wire [29:0] data_dut_in,          dut_in;
+	logic [29:0] data_dut_in,          dut_in;
 	(* mem2reg *)
-	reg  [30:0] dut_data_compare[0:`NUM_BUS_COMPARATORS-1];
+	logic [30:0] dut_data_compare[0:NUM_BUS_COMPARATORS-1];
 	(* mem2reg *)
-	reg  [30:0] dut_data_compare_mask[0:`NUM_BUS_COMPARATORS-1];
-	wire [`NUM_ROUTES-1:0] dut_data_compare_trig_set[0:`NUM_BUS_COMPARATORS-1];
-	wire [`NUM_ROUTES-1:0] dut_data_compare_edge_trig_set[0:`NUM_BUS_COMPARATORS-1];
-	wire [14:0] dut_adr_ext,          dut_adr_in;
-	reg         dut_data_dir_out,     r_dut_data_dir_out;
-	reg         dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
-	reg         dut_data_lvl_ena;
-	reg  [7:0]  dut_data_out;
-	wire [7:0]  dut_data_ovr_out;
-	wire [7:0]  dut_data_ext,         dut_data_in;
-	wire        n_dut_rd_ext,         dut_rd_in;
-	wire        n_dut_wr_ext,         dut_wr_in;
-	wire        n_dut_cs_rom_ext,     dut_cs_rom_in;
-	wire        n_dut_cs_xram_ext,    dut_cs_xram_in;
-	wire        dut_phi_ext,          dut_phi_in;
-	reg         dut_reset_out,        r_dut_reset_out;
-	wire        n_dut_reset_ext,      dut_reset_in;
+	logic [30:0] dut_data_compare_mask[0:NUM_BUS_COMPARATORS-1];
+	wire logic [NUM_ROUTES-1:0] dut_data_compare_trig_set[0:NUM_BUS_COMPARATORS-1];
+	wire logic [NUM_ROUTES-1:0] dut_data_compare_edge_trig_set[0:NUM_BUS_COMPARATORS-1];
+	logic [14:0] dut_adr_ext,          dut_adr_in;
+	logic        dut_data_dir_out,     r_dut_data_dir_out;
+	logic        dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
+	logic        dut_data_lvl_ena;
+	logic [7:0]  dut_data_out;
+	logic [7:0]  dut_data_ovr_out;
+	logic [7:0]  dut_data_ext,         dut_data_in;
+	logic        n_dut_rd_ext,         dut_rd_in;
+	logic        n_dut_wr_ext,         dut_wr_in;
+	logic        n_dut_cs_rom_ext,     dut_cs_rom_in;
+	logic        n_dut_cs_xram_ext,    dut_cs_xram_in;
+	logic        dut_phi_ext,          dut_phi_in;
+	logic        dut_reset_out,        r_dut_reset_out;
+	logic        n_dut_reset_ext,      dut_reset_in;
 	cdc #(1) dut_adr_cdc[14:0](pllclk, dut_adr_ext,        dut_adr_in);
 	cdc #(1) dut_data_cdc[7:0](pllclk, dut_data_ext,       dut_data_in);
 	cdc #(1) dut_rd_cdc       (pllclk, !n_dut_rd_ext,      dut_rd_in);
@@ -212,24 +206,24 @@ module top(
 	cdc #(1) dut_phi_cdc      (pllclk, dut_phi_ext,        dut_phi_in);
 	cdc #(1) dut_reset_cdc    (pllclk, !n_dut_reset_ext,   dut_reset_in);
 
-	reg dut_any_cs;
+	logic dut_any_cs;
 
-	reg  r_dut_trigger;
-	wire dut_trigger;
-	reg  dut_data_ovr;
-	wire dut_ctl_sig, dut_trig_sig, dut_data_sig, dut_cmp_sig;
-	wire dut_reset_set_mask;
-	wire dut_reset_reset_mask;
-	wire dut_data_set_mask;
-	wire dut_data_reset_mask;
-	wire [`NUM_BUS_COMPARATORS-1:0] dut_data_compare_set, dut_data_compare_mask_set;
+	logic r_dut_trigger;
+	logic dut_trigger;
+	logic dut_data_ovr;
+	logic dut_ctl_sig, dut_trig_sig, dut_data_sig, dut_cmp_sig;
+	logic dut_reset_set_mask;
+	logic dut_reset_reset_mask;
+	logic dut_data_set_mask;
+	logic dut_data_reset_mask;
+	logic [NUM_BUS_COMPARATORS-1:0] dut_data_compare_set, dut_data_compare_mask_set;
 
-	wire [7:0] irq, f_irq;
+	logic [7:0] irq, f_irq;
 
-	reg  [7:0] sysram[0:4095];
-	reg  [7:0] dut_ro_ram[0:4095];
-	reg  [7:0] dut_wo_ram[0:4095];
-	reg  [31:0] recram[0:1023];
+	logic [7:0]  sysram[0:4095];
+	logic [7:0]  dut_ro_ram[0:4095];
+	logic [7:0]  dut_wo_ram[0:4095];
+	logic [31:0] recram[0:1023];
 
 	/* Place jump instruction at $0000 that jumps onto itself. */
 	initial sysram[0] = 'h18; /* JR */
@@ -237,267 +231,271 @@ module top(
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(0),
+			.PULLUP(0)
 		) sw_io[15:0] (
 			.PACKAGE_PIN(sw),
 			.INPUT_CLK(cpuclk),
-			.D_IN_0(sw_ext),
+			.D_IN_0(sw_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(0),
+			.PULLUP(0)
 		) btn_io[3:0] (
 			.PACKAGE_PIN(btn),
 			.INPUT_CLK(cpuclk),
-			.D_IN_0(btn_ext),
+			.D_IN_0(btn_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 1101_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) ft245_d_io[7:0] (
 			.PACKAGE_PIN(ft245_d),
 			.OUTPUT_CLK(cpuclk),
 			.INPUT_CLK(cpuclk),
 			.OUTPUT_ENABLE(r_reset_done && ft245_dir_out),
 			.D_OUT_0(ft245_d_out),
-			.D_IN_0(ft245_d_in),
+			.D_IN_0(ft245_d_in)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) ft245_n_rxf_io (
 			.PACKAGE_PIN(ft245_n_rxf),
 			.INPUT_CLK(cpuclk),
-			.D_IN_0(ft245_n_rxf_ext),
+			.D_IN_0(ft245_n_rxf_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) ft245_n_txe_io (
 			.PACKAGE_PIN(ft245_n_txe),
 			.INPUT_CLK(cpuclk),
-			.D_IN_0(ft245_n_txe_ext),
+			.D_IN_0(ft245_n_txe_ext)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01),
+			.PIN_TYPE('b 0101_01)
 		) ft245_n_rd_io (
 			.PACKAGE_PIN(ft245_n_rd),
 			.OUTPUT_CLK(cpuclk),
-			.D_OUT_0(!r_reset_done || !ft245_rd_out),
+			.D_OUT_0(!r_reset_done || !ft245_rd_out)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01),
+			.PIN_TYPE('b 0101_01)
 		) ft245_n_wr_io (
 			.PACKAGE_PIN(ft245_n_wr),
 			.OUTPUT_CLK(cpuclk),
-			.D_OUT_0(!r_reset_done || !ft245_wr_out),
+			.D_OUT_0(!r_reset_done || !ft245_wr_out)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01),
+			.PIN_TYPE('b 0101_01)
 		) ft245_siwu_io (
 			.PACKAGE_PIN(ft245_siwu),
 			.OUTPUT_CLK(cpuclk),
-			.D_OUT_0(!r_reset_done || !ft245_siwu_out),
+			.D_OUT_0(!r_reset_done || !ft245_siwu_out)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(1),
+			.PULLUP(1)
 		) p10_io (
-			.PACKAGE_PIN(p10),
+			.PACKAGE_PIN(p10)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(1),
+			.PULLUP(1)
 		) p11_io (
-			.PACKAGE_PIN(p11),
+			.PACKAGE_PIN(p11)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(1),
+			.PULLUP(1)
 		) p12_io (
-			.PACKAGE_PIN(p12),
+			.PACKAGE_PIN(p12)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(1),
+			.PULLUP(1)
 		) p13_io (
-			.PACKAGE_PIN(p13),
+			.PACKAGE_PIN(p13)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(1),
+			.PULLUP(1)
 		) n_mreset_io (
-			.PACKAGE_PIN(n_mreset),
+			.PACKAGE_PIN(n_mreset)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) adr_io[14:0] (
 			.PACKAGE_PIN(adr),
 			.INPUT_CLK(pllclk),
-			.D_IN_0(dut_adr_ext),
+			.D_IN_0(dut_adr_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 1101_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) data_io[7:0] (
 			.PACKAGE_PIN(data),
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
 			.OUTPUT_ENABLE(!f_reset && dut_data_dir_out),
 			.D_OUT_0(dut_data_ovr ? dut_data_ovr_out : dut_data_out),
-			.D_IN_0(dut_data_ext),
+			.D_IN_0(dut_data_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) n_rd_io (
 			.PACKAGE_PIN(n_rd),
 			.INPUT_CLK(pllclk),
-			.D_IN_0(n_dut_rd_ext),
+			.D_IN_0(n_dut_rd_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) n_wr_io (
 			.PACKAGE_PIN(n_wr),
 			.INPUT_CLK(pllclk),
-			.D_IN_0(n_dut_wr_ext),
+			.D_IN_0(n_dut_wr_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) n_cs_rom_io (
 			.PACKAGE_PIN(n_cs_rom),
 			.INPUT_CLK(pllclk),
-			.D_IN_0(n_dut_cs_rom_ext),
+			.D_IN_0(n_dut_cs_rom_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) n_cs_xram_io (
 			.PACKAGE_PIN(n_cs_xram),
 			.INPUT_CLK(pllclk),
-			.D_IN_0(n_dut_cs_xram_ext),
+			.D_IN_0(n_dut_cs_xram_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) phi_io (
 			.PACKAGE_PIN(phi),
 			.INPUT_CLK(pllclk),
-			.D_IN_0(dut_phi_ext),
+			.D_IN_0(dut_phi_ext)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 1101_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) n_reset_io (
 			.PACKAGE_PIN(n_reset),
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
 			.OUTPUT_ENABLE(!f_reset && dut_reset_out),
-			.D_IN_0(n_dut_reset_ext),
+			.D_IN_0(n_dut_reset_ext)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01),
+			.PIN_TYPE('b 0101_01)
 		) n_soe_io (
 			.PACKAGE_PIN(n_soe),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(f_reset || !dut_data_lvl_ena),
+			.D_OUT_0(f_reset || !dut_data_lvl_ena)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01),
+			.PIN_TYPE('b 0101_01)
 		) sdir_io (
 			.PACKAGE_PIN(sdir),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(!f_reset && dut_data_lvl_dir_out),
+			.D_OUT_0(!f_reset && dut_data_lvl_dir_out)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(1),
+			.PULLUP(1)
 		) sin_io (
-			.PACKAGE_PIN(sin),
+			.PACKAGE_PIN(sin)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_01),
-			.PULLUP(0),
+			.PULLUP(0)
 		) sd_sw_io (
-			.PACKAGE_PIN(sd_sw),
+			.PACKAGE_PIN(sd_sw)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_00),
+			.PIN_TYPE('b 0101_00)
 		) pa_io[7:0] (
 			.PACKAGE_PIN(pa),
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
 			.D_OUT_0(pa_out),
-			.D_IN_0(pa_ext),
+			.D_IN_0(pa_ext)
 		);
 
 	pll pll_inst(
 		.clock_in(clk12m),
-		.clock_out(pllclk),
+		.clock_out(pllclk)
 	);
 
 	assign cpuclk = clk12m;
 
-	always @* begin
+	always_comb begin
+		localparam int rst_assert  = 0;
+		localparam int rst_release = 1;
+		localparam int rst_done    = 2;
+
 		initial_reset_ticks = r_initial_reset_ticks + 1;
 		initial_reset_done  = r_initial_reset_done;
-		reset_ticks         = 'bx;
+		reset_ticks         = 'x;
 		reset_state         = r_reset_state;
 
 		if (&r_initial_reset_ticks)
 			initial_reset_done = 1;
 
 		if (btn_in[3]) begin
-			reset_state = `rst_assert;
+			reset_state = rst_assert;
 			reset_ticks = 0;
 		end
 
 		if (r_initial_reset_done) case (reset_state)
-		`rst_assert:
+		rst_assert:
 			if (&r_reset_ticks) begin
-				reset_state = `rst_release;
+				reset_state = rst_release;
 				reset_ticks = 0;
 			end else
 				reset_ticks = r_reset_ticks + 1;
-		`rst_release:
+		rst_release:
 			if (&r_reset_ticks)
-				reset_state = `rst_done;
+				reset_state = rst_done;
 			else
 				reset_ticks = r_reset_ticks + 1;
 		endcase
 
-		reset_done = reset_state == `rst_done;
+		reset_done = reset_state == rst_done;
 	end
 
-	always @(posedge cpuclk) begin
+	always_ff @(posedge cpuclk) begin
 		r_initial_reset_ticks <= initial_reset_ticks;
 		r_initial_reset_done  <= initial_reset_done;
 		r_reset_ticks         <= reset_ticks;
@@ -505,12 +503,12 @@ module top(
 		r_reset_done          <= reset_done;
 	end
 
-	always @(posedge cpuclk) begin
+	always_ff @(posedge cpuclk) begin
 		data_sysram_out <= sysram[adr_cpu[11:0]];
 		data_dutram_out <= dut_wo_ram[adr_cpu[11:0]];
 		data_recram_out <= recram[adr_cpu[11:2]];
 
-		if (wr_cpu) case (1)
+		if (wr_cpu) unique0 case (1)
 		cs_cpu_sysram:
 			sysram[adr_cpu[11:0]] <= data_cpu_out;
 		cs_cpu_dutram:
@@ -530,11 +528,10 @@ module top(
 		endcase
 	end
 
-	always @* begin :combine_cpu_data
-		data_cpu_in = 'hff;
+	always_comb begin
+		data_cpu_in = '1;
 
-		(* parallelcase *)
-		case (1)
+		unique0 case (1)
 		cs_cpu_sysram:
 			data_cpu_in = data_sysram_out;
 		cs_cpu_dutram:
@@ -578,13 +575,13 @@ module top(
 			data_cpu_in = data_cpureg_out;
 		endcase
 
-		data_cpu_in = data_cpu_in & data_cpu_in_wand;
+		data_cpu_in &= data_cpu_in_wand;
 
 		if (ddrv_dbg)
 			data_cpu_in = data_dbg_out;
 	end
 
-	always @* begin :adr_to_cs
+	always_comb begin
 		cs_cpu_sysram   = 0;
 		cs_cpu_dutram   = 0;
 		cs_cpu_recram   = 0;
@@ -600,8 +597,7 @@ module top(
 		cs_cpu_io_if    = 0;
 		cs_cpu_io_ie    = 0;
 
-		integer i;
-		for (i = 0; i < `NUM_COUNTERS; i = i + 1)
+		for (int i = 0; i < NUM_COUNTERS; i++)
 			cs_cpu_counter[i] = 0;
 
 		if (r_reset_done) casez (adr_cpu)
@@ -627,21 +623,21 @@ module top(
 		'b 1111_1111_0001_0101: /* 0xff15:        Recording Control */
 			cs_cpu_rec = 1;
 		'b 1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
-			if (`NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
+			if (NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
 		'b 1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
-			if (`NUM_COUNTERS > 1) cs_cpu_counter[1] = 1;
+			if (NUM_COUNTERS > 1) cs_cpu_counter[1] = 1;
 		'b 1111_1111_0010_10??: /* 0xff28-0xff2b: Counter 2 */
-			if (`NUM_COUNTERS > 2) cs_cpu_counter[2] = 1;
+			if (NUM_COUNTERS > 2) cs_cpu_counter[2] = 1;
 		'b 1111_1111_0010_11??: /* 0xff2c-0xff2f: Counter 3 */
-			if (`NUM_COUNTERS > 3) cs_cpu_counter[3] = 1;
+			if (NUM_COUNTERS > 3) cs_cpu_counter[3] = 1;
 		'b 1111_1111_0011_00??: /* 0xff30-0xff33: Counter 4 */
-			if (`NUM_COUNTERS > 4) cs_cpu_counter[4] = 1;
+			if (NUM_COUNTERS > 4) cs_cpu_counter[4] = 1;
 		'b 1111_1111_0011_01??: /* 0xff34-0xff37: Counter 5 */
-			if (`NUM_COUNTERS > 5) cs_cpu_counter[5] = 1;
+			if (NUM_COUNTERS > 5) cs_cpu_counter[5] = 1;
 		'b 1111_1111_0011_10??: /* 0xff38-0xff3b: Counter 6 */
-			if (`NUM_COUNTERS > 6) cs_cpu_counter[6] = 1;
+			if (NUM_COUNTERS > 6) cs_cpu_counter[6] = 1;
 		'b 1111_1111_0011_11??: /* 0xff3c-0xff3f: Counter 7 */
-			if (`NUM_COUNTERS > 7) cs_cpu_counter[7] = 1;
+			if (NUM_COUNTERS > 7) cs_cpu_counter[7] = 1;
 		'b 1111_1111_0100_00??: /* 0xff40-0xff43: Port A */
 			cs_cpu_pa = 1;
 		'b 1111_1111_0101_00??: /* 0xff50-0xff53: DUT Bus */
@@ -677,7 +673,7 @@ module top(
 		.r_ime(ime),
 		.dbg_probe(dbg_probe),
 		.dbg_halt(halt),
-		.dbg_no_inc(no_inc),
+		.dbg_no_inc(no_inc)
 	);
 
 	ft245_ifc dbg_ft245(
@@ -698,7 +694,7 @@ module top(
 		.txe(!ft245_n_txe_in),
 		.rd(ft245_rd_out),
 		.wr(ft245_wr_out),
-		.siwu(ft245_siwu_out),
+		.siwu(ft245_siwu_out)
 	);
 
 	lr35902_dbg_ifc dbg_ifc(
@@ -716,15 +712,15 @@ module top(
 		.no_inc(no_inc),
 
 		.data_rx(dbg_data_rx),
-		.data_rx_valid(1),
+		.data_rx_valid('1),
 		.data_rx_seq(dbg_data_rx_seq),
 		.data_rx_ack(dbg_data_rx_ack),
 		.data_tx(dbg_data_tx),
 		.data_tx_seq(dbg_data_tx_seq),
-		.data_tx_ack(dbg_data_tx_ack),
+		.data_tx_ack(dbg_data_tx_ack)
 	);
 
-	counter_block #(`COUNTER_WIDTH, `NUM_COUNTER_COMPARATORS, `NUM_ROUTES) counter[0:`NUM_COUNTERS-1](
+	counter_block #(COUNTER_WIDTH, NUM_COUNTER_COMPARATORS, NUM_ROUTES) counter[0:NUM_COUNTERS-1](
 		.ctrclk(pllclk),
 		.busclk(cpuclk),
 		.ctrrst(f_reset),
@@ -732,17 +728,17 @@ module top(
 		.route_in(route),
 		.route_out(route),
 
-		.route_con(atom[`NUM_ROUTES-1:0]),
-		.wide_data(atom[`COUNTER_WIDTH-1:0]),
+		.route_con(atom[NUM_ROUTES-1:0]),
+		.wide_data(atom[COUNTER_WIDTH-1:0]),
 		.data_in(data_cpu_out),
 		.data_out(data_cpu_in_wand),
 		.adr(adr_cpu[1:0]),
 		.cs(cs_cpu_counter),
 		.rd(rd_cpu),
-		.wr(wr_cpu),
+		.wr(wr_cpu)
 	);
 
-	always @* begin
+	always_comb begin
 		dut_data_dir_out     = r_dut_data_dir_out;
 		dut_data_lvl_dir_out = r_dut_data_lvl_dir_out;
 		dut_reset_out        = r_dut_reset_out;
@@ -787,9 +783,9 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_in(pa_in),
-		.fvalue_mask('hff),
+		.fvalue_mask(8'hff),
 
-		.svalue_out(data_pa_in),
+		.svalue_out(data_pa_in)
 	);
 
 	dp_reg #(8) pa_out_reg2bus(
@@ -797,9 +793,9 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_in(pa_out),
-		.fvalue_mask('hff),
+		.fvalue_mask(8'hff),
 
-		.svalue_out(data_pa_out),
+		.svalue_out(data_pa_out)
 	);
 
 	dp_reg #(8) pa_out_set_reg(
@@ -807,10 +803,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(pa_set_mask),
-		.fvalue_mask('hff),
+		.fvalue_mask(8'hff),
 
 		.svalue_in(data_cpu_out),
-		.svalue_mask({8{pa_set_sig}}),
+		.svalue_mask({8{pa_set_sig}})
 	);
 
 	dp_reg #(8) pa_out_reset_reg(
@@ -818,42 +814,42 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(pa_reset_mask),
-		.fvalue_mask('hff),
+		.fvalue_mask(8'hff),
 
 		.svalue_in(data_cpu_out),
-		.svalue_mask({8{pa_reset_sig}}),
+		.svalue_mask({8{pa_reset_sig}})
 	);
 
-	dp_reg #(`NUM_ROUTES) pa_trigger_set_reg(
+	dp_reg #(NUM_ROUTES) pa_trigger_set_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 		.frst(f_reset),
 
 		.fvalue_out(pa_trigger_set),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{pa_trigger_set_set}}),
+		.svalue_in(atom[NUM_ROUTES-1:0]),
+		.svalue_mask({NUM_ROUTES{pa_trigger_set_set}})
 	);
 
-	dp_reg #(`NUM_ROUTES) pa_trigger_reset_reg(
+	dp_reg #(NUM_ROUTES) pa_trigger_reset_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 		.frst(f_reset),
 
 		.fvalue_out(pa_trigger_reset),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{pa_trigger_reset_set}}),
+		.svalue_in(atom[NUM_ROUTES-1:0]),
+		.svalue_mask({NUM_ROUTES{pa_trigger_reset_set}})
 	);
 
-	always @(posedge pllclk) begin
+	always_ff @(posedge pllclk) begin
 		pa_out <= ((pa_out | pa_set_mask) & ~pa_reset_mask);
 
 		if (f_reset)
 			pa_out <= 0;
 	end
 
-	always @(posedge cpuclk) r_pa_trigger <= wr_cpu && cs_cpu_pa;
+	always_ff @(posedge cpuclk) r_pa_trigger <= wr_cpu && cs_cpu_pa;
 	assign pa_trigger = wr_cpu && cs_cpu_pa && !r_pa_trigger;
 	assign pa_set_sig = pa_trigger && !adr_cpu[1:0];
 	assign pa_reset_sig = pa_trigger && adr_cpu[1:0] == 1;
@@ -863,15 +859,15 @@ module top(
 	assign pa_set_mask[0]   = |(pa_trigger_set   & route);
 	assign pa_reset_mask[0] = |(pa_trigger_reset & route);
 
-	dp_reg #(`NUM_ROUTES) ones_set_reg(
+	dp_reg #(NUM_ROUTES) ones_set_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 		.frst(f_reset),
 
 		.fvalue_out(ones_set),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{ones_set_trigger}}),
+		.svalue_in(atom[NUM_ROUTES-1:0]),
+		.svalue_mask({NUM_ROUTES{ones_set_trigger}})
 	);
 
 	assign ones_set_trigger = wr_cpu && cs_cpu_ones_set;
@@ -884,19 +880,19 @@ module top(
 		.fvalue_mask(f_irq),
 
 		.svalue_out(irq),
-		.svalue_mask('hff),
+		.svalue_mask(8'hff)
 	);
 
-	assign f_irq = {{(`NUM_ROUTES > 8 ? 0 : 8-`NUM_ROUTES){1'b0}}, route[(`NUM_ROUTES > 8 ? 7 : `NUM_ROUTES-1):0]};
+	assign f_irq = {{(NUM_ROUTES > 8 ? 0 : 8-NUM_ROUTES){1'b0}}, route[(NUM_ROUTES > 8 ? 7 : NUM_ROUTES-1):0]};
 
 	dp_reg #(30) dut_reg2bus(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
 		.fvalue_in(dut_in),
-		.fvalue_mask('h3fffffff),
+		.fvalue_mask(30'h3fffffff),
 
-		.svalue_out(data_dut_in),
+		.svalue_out(data_dut_in)
 	);
 
 	assign dut_in = { dut_reset_in, dut_phi_in,
@@ -909,10 +905,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_reset_set_mask),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[0]),
-		.svalue_mask(dut_ctl_sig),
+		.svalue_mask(dut_ctl_sig)
 	);
 
 	dp_reg dut_reset_reset_reg(
@@ -920,10 +916,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_reset_reset_mask),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[2]),
-		.svalue_mask(dut_ctl_sig),
+		.svalue_mask(dut_ctl_sig)
 	);
 
 	dp_reg dut_data_set_reg(
@@ -931,10 +927,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_data_set_mask),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[1]),
-		.svalue_mask(dut_ctl_sig),
+		.svalue_mask(dut_ctl_sig)
 	);
 
 	dp_reg dut_data_reset_reg(
@@ -942,10 +938,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_data_reset_mask),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[3]),
-		.svalue_mask(dut_ctl_sig),
+		.svalue_mask(dut_ctl_sig)
 	);
 
 	dp_reg #(8) dut_data_reg(
@@ -955,70 +951,68 @@ module top(
 		.fvalue_out(dut_data_ovr_out),
 
 		.svalue_in(data_cpu_out),
-		.svalue_mask({8{dut_data_sig}}),
+		.svalue_mask({8{dut_data_sig}})
 	);
 
-	dp_reg #(`NUM_BUS_COMPARATORS) dut_data_compare_set_reg(
+	dp_reg #(NUM_BUS_COMPARATORS) dut_data_compare_set_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_data_compare_set),
-		.fvalue_mask({`NUM_BUS_COMPARATORS{1'b1}}),
+		.fvalue_mask({NUM_BUS_COMPARATORS{1'b1}}),
 
-		.svalue_in(data_cpu_out[`NUM_BUS_COMPARATORS-1:0]),
-		.svalue_mask({`NUM_BUS_COMPARATORS{dut_cmp_sig}}),
+		.svalue_in(data_cpu_out[NUM_BUS_COMPARATORS-1:0]),
+		.svalue_mask({NUM_BUS_COMPARATORS{dut_cmp_sig}})
 	);
 
-	dp_reg #(`NUM_BUS_COMPARATORS) dut_data_compare_mask_set_reg(
+	dp_reg #(NUM_BUS_COMPARATORS) dut_data_compare_mask_set_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 
 		.fvalue_out(dut_data_compare_mask_set),
-		.fvalue_mask({`NUM_BUS_COMPARATORS{1'b1}}),
+		.fvalue_mask({NUM_BUS_COMPARATORS{1'b1}}),
 
-		.svalue_in(data_cpu_out[`NUM_BUS_COMPARATORS-1+4:4]),
-		.svalue_mask({`NUM_BUS_COMPARATORS{dut_cmp_sig}}),
+		.svalue_in(data_cpu_out[NUM_BUS_COMPARATORS-1+4:4]),
+		.svalue_mask({NUM_BUS_COMPARATORS{dut_cmp_sig}})
 	);
 
-	generate for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1)
-		dp_reg #(`NUM_ROUTES) dut_trigger_set_reg(
+	generate for (genvar i = 0; i < NUM_BUS_COMPARATORS; i++)
+		dp_reg #(NUM_ROUTES) dut_trigger_set_reg(
 			.fclk(pllclk),
 			.sclk(cpuclk),
 			.frst(f_reset),
 
 			.fvalue_out(dut_data_compare_trig_set[i]),
 
-			.svalue_in(atom[`NUM_ROUTES-1:0]),
-			.svalue_mask({`NUM_ROUTES{dut_trig_sig && data_cpu_out[i]}}),
+			.svalue_in(atom[NUM_ROUTES-1:0]),
+			.svalue_mask({NUM_ROUTES{dut_trig_sig && data_cpu_out[i]}})
 		);
 	endgenerate
 
-	generate for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1)
-		dp_reg #(`NUM_ROUTES) dut_edge_trigger_set_reg(
+	generate for (genvar i = 0; i < NUM_BUS_COMPARATORS; i++)
+		dp_reg #(NUM_ROUTES) dut_edge_trigger_set_reg(
 			.fclk(pllclk),
 			.sclk(cpuclk),
 			.frst(f_reset),
 
 			.fvalue_out(dut_data_compare_edge_trig_set[i]),
 
-			.svalue_in(atom[`NUM_ROUTES-1:0]),
-			.svalue_mask({`NUM_ROUTES{dut_trig_sig && data_cpu_out[i+4]}}),
+			.svalue_in(atom[NUM_ROUTES-1:0]),
+			.svalue_mask({NUM_ROUTES{dut_trig_sig && data_cpu_out[i+4]}})
 		);
 	endgenerate
 
-	always @(posedge cpuclk) r_dut_trigger <= wr_cpu && cs_cpu_dut;
+	always_ff @(posedge cpuclk) r_dut_trigger <= wr_cpu && cs_cpu_dut;
 	assign dut_trigger = wr_cpu && cs_cpu_dut && !r_dut_trigger;
 	assign dut_ctl_sig = dut_trigger && !adr_cpu[1:0];
 	assign dut_trig_sig = dut_trigger && adr_cpu[1:0] == 1;
 	assign dut_data_sig = dut_trigger && adr_cpu[1:0] == 2;
 	assign dut_cmp_sig = dut_trigger && &adr_cpu[1:0];
 
-	always @(posedge pllclk) begin :dut_glue
-		integer i;
-
+	always_ff @(posedge pllclk) begin
 		dut_data_ovr <= (dut_data_ovr | dut_data_set_mask) & !dut_data_reset_mask;
 
-		for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1) begin
+		for (int i = 0; i < NUM_BUS_COMPARATORS; i++) begin
 			if (dut_data_compare_set[i])
 				dut_data_compare[i] <= atom;
 			if (dut_data_compare_mask_set[i])
@@ -1027,75 +1021,77 @@ module top(
 
 		if (f_reset) begin
 			dut_data_ovr <= 0;
-			for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1) begin
+			for (int i = 0; i < NUM_BUS_COMPARATORS; i++) begin
 				dut_data_compare[i]      <= 0;
 				dut_data_compare_mask[i] <= 0;
 			end
 		end
 	end
 
-	always @(posedge pllclk) begin :combine_piped_route
-		reg [`NUM_BUS_COMPARATORS-1:0] prev_matches;
+	always_ff @(posedge pllclk) begin
+		logic [NUM_BUS_COMPARATORS-1:0] prev_matches;
+		logic [NUM_ROUTES-1:0]          route_tmp;
 
-		piped_route = ones_set;
+		route_tmp = ones_set;
 
-		integer i;
-		for (i = 0; i < `NUM_BUS_COMPARATORS; i = i + 1) begin :match_bus
-			reg matches;
+		for (int i = 0; i < NUM_BUS_COMPARATORS; i++) begin
+			logic matches;
 			matches = ({ pa_in[0], dut_in } & dut_data_compare_mask[i]) ==
 			          (dut_data_compare[i] & dut_data_compare_mask[i]);
 			if (matches) begin
-				piped_route = piped_route | dut_data_compare_trig_set[i];
+				route_tmp |= dut_data_compare_trig_set[i];
 				if (!prev_matches[i])
-					piped_route = piped_route | dut_data_compare_edge_trig_set[i];
+					route_tmp |= dut_data_compare_edge_trig_set[i];
 			end
 			prev_matches[i] = matches;
 		end
+
+		piped_route <= route_tmp;
 	end
 
 	assign route = piped_route;
 
-	reg  [9:0] rec_adr;
-	wire [9:0] rec_adr_new;
-	wire       rec_adr_set;
-	reg  rec_running;
-	wire rec_trigger;
-	wire [`NUM_ROUTES-1:0] rec_capture;
-	wire [`NUM_ROUTES-1:0] rec_start;
-	wire [`NUM_ROUTES-1:0] rec_stop;
-	wire rec_cap_trig, rec_start_trig, rec_stop_trig;
+	logic [9:0] rec_adr;
+	logic [9:0] rec_adr_new;
+	logic       rec_adr_set;
+	logic rec_running;
+	logic rec_trigger;
+	logic [NUM_ROUTES-1:0] rec_capture;
+	logic [NUM_ROUTES-1:0] rec_start;
+	logic [NUM_ROUTES-1:0] rec_stop;
+	logic rec_cap_trig, rec_start_trig, rec_stop_trig;
 
-	dp_reg #(`NUM_ROUTES) rec_start_reg(
+	dp_reg #(NUM_ROUTES) rec_start_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 		.frst(f_reset),
 
 		.fvalue_out(rec_start),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[0]}}),
+		.svalue_in(atom[NUM_ROUTES-1:0]),
+		.svalue_mask({NUM_ROUTES{rec_trigger && data_cpu_out[0]}})
 	);
 
-	dp_reg #(`NUM_ROUTES) rec_stop_reg(
+	dp_reg #(NUM_ROUTES) rec_stop_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 		.frst(f_reset),
 
 		.fvalue_out(rec_stop),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[1]}}),
+		.svalue_in(atom[NUM_ROUTES-1:0]),
+		.svalue_mask({NUM_ROUTES{rec_trigger && data_cpu_out[1]}})
 	);
 
-	dp_reg #(`NUM_ROUTES) rec_capture_reg(
+	dp_reg #(NUM_ROUTES) rec_capture_reg(
 		.fclk(pllclk),
 		.sclk(cpuclk),
 		.frst(f_reset),
 
 		.fvalue_out(rec_capture),
 
-		.svalue_in(atom[`NUM_ROUTES-1:0]),
-		.svalue_mask({`NUM_ROUTES{rec_trigger && data_cpu_out[2]}}),
+		.svalue_in(atom[NUM_ROUTES-1:0]),
+		.svalue_mask({NUM_ROUTES{rec_trigger && data_cpu_out[2]}})
 	);
 
 	dp_reg rec_start_trig_reg(
@@ -1103,10 +1099,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(rec_start_trig),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[3]),
-		.svalue_mask(rec_trigger),
+		.svalue_mask(rec_trigger)
 	);
 
 	dp_reg rec_stop_trig_reg(
@@ -1114,10 +1110,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(rec_stop_trig),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[4]),
-		.svalue_mask(rec_trigger),
+		.svalue_mask(rec_trigger)
 	);
 
 	dp_reg rec_cap_trig_reg(
@@ -1125,10 +1121,10 @@ module top(
 		.sclk(cpuclk),
 
 		.fvalue_out(rec_cap_trig),
-		.fvalue_mask(1),
+		.fvalue_mask('1),
 
 		.svalue_in(data_cpu_out[5]),
-		.svalue_mask(rec_trigger),
+		.svalue_mask(rec_trigger)
 	);
 
 	dp_reg #(11) rec_adr_reg(
@@ -1141,12 +1137,12 @@ module top(
 		.fvalue_in(11'b0xxxxxxxxxx),
 
 		.svalue_in({ 1'b1, atom[9:0] }),
-		.svalue_mask({11{rec_trigger && data_cpu_out[7]}}),
+		.svalue_mask({11{rec_trigger && data_cpu_out[7]}})
 	);
 
 	assign rec_trigger = wr_cpu && cs_cpu_rec;
 
-	always @(posedge pllclk) begin
+	always_ff @(posedge pllclk) begin
 		if (rec_running && ((rec_capture & route) || rec_cap_trig)) begin
 			recram[rec_adr] <= { 1'b0, pa_in[0], dut_in[29:0] };
 			rec_adr         <= rec_adr + 1;

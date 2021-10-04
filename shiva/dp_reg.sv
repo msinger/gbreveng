@@ -2,37 +2,37 @@
 
 (* nolatches *)
 module dp_reg #(
-		parameter WIDTH       = 1,
-		          RESET_VALUE = 0,
-		          RESET_MASK  = 'hffffffff,
+		parameter int WIDTH       = 1,
+		              RESET_VALUE = 0,
+		              RESET_MASK  = '1
 	) (
-		input  wire             fclk,
-		input  wire             sclk,
-		input  wire             frst        = 0,
+		input  logic             fclk,
+		input  logic             sclk,
+		input  logic             frst        = 0,
 
-		input  wire [WIDTH-1:0] fvalue_mask = 0,
-		input  wire [WIDTH-1:0] fvalue_in   = 0,
-		output reg  [WIDTH-1:0] fvalue_out,
+		input  logic [WIDTH-1:0] fvalue_mask = 0,
+		input  logic [WIDTH-1:0] fvalue_in   = 0,
+		output logic [WIDTH-1:0] fvalue_out,
 
-		input  wire [WIDTH-1:0] svalue_mask = 0,
-		input  wire [WIDTH-1:0] svalue_in   = 0,
-		output reg  [WIDTH-1:0] svalue_out,
+		input  logic [WIDTH-1:0] svalue_mask = 0,
+		input  logic [WIDTH-1:0] svalue_in   = 0,
+		output logic [WIDTH-1:0] svalue_out
 	);
 
-	reg f2s_fseq, f2s_sseq;
-	reg f2s_fack, f2s_sack;
+	logic f2s_fseq, f2s_sseq;
+	logic f2s_fack, f2s_sack;
 	cdc f2s_seq_cdc(sclk, f2s_fseq, f2s_sseq);
 	cdc f2s_ack_cdc(fclk, f2s_sack, f2s_fack);
-	reg [WIDTH-1:0] f2s_value;
+	logic [WIDTH-1:0] f2s_value;
 
-	reg s2f_fseq, s2f_sseq;
-	reg s2f_fack, s2f_sack;
+	logic s2f_fseq, s2f_sseq;
+	logic s2f_fack, s2f_sack;
 	cdc s2f_seq_cdc(fclk, s2f_sseq, s2f_fseq);
 	cdc s2f_ack_cdc(sclk, s2f_fack, s2f_sack);
-	reg [WIDTH-1:0] s2f_mask;
-	reg [WIDTH-1:0] s2f_value;
+	logic [WIDTH-1:0] s2f_mask;
+	logic [WIDTH-1:0] s2f_value;
 
-	always @(posedge sclk) begin
+	always_ff @(posedge sclk) begin
 		if (f2s_sseq != f2s_sack) begin
 			svalue_out <= f2s_value;
 			f2s_sack   <= f2s_sseq;
@@ -45,7 +45,7 @@ module dp_reg #(
 		end
 	end
 
-	always @(posedge fclk) begin
+	always_ff @(posedge fclk) begin
 		fvalue_out <= (fvalue_in & fvalue_mask) | (fvalue_out & ~fvalue_mask);
 
 		if (f2s_fseq == f2s_fack) begin
