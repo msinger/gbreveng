@@ -1,6 +1,6 @@
 AC_PREREQ([2.63])
 AC_INIT([gbreveng], [0.1])
-AC_CONFIG_SRCDIR([mrd_test/top.v])
+AC_CONFIG_SRCDIR([mrd_test/top.sv])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([foreign dist-bzip2 filename-length-max=99 no-dependencies tar-ustar])

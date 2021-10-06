@@ -3,88 +3,88 @@
 (* nolatches *)
 (* top *)
 module test_hw(
-		input  logic        clk12m,        /* 12 MHz clock input */
-		input  logic        clk16m,        /* 16 MiHz clock input */
-		output logic        clk16m_en,     /* 16 MiHz clock enable */
+		input  logic            clk12m,        /* 12 MHz clock input */
+		input  logic            clk16m,        /* 16 MiHz clock input */
+		output logic            clk16m_en,     /* 16 MiHz clock enable */
 
-		output logic [15:0] led,
-		input  logic [15:0] sw,
-		input  logic [3:0]  btn,
+		output logic     [15:0] led,
+		input  logic     [15:0] sw,
+		input  logic     [3:0]  btn,
 
-		inout  logic [7:0]  ft245_d,
-		input  logic        ft245_n_rxf,
-		input  logic        ft245_n_txe,
-		output logic        ft245_n_rd,
-		output logic        ft245_n_wr,
-		output logic        ft245_siwu,
+		inout  tri logic [7:0]  ft245_d,
+		input  logic            ft245_n_rxf,
+		input  logic            ft245_n_txe,
+		output logic            ft245_n_rd,
+		output logic            ft245_n_wr,
+		output logic            ft245_siwu,
 
-		output logic        chl,           /* left audio PWM channel */
-		output logic        chr,           /* right audio PWM channel */
-		output logic        chm,           /* mono audio PWM channel */
+		output logic            chl,           /* left audio PWM channel */
+		output logic            chr,           /* right audio PWM channel */
+		output logic            chm,           /* mono audio PWM channel */
 
-		input  logic        p10,
-		input  logic        p11,
-		input  logic        p12,
-		input  logic        p13,
-		input  logic        p14,
-		input  logic        p15,
+		input  logic            p10,
+		input  logic            p11,
+		input  logic            p12,
+		input  logic            p13,
+		input  logic            p14,
+		input  logic            p15,
 
-		output logic [20:0] madr,
-		inout  logic [7:0]  mdata,
-		output logic        n_mrd,
-		output logic        n_mwr,
-		output logic        n_prog,
-		output logic        n_mcs_rom = 1,
-		output logic        n_mcs_xram = 1,
-		output logic        n_mcs_wram,
-		output logic        n_mcs_crom,
-		output logic        n_mcs_cram,
-		output logic        mphi,
-		inout  logic        n_mreset = 1,
-		output logic        n_moe = 1,
-		output logic        n_moed = 1,
-		output logic        mdir,
+		output logic     [20:0] madr,
+		inout  tri logic [7:0]  mdata,
+		output logic            n_mrd,
+		output logic            n_mwr,
+		output logic            n_prog,
+		output logic            n_mcs_rom = 1,
+		output logic            n_mcs_xram = 1,
+		output logic            n_mcs_wram,
+		output logic            n_mcs_crom,
+		output logic            n_mcs_cram,
+		output logic            mphi,
+		inout  tri logic        n_mreset = 1,
+		output logic            n_moe = 1,
+		output logic            n_moed = 1,
+		output logic            mdir,
 
-		input  logic [14:0] adr,
-		inout  logic [7:0]  data,
-		input  logic        n_rd,
-		input  logic        n_wr,
-		input  logic        n_cs_rom,
-		input  logic        n_cs_xram,
-		input  logic        phi,
-		inout  logic        n_reset = 1,
-		output logic        n_soe = 1,
-		output logic        sdir,
+		input  logic     [14:0] adr,
+		inout  tri logic [7:0]  data,
+		input  logic            n_rd,
+		input  logic            n_wr,
+		input  logic            n_cs_rom,
+		input  logic            n_cs_xram,
+		input  logic            phi,
+		inout  tri logic        n_reset = 1,
+		output logic            n_soe = 1,
+		output logic            sdir,
 
-		output logic [13:0] vadr,
-		inout  logic [7:0]  vdata,
-		output logic        n_vrd,
-		output logic        n_vwr,
-		output logic        n_vcs,
+		output logic     [13:0] vadr,
+		inout  tri logic [7:0]  vdata,
+		output logic            n_vrd,
+		output logic            n_vwr,
+		output logic            n_vcs,
 
-		inout  logic [7:0]  pa,
-		output logic        n_pa_oe = 1,
-		output logic        pa_dir,
+		inout  tri logic [7:0]  pa,
+		output logic            n_pa_oe = 1,
+		output logic            pa_dir,
 
-		inout  logic [7:0]  pb,
-		output logic        n_pb_oe = 1,
-		output logic        pb_dir,
+		inout  tri logic [7:0]  pb,
+		output logic            n_pb_oe = 1,
+		output logic            pb_dir,
 
-		input  logic        sin,
-		output logic        sout,
+		input  logic            sin,
+		output logic            sout,
 
-		input  logic        sd_sw,
-		input  logic        sd_clk,
-		input  logic        sd_cmd,
-		input  logic [3:0]  sd_data,
+		input  logic            sd_sw,
+		input  logic            sd_clk,
+		input  logic            sd_cmd,
+		input  logic     [3:0]  sd_data,
 
-		output logic        lcd_hsync,
-		output logic        lcd_vsync,
-		output logic        lcd_latch,
-		output logic        lcd_altsig,
-		output logic        lcd_ctrl,
-		output logic        lcd_clk,
-		output logic [1:0]  lcd_data,
+		output logic            lcd_hsync,
+		output logic            lcd_vsync,
+		output logic            lcd_latch,
+		output logic            lcd_altsig,
+		output logic            lcd_ctrl,
+		output logic            lcd_clk,
+		output logic     [1:0]  lcd_data
 	);
 
 	logic pllclk;
@@ -100,38 +100,38 @@ module test_hw(
 
 	SB_IO #(
 			.PIN_TYPE('b 1101_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) ft245_d_io[7:0] (
 			.PACKAGE_PIN(ft245_d),
 			.OUTPUT_CLK(clk12m),
 			.INPUT_CLK(clk12m),
 			.OUTPUT_ENABLE(ft245_dir_out),
 			.D_OUT_0(ft245_d_out),
-			.D_IN_0(ft245_d_in),
+			.D_IN_0(ft245_d_in)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 1101_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) mdata_io[7:0] (
 			.PACKAGE_PIN(mdata),
 			.OUTPUT_CLK(clk12m),
 			.INPUT_CLK(clk12m),
 			.OUTPUT_ENABLE(md_dir_out),
 			.D_OUT_0(md_out),
-			.D_IN_0(md_in),
+			.D_IN_0(md_in)
 		);
 
 	SB_IO #(
 			.PIN_TYPE('b 1101_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) vdata_io[7:0] (
 			.PACKAGE_PIN(vdata),
 			.OUTPUT_CLK(clk12m),
 			.INPUT_CLK(clk12m),
 			.OUTPUT_ENABLE(vd_dir_out),
 			.D_OUT_0(vd_out),
-			.D_IN_0(vd_in),
+			.D_IN_0(vd_in)
 		);
 
 	SB_PLL40_CORE #(
@@ -139,71 +139,70 @@ module test_hw(
 			.DIVR(0),
 			.DIVF(55),
 			.DIVQ(5),
-			.FILTER_RANGE(1),
+			.FILTER_RANGE(1)
 		) pll0 (
-			.RESETB(1),
-			.BYPASS(0),
+			.RESETB('1),
+			.BYPASS('0),
 			.REFERENCECLK(clk12m),
-			.PLLOUTCORE(pllclk),
+			.PLLOUTCORE(pllclk)
 		);
 
 	logic [23:0] cyc;
 	logic [20:0] cyc16;
 	logic [20:0] cycpll;
 
-	always_ff @(posedge clk12m) cyc++;
-	always_ff @(posedge clk16m) cyc16++;
-	always_ff @(posedge pllclk) cycpll++;
+	always_ff @(posedge clk12m) cyc    <= cyc    + 1;
+	always_ff @(posedge clk16m) cyc16  <= cyc16  + 1;
+	always_ff @(posedge pllclk) cycpll <= cycpll + 1;
 
-	always_ff @(posedge clk12m) clk16m_en = cyc[23];
+	always_ff @(posedge clk12m) clk16m_en <= cyc[23];
 
-	localparam MA   = 0;
-	localparam MAW  = 21;
-	localparam MAE  = MA + MAW - 1;
-	localparam MD   = MA + MAW;
-	localparam MDW  = 8;
-	localparam MDE  = MD + MDW - 1;
-	localparam MDO  = MD + MDW;
-	localparam MDT  = MDO + 1;
-	localparam MRD  = MDT + 1;
-	localparam MWR  = MRD + 1;
-	localparam MPRG = MWR + 1;
-	localparam MSW  = MPRG + 1;
-	localparam MSCR = MSW + 1;
-	localparam MSCX = MSCR + 1;
-	localparam SA   = MSCX + 1;
-	localparam SAW  = 15;
-	localparam SAE  = SA + SAW - 1;
-	localparam VA   = SA + SAW;
-	localparam VAW  = 14;
-	localparam VAE  = VA + VAW - 1;
-	localparam VD   = VA + VAW;
-	localparam VDW  = 8;
-	localparam VDE  = VD + VDW - 1;
-	localparam VDO  = VD + VDW;
-	localparam VDT  = VDO + 1;
-	localparam VRD  = VDT + 1;
-	localparam VWR  = VRD + 1;
-	localparam VCS  = VWR + 1;
-	localparam PXX  = VCS + 1;
-	localparam PXXW = 6;
-	localparam PXXE = PXX + PXXW - 1;
-	localparam LCD  = PXX + PXXW;
-	localparam LCDW = 8;
-	localparam LCDE = LCD + LCDW - 1;
-	localparam PXXT = LCD + LCDW;
-	localparam LCDT = PXXT + 1;
-	localparam SW   = LCDT + 1;
-	localparam SE   = SW - 1;
+	localparam int MA   = 0;
+	localparam int MAW  = 21;
+	localparam int MAE  = MA + MAW - 1;
+	localparam int MD   = MA + MAW;
+	localparam int MDW  = 8;
+	localparam int MDE  = MD + MDW - 1;
+	localparam int MDO  = MD + MDW;
+	localparam int MDT  = MDO + 1;
+	localparam int MRD  = MDT + 1;
+	localparam int MWR  = MRD + 1;
+	localparam int MPRG = MWR + 1;
+	localparam int MSW  = MPRG + 1;
+	localparam int MSCR = MSW + 1;
+	localparam int MSCX = MSCR + 1;
+	localparam int SA   = MSCX + 1;
+	localparam int SAW  = 15;
+	localparam int SAE  = SA + SAW - 1;
+	localparam int VA   = SA + SAW;
+	localparam int VAW  = 14;
+	localparam int VAE  = VA + VAW - 1;
+	localparam int VD   = VA + VAW;
+	localparam int VDW  = 8;
+	localparam int VDE  = VD + VDW - 1;
+	localparam int VDO  = VD + VDW;
+	localparam int VDT  = VDO + 1;
+	localparam int VRD  = VDT + 1;
+	localparam int VWR  = VRD + 1;
+	localparam int VCS  = VWR + 1;
+	localparam int PXX  = VCS + 1;
+	localparam int PXXW = 6;
+	localparam int PXXE = PXX + PXXW - 1;
+	localparam int LCD  = PXX + PXXW;
+	localparam int LCDW = 8;
+	localparam int LCDE = LCD + LCDW - 1;
+	localparam int PXXT = LCD + LCDW;
+	localparam int LCDT = PXXT + 1;
+	localparam int SW   = LCDT + 1;
+	localparam int SE   = SW - 1;
 
 	logic [SE:0] sr[0:511];
 	logic [SE:0] s;
 
-	initial begin :init_sr
-		logic   [SE:0] t;
-		integer        i;
+	initial begin
+		logic [SE:0] t;
 
-		for (i = 0; i < 512; i++)
+		for (int i = 0; i < 512; i++)
 			sr[i] = 0;
 
 		/*
@@ -1133,10 +1132,10 @@ module test_hw(
 		sr[282]     = t;
 	end
 
-	logic [8:0] c = cyc[12:4];
-	logic       d = cyc[3:0] == 4;
+	wire logic [8:0] c = cyc[12:4];
+	wire logic       d = cyc[3:0] == 4;
 
-	always_ff @(posedge clk12m) s = sr[c];
+	always_ff @(posedge clk12m) s <= sr[c];
 
 	logic [5:0] pxx_good, pxx_led;
 	logic [7:0] lcd_good, lcd_led;
@@ -1145,14 +1144,14 @@ module test_hw(
 
 	always_ff @(posedge clk12m) if (d) begin
 		if (&c) begin
-			pxx_led  = pxx_good;
-			pxx_good = 'h3f;
-			lcd_led  = lcd_good;
-			lcd_good = 'hff;
-			md_led   = md_good;
-			md_good  = 1;
-			vd_led   = vd_good;
-			vd_good  = 1;
+			pxx_led  <= pxx_good;
+			pxx_good  = 'h3f;
+			lcd_led  <= lcd_good;
+			lcd_good  = 'hff;
+			md_led   <= md_good;
+			md_good   = 1;
+			vd_led   <= vd_good;
+			vd_good   = 1;
 		end
 		if (s[PXXT]) begin
 			pxx_good &= ~s[PXXE:PXX] ^ { p15, p14, p13, p12, p11, p10 };
@@ -1166,33 +1165,33 @@ module test_hw(
 		if (s[VDT]) begin
 			vd_good &= s[VDE:VD] == vd_in;
 		end
-		madr       = s[MAE:MA];
-		md_out     = s[MDE:MD];
-		md_dir_out = s[MDO];
-		n_mrd      = !s[MRD];
-		n_mwr      = !s[MWR];
-		n_prog     = !s[MPRG];
-		n_mcs_wram = !s[MSW];
-		n_mcs_crom = !s[MSCR];
-		n_mcs_cram = !s[MSCX];
-		vadr       = s[VAE:VA];
-		vd_out     = s[VDE:VD];
-		vd_dir_out = s[VDO];
-		n_vrd      = !s[VRD];
-		n_vwr      = !s[VWR];
-		n_vcs      = !s[VCS];
-		lcd_hsync  = s[LCD+7];
-		lcd_vsync  = s[LCD+6];
-		lcd_latch  = s[LCD+5];
-		lcd_altsig = s[LCD+4];
-		lcd_ctrl   = s[LCD+3];
-		lcd_clk    = s[LCD+2];
-		lcd_data   = s[LCD+1:LCD];
+		madr       <= s[MAE:MA];
+		md_out     <= s[MDE:MD];
+		md_dir_out <= s[MDO];
+		n_mrd      <= !s[MRD];
+		n_mwr      <= !s[MWR];
+		n_prog     <= !s[MPRG];
+		n_mcs_wram <= !s[MSW];
+		n_mcs_crom <= !s[MSCR];
+		n_mcs_cram <= !s[MSCX];
+		vadr       <= s[VAE:VA];
+		vd_out     <= s[VDE:VD];
+		vd_dir_out <= s[VDO];
+		n_vrd      <= !s[VRD];
+		n_vwr      <= !s[VWR];
+		n_vcs      <= !s[VCS];
+		lcd_hsync  <= s[LCD+7];
+		lcd_vsync  <= s[LCD+6];
+		lcd_latch  <= s[LCD+5];
+		lcd_altsig <= s[LCD+4];
+		lcd_ctrl   <= s[LCD+3];
+		lcd_clk    <= s[LCD+2];
+		lcd_data   <= s[LCD+1:LCD];
 	end
 
 	logic [7:0] led_mode = 0;
 
-	always_ff @(posedge clk12m) if (btn[0]) led_mode = sw[7:0];
+	always_ff @(posedge clk12m) if (btn[0]) led_mode <= sw[7:0];
 
 	always_comb case (led_mode)
 	0: begin

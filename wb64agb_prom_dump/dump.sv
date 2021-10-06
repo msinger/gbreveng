@@ -15,7 +15,7 @@ module dump(
 		input  logic       data,
 		output logic       clk     = 0,
 		output logic       n_reset = 0,
-		output logic       n_ce    = 1,
+		output logic       n_ce    = 1
 	);
 
 	logic start_trigger = 0;
@@ -27,29 +27,31 @@ module dump(
 	logic [7:0] dout   = 0;
 	logic       dvalid = 0;
 
-	logic [7:0] state = 0;
+	logic [7:0] state  = 0;
 
 	logic [3:0] clkdiv = 0;
 	logic clk1m        = clkdiv[3];
 
 	always_ff @(posedge clk12m) begin
-		clkdiv++;
-		if (clkdiv >= 14)
-			clkdiv = 2;
+		logic [3:0] clk_tmp;
+		clk_tmp = clkdiv + 1;
+		if (clk_tmp >= 14)
+			clk_tmp = 2;
+		clkdiv <= clk_tmp;
 	end
 
 	SB_IO #(
 			.PIN_TYPE('b 0000_00),
-			.PULLUP(1),
+			.PULLUP(1)
 		) start_io (
 			.PACKAGE_PIN(start),
 			.INPUT_CLK(clk12m),
-			.D_IN_0(start_in),
+			.D_IN_0(start_in)
 		);
 
 	always_ff @(posedge clk1m) start_trigger <= start_in;
 
-	always_ff @(posedge clk1m) count++;
+	always_ff @(posedge clk1m) count <= count + 1;
 
 	always_ff @(posedge clk1m) case (state)
 		0: begin
@@ -93,7 +95,7 @@ module dump(
 			if (count == 15) begin
 				dout   <= din;
 				dvalid <= 1;
-				led++;
+				led    <= led + 1;
 			end
 		end
 	endcase

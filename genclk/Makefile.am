@@ -1,5 +1,5 @@
 SRC = \
-top.v
+top.sv
 
 NODIST_SRC = \
 pll.v

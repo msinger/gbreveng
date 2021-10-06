@@ -1,46 +1,46 @@
 `default_nettype none
 
-`define width  160
-`define height 144
-
-`define first_px 95
-
 (* nolatches *)
 (* top *)
 module top(
-		input  wire        clk16m,
-		output wire        clk16m_en,
-		output wire [15:0] led,
-		input  wire [15:0] sw,
-		input  wire [3:0]  btn,
+		input  logic        clk16m,
+		output logic        clk16m_en,
+		output logic [15:0] led,
+		input  logic [15:0] sw,
+		input  logic [3:0]  btn,
 
-		output reg  [1:0]  lcd_d,
-		output reg         lcd_clk,
-		output reg         lcd_hsync,
-		output reg         lcd_vsync,
-		output reg         lcd_latch,
-		output reg         lcd_pol,
-		output reg         lcd_tim,
+		output logic [1:0]  lcd_d,
+		output logic        lcd_clk,
+		output logic        lcd_hsync,
+		output logic        lcd_vsync,
+		output logic        lcd_latch,
+		output logic        lcd_pol,
+		output logic        lcd_tim,
 
-		output wire        p10
+		output logic        p10
 	);
 
-	reg  [1:0] d;
-	reg        pclk;
-	reg        hsync;
-	reg        vsync;
-	reg        latch;
-	reg        pol;
-	reg        tim;
+	localparam int width  = 160;
+	localparam int height = 144;
 
-	reg        clk;
+	localparam int first_px = 95;
 
-	reg        r_fe  = 0, fe;
-	reg  [8:0] r_cyc = 0, cyc;
-	reg  [7:0] r_ly  = 0, ly;
+	logic [1:0] d;
+	logic       pclk;
+	logic       hsync;
+	logic       vsync;
+	logic       latch;
+	logic       pol;
+	logic       tim;
 
-	wire [7:0] ix;
-	wire [1:0] px;
+	logic       clk;
+
+	logic       r_fe  = 0, fe;
+	logic [8:0] r_cyc = 0, cyc;
+	logic [7:0] r_ly  = 0, ly;
+
+	logic [7:0] ix;
+	logic [1:0] px;
 
 	assign clk16m_en = 1;
 
@@ -48,18 +48,18 @@ module top(
 
 	assign p10 = !r_fe;
 
-	assign ix = cyc - `first_px;
+	assign ix = cyc - first_px;
 
 	img #(
-		.width(`width),
-		.height(`height)
+		.width(width),
+		.height(height)
 	) image(
 		.x(ix),
 		.y(ly),
 		.value(px)
 	);
 
-	always @* begin
+	always_comb begin
 		d     = lcd_d;
 		pclk  = lcd_clk;
 		hsync = lcd_hsync;
@@ -72,10 +72,10 @@ module top(
 
 		fe = !r_fe;
 		if (!fe)
-			cyc = cyc + 1;
+			cyc++;
 		if (cyc == 456) begin
 			cyc = 0;
-			ly  = ly + 1;
+			ly++;
 		end
 		if (ly == 154)
 			ly  = 0;
@@ -84,7 +84,7 @@ module top(
 			latch = 1;
 			tim   = 1;
 		end
-		if (fe && cyc == 2 && ly == `height)
+		if (fe && cyc == 2 && ly == height)
 			pol   = !pol;
 		if (fe && cyc == 4) begin
 			latch = 0;
@@ -98,9 +98,9 @@ module top(
 			tim   = 1;
 		if (fe && cyc == 36)
 			tim   = 0;
-		if (fe && cyc == 81 && ly < `height)
+		if (fe && cyc == 81 && ly < height)
 			hsync = 1;
-		if (!fe && cyc == 88 && ly < `height)
+		if (!fe && cyc == 88 && ly < height)
 			pclk  = 1;
 		if (fe && cyc == 88)
 			pclk  = 0;
@@ -115,19 +115,19 @@ module top(
 		if (fe && cyc == 340)
 			tim   = 0;
 
-		if (fe && cyc >= `first_px && cyc < `first_px + `width && ly < `height)
+		if (fe && cyc >= first_px && cyc < first_px + width && ly < height)
 			d = px;
 
-		if (!fe && cyc > `first_px && cyc < `first_px + `width && ly < `height)
+		if (!fe && cyc > first_px && cyc < first_px + width && ly < height)
 			pclk = 0;
-		if (fe && cyc > `first_px && cyc < `first_px + `width - 1 && ly < `height)
+		if (fe && cyc > first_px && cyc < first_px + width - 1 && ly < height)
 			pclk = 1;
 	end
 
-	always @(posedge clk16m)
+	always_ff @(posedge clk16m)
 		clk <= !clk;
 
-	always @(posedge clk) begin
+	always_ff @(posedge clk) begin
 		lcd_d     <= d;
 		lcd_clk   <= pclk;
 		lcd_hsync <= hsync;

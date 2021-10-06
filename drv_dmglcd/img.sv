@@ -2,15 +2,15 @@
 
 (* nolatches *)
 module img #(
-		parameter width  = 160,
-		parameter height = 144
+		parameter int width  = 160,
+		parameter int height = 144
 	) (
-		input  wire [7:0] x,
-		input  wire [7:0] y,
-		output reg  [1:0] value
+		input  logic [7:0] x,
+		input  logic [7:0] y,
+		output logic [1:0] value
 	);
 
-	always @* begin
+	always_comb begin
 		value = 0;
 
 		if (y == 0 || y == height - 1) begin

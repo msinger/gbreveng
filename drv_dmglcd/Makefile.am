@@ -1,6 +1,6 @@
 SRC = \
-top.v \
-img.v
+top.sv \
+img.sv
 
 NODIST_SRC =
 
