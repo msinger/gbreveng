@@ -1143,20 +1143,32 @@ module top(
 	assign rec_trigger = wr_cpu && cs_cpu_rec;
 
 	always_ff @(posedge pllclk) begin
-		if (rec_running && ((rec_capture & route) || rec_cap_trig)) begin
-			recram[rec_adr] <= { 1'b0, pa_in[0], dut_in[29:0] };
+		logic start, stop, capture;
+
+		start   = (rec_start & route) || rec_start_trig;
+		stop    = (rec_stop & route) || rec_stop_trig;
+		capture = rec_running && ((rec_capture & route) || rec_cap_trig);
+
+		/* Toggle if start and stop are signaled at the same time */
+		if (start && rec_running)
+			start = 0;
+		if (stop && !rec_running)
+			stop = 0;
+
+		/* Always do one capture when stopping with bit 31 set */
+		if (stop)
+			capture = 1;
+
+		if (capture) begin
+			recram[rec_adr] <= { stop, pa_in[0], dut_in[29:0] };
 			rec_adr         <= rec_adr + 1;
 		end
 
 		if (rec_adr_set)
 			rec_adr <= rec_adr_new;
 
-		if (((rec_start & route) || rec_start_trig) && ((rec_stop & route) || rec_stop_trig))
-			rec_running <= !rec_running;
-		if ((rec_start & route) || rec_start_trig)
-			rec_running <= 1;
-		if ((rec_stop & route) || rec_stop_trig)
-			rec_running <= 0;
+		if (start || stop)
+			rec_running <= start;
 	end
 
 endmodule
