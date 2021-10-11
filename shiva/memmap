@@ -34,6 +34,9 @@ FF15          REC_CTRL
   1 -/w       If 1, applies ATOM for STOP trigger input.
   0 -/w       If 1, applies ATOM for START trigger input.
 
+FF16          REC_CFG
+  0 r/w       If 1, record in cyclic mode, don't stop at end of record RAM.
+
 FF20 (LSB)    COUNT0
 FF21
 FF22

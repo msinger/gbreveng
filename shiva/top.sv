@@ -128,7 +128,7 @@ module top(
 	logic cs_cpu_io_if, cs_cpu_io_ie;
 	logic cs_cpu_atom;
 	logic cs_cpu_ones_set;
-	logic cs_cpu_rec;
+	logic cs_cpu_rec, cs_cpu_rec_cfg;
 	logic cs_cpu_pa;
 	logic cs_cpu_dut;
 
@@ -156,6 +156,8 @@ module top(
 	cdc #(1) pa_cdc[7:0](pllclk, pa_ext, pa_in);
 
 	logic [31:0] atom;
+
+	logic data_rec_cyclic;
 
 	logic                  ones_set_trigger;
 	logic [NUM_ROUTES-1:0] ones_set;
@@ -559,6 +561,8 @@ module top(
 			data_cpu_in = atom[23:16];
 		cs_cpu_atom && adr_cpu[1:0] == 3:
 			data_cpu_in = atom[31:24];
+		cs_cpu_rec_cfg:
+			data_cpu_in = { 7'b0, data_rec_cyclic };
 		cs_cpu_pa && adr_cpu[1:0] == 0:
 			data_cpu_in = data_pa_out[7:0];
 		cs_cpu_pa && adr_cpu[1:0] == 1:
@@ -592,6 +596,7 @@ module top(
 		cs_cpu_atom     = 0;
 		cs_cpu_ones_set = 0;
 		cs_cpu_rec      = 0;
+		cs_cpu_rec_cfg  = 0;
 		cs_cpu_pa       = 0;
 		cs_cpu_dut      = 0;
 		cs_cpu_io_if    = 0;
@@ -622,6 +627,8 @@ module top(
 			cs_cpu_ones_set = 1;
 		'b 1111_1111_0001_0101: /* 0xff15:        Recording Control */
 			cs_cpu_rec = 1;
+		'b 1111_1111_0001_0110: /* 0xff16:        Recording Config */
+			cs_cpu_rec_cfg = 1;
 		'b 1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
 			if (NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
 		'b 1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
@@ -1055,11 +1062,12 @@ module top(
 	logic [9:0] rec_adr_new;
 	logic       rec_adr_set;
 	logic rec_running;
-	logic rec_trigger;
+	logic rec_trigger, rec_cfg_trigger;
 	logic [NUM_ROUTES-1:0] rec_capture;
 	logic [NUM_ROUTES-1:0] rec_start;
 	logic [NUM_ROUTES-1:0] rec_stop;
 	logic rec_cap_trig, rec_start_trig, rec_stop_trig;
+	logic rec_cyclic;
 
 	dp_reg #(NUM_ROUTES) rec_start_reg(
 		.fclk(pllclk),
@@ -1140,7 +1148,20 @@ module top(
 		.svalue_mask({11{rec_trigger && data_cpu_out[7]}})
 	);
 
-	assign rec_trigger = wr_cpu && cs_cpu_rec;
+	dp_reg rec_cyclic_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(rec_cyclic),
+
+		.svalue_in(data_cpu_out[0]),
+		.svalue_mask(rec_cfg_trigger),
+		.svalue_out(data_rec_cyclic)
+	);
+
+	assign rec_trigger     = wr_cpu && cs_cpu_rec;
+	assign rec_cfg_trigger = wr_cpu && cs_cpu_rec_cfg;
 
 	always_ff @(posedge pllclk) begin
 		logic start, stop, capture;
@@ -1148,6 +1169,9 @@ module top(
 		start   = (rec_start & route) || rec_start_trig;
 		stop    = (rec_stop & route) || rec_stop_trig;
 		capture = rec_running && ((rec_capture & route) || rec_cap_trig);
+
+		if (rec_running && !rec_cyclic && &rec_adr)
+			stop = 1;
 
 		/* Toggle if start and stop are signaled at the same time */
 		if (start && rec_running)
