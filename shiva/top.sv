@@ -87,11 +87,11 @@ module top(
 		output logic     [1:0]  lcd_data   = 0
 	);
 
-	localparam int COUNTER_WIDTH           = 7;
-	localparam int NUM_COUNTERS            = 2;
+	localparam int COUNTER_WIDTH           = 6;
+	localparam int NUM_COUNTERS            = 1;
 	localparam int NUM_COUNTER_COMPARATORS = 5;
 	localparam int NUM_BUS_COMPARATORS     = 1;
-	localparam int NUM_ROUTES              = 6;
+	localparam int NUM_ROUTES              = 4;
 
 	logic pllclk;
 	logic cpuclk;
