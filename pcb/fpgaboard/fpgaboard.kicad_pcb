@@ -17,9 +17,10 @@
     (title "Game Boy reverse eng. FPGA board")
     (date 2020-08-29)
     (rev 1)
-    (company "Author: Michael Singer")
+    (company "CC-BY-SA-4.0 Michael Singer")
     (comment 1 https://sourceforge.net/projects/iceboy/)
-    (comment 2 http://iceboy.a-singer.de/)
+    (comment 2 https://github.com/msinger/gbreveng/)
+    (comment 3 http://iceboy.a-singer.de/)
   )
 
   (layers
@@ -48,7 +49,7 @@
   )
 
   (setup
-    (last_trace_width 0.5)
+    (last_trace_width 0.15)
     (user_trace_width 0.1016)
     (user_trace_width 0.15)
     (user_trace_width 0.25)
@@ -17158,7 +17159,7 @@
   (gr_arc (start 133.5 67.68) (end 133.74 69.2) (angle 90) (layer F.SilkS) (width 0.2))
   (gr_line (start 129.92 65.74) (end 124 65.74) (angle 90) (layer F.SilkS) (width 0.2))
   (gr_arc (start 129.91 67.82) (end 129.91 65.75) (angle 90) (layer F.SilkS) (width 0.2))
-  (gr_text "Game Boy reverse eng. FPGA board\nRev. 1 - 2019-10-06\nhttps://sourceforge.net/projects/iceboy/\nhttp://iceboy.a-singer.de/" (at 140.82 126.59) (layer F.SilkS)
+  (gr_text "Game Boy reverse eng. FPGA board\nRev. 1 - 2019-10-06\nhttps://github.com/msinger/gbreveng/\nhttp://iceboy.a-singer.de/" (at 140.82 126.59) (layer F.SilkS)
     (effects (font (size 1.2 1.2) (thickness 0.2)) (justify left))
   )
   (gr_text "J8: GPIO A0-A7\n    (3.3V)" (at 20.4 55.9) (layer Cmts.User)

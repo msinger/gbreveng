@@ -46,10 +46,10 @@ Sheet 7 11
 Title "Game Boy reverse eng. FPGA board"
 Date "2020-04-24"
 Rev "1"
-Comp "Author: Michael Singer"
+Comp "CC-BY-SA-4.0 Michael Singer"
 Comment1 "https://sourceforge.net/projects/iceboy/"
-Comment2 "http://iceboy.a-singer.de/"
-Comment3 ""
+Comment2 "https://github.com/msinger/gbreveng/"
+Comment3 "http://iceboy.a-singer.de/"
 Comment4 ""
 $EndDescr
 $Comp
