@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>GameBoy Memory Access Patterns</title>
+<title>Game Boy Memory Access Patterns</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
  img {
@@ -33,14 +33,14 @@
 </style>
 </head>
 <body>
-<h1>GameBoy Memory Access Patterns</h1>
+<h1>Game Boy Memory Access Patterns</h1>
 <h2>Setup</h2>
 <p>All measurements were done on a DMG-CPU B.</p>
 <p>For the first few pictures a Hantek 6022BL oscilloscope/logic analyzer was used. (In digital mode,
 basically a Chineese Saleae ripoff.) The sample rate is 24M/s. Needless to say, this cheap device doesn't
 have decent Schmitt triggers on the logic inputs. When the probed voltage is in the range of 1.3V and 1.7V,
 the displayed level randomly flickers between high and low. This effect is visible during power up of the
-GameBoy, when the signals are slowly rising.</p>
+Game Boy, when the signals are slowly rising.</p>
 <p>Later I got another (much cheaper) logic analyzer from China that claims to be a Saleae, but it isn't.
 Although it only costs about a third of the Hantek, it is actually able to utilize all 16 inputs! All
 recordings with 16M/s, 25M/s and 32M/s are done with this new one; the 24M/s ones are done with the Hantek.
@@ -49,7 +49,7 @@ logic analyzer returns some old buffers when it starts sampling. The beginning o
 be ignored.</p>
 <p>An EverDrive cartridge was used for running the test code. This means the state and timing of the data
 lines when reading from the cartridge may not be representative for an original cartridge. Also, when this
-cartridge is plugged in during power up of the GameBoy, the ramp up time of the reset line drops from ~50ms
+cartridge is plugged in during power up of the Game Boy, the ramp up time of the reset line drops from ~50ms
 to ~40ms. Maybe there is a pull up resistor in the cartridge causing this.</p>
 <h2>Power On event</h2>
 <p>After flipping the power switch to the <i>on</i> position, the clock, #write and #cs signals, address
@@ -219,7 +219,7 @@ primary chip selects (#cs and A15). When accesing the address range 0xE000-0xFDF
 and therefore both RAMs are active.</p>
 <p>When #read is low, D0-D7 are always configured as inputs (driven by the cartridge or WRAM or pulled up by
 a pull-up resistor). When #read is high and a chip select (#cs or A15) is low, D0-D7 are always configured as
-outputs (driven by the GameBoy). There is a short switching period when #read and both chip selects are high.</p>
+outputs (driven by the Game Boy). There is a short switching period when #read and both chip selects are high.</p>
 <table class="default center" style="background-color:#ffe0e0;">
 <tr>
 <th><i>&amp;&amp;</i></th>
@@ -537,9 +537,9 @@ CPU write WRAM:
 I removed the EverDrive cartridge for determining the timings of the data lines during writes, because
 I have the suspicion, that this cartridge messes around with the data lines during writes to the ROM and
 cartridge RAM. When writing to cartridge RAM, it keeps the state of the data lines as they were written when
-the GameBoy stops driving the lines. It does that without noticeable peaks of the pull-ups. When writing to
+the Game Boy stops driving the lines. It does that without noticeable peaks of the pull-ups. When writing to
 ROM, the EverDrive seems to drive the data lines as soon as the chip select (A15) goes low, even when #rd is
-high. It seems like it is always driving the lines with the same value they were driven before by the GameBoy.
+high. It seems like it is always driving the lines with the same value they were driven before by the Game Boy.
 It stops driving when #wr goes low, but remembers the written value for next time. I suspect that the
 EverDrive has "keeper" pull-up/down resistors, that keep the lines at their last state. Maybe it saves power
 to avoid the slow signal transitions from low to high, that normally happen without the EverDrive.

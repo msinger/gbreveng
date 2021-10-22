@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IceBoy - Game Boy clone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-site-verification" content="DlY286fW0xZEWarmlVOm2BHkBh8mpnOYLsblLwNL0Nk">
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
+</head>
+<body><main>
+<h1>IceBoy - Game Boy clone</h1>
+<p>This domain serves as a place for documenting the progress of developing my Game Boy clone (IceBoy) and all the stuff
+I found out about the real Game Boys. I started with IceBoy because I wanted to learn about FPGAs and thought a Game Boy
+would be a fun project for that. I decided to develop IceBoy for the Lattice iCE40 FPGA family. This is where the name
+IceBoy comes from: <b><u>iCE</u></b>40 &rarr; <b><u>Ice</u></b>Boy. I made this decision to use the iCE40 family because
+I wanted to use a toolchain that is completely open source: <a href="http://www.clifford.at/icestorm/">Project
+IceStorm</a>.</p>
+<p>You can find the IceBoy source code here:</p>
+<p style="margin: 1em;">&rarr; <a href="https://github.com/msinger/iceboy">IceBoy repository on GitHub</a></p>
+<p style="margin: 1em;">&rarr; <a href="https://sourceforge.net/projects/iceboy/">IceBoy project on SourceForge</a></p>
+<p>The first prototype was running on a
+<a href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/iCE40HX8KBreakoutBoard.aspx">iCE40-HX8K
+Breakout Board</a> with a perfboard attached to it for memory, and a LCD display with UC1611 driver that I got with
+an <a href="http://www.conitec.com/english/linuxboard.php">ARM evaluation board</a> over a decade ago.</p>
+<table><tr><td><a href="doc/img/prototype.jpg"><img src="doc/img/prototype.jpg" alt=""></a></td>
+<td><a href="doc/img/perfbrd.jpg"><img src="doc/img/perfbrd.jpg" alt=""></a></td></tr></table>
+<p>The evaluation board on the left side is just used as an adapter to connect the pin header to the small 0.5 mm
+pitched connector of the LCD, and also as a power supply. The perfboard on the right side contains SRAM chips: One
+for the Game Boy its work RAM, one for the cartridge save game RAM (32 KiB), and two for holding a ROM file (2x512 KiB).
+The ROM file can be received over UART while the IceBoy is under reset. The video RAM and boot ROM are FGPA internal.</p>
+<p>This setup was very fragile so I wanted to make my own PCB for further development. I also wanted a system for making
+research on the Game Boy more comfortable. I combined those two aspects into one PCB: The Game Boy reverse engineering
+FGPA board.</p>
+<p><a href="doc/img/gbreveng_brd.jpg"><img src="doc/img/gbreveng_brd.jpg" alt="" style="max-width: 50%;"></a></p>
+<p>I let <a href="https://www.seeedstudio.com/fusion.html">SeeedStudio</a> manufacture and assemble two of those PCBs.
+I used their PCB manufacturing services multiple times now and so far I'm very happy with their quality. The board has
+all the memory the Game Boy needs onboard. It has even more than the perfboard had. There's 2x1 MiB for the ROM file,
+128 KiB for the cartridge RAM and I had added another RAM that has it's own data and address bus, so it can be used as
+video RAM. There is a cartridge connector at the top, which can be used instead of loading a ROM file over UART. Just
+like on the real Game Boy, the cartridge connector is also sharing its data and address bus with the work RAM. The big
+pin header at the far left edge of the PCB can be connected to a real Game Boy using the
+<a href="https://github.com/Gekkio/gb-hardware">GB-BRK-CART v4.0 adapter PCB from Gekkio</a>. The FPGA board can act
+as a cartridge to the real Game Boy in this use case. On the right side there is a Game Boy Link Port and in the
+bottom right corner a DMG-LCD PCB can be connected with the original 21 pin flex cable, so IceBoy can drive the original
+LCD and also sense the buttons and use the original speaker for audio output.</p>
+<p>The KiCad project for the board is here:</p>
+<p style="margin: 1em;">&rarr; <a href="https://github.com/msinger/gbreveng/tree/master/pcb/fpgaboard">Game Boy reverse
+engineering FPGA board KiCad project</a></p>
+<p style="margin: 1em;">&rarr; <a href="doc/gbreveng_sch.pdf">Game Boy reverse engineering FPGA board schematics PDF
+(rev 0)</a></p>
+<article>
+<h2>Game Boy research</h2>
+<p>I've done a bit of research on Game Boys that I've documented on separate pages:</p>
+<table class="default">
+<tr><td style="min-width:100px"><img src="doc/img/thumb/signals.png" alt=""></td><td>
+<a href="doc/mem_patterns.html">Game Boy Memory Access Patterns</a><br>
+This is just some basic stuff like what's visible on the external bus when the Game Boy accesses different
+address ranges.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/nocrystal.jpg" alt=""></td><td>
+<a href="doc/skip_ff50.html">Skip write to 0xff50 register before leaving boot ROM</a><br>
+Of course I wanted to experiment on the boot ROM skip like everybody else did already. I found out which single
+clock tick needs to be shortened for the CPU to make a deterministic jump to one specific address.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/wideboy.jpg" alt=""></td><td>
+<a href="doc/wide_boy.html">Wide-Boy64 Research</a><br>
+I have reverse engineered the schematics of the Wide-Boy64 AGB and was able to dump the Spartan bitstream from
+the PROM.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/clkgen.png" alt=""></td><td>
+<a href="doc/dmg_reset.html">Weird DMG-CPU Reset Behaviour</a><br>
+I discovered that some state of the clock generation logic inside the DMG-CPU B chip is not properly reset, which
+is actually measurable from outside the chip.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/cpucore.jpg" alt=""></td><td>
+<a href="doc/dmg_cpu_connections.html">DMG-CPU SM83 Connections</a><br>
+Here I'm trying to figure out the purpose of each connection from/to the CPU core inside the DMG-CPU B. I use
+<a href="https://github.com/furrtek/DMG-CPU-Inside">Furrtek's schematics</a> and some Icarus Verilog
+<a href="https://github.com/msinger/dmg-sim">simulations</a> for that.
+</td></tr>
+</table>
+</article>
+<article>
+<h2>Tools for Game Boy research</h2>
+<p>During my research attempts, I made some stuff to make further research easier for myself. Maybe it helps you too:</p>
+<table class="default">
+<tr><td style="min-width:100px"><img src="doc/img/thumb/db.jpg" alt=""></td><td>
+<a href="db.html">Game Boy Database</a><br>
+I stole this idea from Gekkio, there's really no other way to put it. Check out his huge
+<a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot tracking down all the different CPU revisions on
+ebay, based on the serial numbers on the back.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/map.jpg" alt=""></td><td>
+<a href="dmg_cpu_b_map/">Game Boy DMG-CPU B Map</a><br>
+A <a href="https://leafletjs.com/">Leaflet</a> map of the
+<a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">DMG-CPU B die shot</a> with
+<a href="https://github.com/furrtek/DMG-CPU-Inside">Furrtek's overlays</a>. The overlays can be switched on and off
+and you can actually choose between two versions of the die shot. There's a search box in the bottom left corner where
+you can enter the names of the cells as they are labelled by Furrtek, so you don't have to search them manually.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/cellref.jpg" alt=""></td><td>
+<a href="doc/dmg_cells.html">DMG-CPU Cells Reference</a><br>
+This is supposed to be a complete "reference manual" for all the cells used inside the DMG-CPU B chip. I made a separate
+page that describes how I came to some of the conclusions in the reference:
+<a href="doc/dmg_cells2.html">DMG-CPU Cell Examination</a></td></tr>
+</table>
+</article></main><footer>
+<hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</footer></body>
+</html>
