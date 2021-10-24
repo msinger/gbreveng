@@ -188,7 +188,7 @@ module top(
 	logic [14:0] dut_adr_ext,          dut_adr_in;
 	logic        dut_data_dir_out,     r_dut_data_dir_out;
 	logic        dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
-	logic        dut_data_lvl_ena;
+	logic        dut_data_lvl_ena,     r_dut_data_lvl_ena;
 	logic [7:0]  dut_data_out;
 	logic [7:0]  dut_data_ovr_out;
 	logic [7:0]  dut_data_ext,         dut_data_in;
@@ -745,44 +745,107 @@ module top(
 		.wr(wr_cpu)
 	);
 
+	logic [2:0] data_lvl_state, r_data_lvl_state;
+	localparam logic [2:0] lvl_off    = 0;
+	localparam logic [2:0] lvl_ch_in  = 1;
+	localparam logic [2:0] lvl_ch_out = 2;
+	localparam logic [2:0] lvl_in     = 3;
+	localparam logic [2:0] lvl_out    = 4;
+
 	always_comb begin
+		data_lvl_state       = r_data_lvl_state;
 		dut_data_dir_out     = r_dut_data_dir_out;
 		dut_data_lvl_dir_out = r_dut_data_lvl_dir_out;
+		dut_data_lvl_ena     = r_dut_data_lvl_ena;
 		dut_reset_out        = r_dut_reset_out;
 
-		dut_any_cs = dut_cs_rom_in || (dut_cs_xram_in && dut_adr_in[13] && !dut_adr_in[14]);
+		dut_any_cs = (prev_rom_cs && dut_cs_rom_in) ||
+		             ((prev_xram_cs && dut_cs_xram_in) && buffered_adr[13] && !buffered_adr[14]);
 
-		dut_data_lvl_ena = dut_any_cs;
-
-		if (dut_rd_in && dut_any_cs) begin
-			dut_data_lvl_dir_out = 1;
-
-			if (r_dut_data_lvl_dir_out)
-				dut_data_dir_out = 1;
-		end else begin
-			dut_data_dir_out = 0;
-
-			if (!r_dut_data_dir_out)
-				dut_data_lvl_dir_out = 0;
-			else
-				dut_data_lvl_ena = 0;
-		end
+		case (1)
+		dut_rd_in && dut_any_cs:
+			unique case (data_lvl_state)
+				lvl_in, lvl_ch_in: begin
+					data_lvl_state       = lvl_off;
+					dut_data_lvl_ena     = 0;
+				end
+				lvl_off: begin
+					data_lvl_state       = lvl_ch_out;
+					dut_data_dir_out     = 1;
+					dut_data_lvl_dir_out = 1;
+				end
+				lvl_ch_out: begin
+					data_lvl_state       = lvl_out;
+					dut_data_lvl_ena     = 1;
+				end
+				lvl_out:;
+			endcase
+		default:
+			unique case (data_lvl_state)
+				lvl_out, lvl_ch_out: begin
+					data_lvl_state       = lvl_off;
+					dut_data_dir_out     = 0;
+					dut_data_lvl_ena     = 0;
+				end
+				lvl_off: begin
+					data_lvl_state       = lvl_ch_in;
+					dut_data_lvl_dir_out = 0;
+				end
+				lvl_ch_in: begin
+					data_lvl_state       = lvl_in;
+					dut_data_lvl_ena     = 1;
+				end
+				lvl_in:;
+			endcase
+		endcase
 
 		dut_reset_out = (dut_reset_out || dut_reset_set_mask) && !dut_reset_reset_mask;
 
+		if (f_reset) begin
+			dut_reset_out    = 0;
+			data_lvl_state   = lvl_off;
+			dut_data_lvl_ena = 0;
+			dut_data_dir_out = 0;
+		end
+	end
+
+	logic [14:0] buffered_adr;
+	logic prev_rom_cs, prev_xram_cs;
+
+	/* The Game Boy has glitches on its address lines in a few cases when the data lines change. The "ldx a, (nn)"
+	   instruction (0xfa) always triggers those glitches. The glitches in the address would cause us to change
+	   the data again that we read from dut_ro_ram[] and output on dut_data_out. This would be a feedback loop,
+	   producing more and more glitches. Somehow, due to these repeated glitches, the Game Boy's 5V supply (or at
+	   least what is measurable at the J18 connector of out board) dips down to ~3V. These supply voltage dips cause
+	   either the Game Boy or our level converters to detect wrong logic levels. This also happens for the 4 MHz
+	   clock. Effectively, this causes overclocking events for the Game Boy, making PHI in this instances only half
+	   as long as usual. Very weird stuff happens.
+	   To prevent those feedback loops, we buffer the address lines the moment any of the two chip selects get
+	   asserted. */
+	always @(posedge pllclk) begin
+		prev_rom_cs  <= dut_cs_rom_in;
+		prev_xram_cs <= dut_cs_xram_in;
+
+		if ((!prev_rom_cs  && dut_cs_rom_in) ||
+		    (!prev_xram_cs && dut_cs_xram_in))
+			buffered_adr <= dut_adr_in;
+
 		if (f_reset)
-			dut_reset_out = 0;
+			buffered_adr <= 0;
 	end
 
 	always @(posedge pllclk) begin
+		r_data_lvl_state       <= data_lvl_state;
 		r_dut_data_dir_out     <= dut_data_dir_out;
 		r_dut_data_lvl_dir_out <= dut_data_lvl_dir_out;
+		r_dut_data_lvl_ena     <= dut_data_lvl_ena;
 		r_dut_reset_out        <= dut_reset_out;
 
-		dut_data_out <= dut_ro_ram[dut_adr_in[11:0]];
+		dut_data_out <= dut_ro_ram[buffered_adr[11:0]];
 
-		if (dut_wr_in && dut_cs_xram_in && dut_adr_in[13])
-			dut_wo_ram[dut_adr_in[11:0]] <= dut_data_in;
+		if (dut_wr_in && dut_cs_xram_in && buffered_adr[13] &&
+		    r_dut_data_lvl_ena && !r_dut_data_lvl_dir_out && !r_dut_data_dir_out)
+			dut_wo_ram[buffered_adr[11:0]] <= dut_data_in;
 	end
 
 	dp_reg #(8) pa_in_reg2bus(
