@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <title>Weird DMG-CPU Reset Behaviour</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Reset behaviour of Game Boy DMG-CPU B.">
 <style>img { max-width: 100%; display: inline; }</style>
 </head>
 <body>
-<p><a href="http://iceboy.a-singer.de/">Home</a></p>
-<hr>
-<h1>Weird DMG-CPU Reset Behaviour</h1>
+<nav><p><a href="http://iceboy.a-singer.de/">Home</a></p>
+<hr></nav>
+<main><h1>Weird DMG-CPU Reset Behaviour</h1>
 <p>About two years ago I was experimenting with <a href="skip_ff50.html">skipping the write to FF50</a> to get
 access to the boot ROM. I removed the crystal and clocked the DMG-CPU B with an FPGA and counted the exact amount of
 clock ticks that were necessary for the CPU to fetch the instruction at address 0x100. I noticed an odd inconsistency
@@ -56,10 +57,11 @@ of the DMG-CPU B</a>. I was eager to find out what it was that kept counting dur
 0 and 1 of the DIV register, but all bits in this register are reset by the same reset source. So it couldn't be
 it. My second suspect was the clock divider made out of the cells ADYK, AFUR, ALEF and APUK on the left hand side
 of page 1:</p>
-<p><img src="img/cells/adyk_afur_alef_apuk_sch.png" alt=""></p>
+<p><img src="img/cells/adyk_afur_alef_apuk_sch.png"
+alt="Schematic of clock divider in DMG-CPU-B; CC-BY-SA-4.0 Furrtek"></p>
 <p>These four DFFs are reset by the signal <span style="text-decoration:overline">T1T2</span> coming from
 here:</p>
-<p><img src="img/cells/t1t2_sch.png" alt=""></p>
+<p><img src="img/cells/t1t2_sch.png" alt="Schematic of DMG-CPU B test pins; CC-BY-SA-4.0 Furrtek"></p>
 <p>According to this, the four DFFs are reset when T1=T2=0 and RESET=1. The pins T1 and T2 are always connected
 to GND. So it looks like these four DFFs (ADYK, AFUR, ALEF and APUK) are also reset and can't be responsible for
 what we've seen in the experiment. (At least, that's what I thought.)</p>
@@ -79,11 +81,11 @@ on two years ago. So I had quickly modified my test code to check if this is act
 I can control two extra output pins with a button press. They are normally low, and when I press the button, they
 go high until I release it again. I did this for controlling the T1 and T2 test pins of course. This is easier said
 than done, because I had to lift up the two pins from the PCB first:</p>
-<p><img src="img/dmg_cpu_b_t1_t2_lift.jpg" alt=""></p>
+<p><img src="img/dmg_cpu_b_t1_t2_lift.jpg" alt="Test pins T1 and T2 of DMG-CPU B lifted"></p>
 <p>It looks very ugly and indeed it is very ugly. I managed to damage one of the pads, it partially came off the
 PCB. So it won't survive another operation like that. Poor Gameboy endured a lot. This is how the whole setup looks
 now:</p>
-<p><img src="img/dmg_cpu_reset_test.jpg" alt=""></p>
+<p><img src="img/dmg_cpu_reset_test.jpg" alt="Game Boy connected to FPGA board with lifted T1 and T2 test pins"></p>
 <p>When I repeat the experiment from before, each time I pull the test pins T1 and T2 high during Gameboy reset, the
 tick count until address 0x100 gets read is always tick count D, no matter what it was before and no matter how many clock ticks the Gameboy
 got in the previous iteration. In my opinion, this actually proves that ADYK, AFUR, ALEF and APUK are only properly
@@ -130,7 +132,7 @@ AFUR and APUK must trigger on the negative edge of their input clock. See
 <a href="https://github.com/furrtek/DMG-CPU-Inside/issues/10">issue #10</a>.</p>
 <p>So maybe it was intentional to not reset these DFFs and they kept the option to pull T1 and T2 up, just in case
 something went wrong. One possible benfit could be that the PHI clock stays phase coherent across resets.</p>
-<hr>
+</main><footer><hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
-</body>
+</footer></body>
 </html>
