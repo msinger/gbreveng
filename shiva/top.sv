@@ -93,6 +93,8 @@ module top(
 	localparam int NUM_BUS_COMPARATORS     = 1;
 	localparam int NUM_ROUTES              = 4;
 
+	localparam bit CLEAR_HOLD_BUFFERS      = 1;
+
 	logic pllclk;
 	logic cpuclk;
 
@@ -354,8 +356,8 @@ module top(
 			.PACKAGE_PIN(data),
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
-			.OUTPUT_ENABLE(!f_reset && dut_data_dir_out),
-			.D_OUT_0(dut_data_ovr ? dut_data_ovr_out : dut_data_out),
+			.OUTPUT_ENABLE(dut_data_dir_out),
+			.D_OUT_0(dut_data_out),
 			.D_IN_0(dut_data_ext)
 		);
 
@@ -411,7 +413,7 @@ module top(
 			.PACKAGE_PIN(n_reset),
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
-			.OUTPUT_ENABLE(!f_reset && dut_reset_out),
+			.OUTPUT_ENABLE(dut_reset_out),
 			.D_IN_0(n_dut_reset_ext)
 		);
 
@@ -420,7 +422,7 @@ module top(
 		) n_soe_io (
 			.PACKAGE_PIN(n_soe),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(f_reset || !dut_data_lvl_ena)
+			.D_OUT_0(!dut_data_lvl_ena)
 		);
 
 	SB_IO #(
@@ -428,7 +430,7 @@ module top(
 		) sdir_io (
 			.PACKAGE_PIN(sdir),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(!f_reset && dut_data_lvl_dir_out)
+			.D_OUT_0(dut_data_lvl_dir_out)
 		);
 
 	SB_IO #(
@@ -746,11 +748,12 @@ module top(
 	);
 
 	logic [2:0] data_lvl_state, r_data_lvl_state;
-	localparam logic [2:0] lvl_off    = 0;
-	localparam logic [2:0] lvl_ch_in  = 1;
-	localparam logic [2:0] lvl_ch_out = 2;
-	localparam logic [2:0] lvl_in     = 3;
-	localparam logic [2:0] lvl_out    = 4;
+	localparam int lvl_off    = 0;
+	localparam int lvl_ch_in  = 1;
+	localparam int lvl_ch_out = 2;
+	localparam int lvl_in     = 3;
+	localparam int lvl_out    = 4;
+	localparam int lvl_rst    = 6;
 
 	always_comb begin
 		data_lvl_state       = r_data_lvl_state;
@@ -762,6 +765,8 @@ module top(
 		dut_any_cs = (prev_rom_cs && dut_cs_rom_in) ||
 		             ((prev_xram_cs && dut_cs_xram_in) && buffered_adr[13] && !buffered_adr[14]);
 
+		dut_data_out = dut_data_ovr ? dut_data_ovr_out : buffered_data_out;
+
 		case (1)
 		dut_rd_in && dut_any_cs:
 			unique case (data_lvl_state)
@@ -769,7 +774,7 @@ module top(
 					data_lvl_state       = lvl_off;
 					dut_data_lvl_ena     = 0;
 				end
-				lvl_off: begin
+				lvl_off, lvl_rst: begin
 					data_lvl_state       = lvl_ch_out;
 					dut_data_dir_out     = 1;
 					dut_data_lvl_dir_out = 1;
@@ -783,6 +788,16 @@ module top(
 		default:
 			unique case (data_lvl_state)
 				lvl_out, lvl_ch_out: begin
+					if (CLEAR_HOLD_BUFFERS) begin
+						data_lvl_state   = lvl_rst;
+						dut_data_out     = '1;
+					end else begin
+						data_lvl_state   = lvl_off;
+						dut_data_dir_out = 0;
+						dut_data_lvl_ena = 0;
+					end
+				end
+				lvl_rst: begin
 					data_lvl_state       = lvl_off;
 					dut_data_dir_out     = 0;
 					dut_data_lvl_ena     = 0;
@@ -809,6 +824,7 @@ module top(
 		end
 	end
 
+	logic [7:0]  buffered_data_out;
 	logic [14:0] buffered_adr;
 	logic prev_rom_cs, prev_xram_cs;
 
@@ -827,8 +843,10 @@ module top(
 		prev_xram_cs <= dut_cs_xram_in;
 
 		if ((!prev_rom_cs  && dut_cs_rom_in) ||
-		    (!prev_xram_cs && dut_cs_xram_in))
-			buffered_adr <= dut_adr_in;
+		    (!prev_xram_cs && dut_cs_xram_in)) begin
+			buffered_data_out <= dut_ro_ram[dut_adr_in[11:0]];
+			buffered_adr      <= dut_adr_in;
+		end
 
 		if (f_reset)
 			buffered_adr <= 0;
@@ -840,8 +858,6 @@ module top(
 		r_dut_data_lvl_dir_out <= dut_data_lvl_dir_out;
 		r_dut_data_lvl_ena     <= dut_data_lvl_ena;
 		r_dut_reset_out        <= dut_reset_out;
-
-		dut_data_out <= dut_ro_ram[buffered_adr[11:0]];
 
 		if (dut_wr_in && dut_cs_xram_in && buffered_adr[13] &&
 		    r_dut_data_lvl_ena && !r_dut_data_lvl_dir_out && !r_dut_data_dir_out)
