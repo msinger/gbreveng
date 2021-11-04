@@ -117,9 +117,10 @@ Boot ROM instructions at address 0x13 and 0x14</i></p>
 <p>The patterns that are visible on the two external busses of the chip are depending on which components are accessed
 by the CPU, PPU and DMA. The following table shows the memory map as seen by the CPU. Although in reality this is much
 more spaghetti-ish, I tried to divide the various components into four busses. This grouping is only for describing which
-signal patterns can be seen when a component from any of those groups is accessed. The boot ROM got its own group even
-though it should be logically fit in the "Internal Bus" group, because for some reason it deviates from the patterns
-seen in this group.</p>
+signal patterns can be seen when a component from any of those groups is accessed. The
+<span style="background-color:#e0ffe0;">Boot ROM</span> got its own group even though it should logically fit into the
+<span style="background-color:#ffffe0;">Internal Bus</span> group, because for some reason it deviates from the patterns
+seen in that group.</p>
 <table class="default center">
 <tr>
 <th><i>mapping</i></th>
@@ -180,9 +181,9 @@ seen in this group.</p>
 </tr><tr>
 <th><i>unused area</i><br>0xFEA0-0xFEFF</th>
 <td>&nbsp;</td>
+<td>X</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
-<td>?</td>
 <td>&nbsp;</td>
 </tr><tr>
 <th>Registers<br>0xFF00-0xFF7F</th>
@@ -212,17 +213,18 @@ seen in this group.</p>
 gets cut off when boot ROM code writes 0x01 to register 0xFF50<br>
 (**): 0xE000-0xFDFF is often called the WRAM echo or shadow area; actually the cartridge
 RAM may also respond here, which could lead to short circuits during read operations</i></p>
-<p>On the external bus, A15 serves as a low active ROM chip select. It will only switch to low when the
-cartridge ROM gets accessed. It will immediatly switch back to high at the end of the read/write operation. The
-other address lines (A0-A14) keep their state until another bus access is causing them to change. The #cs signal
-serves as a chip select for both RAMs on the external bus (WRAM and cartridge RAM). It behaves the same way as
-A15 does for the cartridge ROM. The WRAM uses A14 as a secondary, high active chip select. The cartridge RAM uses
-A13 as a secondary, high active chip select. Still, A13 and A14 act like the other address lines, not like the
-primary chip selects (#cs and A15). When accesing the address range 0xE000-0xFDFF, both A13 and A14 are high
-and therefore both RAMs are active.</p>
+<p>On the <span style="background-color:#ffe0e0;">External Bus</span>, A15 serves as a low active ROM chip select.
+It will only switch to low when the cartridge ROM gets accessed. It will immediatly switch back to high at the end
+of the read/write operation. The address lines A0-A7 keep their state until another bus access is causing them to
+change. A8-A14 get reset to zero at the end of each <span style="background-color:#ffe0e0;">External Bus</span>
+access. (<i>TODO: Check if this is also true if the DMA is accessing the bus.</i>) The #cs signal serves as a chip
+select for both RAMs on the <span style="background-color:#ffe0e0;">External Bus</span> (WRAM and cartridge RAM).
+It behaves the same way as A15 does for the cartridge ROM. The WRAM uses A14 as a secondary, high active chip select.
+The cartridge RAM uses A13 as a secondary, high active chip select. Still, A13 and A14 act like normal address lines,
+not like the primary chip selects (#cs and A15). When accesing the address range 0xE000-0xFDFF, both A13 and A14 are
+high and therefore both RAMs are active.</p>
 <p>When #read is low, D0-D7 are always configured as inputs (driven by the cartridge or WRAM or pulled up by
-a pull-up resistor). When #read is high and a chip select (#cs or A15) is low, D0-D7 are always configured as
-outputs (driven by the Game Boy). There is a short switching period when #read and both chip selects are high.</p>
+a pull-up resistor). When #read is high, D0-D7 are always configured as outputs (driven by the Game Boy).</p>
 <table class="default center" style="background-color:#ffe0e0;">
 <tr>
 <th><i>&amp;&amp;</i></th>
@@ -236,9 +238,9 @@ outputs (driven by the Game Boy). There is a short switching period when #read a
 <td>&larr; input<br>&nbsp;</td>
 </tr><tr>
 <th>(#read)</th>
-<td>&nbsp;<br>output &rarr;</td>
-<td>&uarr;<br>&larr; undefined &rarr;</td>
-<td>&nbsp;<br>&larr; output</td>
+<td>&nearr;<br>output &rarr;</td>
+<td>&uarr;<br>&larr; output &rarr;</td>
+<td>&nwarr;<br>&larr; output</td>
 </tr>
 </table>
 <p><i><u>Table 2</u><br>
@@ -278,66 +280,211 @@ the highest priority, the CPU has the lowest.</p>
 </tr>
 </table>
 <p><i><u>Table 3</u></i></p>
+<h2>Signals visible on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by CPU</h2>
 <table class="default" style="background-color:#ffe0e0;">
 <tr>
-<th><i>signals visible on<br>external bus during<br>CPU mem access</i></th>
+<th colspan="3"><i>signals visible on<br>external bus during<br>CPU mem access</i></th>
+<th>#write</th>
+<th>#read</th>
+<th>#cs</th>
+<th>A15</th>
+<th>A8-A14</th>
+<th>A0-A7</th>
+<th>D0-D7 direction</th>
+<th>D0-D7 output buffer</th>
+</tr><tr>
+<th style="background-color:#e0ffe0;" colspan="3">Boot ROM R/W</th>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td>high</td>
+<td>no change</td>
+<td>no change</td>
+<td>input</td>
+<td>n/a</td>
+</tr><tr>
+<th style="background-color:#ffe0e0;" rowspan="4">External Bus</th>
+<th style="background-color:#ffe0e0;" rowspan="2">ROM</th>
+<th style="background-color:#ffe0e0;">R</th>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td>low</td>
+<td rowspan="4">change;<br>go low at end of cycle</td>
+<td rowspan="4">change</td>
+<td>input</td>
+<td>n/a</td>
+</tr><tr>
+<th style="background-color:#ffe0e0;">W</th>
+<td>low</td>
+<td>high</td>
+<td>high</td>
+<td>low</td>
+<td>output</td>
+<td>first 0xFF, then actual data</td>
+</tr><tr>
+<th style="background-color:#ffe0e0;" rowspan="2">RAM</th>
+<th style="background-color:#ffe0e0;">R</th>
+<td>high</td>
+<td>low</td>
+<td>low</td>
+<td>high</td>
+<td>input</td>
+<td>n/a</td>
+</tr><tr>
+<th style="background-color:#ffe0e0;">W</th>
+<td>low</td>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td>output</td>
+<td>first 0xFF, then actual data</td>
+</tr><tr>
+<th style="background-color:#ffffe0;" colspan="2" rowspan="2">Internal Bus</th>
+<th style="background-color:#ffffe0;">R</th>
+<td rowspan="2">high</td>
+<td>low</td>
+<td rowspan="2">high</td>
+<td rowspan="2">high</td>
+<td rowspan="2"><b>change</b>;<br>but <b>don't</b> go low at end of cycle</td>
+<td rowspan="2"><b>change</b></td>
+<td rowspan="2">input</td>
+<td rowspan="2">n/a</td>
+</tr><tr>
+<th style="background-color:#ffffe0;">W</th>
+<td>low (glitchy)</td>
+</tr><tr>
+<th style="background-color:#e0e0ff;" colspan="3">External Video Bus R/W</th>
+<td>high</td>
+<td>low</td>
+<td>high</td>
+<td>high</td>
+<td>no change</td>
+<td>no change</td>
+<td>input</td>
+<td>n/a</td>
+</tr><tr>
+<th style="background-color:#e0ffff;" colspan="2" rowspan="2">Internal Video Bus</th>
+<th style="background-color:#e0ffff;">R</th>
+<td rowspan="2">high</td>
+<td>low</td>
+<td rowspan="2">high</td>
+<td rowspan="2">high</td>
+<td rowspan="2"><b>change</b>;<br>but <b>don't</b> go low at end of cycle</td>
+<td rowspan="2"><b>change</b></td>
+<td rowspan="2">input</td>
+<td rowspan="2">n/a</td>
+</tr><tr>
+<th style="background-color:#e0ffff;">W</th>
+<td>low (glitchy)</td>
+</tr>
+</table>
+<p><i><u>Table 4</u><br>
+Signals visible on external bus when CPU accesses any of the five groups (while DMA is not accessing WRAM or cartridge)</i></p>
+<h2>Sequence of events on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by CPU</h2>
+<p><img src="img/ext_mem_cycle.png" alt=""><br>
+<i><u>Picture 5</u><br>
+Shows the eight clock edges within a memory cycle and assigns labels to them, which are referenced in the sequence below</i></p>
+<ul>
+<li><b style="background-color:#ff8080;">T1F:</b>
+<ul>
+<li>Only when CPU accesses <span style="background-color:#ffe0e0;">External Bus</span>,
+<span style="background-color:#ffffe0;">Internal Bus</span> or
+<span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>A0-A14 change to new address</b></li>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>#read goes high</b></li>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>D0-D7 get actively driven high (before that, they were held high by pull-up resistors)</b></li>
+<li>Only when CPU writes to <span style="background-color:#ffffe0;">Internal Bus</span> or
+<span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>#read may glitch for less than 15 ns
+(static-0 hazard)</b></li>
+<li>Only when CPU writes to <span style="background-color:#ffffe0;">Internal Bus</span> or
+<span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>D0-D7 may glitch for less than 15 ns
+(getting actively driven high instead of only being weakly pulled high by resistors)</b></li>
+</ul></li>
+<li><b style="background-color:#ff8080;">T1R:</b>
+<ul>
+<li>Only when CPU accesses <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>#cs or A15 goes low</b></li>
+</ul></li>
+<li><b style="background-color:#80ff80;">T2F:</b><ul><li><i>no changes</i></li></ul></li>
+<li><b style="background-color:#80ff80;">T2R:</b>
+<ul>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>#write goes low</b></li>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>D0-D7 get driven with the actual data</b></li>
+</ul></li>
+<li><b style="background-color:#8080ff;">T3F:</b><ul><li><i>no changes</i></li></ul></li>
+<li><b style="background-color:#8080ff;">T3R:</b><ul><li><i>no changes</i>, but <b>D0-D7 get sampled during read</b></li></ul></li>
+<li><b style="background-color:#ffff80;">T4F:</b>
+<ul>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>#write goes high</b></li>
+</ul></li>
+<li><b style="background-color:#ffff80;">T4R:</b>
+<ul>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>#read goes low</b></li>
+<li>Only when CPU accesses <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>#cs or A15 goes high</b></li>
+<li>Only when CPU accesses <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>A8-A14 go low</b></li>
+<li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
+<b>D0-D7 stop being driven (pull-up resistors take over)</b></li>
+</ul></li>
+</ul>
+<h2>Signals visible on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by DMA</h2>
+<table class="default" style="background-color:#ffe0e0;">
+<tr>
+<th><i>signals visible on<br>external bus during<br>DMA mem access</i></th>
 <th>#write</th>
 <th>#read</th>
 <th>#cs</th>
 <th>A15</th>
 <th>A0-A14</th>
 <th>D0-D7 direction</th>
-<th>D0-D7 output buffer</th>
 </tr><tr>
 <th style="background-color:#e0ffe0;">Boot ROM (*)</th>
-<td>high</td>
-<td>low</td>
-<td>high</td>
-<td>high</td>
-<td>no change TODO: double check; A8 seems to go low when accessing boot ROM</td>
-<td>input</td>
-<td>no change</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
 <th style="background-color:#ffe0e0;">External Bus</th>
-<td>w: low<br>r: high</td>
-<td>w: high<br>r: low</td>
-<td>high</td>
-<td>low</td>
-<td>change</td>
-<td>w: output<br>r: input</td>
-<td>w: change<br>r: no change</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
-<th style="background-color:#ffffe0;">Internal Bus</th>
-<td>high</td>
-<td>w: low (glitchy)<br>r: low</td>
-<td>high</td>
-<td>high</td>
-<td><b>change</b></td>
-<td>input</td>
-<td>no change</td>
+<th style="background-color:#ffffe0;">Internal Bus (*)</th>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr><tr>
 <th style="background-color:#e0e0ff;">External Video Bus</th>
-<td>high</td>
-<td>w: low (glitchy)<br>r: low</td>
-<td>high</td>
-<td>high</td>
-<td>no change</td>
-<td>input</td>
-<td>no change</td>
+<td colspan="6" style="text-align:center;"><i>ext. bus is controlled by CPU</i></td>
 </tr><tr>
 <th style="background-color:#e0ffff;">Internal Video Bus</th>
-<td>high</td>
-<td>w: low (glitchy)<br>r: low</td>
-<td>high</td>
-<td>high</td>
-<td><b>change</b></td>
-<td>input</td>
-<td>no change</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
 </tr>
 </table>
-<p><i><u>Table 4</u><br>
-Signals visible on external bus when CPU accesses any of the five groups (while DMA is not accessing WRAM or cartridge)<br>
-(*): Write access on boot ROM not tested yet</i></p>
+<p><i><u>Table 5</u><br>
+Signals visible on external bus when DMA accesses any of the three/five (*) groups<br>
+(*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
+<h2>Signals visible on <span style="background-color:#e0e0ff;">External Video Bus</span> during memory cycle issued by CPU</h2>
 <table class="default" style="background-color:#e0e0ff;">
 <tr>
 <th><i>signals visible on<br>ext. video bus during<br>CPU mem access</i></th>
@@ -389,9 +536,10 @@ Signals visible on external bus when CPU accesses any of the five groups (while 
 <td>?</td>
 </tr>
 </table>
-<p><i><u>Table 5</u><br>
+<p><i><u>Table 6</u><br>
 Signals visible on external video bus when CPU accesses any of the five groups (while PPU and DMA are not accessing VRAM)<br>
 (*): Write access on boot ROM not tested yet</i></p>
+<h2>Signals visible on <span style="background-color:#e0e0ff;">External Video Bus</span> during memory cycle issued by PPU</h2>
 <table class="default" style="background-color:#e0e0ff;">
 <tr>
 <th><i>signals visible on<br>ext. video bus during<br>PPU mem access</i></th>
@@ -409,60 +557,12 @@ Signals visible on external video bus when CPU accesses any of the five groups (
 <td>input (glitchy)</td>
 </tr><tr>
 <th style="background-color:#e0ffff;">Internal Video Bus</th>
-<td colspan="5" style="text-align:center;">controlled by DMA or CPU</td>
-</tr>
-</table>
-<p><i><u>Table 6</u><br>
-Signals visible on external video bus when PPU accesses any of the two busses</i></p>
-<table class="default" style="background-color:#ffe0e0;">
-<tr>
-<th><i>signals visible on<br>external bus during<br>DMA mem access</i></th>
-<th>#write</th>
-<th>#read</th>
-<th>#cs</th>
-<th>A15</th>
-<th>A0-A14</th>
-<th>D0-D7 direction</th>
-</tr><tr>
-<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
-<th style="background-color:#ffe0e0;">External Bus</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
-<th style="background-color:#ffffe0;">Internal Bus (*)</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
-<th style="background-color:#e0e0ff;">External Video Bus</th>
-<td colspan="6" style="text-align:center;">controlled by CPU</td>
-</tr><tr>
-<th style="background-color:#e0ffff;">Internal Video Bus</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
+<td colspan="5" style="text-align:center;"><i>ext. video bus is controlled by DMA or CPU</i></td>
 </tr>
 </table>
 <p><i><u>Table 7</u><br>
-Signals visible on external bus when DMA accesses any of the three/five (*) groups<br>
-(*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
+Signals visible on external video bus when PPU accesses any of the two busses</i></p>
+<h2>Signals visible on <span style="background-color:#e0e0ff;">External Video Bus</span> during memory cycle issued by DMA</h2>
 <table class="default" style="background-color:#e0e0ff;">
 <tr>
 <th><i>signals visible on<br>ext. video bus during<br>DMA mem access</i></th>
@@ -480,7 +580,7 @@ Signals visible on external bus when DMA accesses any of the three/five (*) grou
 <td>?</td>
 </tr><tr>
 <th style="background-color:#ffe0e0;">External Bus</th>
-<td colspan="5" style="text-align:center;">controlled by PPU or CPU</td>
+<td colspan="5" style="text-align:center;"><i>ext. video bus is controlled by PPU or CPU</i></td>
 </tr><tr>
 <th style="background-color:#ffffe0;">Internal Bus (*)</th>
 <td>?</td>
