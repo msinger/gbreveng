@@ -224,7 +224,8 @@ The cartridge RAM uses A13 as a secondary, high active chip select. Still, A13 a
 not like the primary chip selects (#cs and A15). When accesing the address range 0xE000-0xFDFF, both A13 and A14 are
 high and therefore both RAMs are active.</p>
 <p>When #read is low, D0-D7 are always configured as inputs (driven by the cartridge or WRAM or pulled up by
-a pull-up resistor). When #read is high, D0-D7 are always configured as outputs (driven by the Game Boy).</p>
+a pull-up resistor). When #read is high, D0-D7 are always configured as outputs (driven by the Game Boy). This is
+true even when there is no #write and/or chip select signal pulled low yet.</p>
 <table class="default center" style="background-color:#ffe0e0;">
 <tr>
 <th><i>&amp;&amp;</i></th>
@@ -238,9 +239,9 @@ a pull-up resistor). When #read is high, D0-D7 are always configured as outputs 
 <td>&larr; input<br>&nbsp;</td>
 </tr><tr>
 <th>(#read)</th>
-<td>&nearr;<br>output &rarr;</td>
+<td>&nbsp;<br>output &nearr;</td>
 <td>&uarr;<br>&larr; output &rarr;</td>
-<td>&nwarr;<br>&larr; output</td>
+<td>&nbsp;<br>&nwarr; output</td>
 </tr>
 </table>
 <p><i><u>Table 2</u><br>
@@ -321,7 +322,7 @@ the highest priority, the CPU has the lowest.</p>
 <td>high</td>
 <td>low</td>
 <td>output</td>
-<td>first 0xFF, then actual data</td>
+<td>first 0xFF<i>(*)</i>, then actual data</td>
 </tr><tr>
 <th style="background-color:#ffe0e0;" rowspan="2">RAM</th>
 <th style="background-color:#ffe0e0;">R</th>
@@ -338,7 +339,7 @@ the highest priority, the CPU has the lowest.</p>
 <td>low</td>
 <td>high</td>
 <td>output</td>
-<td>first 0xFF, then actual data</td>
+<td>first 0xFF<i>(*)</i>, then actual data</td>
 </tr><tr>
 <th style="background-color:#ffffe0;" colspan="2" rowspan="2">Internal Bus</th>
 <th style="background-color:#ffffe0;">R</th>
@@ -348,11 +349,13 @@ the highest priority, the CPU has the lowest.</p>
 <td rowspan="2">high</td>
 <td rowspan="2"><b>change</b>;<br>but <b>don't</b> go low at end of cycle</td>
 <td rowspan="2"><b>change</b></td>
-<td rowspan="2">input</td>
-<td rowspan="2">n/a</td>
+<td>input</td>
+<td>n/a</td>
 </tr><tr>
 <th style="background-color:#ffffe0;">W</th>
 <td>low (glitchy)</td>
+<td>input (glitchy)</td>
+<td>0xFF<i>(*)</i> if direction glitches</td>
 </tr><tr>
 <th style="background-color:#e0e0ff;" colspan="3">External Video Bus R/W</th>
 <td>high</td>
@@ -372,35 +375,46 @@ the highest priority, the CPU has the lowest.</p>
 <td rowspan="2">high</td>
 <td rowspan="2"><b>change</b>;<br>but <b>don't</b> go low at end of cycle</td>
 <td rowspan="2"><b>change</b></td>
-<td rowspan="2">input</td>
-<td rowspan="2">n/a</td>
+<td>input</td>
+<td>n/a</td>
 </tr><tr>
 <th style="background-color:#e0ffff;">W</th>
 <td>low (glitchy)</td>
+<td>input (glitchy)</td>
+<td>0xFF<i>(*)</i> if direction glitches</td>
 </tr>
 </table>
 <p><i><u>Table 4</u><br>
-Signals visible on external bus when CPU accesses any of the five groups (while DMA is not accessing WRAM or cartridge)</i></p>
+Signals visible on external bus when CPU accesses any of the five groups (while DMA is not accessing WRAM or cartridge)<br>
+(*): The two stack pushes during the CALL and RST instructions are an exception. They output their respective part of
+the program counter the whole time while #read is high, they don't start with driving 0xFF. TODO: Check if this also
+applies to the pushing on interrupt entry.</i></p>
 <h2>Sequence of events on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by CPU</h2>
 <p><img src="img/ext_mem_cycle.png" alt=""><br>
 <i><u>Picture 5</u><br>
 Shows the eight clock edges within a memory cycle and assigns labels to them, which are referenced in the sequence below</i></p>
-<ul>
+<ol>
 <li><b style="background-color:#ff8080;">T1F:</b>
 <ul>
 <li>Only when CPU accesses <span style="background-color:#ffe0e0;">External Bus</span>,
 <span style="background-color:#ffffe0;">Internal Bus</span> or
-<span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>A0-A14 change to new address</b></li>
+<span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>A0-A14 change to new address</b><br>
+<i>TODO: When stack pointer points to video RAM, there are some changes on address lines during the stack pushing
+of the CALL instructions. Figure out what these are.</i></li>
 <li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
 <b>#read goes high</b></li>
 <li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
-<b>D0-D7 get actively driven high (before that, they were held high by pull-up resistors)</b></li>
+<b>D0-D7 get actively driven high (before that, they were held high by pull-up resistors)</b><br>
+(There is an exception to this during stack pushing of the CALL and RST instructions: The respective part of the program
+counter is actively driven on D0-D7 instead of them being driven high)</li>
 <li>Only when CPU writes to <span style="background-color:#ffffe0;">Internal Bus</span> or
 <span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>#read may glitch for less than 15 ns
 (static-0 hazard)</b></li>
 <li>Only when CPU writes to <span style="background-color:#ffffe0;">Internal Bus</span> or
 <span style="background-color:#e0ffff;">Internal Video Bus</span>: <b>D0-D7 may glitch for less than 15 ns
-(getting actively driven high instead of only being weakly pulled high by resistors)</b></li>
+(getting actively driven high instead of only being weakly pulled high by resistors)</b><br>
+(There is an exception to this during stack pushing of the CALL and RST instructions: The respective part of the program
+counter is actively driven on D0-D7 shortly when they are glitching instead of them being driven high)</li>
 </ul></li>
 <li><b style="background-color:#ff8080;">T1R:</b>
 <ul>
@@ -433,7 +447,7 @@ Shows the eight clock edges within a memory cycle and assigns labels to them, wh
 <li>Only when CPU writes to <span style="background-color:#ffe0e0;">External Bus</span>:
 <b>D0-D7 stop being driven (pull-up resistors take over)</b></li>
 </ul></li>
-</ul>
+</ol>
 <h2>Signals visible on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by DMA</h2>
 <table class="default" style="background-color:#ffe0e0;">
 <tr>
