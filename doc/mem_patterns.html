@@ -266,9 +266,9 @@ the highest priority, the CPU has the lowest.</p>
 <td>X (ro)</td>
 </tr><tr>
 <th>DMA</th>
-<td>?</td>
+<td><i>(*)</i></td>
 <td>X (ro)</td>
-<td>?</td>
+<td><i>(*)</i></td>
 <td>X (ro)</td>
 <td>X (wo)</td>
 </tr><tr>
@@ -280,7 +280,9 @@ the highest priority, the CPU has the lowest.</p>
 <td>X</td>
 </tr>
 </table>
-<p><i><u>Table 3</u></i></p>
+<p><i><u>Table 3</u><br>
+(*): When DMA is given source address 0xFEXX or 0xFFXX, it reads from external bus. When DMA is given source address
+0x00XX, it always reads from external bus, it doesn't matter if boot ROM is still visible or not.</i></p>
 <h2>Signals visible on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by CPU</h2>
 <table class="default" style="background-color:#ffe0e0;">
 <tr>
@@ -451,7 +453,7 @@ counter is actively driven on D0-D7 shortly when they are glitching instead of t
 <h2>Signals visible on <span style="background-color:#ffe0e0;">External Bus</span> during memory cycle issued by DMA</h2>
 <table class="default" style="background-color:#ffe0e0;">
 <tr>
-<th><i>signals visible on<br>external bus during<br>DMA mem access</i></th>
+<th colspan="2"><i>signals visible on<br>external bus during<br>DMA mem access</i></th>
 <th>#write</th>
 <th>#read</th>
 <th>#cs</th>
@@ -459,45 +461,25 @@ counter is actively driven on D0-D7 shortly when they are glitching instead of t
 <th>A0-A14</th>
 <th>D0-D7 direction</th>
 </tr><tr>
-<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
+<th style="background-color:#ffe0e0;" rowspan="2">External Bus</th>
+<th style="background-color:#ffe0e0;">ROM</th>
+<td rowspan="2">high</td>
+<td rowspan="2">low</td>
+<td>high</td>
+<td>low</td>
+<td rowspan="2">change</td>
+<td rowspan="2">input</td>
 </tr><tr>
-<th style="background-color:#ffe0e0;">External Bus</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
+<th style="background-color:#ffe0e0;">RAM</th>
+<td>low</td>
+<td>high</td>
 </tr><tr>
-<th style="background-color:#ffffe0;">Internal Bus (*)</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
-<th style="background-color:#e0e0ff;">External Video Bus</th>
+<th style="background-color:#e0e0ff;" colspan="2">External Video Bus</th>
 <td colspan="6" style="text-align:center;"><i>ext. bus is controlled by CPU</i></td>
-</tr><tr>
-<th style="background-color:#e0ffff;">Internal Video Bus</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
 </tr>
 </table>
 <p><i><u>Table 5</u><br>
-Signals visible on external bus when DMA accesses any of the three/five (*) groups<br>
-(*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
+Signals visible on external bus when DMA reads from any of the two busses</i></p>
 <h2>Signals visible on <span style="background-color:#e0e0ff;">External Video Bus</span> during memory cycle issued by CPU</h2>
 <table class="default" style="background-color:#e0e0ff;">
 <tr>
@@ -586,41 +568,19 @@ Signals visible on external video bus when PPU accesses any of the two busses</i
 <th>VA0-VA12</th>
 <th>VD0-VD7 direction</th>
 </tr><tr>
-<th style="background-color:#e0ffe0;">Boot ROM (*)</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
 <th style="background-color:#ffe0e0;">External Bus</th>
 <td colspan="5" style="text-align:center;"><i>ext. video bus is controlled by PPU or CPU</i></td>
 </tr><tr>
-<th style="background-color:#ffffe0;">Internal Bus (*)</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
 <th style="background-color:#e0e0ff;">External Video Bus</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-</tr><tr>
-<th style="background-color:#e0ffff;">Internal Video Bus</th>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
-<td>?</td>
+<td>high</td>
+<td>low</td>
+<td>low</td>
+<td>change</td>
+<td>input</td>
 </tr>
 </table>
 <p><i><u>Table 8</u><br>
-Signals visible on external video bus when DMA accesses any of the three/five (*) groups (while PPU is not accessing VRAM)<br>
-(*): Not tested yet if DMA has access to boot ROM or internal bus</i></p>
+Signals visible on external video bus when DMA reads from any of the two busses (while PPU is not accessing VRAM)</i></p>
 <!--
 CPU write WRAM:
   950ns clk period:
