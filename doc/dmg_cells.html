@@ -1582,8 +1582,7 @@ cell nearby that generates the inverted clock. The flip-flop triggers on a posit
 edge of <i>!clk</i>.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
 necessary for it to work.</p>
-<p>This variant is similar to variant B, but it is missing the <i>q</i> output. Furthermore, it is one row shorter:
-There is only a single row between <i>!rst</i> and <i>!q</i> instead of two.</p>
+<p>This variant is similar to variant B, but it is missing the <i>!q</i> output. Furthermore, it is two rows shorter.</p>
 <p><i>TODO: Not really sure about clock input polarity.</i></p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
@@ -1603,8 +1602,8 @@ a positive edge on the <i>clk</i> input at the same time.</td></tr>
 <td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
 two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
 the picture).</td></tr>
-<tr><td><i>!q</i></td>
-<td>Inverted data output.</td></tr>
+<tr><td><i>q</i></td>
+<td>Data output.</td></tr>
 </table></td></tr>
 </table>
 <p>Instances:
