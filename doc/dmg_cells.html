@@ -94,12 +94,12 @@ all documented once and for all, to make life easier!</p>
  </li>
  <li><a href="#compound">Compound logic gates</a>
   <ul>
-   <li><a href="#aoi1">AOI1</a></li>
-   <li><a href="#aoi2">AOI2</a></li>
-   <li><a href="#aoi3">AOI3</a></li>
-   <li><a href="#aoi4">AOI4</a></li>
-   <li><a href="#aoi6">AOI6</a></li>
-   <li><a href="#ao">AO</a></li>
+   <li><a href="#aoi">AOI</a></li>
+   <li><a href="#ao1">AO1</a></li>
+   <li><a href="#ao2">AO2</a></li>
+   <li><a href="#ao3">AO3</a></li>
+   <li><a href="#ao4">AO4</a></li>
+   <li><a href="#ao6">AO6</a></li>
    <li><a href="#oa">OA</a></li>
    <li><a href="#muxi">MUXI</a></li>
    <li><a href="#mux">MUX</a></li>
@@ -457,7 +457,7 @@ all documented once and for all, to make life easier!</p>
 </table></td></tr>
 </table>
 <h2 id="compound">Compound logic gates</h2>
-<h3 id="aoi1">AOI1</h3>
+<h3 id="aoi">AOI</h3>
 <p>2-1 AND-OR-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: NAO</p>
 <table>
@@ -472,60 +472,7 @@ all documented once and for all, to make life easier!</p>
 <td>Outputs <code>!((a && b) || c)</code>.</td></tr>
 </table></td></tr>
 </table>
-<h3 id="aoi2">AOI2</h3>
-<p>2-2 AND-OR-INVERT two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_2</p>
-<table>
-<tr><td><img src="img/cells/jufy_desc.png" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i></td>
-<td>Inputs to AND gates.</td></tr>
-<tr><td><i>q</i></td>
-<td>Outputs <code>!((a && b) || (c && d))</code>.</td></tr>
-</table></td></tr>
-</table>
-<h3 id="aoi3">AOI3</h3>
-<p>2-2-2 AND-OR-INVERT two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_3</p>
-<table>
-<tr><td><img src="img/cells/evug_desc.png" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i></td>
-<td>Inputs to AND gates.</td></tr>
-<tr><td><i>q</i></td>
-<td>Outputs <code>!((a && b) || (c && d) || (e && f))</code>.</td></tr>
-</table></td></tr>
-</table>
-<h3 id="aoi4">AOI4</h3>
-<p>2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
-<table>
-<tr><td><img src="img/cells/waly_desc.png" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i></td>
-<td>Inputs to AND gates.</td></tr>
-<tr><td><i>q</i></td>
-<td>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h))</code>.</td></tr>
-</table></td></tr>
-</table>
-<h3 id="aoi6">AOI6</h3>
-<p>2-2-2-2-2-2 AND-OR-INVERT two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_6</p>
-<table>
-<tr><td><img src="img/cells/etyr_desc.png" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i>;
-<i>i</i>, <i>j</i>; <i>k</i>, <i>l</i></td>
-<td>Inputs to AND gates.</td></tr>
-<tr><td><i>q</i></td>
-<td>Outputs <code>!((a && b) || (c && d) || (e && f) || (g && h) || (i && j) || (k && l))</code>.</td></tr>
-</table></td></tr>
-</table>
-<h3 id="ao">AO</h3>
+<h3 id="ao1">AO1</h3>
 <p>2-1 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
 <table>
@@ -538,6 +485,59 @@ all documented once and for all, to make life easier!</p>
 <td>Input to OR gate.</td></tr>
 <tr><td><i>q</i></td>
 <td>Outputs <code>((a && b) || c)</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="ao2">AO2</h3>
+<p>2-2 AND-OR two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_2</p>
+<table>
+<tr><td><img src="img/cells/jufy_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i></td>
+<td>Inputs to AND gates.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs <code>((a && b) || (c && d))</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="ao3">AO3</h3>
+<p>2-2-2 AND-OR two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_3</p>
+<table>
+<tr><td><img src="img/cells/evug_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i></td>
+<td>Inputs to AND gates.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs <code>((a && b) || (c && d) || (e && f))</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="ao4">AO4</h3>
+<p>2-2-2-2 AND-OR two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
+<table>
+<tr><td><img src="img/cells/waly_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i></td>
+<td>Inputs to AND gates.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs <code>((a && b) || (c && d) || (e && f) || (g && h))</code>.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="ao6">AO6</h3>
+<p>2-2-2-2-2-2 AND-OR two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_6</p>
+<table>
+<tr><td><img src="img/cells/etyr_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>a</i>, <i>b</i>; <i>c</i>, <i>d</i>; <i>e</i>, <i>f</i>; <i>g</i>, <i>h</i>;
+<i>i</i>, <i>j</i>; <i>k</i>, <i>l</i></td>
+<td>Inputs to AND gates.</td></tr>
+<tr><td><i>q</i></td>
+<td>Outputs <code>((a && b) || (c && d) || (e && f) || (g && h) || (i && j) || (k && l))</code>.</td></tr>
 </table></td></tr>
 </table>
 <h3 id="oa">OA</h3>
