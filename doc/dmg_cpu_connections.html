@@ -250,7 +250,8 @@ multiple</a></td>
 <a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-67,104.47,-67,105.13,-67.08,105.23,-67.08,107.96,-45.23,107.97,-45.16,43.77,-76.73,43.77,-76.73,36.76,-86.65,36.76,-86.65,33.46,-88.69,33.46,-88.69,31.29">
 unlabeled</a></td>
 <td><a href="/dmg_cpu_b_map/?view=syro&mark%5b0%5d=-88.7,31.4">SYRO.q</a></td>
-<td>High when address bus is 0xfexx or 0xffxx. I suspect this is used by the CPU to decode the address for the
+<td>High when address bus is 0xfexx or 0xffxx. When high, it suppresses R7, so that the data bus can be driven by
+an internal component (HRAM, OAM, FFxx registers). I suspect this is also used by the CPU to decode the address for the
 interrupt enable register (0xffff), but I'm not sure yet.</td>
 </tr><tr>
 <td>R5</td>
@@ -259,8 +260,8 @@ interrupt enable register (0xffff), but I'm not sure yet.</td>
 <a href="/dmg_cpu_b_map/?wires=0&view=line%5b%5d&line%5b0%5d=-67.19,104.47,-67.19,105.07,-67.25,105.15,-67.25,107.96,-110.14,107.93,-115.58,107.91,-115.65,148.48,-105.4,148.48,-105.4,147.11,-97.38,147.12,-97.38,148.84,-84.48,148.84,-84.48,166.45,-83.87,166.45&line%5b1%5d=-110.14,107.93,-110.08,39.77,-90.15,39.78,-90.15,38.29&line%5b2%5d=-93.99,35.55,-93.99,38.29,-88.52,38.29,-88.52,33.21,-86.48,33.21,-86.48,31.29">
 unlabeled</a></td>
 <td><a href="/dmg_cpu_b_map/?view=tutu&mark%5b0%5d=-93.99,35.66">TUTU.q</a></td>
-<td>High when address bus is 0x00xx and boot ROM is still visible (*0xff50 == 0x00). I suspect this is used by the
-CPU to suppress R7 during boot ROM access, but I'm not sure yet.</td>
+<td>High when address bus is 0x00xx and boot ROM is still visible. When high, it suppresses R7,
+so that the data bus can be driven by the internal boot ROM.</td>
 </tr><tr>
 <td>R6</td>
 <td>I</td>
@@ -277,12 +278,13 @@ T1<span style="text-decoration:overline">T2</span></a></td>
 FROM_CPU4</a></td>
 <td><a href="/dmg_cpu_b_map/?view=texo&mark%5b0%5d=-85.96,35.68">TEXO.in1</a>,
 <a href="/dmg_cpu_b_map/?view=agut&mark%5b0%5d=-56.03,154.86">AGUT.in3</a></td>
-<td>Active-high memory request? Has to be high during memory cycles (read or write). This causes one of the chip
-select signals (<a href="/dmg_cpu_b_map/?view=cs">CS</a>, <a href="/dmg_cpu_b_map/?view=mcs">MCS</a>,
+<td>Active-high external memory request. Has to be high during external memory cycles (read or write). This causes
+one of the chip select signals (<a href="/dmg_cpu_b_map/?view=cs">CS</a>, <a href="/dmg_cpu_b_map/?view=mcs">MCS</a>,
 <a href="/dmg_cpu_b_map/?view=a15">A15</a>) to be asserted in the right moment. Has to be low if no memory cycle
 is going on, otherwise the chip select will be asserted even if R1 and R2 are low. During write cycles, this signal
 is also needed for driving the internal data bus onto the I/O pads. During read cycles, this signal is also needed for
-latching the I/O pads and driving the latched data onto the internal data bus.</td>
+latching the I/O pads and driving the latched data onto the internal data bus. When R4 or R5 is high, the CPU keeps
+this signal low, allowing internal components (HRAM, OAM, boot ROM, FFxx registers) to drive the internal data bus.</td>
 </tr><tr>
 <td>R8</td>
 <td>?</td>
