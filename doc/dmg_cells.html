@@ -120,12 +120,12 @@ all documented once and for all, to make life easier!</p>
  <li><a href="#ff">Storage elements</a>
   <ul>
    <li><a href="#srlatch">SR-LATCH</a></li>
-   <li><a href="#dlatch">DLATCH</a></li>
-   <li><a href="#dff">DFF</a></li>
+   <li><a href="#dlatch_a">D-LATCH - Variant A</a></li>
+   <li><a href="#dlatch_b">D-LATCH - Variant B</a></li>
+   <li><a href="#drlatch">DR-LATCH</a></li>
    <li><a href="#dffr_a">DFFR - Variant A</a></li>
    <li><a href="#dffr_b">DFFR - Variant B</a></li>
    <li><a href="#dffr_b2">DFFR - Variant B+</a></li>
-   <li><a href="#dffr_c">DFFR - Variant C</a></li>
    <li><a href="#dffsr">DFFSR</a></li>
    <li><a href="#tffd">TFFD</a></li>
   </ul>
@@ -738,30 +738,10 @@ just figured out the correct function of these cells.</p>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<h3 id="dlatch">DLATCH</h3>
+<h3 id="dlatch_a">D-LATCH - Variant A</h3>
 <p>Gated data latch.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
-<table>
-<tr><td><img src="img/cells/zeca_desc.png" style="min-width:300px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>d</i></td>
-<td>Data input.</td></tr>
-<tr><td><i>ena</i></td>
-<td>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
-as <i>ena</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ena</i> goes
-high again.</td></tr>
-<tr><td><i>q</i></td>
-<td>Data output.</td></tr>
-<tr><td><i>!q</i></td>
-<td>Inverted data output.</td></tr>
-</table></td></tr>
-</table>
-<h3 id="dff">DFF</h3>
-<p>Single-edge-triggered data flip-flop.</p>
-<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
-cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
-edge of <i>!clk</i>.</p>
+<p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted enable signal.</p>
 <p>There are instances of this cell that have their <i>!q</i> output stripped off. Those stripped cells can have an
 unrelated net run through the row where the <i>!q</i> output would have been. The cells named
 <a href="/dmg_cpu_b_map/?view=mytu">MYTU</a> and <a href="/dmg_cpu_b_map/?view=mofo">MOFO</a> are two
@@ -772,14 +752,13 @@ examples of that.</p>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</td></tr>
-<tr><td><i>clk</i></td>
-<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</td></tr>
-<tr><td><i>!clk</i></td>
-<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</td></tr>
+<td>Data input.</td></tr>
+<tr><td><i>ena</i></td>
+<td>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
+as <i>ena</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ena</i> goes
+high again.</td></tr>
+<tr><td><i>!ena</i></td>
+<td>Active-low enable input. Must always be the inverse of <i>ena</i>.</td></tr>
 <tr><td><i>q</i></td>
 <td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
@@ -961,29 +940,44 @@ a positive edge on the <i>clk</i> input at the same time.</td></tr>
 <a href="/dmg_cpu_b_map/?view=suny">SUNY</a>
 <a href="/dmg_cpu_b_map/?view=suto">SUTO</a>
 </p>
-<h3 id="dffr_a">DFFR - Variant A</h3>
-<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
-<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
-cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
-edge of <i>!clk</i>. It doesn't seem to matter which one of the two inputs gets slightly delayed by the inverter,
-it works both ways.</p>
-<p><i>TODO: Not really sure about clock input polarity.</i></p>
+<h3 id="dlatch_b">D-LATCH - Variant B</h3>
+<p>Gated data latch.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
+<table>
+<tr><td><img src="img/cells/zeca_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>d</i></td>
+<td>Data input.</td></tr>
+<tr><td><i>ena</i></td>
+<td>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
+as <i>ena</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ena</i> goes
+high again.</td></tr>
+<tr><td><i>q</i></td>
+<td>Data output.</td></tr>
+<tr><td><i>!q</i></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<h3 id="drlatch">DR-LATCH</h3>
+<p>Gated data latch with active-low reset.</p>
+<p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted enable signal.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
 <tr><td><img src="img/cells/cyxu_desc.png" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>d</i></td>
-<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</td></tr>
-<tr><td><i>clk</i></td>
-<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</td></tr>
-<tr><td><i>!clk</i></td>
-<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</td></tr>
+<td>Data input.</td></tr>
+<tr><td><i>ena</i></td>
+<td>Active-high enable input. When high, the value at <i>d</i> transparently propagates through the latch. As soon
+as <i>ena</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ena</i> goes
+high again.</td></tr>
+<tr><td><i>!ena</i></td>
+<td>Active-low enable input. Must always be the inverse of <i>ena</i>.</td></tr>
 <tr><td><i>!rst</i></td>
-<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low.</td></tr>
+<td>Active-low reset input. Data inside the latch gets reset to 0 when <i>!rst</i> is low.</td></tr>
 <tr><td><i>q</i></td>
 <td>Data output.</td></tr>
 <tr><td><i>!q</i></td>
@@ -1229,6 +1223,69 @@ a positive edge on the <i>clk</i> input at the same time.</td></tr>
 <a href="/dmg_cpu_b_map/?view=zoly">ZOLY</a>
 <a href="/dmg_cpu_b_map/?view=zulu">ZULU</a>
 <a href="/dmg_cpu_b_map/?view=zyjo">ZYJO</a>
+</p>
+<h3 id="dffr_a">DFFR - Variant A</h3>
+<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
+edge of <i>!clk</i>.</p>
+<p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
+necessary for it to work.</p>
+<p>This variant is similar to variant B, but it is missing the <i>!q</i> output. Furthermore, it is two rows shorter.</p>
+<p><i>TODO: Not really sure about clock input polarity.</i></p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
+<table>
+<tr><td><img src="img/cells/poju_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>d</i></td>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
+of <i>!clk</i>.</td></tr>
+<tr><td><i>clk</i></td>
+<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a negative edge on the <i>!clk</i> input at the same time.</td></tr>
+<tr><td><i>!clk</i></td>
+<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
+a positive edge on the <i>clk</i> input at the same time.</td></tr>
+<tr><td><i>!rst</i></td>
+<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
+two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
+the picture).</td></tr>
+<tr><td><i>q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=defa">DEFA</a>
+<a href="/dmg_cpu_b_map/?view=dele">DELE</a>
+<a href="/dmg_cpu_b_map/?view=deva">DEVA</a>
+<a href="/dmg_cpu_b_map/?view=dexe">DEXE</a>
+<a href="/dmg_cpu_b_map/?view=dofy">DOFY</a>
+<a href="/dmg_cpu_b_map/?view=doly">DOLY</a>
+<a href="/dmg_cpu_b_map/?view=edok">EDOK</a>
+<a href="/dmg_cpu_b_map/?view=epyr">EPYR</a>
+<a href="/dmg_cpu_b_map/?view=eter">ETER</a>
+<a href="/dmg_cpu_b_map/?view=exap">EXAP</a>
+<a href="/dmg_cpu_b_map/?view=faxo">FAXO</a>
+<a href="/dmg_cpu_b_map/?view=galo">GALO</a>
+<a href="/dmg_cpu_b_map/?view=gele">GELE</a>
+<a href="/dmg_cpu_b_map/?view=gyme">GYME</a>
+<a href="/dmg_cpu_b_map/?view=hele">HELE</a>
+<a href="/dmg_cpu_b_map/?view=hopa">HOPA</a>
+<a href="/dmg_cpu_b_map/?view=hora">HORA</a>
+<a href="/dmg_cpu_b_map/?view=jape">JAPE</a>
+<a href="/dmg_cpu_b_map/?view=jete">JETE</a>
+<a href="/dmg_cpu_b_map/?view=jode">JODE</a>
+<a href="/dmg_cpu_b_map/?view=jyme">JYME</a>
+<a href="/dmg_cpu_b_map/?view=kare">KARE</a>
+<a href="/dmg_cpu_b_map/?view=poju">POJU</a>
+<a href="/dmg_cpu_b_map/?view=powy">POWY</a>
+<a href="/dmg_cpu_b_map/?view=poxa">POXA</a>
+<a href="/dmg_cpu_b_map/?view=pozo">POZO</a>
+<a href="/dmg_cpu_b_map/?view=pulo">PULO</a>
+<a href="/dmg_cpu_b_map/?view=pyju">PYJU</a>
+<a href="/dmg_cpu_b_map/?view=pyzo">PYZO</a>
+<a href="/dmg_cpu_b_map/?view=rawu">RAWU</a>
 </p>
 <h3 id="dffr_b">DFFR - Variant B</h3>
 <p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
@@ -1574,69 +1631,6 @@ the picture).</td></tr>
 <a href="/dmg_cpu_b_map/?view=xuva">XUVA</a>
 <a href="/dmg_cpu_b_map/?view=xydo">XYDO</a>
 <a href="/dmg_cpu_b_map/?view=yfel">YFEL</a>
-</p>
-<h3 id="dffr_c">DFFR - Variant C</h3>
-<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
-<p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
-cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>clk</i> and a negative
-edge of <i>!clk</i>.</p>
-<p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
-necessary for it to work.</p>
-<p>This variant is similar to variant B, but it is missing the <i>!q</i> output. Furthermore, it is two rows shorter.</p>
-<p><i>TODO: Not really sure about clock input polarity.</i></p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
-<table>
-<tr><td><img src="img/cells/poju_desc.png" style="min-width:300px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>d</i></td>
-<td>Data input. Gets stored in the flip-flop on positive edge of <i>clk</i> and a simultanious negative edge
-of <i>!clk</i>.</td></tr>
-<tr><td><i>clk</i></td>
-<td>Positive clock input. On a positive edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a negative edge on the <i>!clk</i> input at the same time.</td></tr>
-<tr><td><i>!clk</i></td>
-<td>Negative clock input. On a negative edge the data input <i>d</i> gets stored in the flip-flop. There needs to be
-a positive edge on the <i>clk</i> input at the same time.</td></tr>
-<tr><td><i>!rst</i></td>
-<td>Active-low reset input. Data inside the flip-flop gets reset to 0 when <i>!rst</i> is low. There are
-two <i>!rst</i> inputs to this cell, which are externally connected to each other (by the pink line in
-the picture).</td></tr>
-<tr><td><i>q</i></td>
-<td>Data output.</td></tr>
-</table></td></tr>
-</table>
-<p>Instances:
-<a href="/dmg_cpu_b_map/?view=defa">DEFA</a>
-<a href="/dmg_cpu_b_map/?view=dele">DELE</a>
-<a href="/dmg_cpu_b_map/?view=deva">DEVA</a>
-<a href="/dmg_cpu_b_map/?view=dexe">DEXE</a>
-<a href="/dmg_cpu_b_map/?view=dofy">DOFY</a>
-<a href="/dmg_cpu_b_map/?view=doly">DOLY</a>
-<a href="/dmg_cpu_b_map/?view=edok">EDOK</a>
-<a href="/dmg_cpu_b_map/?view=epyr">EPYR</a>
-<a href="/dmg_cpu_b_map/?view=eter">ETER</a>
-<a href="/dmg_cpu_b_map/?view=exap">EXAP</a>
-<a href="/dmg_cpu_b_map/?view=faxo">FAXO</a>
-<a href="/dmg_cpu_b_map/?view=galo">GALO</a>
-<a href="/dmg_cpu_b_map/?view=gele">GELE</a>
-<a href="/dmg_cpu_b_map/?view=gyme">GYME</a>
-<a href="/dmg_cpu_b_map/?view=hele">HELE</a>
-<a href="/dmg_cpu_b_map/?view=hopa">HOPA</a>
-<a href="/dmg_cpu_b_map/?view=hora">HORA</a>
-<a href="/dmg_cpu_b_map/?view=jape">JAPE</a>
-<a href="/dmg_cpu_b_map/?view=jete">JETE</a>
-<a href="/dmg_cpu_b_map/?view=jode">JODE</a>
-<a href="/dmg_cpu_b_map/?view=jyme">JYME</a>
-<a href="/dmg_cpu_b_map/?view=kare">KARE</a>
-<a href="/dmg_cpu_b_map/?view=poju">POJU</a>
-<a href="/dmg_cpu_b_map/?view=powy">POWY</a>
-<a href="/dmg_cpu_b_map/?view=poxa">POXA</a>
-<a href="/dmg_cpu_b_map/?view=pozo">POZO</a>
-<a href="/dmg_cpu_b_map/?view=pulo">PULO</a>
-<a href="/dmg_cpu_b_map/?view=pyju">PYJU</a>
-<a href="/dmg_cpu_b_map/?view=pyzo">PYZO</a>
-<a href="/dmg_cpu_b_map/?view=rawu">RAWU</a>
 </p>
 <h3 id="dffsr">DFFSR</h3>
 <p>Positive-edge-triggered data flip-flop with active-low asynchronous set and reset.</p>
