@@ -1,11 +1,11 @@
 .section .hdrname
-	.db "halt"
+	.db "eidi"
 
 .section .text
 main:
 .global main
-;	di
-	ei
+	di
+;	ei
 	xor a
 	ld (0x0f), a
 	ld a, 0x08
@@ -14,11 +14,8 @@ main:
 	ld (0x02), a
 	nop
 	nop
-	halt
-;	halt
-;	ld de, 0x1234
-;	set 7, a
-	inc a
+	ei
+;	di
 	nop
 	nop
 	jr main

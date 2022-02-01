@@ -16,7 +16,8 @@ ROMS = \
 	disp-test.s \
 	stop.s \
 	halt.s \
-	sck-in.s
+	sck-in.s \
+	eidi.s
 
 EXTRA_DIST = common.s $(ROMS)
 

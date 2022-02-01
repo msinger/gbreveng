@@ -162,12 +162,13 @@ one T9/T10 tick later. Wether the CPU pulls T11 high immediately when T15 gets h
 is unknown (both will work fine). I assume this mechanism is there to assure the crystal oscillator is stabilized.<br>
 The same mechanism likely is used when the system wakes up from STOP mode. When the crystal oscillator gets disabled by
 driving T14 low, the DIV register gets reset to zero, so it will take the same ~32 ms.<br>
-It is unknown if the CPU ever drives T11 low again after it was driven high (except when switching off the crystal
-oscillator) to disable some clocks.<br>
 For this mechanism to work, many of the bugs in the schematics must be fixed, especially
 <a href="https://github.com/furrtek/DMG-CPU-Inside/issues/29">#29</a>,
 <a href="https://github.com/furrtek/DMG-CPU-Inside/issues/10">#10</a> and
-<a href="https://github.com/furrtek/DMG-CPU-Inside/issues/43">#43</a>.</td>
+<a href="https://github.com/furrtek/DMG-CPU-Inside/issues/43">#43</a>.<br>
+When the CPU executes a HALT instruction and none of the enabled interrupts are pending, then the CPU will pull T11 low
+to disable most of its clocks. When waking up from HALT mode (due to an interrupt), the CPU will pull T11 high on the
+next T9/T10 tick, which re-enables all the other clocks.</td>
 </tr><tr>
 <td>T12</td>
 <td>I</td>
