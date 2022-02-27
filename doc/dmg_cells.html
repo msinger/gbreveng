@@ -94,12 +94,12 @@ all documented once and for all, to make life easier!</p>
  </li>
  <li><a href="#compound">Compound logic gates</a>
   <ul>
-   <li><a href="#aoi">AOI</a></li>
    <li><a href="#ao1">AO1</a></li>
    <li><a href="#ao2">AO2</a></li>
    <li><a href="#ao3">AO3</a></li>
    <li><a href="#ao4">AO4</a></li>
    <li><a href="#ao6">AO6</a></li>
+   <li><a href="#oai">OAI</a></li>
    <li><a href="#oa">OA</a></li>
    <li><a href="#muxi">MUXI</a></li>
    <li><a href="#mux">MUX</a></li>
@@ -2628,26 +2628,6 @@ all documented once and for all, to make life easier!</p>
 (110 total)
 </p>
 <h2 id="compound">Compound logic gates</h2>
-<h3 id="aoi">AOI</h3>
-<p>2-1 AND-OR-INVERT two-level compound gate.</p>
-<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: NAO</p>
-<table>
-<tr><td><img src="img/cells/cufe_desc.png" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>IN1</i>, <i>IN2</i></td>
-<td>Inputs to AND gate.</td></tr>
-<tr><td><i>IN3</i></td>
-<td>Input to OR gate.</td></tr>
-<tr><td><i>Q</i></td>
-<td>Outputs <code>!((IN1 &amp;&amp; IN2) || IN3)</code>.</td></tr>
-</table></td></tr>
-</table>
-<p><img src="img/cells/aoi_cmos.png" alt=""></p>
-<p>Instances:
-<a href="/dmg_cpu_b_map/?view=cufe">CUFE</a>
-(1 total)
-</p>
 <h3 id="ao1">AO1</h3>
 <p>2-1 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
@@ -2770,6 +2750,26 @@ all documented once and for all, to make life easier!</p>
 <p><img src="img/cells/ao6_cmos.png" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=etyr">ETYR</a>
+(1 total)
+</p>
+<h3 id="oai">OAI</h3>
+<p>2-1 OR-AND-INVERT two-level compound gate.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: NAO</p>
+<table>
+<tr><td><img src="img/cells/cufe_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to OR gate.</td></tr>
+<tr><td><i>IN3</i></td>
+<td>Input to AND gate.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>!((IN1 || IN2) &amp;&amp; IN3)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/oai_cmos.png" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=cufe">CUFE</a>
 (1 total)
 </p>
 <h3 id="oa">OA</h3>
