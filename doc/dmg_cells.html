@@ -2804,18 +2804,20 @@ all documented once and for all, to make life easier!</p>
 <h3 id="muxi">MUXI</h3>
 <p>Inverting multiplexer with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/petu_desc.png" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/petu_desc.png" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D0</i>, <i>D1</i></td>
 <td>Data inputs.</td></tr>
-<tr><td><i>D0/<span style="text-decoration:overline">D1</span></i></td>
+<tr><td><i>SEL</i></td>
 <td>Select input.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs inverted <i>D0</i> if <i>D0/<span style="text-decoration:overline">D1</span></i> is high; outputs
-inverted <i>D1</i> if <i>D0/<span style="text-decoration:overline">D1</span></i> is low.</td></tr>
+<td>Outputs inverted <i>D0</i> if <i>SEL</i> is high; outputs
+inverted <i>D1</i> if <i>SEL</i> is low.</td></tr>
 </table></td></tr>
 </table>
+<p><img src="img/cells/muxi_layout.png" alt=""></p>
+<p><img src="img/cells/muxi_cmos.png" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=cave">CAVE</a>
 <a href="/dmg_cpu_b_map/?view=copo">COPO</a>
@@ -2841,18 +2843,19 @@ inverted <i>D1</i> if <i>D0/<span style="text-decoration:overline">D1</span></i>
 <h3 id="mux">MUX</h3>
 <p>Multiplexer with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/atur_desc.png" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/atur_desc.png" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D0</i>, <i>D1</i></td>
 <td>Data inputs.</td></tr>
-<tr><td><i>D0/<span style="text-decoration:overline">D1</span></i></td>
+<tr><td><i>SEL</i></td>
 <td>Select input.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <i>D0</i> if <i>D0/<span style="text-decoration:overline">D1</span></i> is high; outputs <i>D1</i>
-if <i>D0/<span style="text-decoration:overline">D1</span></i> is low.</td></tr>
+<td>Outputs <i>D0</i> if <i>SEL</i> is high; outputs <i>D1</i>
+if <i>SEL</i> is low.</td></tr>
 </table></td></tr>
 </table>
+<p><img src="img/cells/mux_cmos.png" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=afum">AFUM</a>
 <a href="/dmg_cpu_b_map/?view=agyl">AGYL</a>
