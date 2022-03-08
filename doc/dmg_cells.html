@@ -113,16 +113,21 @@ all documented once and for all, to make life easier!</p>
  </li>
  <li><a href="#tri">Tri-state drivers</a>
   <ul>
-   <li><a href="#tri_inv">TRI_INVERTER</a></li>
+   <li><a href="#tri_inv">Tri-state inverters</a>
+    <ul>
+     <li><a href="#tri_inv_if0">TRI_INV_IF0</a></li>
+     <li><a href="#tri_inv_if1">TRI_INV_IF1</a></li>
+    </ul>
+   </li>
    <li><a href="#tri_buf">TRI_BUFFER</a></li>
   </ul>
  </li>
  <li><a href="#ff">Storage elements</a>
   <ul>
-   <li><a href="#srlatch">SR-LATCH</a></li>
-   <li><a href="#dlatch_a">D-LATCH - Variant A</a></li>
-   <li><a href="#dlatch_b">D-LATCH - Variant B</a></li>
-   <li><a href="#drlatch">DR-LATCH</a></li>
+   <li><a href="#srlatch">SR_LATCH</a></li>
+   <li><a href="#dlatch_a">D_LATCH - Variant A</a></li>
+   <li><a href="#dlatch_b">D_LATCH - Variant B</a></li>
+   <li><a href="#drlatch">DR_LATCH</a></li>
    <li><a href="#dffr_a">DFFR - Variant A</a></li>
    <li><a href="#dffr_b">DFFR - Variant B</a></li>
    <li><a href="#dffr_b2">DFFR - Variant B+</a></li>
@@ -2975,21 +2980,18 @@ if <i>SEL</i> is low.</td></tr>
 (33 total)
 </p>
 <h2 id="tri">Tri-state drivers</h2>
-<h3 id="tri_inv">TRI_INVERTER</h3>
-<p>Tri-state inverter.</p>
-<p>This cell comes in two very similar looking shapes: One has an active-high enable input; the other has an
-active-low enable input.</p>
+<h3 id="tri_inv">Tri-state inverters</h3>
+<p>Tri-state inverters come in two very similar looking shapes: One has an active-high enable input; the other has an
+active-low enable input. This picture should help to identify them by highlighting the difference between the two:</p>
 <p><img src="img/cells/tawu_hope.png" alt=""></p>
+<h4 id="tri_inv_if0">TRI_INV_IF0</h4>
+<p>Tri-state inverter with active-low enable input.</p>
 <table>
-<tr><td><img src="img/cells/tawu_desc.png" style="min-width:300px;" alt=""><br>
-<img src="img/cells/hope_desc.png" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/hope_desc.png" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input.</td></tr>
-<tr><td><i>ENA</i></td>
-<td>Active-high enable input. When high, the value at <i>IN</i> gets inverted at <i>Q</i>.
-When low, <i>Q</i> is not driven.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
 <td>Active-low enable input. When low, the value at <i>IN</i> gets inverted at <i>Q</i>.
 When high, <i>Q</i> is not driven.</td></tr>
@@ -2997,105 +2999,9 @@ When high, <i>Q</i> is not driven.</td></tr>
 <td>Inverted tri-state output.</td></tr>
 </table></td></tr>
 </table>
-<p>Instances with <i>ENA</i>:
-<a href="/dmg_cpu_b_map/?view=bade">BADE</a>
-<a href="/dmg_cpu_b_map/?view=baty">BATY</a>
-<a href="/dmg_cpu_b_map/?view=bava">BAVA</a>
-<a href="/dmg_cpu_b_map/?view=bezu">BEZU</a>
-<a href="/dmg_cpu_b_map/?view=bune">BUNE</a>
-<a href="/dmg_cpu_b_map/?view=core">CORE</a>
-<a href="/dmg_cpu_b_map/?view=cugy">CUGY</a>
-<a href="/dmg_cpu_b_map/?view=dame">DAME</a>
-<a href="/dmg_cpu_b_map/?view=daso">DASO</a>
-<a href="/dmg_cpu_b_map/?view=desa">DESA</a>
-<a href="/dmg_cpu_b_map/?view=desy">DESY</a>
-<a href="/dmg_cpu_b_map/?view=detu">DETU</a>
-<a href="/dmg_cpu_b_map/?view=dude">DUDE</a>
-<a href="/dmg_cpu_b_map/?view=dugu">DUGU</a>
-<a href="/dmg_cpu_b_map/?view=efab">EFAB</a>
-<a href="/dmg_cpu_b_map/?view=eluv">ELUV</a>
-<a href="/dmg_cpu_b_map/?view=etak">ETAK</a>
-<a href="/dmg_cpu_b_map/?view=evok">EVOK</a>
-<a href="/dmg_cpu_b_map/?view=nabo">NABO</a>
-<a href="/dmg_cpu_b_map/?view=nela">NELA</a>
-<a href="/dmg_cpu_b_map/?view=nola">NOLA</a>
-<a href="/dmg_cpu_b_map/?view=nuvy">NUVY</a>
-<a href="/dmg_cpu_b_map/?view=pado">PADO</a>
-<a href="/dmg_cpu_b_map/?view=pane">PANE</a>
-<a href="/dmg_cpu_b_map/?view=pare">PARE</a>
-<a href="/dmg_cpu_b_map/?view=pegy">PEGY</a>
-<a href="/dmg_cpu_b_map/?view=poly">POLY</a>
-<a href="/dmg_cpu_b_map/?view=puso">PUSO</a>
-<a href="/dmg_cpu_b_map/?view=pyre">PYRE</a>
-<a href="/dmg_cpu_b_map/?view=racy">RACY</a>
-<a href="/dmg_cpu_b_map/?view=raju">RAJU</a>
-<a href="/dmg_cpu_b_map/?view=raku">RAKU</a>
-<a href="/dmg_cpu_b_map/?view=raly">RALY</a>
-<a href="/dmg_cpu_b_map/?view=raro">RARO</a>
-<a href="/dmg_cpu_b_map/?view=raru">RARU</a>
-<a href="/dmg_cpu_b_map/?view=rase">RASE</a>
-<a href="/dmg_cpu_b_map/?view=ravy">RAVY</a>
-<a href="/dmg_cpu_b_map/?view=reba">REBA</a>
-<a href="/dmg_cpu_b_map/?view=rejy">REJY</a>
-<a href="/dmg_cpu_b_map/?view=reka">REKA</a>
-<a href="/dmg_cpu_b_map/?view=rema">REMA</a>
-<a href="/dmg_cpu_b_map/?view=remo">REMO</a>
-<a href="/dmg_cpu_b_map/?view=reso">RESO</a>
-<a href="/dmg_cpu_b_map/?view=resu">RESU</a>
-<a href="/dmg_cpu_b_map/?view=reta">RETA</a>
-<a href="/dmg_cpu_b_map/?view=reva">REVA</a>
-<a href="/dmg_cpu_b_map/?view=rexu">REXU</a>
-<a href="/dmg_cpu_b_map/?view=roce">ROCE</a>
-<a href="/dmg_cpu_b_map/?view=rody">RODY</a>
-<a href="/dmg_cpu_b_map/?view=rofo">ROFO</a>
-<a href="/dmg_cpu_b_map/?view=roha">ROHA</a>
-<a href="/dmg_cpu_b_map/?view=romy">ROMY</a>
-<a href="/dmg_cpu_b_map/?view=ropu">ROPU</a>
-<a href="/dmg_cpu_b_map/?view=rota">ROTA</a>
-<a href="/dmg_cpu_b_map/?view=rote">ROTE</a>
-<a href="/dmg_cpu_b_map/?view=rova">ROVA</a>
-<a href="/dmg_cpu_b_map/?view=rowe">ROWE</a>
-<a href="/dmg_cpu_b_map/?view=rowu">ROWU</a>
-<a href="/dmg_cpu_b_map/?view=ruga">RUGA</a>
-<a href="/dmg_cpu_b_map/?view=rupy">RUPY</a>
-<a href="/dmg_cpu_b_map/?view=rusa">RUSA</a>
-<a href="/dmg_cpu_b_map/?view=rybu">RYBU</a>
-<a href="/dmg_cpu_b_map/?view=rydo">RYDO</a>
-<a href="/dmg_cpu_b_map/?view=ryke">RYKE</a>
-<a href="/dmg_cpu_b_map/?view=ryla">RYLA</a>
-<a href="/dmg_cpu_b_map/?view=ryne">RYNE</a>
-<a href="/dmg_cpu_b_map/?view=salu">SALU</a>
-<a href="/dmg_cpu_b_map/?view=sapu">SAPU</a>
-<a href="/dmg_cpu_b_map/?view=sawa">SAWA</a>
-<a href="/dmg_cpu_b_map/?view=sego">SEGO</a>
-<a href="/dmg_cpu_b_map/?view=sepu">SEPU</a>
-<a href="/dmg_cpu_b_map/?view=sete">SETE</a>
-<a href="/dmg_cpu_b_map/?view=sezu">SEZU</a>
-<a href="/dmg_cpu_b_map/?view=soku">SOKU</a>
-<a href="/dmg_cpu_b_map/?view=somu">SOMU</a>
-<a href="/dmg_cpu_b_map/?view=sosy">SOSY</a>
-<a href="/dmg_cpu_b_map/?view=sotu">SOTU</a>
-<a href="/dmg_cpu_b_map/?view=supe">SUPE</a>
-<a href="/dmg_cpu_b_map/?view=supo">SUPO</a>
-<a href="/dmg_cpu_b_map/?view=suro">SURO</a>
-<a href="/dmg_cpu_b_map/?view=suvo">SUVO</a>
-<a href="/dmg_cpu_b_map/?view=sypu">SYPU</a>
-<a href="/dmg_cpu_b_map/?view=taku">TAKU</a>
-<a href="/dmg_cpu_b_map/?view=tatu">TATU</a>
-<a href="/dmg_cpu_b_map/?view=tawu">TAWU</a>
-<a href="/dmg_cpu_b_map/?view=teby">TEBY</a>
-<a href="/dmg_cpu_b_map/?view=temu">TEMU</a>
-<a href="/dmg_cpu_b_map/?view=tobo">TOBO</a>
-<a href="/dmg_cpu_b_map/?view=toku">TOKU</a>
-<a href="/dmg_cpu_b_map/?view=tuse">TUSE</a>
-<a href="/dmg_cpu_b_map/?view=tyja">TYJA</a>
-<a href="/dmg_cpu_b_map/?view=upug">UPUG</a>
-<a href="/dmg_cpu_b_map/?view=vapy">VAPY</a>
-<a href="/dmg_cpu_b_map/?view=vejy">VEJY</a>
-<a href="/dmg_cpu_b_map/?view=vury">VURY</a>
-<a href="/dmg_cpu_b_map/?view=wuga">WUGA</a>
-(96 total)
-</p><p>Instances with <span style="text-decoration:overline"><i>ENA</i></span>:
+<p><img src="img/cells/tri_inv_if0_layout.png" alt=""></p>
+<p><img src="img/cells/tri_inv_if0_cmos.png" alt=""></p>
+<p>Instances:
 <a href="/dmg_cpu_b_map/?view=abem">ABEM</a>
 <a href="/dmg_cpu_b_map/?view=acot">ACOT</a>
 <a href="/dmg_cpu_b_map/?view=adyb">ADYB</a>
@@ -3576,6 +3482,122 @@ When high, <i>Q</i> is not driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=zyto">ZYTO</a>
 (478 total)
 </p>
+<h4 id="tri_inv_if1">TRI_INV_IF1</h4>
+<p>Tri-state inverter with active-high enable input.</p>
+<table>
+<tr><td><img src="img/cells/tawu_desc.png" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input.</td></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. When high, the value at <i>IN</i> gets inverted at <i>Q</i>.
+When low, <i>Q</i> is not driven.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Inverted tri-state output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/tri_inv_if1_layout.png" alt=""></p>
+<p><img src="img/cells/tri_inv_if1_cmos.png" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=bade">BADE</a>
+<a href="/dmg_cpu_b_map/?view=baty">BATY</a>
+<a href="/dmg_cpu_b_map/?view=bava">BAVA</a>
+<a href="/dmg_cpu_b_map/?view=bezu">BEZU</a>
+<a href="/dmg_cpu_b_map/?view=bune">BUNE</a>
+<a href="/dmg_cpu_b_map/?view=core">CORE</a>
+<a href="/dmg_cpu_b_map/?view=cugy">CUGY</a>
+<a href="/dmg_cpu_b_map/?view=dame">DAME</a>
+<a href="/dmg_cpu_b_map/?view=daso">DASO</a>
+<a href="/dmg_cpu_b_map/?view=desa">DESA</a>
+<a href="/dmg_cpu_b_map/?view=desy">DESY</a>
+<a href="/dmg_cpu_b_map/?view=detu">DETU</a>
+<a href="/dmg_cpu_b_map/?view=dude">DUDE</a>
+<a href="/dmg_cpu_b_map/?view=dugu">DUGU</a>
+<a href="/dmg_cpu_b_map/?view=efab">EFAB</a>
+<a href="/dmg_cpu_b_map/?view=eluv">ELUV</a>
+<a href="/dmg_cpu_b_map/?view=etak">ETAK</a>
+<a href="/dmg_cpu_b_map/?view=evok">EVOK</a>
+<a href="/dmg_cpu_b_map/?view=nabo">NABO</a>
+<a href="/dmg_cpu_b_map/?view=nela">NELA</a>
+<a href="/dmg_cpu_b_map/?view=nola">NOLA</a>
+<a href="/dmg_cpu_b_map/?view=nuvy">NUVY</a>
+<a href="/dmg_cpu_b_map/?view=pado">PADO</a>
+<a href="/dmg_cpu_b_map/?view=pane">PANE</a>
+<a href="/dmg_cpu_b_map/?view=pare">PARE</a>
+<a href="/dmg_cpu_b_map/?view=pegy">PEGY</a>
+<a href="/dmg_cpu_b_map/?view=poly">POLY</a>
+<a href="/dmg_cpu_b_map/?view=puso">PUSO</a>
+<a href="/dmg_cpu_b_map/?view=pyre">PYRE</a>
+<a href="/dmg_cpu_b_map/?view=racy">RACY</a>
+<a href="/dmg_cpu_b_map/?view=raju">RAJU</a>
+<a href="/dmg_cpu_b_map/?view=raku">RAKU</a>
+<a href="/dmg_cpu_b_map/?view=raly">RALY</a>
+<a href="/dmg_cpu_b_map/?view=raro">RARO</a>
+<a href="/dmg_cpu_b_map/?view=raru">RARU</a>
+<a href="/dmg_cpu_b_map/?view=rase">RASE</a>
+<a href="/dmg_cpu_b_map/?view=ravy">RAVY</a>
+<a href="/dmg_cpu_b_map/?view=reba">REBA</a>
+<a href="/dmg_cpu_b_map/?view=rejy">REJY</a>
+<a href="/dmg_cpu_b_map/?view=reka">REKA</a>
+<a href="/dmg_cpu_b_map/?view=rema">REMA</a>
+<a href="/dmg_cpu_b_map/?view=remo">REMO</a>
+<a href="/dmg_cpu_b_map/?view=reso">RESO</a>
+<a href="/dmg_cpu_b_map/?view=resu">RESU</a>
+<a href="/dmg_cpu_b_map/?view=reta">RETA</a>
+<a href="/dmg_cpu_b_map/?view=reva">REVA</a>
+<a href="/dmg_cpu_b_map/?view=rexu">REXU</a>
+<a href="/dmg_cpu_b_map/?view=roce">ROCE</a>
+<a href="/dmg_cpu_b_map/?view=rody">RODY</a>
+<a href="/dmg_cpu_b_map/?view=rofo">ROFO</a>
+<a href="/dmg_cpu_b_map/?view=roha">ROHA</a>
+<a href="/dmg_cpu_b_map/?view=romy">ROMY</a>
+<a href="/dmg_cpu_b_map/?view=ropu">ROPU</a>
+<a href="/dmg_cpu_b_map/?view=rota">ROTA</a>
+<a href="/dmg_cpu_b_map/?view=rote">ROTE</a>
+<a href="/dmg_cpu_b_map/?view=rova">ROVA</a>
+<a href="/dmg_cpu_b_map/?view=rowe">ROWE</a>
+<a href="/dmg_cpu_b_map/?view=rowu">ROWU</a>
+<a href="/dmg_cpu_b_map/?view=ruga">RUGA</a>
+<a href="/dmg_cpu_b_map/?view=rupy">RUPY</a>
+<a href="/dmg_cpu_b_map/?view=rusa">RUSA</a>
+<a href="/dmg_cpu_b_map/?view=rybu">RYBU</a>
+<a href="/dmg_cpu_b_map/?view=rydo">RYDO</a>
+<a href="/dmg_cpu_b_map/?view=ryke">RYKE</a>
+<a href="/dmg_cpu_b_map/?view=ryla">RYLA</a>
+<a href="/dmg_cpu_b_map/?view=ryne">RYNE</a>
+<a href="/dmg_cpu_b_map/?view=salu">SALU</a>
+<a href="/dmg_cpu_b_map/?view=sapu">SAPU</a>
+<a href="/dmg_cpu_b_map/?view=sawa">SAWA</a>
+<a href="/dmg_cpu_b_map/?view=sego">SEGO</a>
+<a href="/dmg_cpu_b_map/?view=sepu">SEPU</a>
+<a href="/dmg_cpu_b_map/?view=sete">SETE</a>
+<a href="/dmg_cpu_b_map/?view=sezu">SEZU</a>
+<a href="/dmg_cpu_b_map/?view=soku">SOKU</a>
+<a href="/dmg_cpu_b_map/?view=somu">SOMU</a>
+<a href="/dmg_cpu_b_map/?view=sosy">SOSY</a>
+<a href="/dmg_cpu_b_map/?view=sotu">SOTU</a>
+<a href="/dmg_cpu_b_map/?view=supe">SUPE</a>
+<a href="/dmg_cpu_b_map/?view=supo">SUPO</a>
+<a href="/dmg_cpu_b_map/?view=suro">SURO</a>
+<a href="/dmg_cpu_b_map/?view=suvo">SUVO</a>
+<a href="/dmg_cpu_b_map/?view=sypu">SYPU</a>
+<a href="/dmg_cpu_b_map/?view=taku">TAKU</a>
+<a href="/dmg_cpu_b_map/?view=tatu">TATU</a>
+<a href="/dmg_cpu_b_map/?view=tawu">TAWU</a>
+<a href="/dmg_cpu_b_map/?view=teby">TEBY</a>
+<a href="/dmg_cpu_b_map/?view=temu">TEMU</a>
+<a href="/dmg_cpu_b_map/?view=tobo">TOBO</a>
+<a href="/dmg_cpu_b_map/?view=toku">TOKU</a>
+<a href="/dmg_cpu_b_map/?view=tuse">TUSE</a>
+<a href="/dmg_cpu_b_map/?view=tyja">TYJA</a>
+<a href="/dmg_cpu_b_map/?view=upug">UPUG</a>
+<a href="/dmg_cpu_b_map/?view=vapy">VAPY</a>
+<a href="/dmg_cpu_b_map/?view=vejy">VEJY</a>
+<a href="/dmg_cpu_b_map/?view=vury">VURY</a>
+<a href="/dmg_cpu_b_map/?view=wuga">WUGA</a>
+(96 total)
+</p>
 <h3 id="tri_buf">TRI_BUFFER</h3>
 <p>Tri-state buffer with active-low enable input.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
@@ -3654,7 +3676,7 @@ When high, <i>Q</i> is not driven.</td></tr>
 (56 total)
 </p>
 <h2 id="ff">Storage elements</h2>
-<h4 id="srlatch">SR-LATCH</h4>
+<h4 id="srlatch">SR_LATCH</h4>
 <p>Set/reset latch.</p>
 <p>These are wrongly labelled OR and AND gates in the schematics.
 <a href="https://github.com/rgalland">Rgalland</a>
@@ -3713,7 +3735,7 @@ just figured out the correct function of these cells.</p>
 <a href="/dmg_cpu_b_map/?view=xymu">XYMU</a>
 (23 total)
 </p>
-<h3 id="dlatch_a">D-LATCH - Variant A</h3>
+<h3 id="dlatch_a">D_LATCH - Variant A</h3>
 <p>Gated data latch.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
@@ -3918,7 +3940,7 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=suto">SUTO</a>
 (24 total)
 </p>
-<h3 id="dlatch_b">D-LATCH - Variant B</h3>
+<h3 id="dlatch_b">D_LATCH - Variant B</h3>
 <p>Gated data latch.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
 <table>
@@ -3989,7 +4011,7 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=zuve">ZUVE</a>
 (49 total)
 </p>
-<h3 id="drlatch">DR-LATCH</h3>
+<h3 id="drlatch">DR_LATCH</h3>
 <p>Gated data latch with active-low reset.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
