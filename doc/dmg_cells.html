@@ -3603,8 +3603,10 @@ When low, <i>Q</i> is not driven.</td></tr>
 </p>
 <h3 id="tri_buf">TRI_BUFFER</h3>
 <p>Tri-state buffer with active-low enable input.</p>
-<p>There is one external connection always made on this cell (see pink line in the picture) that seem to be
-necessary for it to work.</p>
+<p>The output of this cell has a higher driving strength, comparable to the
+<a href="#inv_b">INVERTER - Variant B</a>.</p>
+<p>There is one external connection always made on this cell (see pink line in the picture) that is
+required to connect the two <i>IN</i> inputs.</p>
 <table>
 <tr><td><img src="img/cells/seke_desc.png" style="min-width:300px;" alt=""></td>
 <td><table class="default">
@@ -3619,6 +3621,8 @@ When high, <i>Q</i> is not driven.</td></tr>
 <td>Tri-state output.</td></tr>
 </table></td></tr>
 </table>
+<p><img src="img/cells/tri_buf_if0_layout.png" alt=""></p>
+<p><img src="img/cells/tri_buf_if0_cmos.png" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=ajov">AJOV</a>
 <a href="/dmg_cpu_b_map/?view=akan">AKAN</a>
