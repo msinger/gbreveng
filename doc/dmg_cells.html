@@ -151,6 +151,11 @@ all documented once and for all, to make life easier!</p>
  <li><a href="#other">Other</a>
   <ul>
    <li><a href="#const">CONST</a></li>
+   <li><a href="#sram">SRAM</a>
+    <ul>
+     <li><a href="#wave_ram">WAVE_RAM</a></li>
+    </ul>
+   </li>
   </ul>
  </li>
 </ul>
@@ -5230,8 +5235,166 @@ by an interrupt, the constant 1 gets clocked in.</p>
 <a href="/dmg_cpu_b_map/?view=wefe">WEFE</a>
 <a href="/dmg_cpu_b_map/?view=-158.7,188.92,-158.18,191.1">[[unlabeled cell between BONE and BUFY]]</a>
 (5 total)
-</p></main>
-<footer><hr>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</p>
+<h3 id="sram">SRAM</h3>
+<p>Static RAM module with 6T bit cells.</p>
+<p>There are four instances of SRAMs on the DMG-CPU B chip: HRAM, Wave RAM and 2x OAM. The following picture shows
+the simplified structure of those SRAMs using the two least significant data lines of the Wave RAM as an example:</p>
+<p><img src="img/cells/sram_overview.png" alt=""></p>
+<p>First of all, please note that the Wave RAM doesn't have output enable inputs
+(OE/<span style="text-decoration:overline">OE</span>). These are shown for completenes. The Wave RAM was selected
+as an example, because it is the smallest one. Also, the Wave RAM is the only one that has seperate data inputs
+and outputs (DIN/DOUT). The other SRAMs have bi-directional data I/Os, where DIN and DOUT are just wired together.
+That's why the other SRAMs have OE/<span style="text-decoration:overline">OE</span> and the Wave RAM doesn't.
+The Wave RAM its data outputs are always driving, even when writing or during bit line precharging.</p>
+<p>Each bit consists of six transistors: Two PMOS and two NMOS forming two CMOS inverters that are feeding each
+other, plus two more NMOS transistors that are controlled by the word line (WL), connecting both sides of the
+inverter pair to the bit lines (BL/<span style="text-decoration:overline">BL</span>). Since there are no PMOS
+transistors complementing those two NMOS, the connection between inverters and bit lines can only pass "zeroes"
+through efficiently. To guarantee the bit lines are in a defined state, they need to be precharged (PCH) with
+"ones" before each memory access. This means reading and writing the bits is implemented in dynamic NMOS logic.
+Writing a bit requires a "strong" zero being put on one of the bit lines, overpowering the inverters and making
+them flip.</p>
+<p>Address decoding on the right hand side is also implemented in dynamic NMOS logic. So, the word line drivers
+require precharging before each memory access too. Address lines A2 and upwards are fed into the address decoder,
+selecting one word line or row. A0 and A1 are used to select one of the four columns. The column muxer consists of
+very huge NMOS transistors, so again, only zeroes can really pass through.</p>
+<p>Bit description:</p>
+<table>
+<tr><td><img src="img/cells/sram_bit_desc.png" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>WL</i></td>
+<td>Active high word line. On polysilicon layer. Goes through all bits in the same row. If high, selects the bit row
+for reading or writing by connecting the bit's inverter pair to the bit lines <i>BL</i> and
+<span style="text-decoration:overline"><i>BL</i></span>.</td></tr>
+<tr><td><i>BL</i>, <span style="text-decoration:overline"><i>BL</i></span></td>
+<td>Bit lines. Mainly connected on M1 layer, only the connections down to the column muxer are done on active-N
+layer, marked by <i>BL*</i> and <span style="text-decoration:overline"><i>BL*</i></span>. When reading the bit,
+if <i>WL</i> is high: <i>BL</i> will be low if the bit contains a zero.
+<span style="text-decoration:overline"><i>BL</i></span> will be low if the bit contains a one.
+When writing the bit, if <i>WL</i> is high: To change bit to a zero, <i>BL</i> needs to be forced being low.
+To change bit to a one, <span style="text-decoration:overline"><i>BL</i></span> needs to be forced being low.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sram_bit_layout.png" alt=""></p>
+<p><img src="img/cells/sram_bit_sch.png" alt=""></p>
+<p>Bit line precharger description:</p>
+<table>
+<tr><td><img src="img/cells/sram_pch_desc.png" style="min-width:260px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>BL_PCH</i></span></td>
+<td>Active low bit line precharge. On M1 layer. If low, the bit lines <i>BL</i> and
+<span style="text-decoration:overline"><i>BL</i></span> are held high.</td></tr>
+<tr><td><i>BL</i>, <span style="text-decoration:overline"><i>BL</i></span></td>
+<td>Bit lines. On M1 layer. If <span style="text-decoration:overline"><i>BL_PCH</i></span> is low, bit lines are
+driven high.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sram_pch_layout.png" alt=""></p>
+<p><img src="img/cells/sram_pch_sch.png" alt=""></p>
+<p>Word line driver description:</p>
+<table>
+<tr><td><img src="img/cells/sram_wldrv_desc.png" style="min-width:280px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>WLDRV_PCH</i></span></td>
+<td>Active low word line driver precharge. On M1 layer. If low, the word line driver gets precharged, making sure
+the <i>WL</i> output of deselected rows is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ROW</i></span></td>
+<td>Active low row select. On active-N layer. If low, then <i>WL</i> gets driven high. This is connected to
+a row of NMOS transistors right next to the word line driver. There is one transistor per address line plus
+one extra one. The extra one has <span style="text-decoration:overline"><i>WLDRV_PCH</i></span> connected to it's
+gate, making sure no row will be selected during precharge. The other transistors either have the respective address
+line connected to their gate, or the complement of that address line.</td></tr>
+<tr><td><i>WL</i></td>
+<td>Word line. On polysilicon layer. If <span style="text-decoration:overline"><i>ROW</i></span> is low (row is
+selected), then <i>WL</i> is driven high. If row isn't selected and word line driver was properly precharged before,
+then <i>WL</i> is driven low.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sram_wldrv_layout.png" alt=""></p>
+<p><img src="img/cells/sram_wldrv_sch.png" alt=""></p>
+<p>Sense amplifier, write logic and column muxer description - Variant A (used in HRAM and OAM):</p>
+<table>
+<tr><td><img src="img/cells/sram_sa_a_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>BL[0..3]</i>, <span style="text-decoration:overline"><i>BL[0..3]</i></span></td>
+<td>Bit lines. On active-N layer. Connect to the four columns of bits above.</td></tr>
+<tr><td><i>COL[0..3]</i></td>
+<td>Active high column selectors. On M1 layer. Only one out of the four column selectors is allowed to be
+high at the same time. Connects the respective pair of bit lines (<i>BLn</i>,
+<span style="text-decoration:overline"><i>BLn</i></span>) from the bit columns above to the read and write
+logic below.</td></tr>
+<tr><td><i>WR</i></td>
+<td>Active high write enable. On M1 layer. If high, then either <i>BLn</i> or
+<span style="text-decoration:overline"><i>BLn</i></span> is strongly driven low, where <i>n</i> is the index of the
+column that is currently selected by <i>COL[0..3]</i>. <i>BLn</i> is driven low if <i>D</i> is low.
+<span style="text-decoration:overline"><i>BLn</i></span> is driven low if <i>D</i> is high.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>BL_PCH</i></span></td>
+<td>Active low bit line precharge. On M1 layer. If low, then the bit lines below the column muxer (the part
+internal to this cell) are weakly pulled high.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>OE</i></span></td>
+<td>Active low output enable. On M1 layer. If low, then the data I/O <i>D</i> is driven high whenever
+<span style="text-decoration:overline"><i>BLn</i></span> is low, where <i>n</i> is the index of the column
+that is currently selected by <i>COL[0..3]</i>.</td></tr>
+<tr><td><i>OE</i></td>
+<td>Active high output enable. On M1 layer. If high, then the data I/O <i>D</i> is driven low whenever <i>BLn</i>
+is low, where <i>n</i> is the index of the column that is currently selected by <i>COL[0..3]</i>.</td></tr>
+<tr><td><i>D</i></td>
+<td>Data I/O. On active-N layer. If <span style="text-decoration:overline"><i>OE</i></span> is low and <i>OE</i>
+is high, then the bit value represented by <i>BLn</i> and <span style="text-decoration:overline"><i>BLn</i></span>
+is driven onto <i>D</i>, where <i>n</i> is the index of the column that is currently selected by <i>COL[0..3]</i>.
+If only one of the two output enables is active, then <i>D</i> is only driven in one direction. If <i>WR</i>
+is high and <i>D</i> is low, then <i>BLn</i> gets strongly driven low, causing the selected memory cell to flip to
+"zero" state. If <i>WR</i> is high and <i>D</i> is high, then <span style="text-decoration:overline"><i>BLn</i></span>
+gets strongly driven low, causing the selected memory cell to flip to "one" state.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sram_sa_a_layout.png" alt=""></p>
+<p><img src="img/cells/sram_sa_a_sch.png" alt=""></p>
+<p>Sense amplifier, write logic and column muxer description - Variant B (used in Wave RAM):</p>
+<table>
+<tr><td><img src="img/cells/sram_sa_b_desc.png" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>BL[0..3]</i>, <span style="text-decoration:overline"><i>BL[0..3]</i></span></td>
+<td>Bit lines. On active-N layer. Connect to the four columns of bits above.</td></tr>
+<tr><td><i>COL[0..3]</i></td>
+<td>Active high column selectors. On M1 layer. Only one out of the four column selectors is allowed to be
+high at the same time. Connects the respective pair of bit lines (<i>BLn</i>,
+<span style="text-decoration:overline"><i>BLn</i></span>) from the bit columns above to the read and write
+logic below.</td></tr>
+<tr><td><i>WR</i></td>
+<td>Active high write enable. On M1 layer. If high, then either <i>BLn</i> or
+<span style="text-decoration:overline"><i>BLn</i></span> is strongly driven low, where <i>n</i> is the index of the
+column that is currently selected by <i>COL[0..3]</i>. <i>BLn</i> is driven low if <i>DIN</i> is low.
+<span style="text-decoration:overline"><i>BLn</i></span> is driven low if <i>DIN</i> is high.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>BL_PCH</i></span></td>
+<td>Active low bit line precharge. On M1 layer. If low, then the bit lines below the column muxer (the part
+internal to this cell) are weakly pulled high.</td></tr>
+<tr><td><i>DOUT</i></td>
+<td>Data output. On active-N layer. The bit value represented by <i>BLn</i> and
+<span style="text-decoration:overline"><i>BLn</i></span> is always driven onto <i>DOUT</i>, where <i>n</i> is the
+index of the column that is currently selected by <i>COL[0..3]</i>.</td></tr>
+<tr><td><i>DIN</i></td>
+<td>Data input. On M2 layer in the die shot to the left; on M1 layer in the layout below. If <i>WR</i> is high
+and <i>DIN</i> is low, then <i>BLn</i> gets strongly driven low, where <i>n</i> is the index of the column that
+is currently selected by <i>COL[0..3]</i>, causing the selected memory cell to flip to "zero" state. If <i>WR</i>
+is high and <i>DIN</i> is high, then <span style="text-decoration:overline"><i>BLn</i></span> gets strongly driven
+low, causing the selected memory cell to flip to "one" state.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sram_sa_b_layout.png" alt=""></p>
+<p><img src="img/cells/sram_sa_b_sch.png" alt=""></p>
+<h4 id="wave_ram">WAVE_RAM</h4>
+<p>16 byte SRAM, organized in four rows and four columns for each of the eight bits.</p>
+<p>Position of all the I/Os of the Wave RAM:</p>
+<p><img src="img/cells/wave_ram_layout.png" alt=""></p>
+<p>For detailed information, see the <a href="#sram">SRAM</a> section above.</p>
+</main><footer><hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </footer></body>
 </html>
