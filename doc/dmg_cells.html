@@ -5070,10 +5070,11 @@ here (not mirrored!).</p>
 <p>Simple inverting input buffer.</p>
 <p>This cell is only used for
 <a href="/dmg_cpu_b_map/?view=c:~%7Breset%7D"><span style="text-decoration:overline">RESET</span></a>,
-<a href="/dmg_cpu_b_map/?view=c:t1">T1</a> and <a href="/dmg_cpu_b_map/?view=c:t2">T2</a> (and an un-bonded
-unknown pad in the top-center of the die, that is directly connected to the CPU). In the die shot this picture
-was taken from, these pins (<span style="text-decoration:overline">RESET</span>, T1 and T2) are located at the
-right-hand side. For consistency across this documentation it is rotated here (not mirrored!).</p>
+<a href="/dmg_cpu_b_map/?view=c:t1">T1</a>, <a href="/dmg_cpu_b_map/?view=c:t2">T2</a> and the un-bonded
+<a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a>
+pad. In the die shot this picture was taken from, these pins (<span style="text-decoration:overline">RESET</span>,
+T1 and T2) are located at the right-hand side. For consistency across this documentation it is rotated here
+(not mirrored!).</p>
 <table>
 <tr><td><img src="img/cells/rst_desc.png" style="min-width:350px;" alt=""></td>
 <td><table class="default">
@@ -5084,10 +5085,10 @@ right-hand side. For consistency across this documentation it is rotated here (n
 </table>
 <p><img src="img/cells/ibuf_sch.png" alt=""></p>
 <p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a>
 <a href="/dmg_cpu_b_map/?view=c:~%7Breset%7D"><span style="text-decoration:overline">RESET</span></a>
 <a href="/dmg_cpu_b_map/?view=c:t1">T1</a>
 <a href="/dmg_cpu_b_map/?view=c:t2">T2</a>
-<a href="/dmg_cpu_b_map/?view=c:unbonded_in_pad">[[unlabeled cell between A10 and A11]]</a>
 (4 total)
 </p>
 <h3 id="obuf_a">OBUFFER - Variant A</h3>
@@ -5113,6 +5114,7 @@ always actively driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:fr">FR</a>
 <a href="/dmg_cpu_b_map/?view=c:ld0">LD0</a>
 <a href="/dmg_cpu_b_map/?view=c:ld1">LD1</a>
+<a href="/dmg_cpu_b_map/?view=c:m1">M1</a>
 <a href="/dmg_cpu_b_map/?view=c:ma0">MA0</a>
 <a href="/dmg_cpu_b_map/?view=c:ma1">MA1</a>
 <a href="/dmg_cpu_b_map/?view=c:ma2">MA2</a>
@@ -5130,7 +5132,6 @@ always actively driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:s">S</a>
 <a href="/dmg_cpu_b_map/?view=c:sout">SOUT</a>
 <a href="/dmg_cpu_b_map/?view=c:st">ST</a>
-<a href="/dmg_cpu_b_map/?view=c:unbonded_out_pad">[[unlabeled cell between LD0 and CPG]]</a>
 (25 total)
 </p>
 <h3 id="obuf_b">OBUFFER - Variant B</h3>

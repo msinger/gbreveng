@@ -96,12 +96,19 @@ the PROM.</td></tr>
 <a href="doc/dmg_reset.html">Weird DMG-CPU Reset Behaviour</a><br>
 I discovered that some state of the clock generation logic inside the DMG-CPU B chip is not properly reset, which
 is actually measurable from outside the chip.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/schematics.png" alt=""></td><td>
+<a href="doc/dmg_cpu_b_sch.pdf">DMG-CPU B Schematics</a><br>
+<a href="https://github.com/rgalland">Régis</a> and I (hopefully) fixed all the bugs left in
+<a href="https://github.com/furrtek/DMG-CPU-Inside">Furrtek's schematics</a> and created our own
+<a href="https://github.com/msinger/dmg-schematics">repository</a> containing KiCad files of Game Boy DMG-CPU B
+schematics. Régis did by far most of the work here, putting a lot of effort into a hierarchical structure that
+actually makes sense. With only a few exceptions, we kept the cell names given by Furrtek.
+</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/cpucore.jpg" alt=""></td><td>
 <a href="doc/dmg_cpu_connections.html">DMG-CPU SM83 Connections</a><br>
-Here I'm trying to figure out the purpose of each connection from/to the CPU core inside the DMG-CPU B. I use
-<a href="https://github.com/furrtek/DMG-CPU-Inside">Furrtek's schematics</a> and some Icarus Verilog
-<a href="https://github.com/msinger/dmg-sim">simulations</a> for that.
-</td></tr>
+Here I'm trying to figure out the purpose of each connection from/to the CPU core inside the DMG-CPU B. I use our
+<a href="doc/dmg_cpu_b_sch.pdf">schematics</a> and some Icarus Verilog
+<a href="https://github.com/msinger/dmg-sim">simulations</a> for that.</td></tr>
 </table>
 </article>
 <article>
@@ -110,16 +117,17 @@ Here I'm trying to figure out the purpose of each connection from/to the CPU cor
 <table class="default">
 <tr><td style="min-width:100px"><img src="doc/img/thumb/db.jpg" alt=""></td><td>
 <a href="db.html">Game Boy Database</a><br>
-I stole this idea from Gekkio, there's really no other way to put it. Check out his huge
-<a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot tracking down all the different CPU revisions on
-ebay, based on the serial numbers on the back.</td></tr>
+A database of all the Game Boys and cartridges I've collected. I stole this idea from Gekkio, there's really no other
+way to put it. Check out his huge <a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot tracking down
+all the different CPU revisions on ebay, based on the serial numbers on the back.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/map.jpg" alt=""></td><td>
 <a href="dmg_cpu_b_map/">Game Boy DMG-CPU B Map</a><br>
 A <a href="https://leafletjs.com/">Leaflet</a> map of the
-<a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">DMG-CPU B die shot</a> with
+<a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">DMG-CPU B die shot</a> with our
+<a href="https://github.com/msinger/dmg-schematics/tree/master/dmg_cpu_b/overlay">fixed version</a> of
 <a href="https://github.com/furrtek/DMG-CPU-Inside">Furrtek's overlays</a>. The overlays can be switched on and off
 and you can actually choose between two versions of the die shot. There's a search box in the bottom left corner where
-you can enter the names of the cells as they are labelled by Furrtek, so you don't have to search them manually.</td></tr>
+you can enter the names of the cells or wires, so you don't have to search them manually.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/cellref.jpg" alt=""></td><td>
 <a href="doc/dmg_cells.html">DMG-CPU Cells Reference</a><br>
 This is supposed to be a complete "reference manual" for all the cells used inside the DMG-CPU B chip. I made a separate
@@ -129,16 +137,16 @@ page that describes how I came to some of the conclusions in the reference:
 </article><article>
 <h2>TODOs</h2>
 <ul>
-<li>IceBoy</li>
+<li>IceBoy
 <ul>
 <li>Fix APU channel 1 frequency sweep</li>
 <li>Suppress the final tick of the pixel clock at the end of each line, so the "Funny Playing" display kit also works</li>
-<li>Integrate findings from simulating Furrtek's DMG-CPU B schematics</li>
+<li>Integrate findings from simulating our DMG-CPU B schematics</li>
 <li>Implement External Link Port</li>
 <li>Implement more MBC chips</li>
 <li>Develop PCB that fits into DMG shell</li>
-</ul>
-<li>Wide-Boy64</li>
+</ul></li>
+<li>Wide-Boy64
 <ul>
 <li><s>Reverse engineer WB64AGB schematics</s> - <i><a href="doc/wideboy64agb_sch.pdf">done</a> 2021-07-22</i></li>
 <li><s>Dump WB64AGB PROM (FPGA bitstream)</s> - <i>done 2021-05-13</i></li>
@@ -146,10 +154,10 @@ page that describes how I came to some of the conclusions in the reference:
 <li>Desolder and dump WB64AGB Flash (N64 ROM)</li>
 <li>Develop WB64AGB clone</li>
 <li>Find and buy WB64CGB on ebay</li>
-</ul>
+</ul></li>
 </ul>
 </article></main><footer>
 <hr>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </footer></body>
 </html>
