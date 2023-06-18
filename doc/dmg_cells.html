@@ -35,7 +35,7 @@
 <hr></nav>
 <main><h1>DMG-CPU Cells Reference</h1>
 <p>This document provides information about the cells found in the
-<a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">Gameboy DMG-CPU-B die shot</a>.
+<a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">Gameboy DMG-CPU-B die shots</a>.
 It builds on the work of Furrtek, the information found in his
 <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a> repository.</p>
 <p>I was in the process of tracing back all the connections from the CPU and was constantly
@@ -44,6 +44,8 @@ all documented once and for all, to make life easier!</p>
 <p>Compared to Furrtek's schematics, some cells have been renamed, because they didn't fit the
 naming scheme of having all cells within the same column or row starting with the same letter.
 Some I/O pads were also renamed, because the names did not fit the official documents.</p>
+<p>Special thanks to <a href="https://github.com/ogamespec">ogamespec</a>. He made some very detailed
+<a href="https://github.com/emu-russia/dmgcpu/discussions/97">poly/active layer pictures</a> for me.</p>
 <p>You can find a cleaned up version of the Game Boy chip schematics for KiCad and the overlay SVG file
 <a href="https://github.com/msinger/dmg-schematics">here</a>.</p>
 <p>Please report any errors I made <a href="https://github.com/msinger/gbreveng/issues">here</a>.</p>
@@ -145,7 +147,8 @@ Some I/O pads were also renamed, because the names did not fit the official docu
    <li><a href="#iobuf_a">IOBUFFER - Variant A</a></li>
    <li><a href="#iobuf_b">IOBUFFER - Variant B</a></li>
    <li><a href="#iobuf_c">IOBUFFER - Variant C</a></li>
-   <li><a href="#ibuf">IBUFFER</a></li>
+   <li><a href="#ibuf_a">IBUFFER - Variant A</a></li>
+   <li><a href="#ibuf_b">IBUFFER - Variant B</a></li>
    <li><a href="#obuf_a">OBUFFER - Variant A</a></li>
    <li><a href="#obuf_b">OBUFFER - Variant B</a></li>
    <li><a href="#osc">OSC</a></li>
@@ -5066,30 +5069,46 @@ here (not mirrored!).</p>
 <a href="/dmg_cpu_b_map/?view=c:sck">SCK</a>
 (1 total)
 </p>
-<h3 id="ibuf">IBUFFER</h3>
+<h3 id="ibuf_a">IBUFFER - Variant A</h3>
 <p>Simple inverting input buffer.</p>
 <p>This cell is only used for
 <a href="/dmg_cpu_b_map/?view=c:~%7Breset%7D"><span style="text-decoration:overline">RESET</span></a>,
-<a href="/dmg_cpu_b_map/?view=c:t1">T1</a>, <a href="/dmg_cpu_b_map/?view=c:t2">T2</a> and the un-bonded
-<a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a>
-pad. In the die shot this picture was taken from, these pins (<span style="text-decoration:overline">RESET</span>,
-T1 and T2) are located at the right-hand side. For consistency across this documentation it is rotated here
-(not mirrored!).</p>
+<a href="/dmg_cpu_b_map/?view=c:t1">T1</a> and <a href="/dmg_cpu_b_map/?view=c:t2">T2</a>.
+In the die shot this picture was taken from, these pins are located at the right-hand side. For consistency
+across this documentation it is rotated here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/rst_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/rst_desc.png?v=1" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>INPUT</i></span></td>
 <td>Inverted input state. Reads the inverted binary level at the input pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ibuf_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/ibuf_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/ibuf_a_sch.png?v=0" alt=""></p>
 <p>Instances:
-<a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a>
 <a href="/dmg_cpu_b_map/?view=c:~%7Breset%7D"><span style="text-decoration:overline">RESET</span></a>
 <a href="/dmg_cpu_b_map/?view=c:t1">T1</a>
 <a href="/dmg_cpu_b_map/?view=c:t2">T2</a>
-(4 total)
+(3 total)
+</p>
+<h3 id="ibuf_b">IBUFFER - Variant B</h3>
+<p>Simple inverting input buffer with pull-up resistor.</p>
+<p>This cell is only used for the un-bonded
+<a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a> pad.</p>
+<table>
+<tr><td><img src="img/cells/nmi_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>INPUT</i></span></td>
+<td>Inverted input state. Reads the inverted binary level at the input pad.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/ibuf_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/ibuf_b_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a>
+(1 total)
 </p>
 <h3 id="obuf_a">OBUFFER - Variant A</h3>
 <p>Simple inverting output buffer.</p>
