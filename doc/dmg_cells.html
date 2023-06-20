@@ -64,6 +64,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
    <li><a href="#nand">NAND gates</a>
     <ul>
      <li><a href="#nand2">NAND2</a></li>
+     <li><a href="#nand2s">NAND2 - Spare Variant</a></li>
      <li><a href="#nand3">NAND3</a></li>
      <li><a href="#nand4">NAND4</a></li>
      <li><a href="#nand5">NAND5</a></li>
@@ -172,7 +173,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="inv_a">INVERTER - Variant A</h4>
 <p>Simple inverter.</p>
 <table>
-<tr><td><img src="img/cells/inv_a_atar_yvom_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/inv_a_atar_ynur_ycux_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
@@ -181,7 +182,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/inv_a_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/inv_a_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abaf">ABAF</a>
@@ -936,7 +937,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="inv_b">INVERTER - Variant B</h4>
 <p>Inverter with higher driving strength.</p>
 <table>
-<tr><td><img src="img/cells/inv_b_efug_fado_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/inv_b_efug_fado_wovu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
@@ -945,7 +946,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/inv_b_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/inv_b_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abef">ABEF</a>
@@ -1229,7 +1230,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="nand2">NAND2</h4>
 <p>NAND gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/rylu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand2_lela_avet_zado_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
@@ -1238,7 +1239,8 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <td>Outputs <code>!(IN1 &amp;&amp; IN2)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand2_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nand2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/nand2_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:afeg">AFEG</a>
 <a href="/dmg_cpu_b_map/?view=c:agyn">AGYN</a>
@@ -1466,6 +1468,41 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <a href="/dmg_cpu_b_map/?view=c:xyve">XYVE</a>
 <a href="/dmg_cpu_b_map/?view=c:zado">ZADO</a>
 (225 total)
+</p>
+<h4 id="nand2s">NAND2 - Spare Variant</h4>
+<p>NAND gate with two inputs.</p>
+</p>This variant of the NAND2 gate is only used for some spare cells.</p>
+<table>
+<tr><td><img src="img/cells/nand2s_ybyw_ybyw_ynuj_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NAND gate.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>!(IN1 &amp;&amp; IN2)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/nand2s_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/nand2_sch.png?v=1" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:ybyw">YBYW</a>
+<a href="/dmg_cpu_b_map/?view=c:ycaw">YCAW</a>
+<a href="/dmg_cpu_b_map/?view=c:ydos">YDOS</a>
+<a href="/dmg_cpu_b_map/?view=c:yfal">YFAL</a>
+<a href="/dmg_cpu_b_map/?view=c:yhes">YHES</a>
+<a href="/dmg_cpu_b_map/?view=c:yjag">YJAG</a>
+<a href="/dmg_cpu_b_map/?view=c:ykor">YKOR</a>
+<a href="/dmg_cpu_b_map/?view=c:ykus">YKUS</a>
+<a href="/dmg_cpu_b_map/?view=c:ykyt">YKYT</a>
+<a href="/dmg_cpu_b_map/?view=c:yloh">YLOH</a>
+<a href="/dmg_cpu_b_map/?view=c:ymeb">YMEB</a>
+<a href="/dmg_cpu_b_map/?view=c:ynuj">YNUJ</a>
+<a href="/dmg_cpu_b_map/?view=c:ynyv">YNYV</a>
+<a href="/dmg_cpu_b_map/?view=c:ytob">YTOB</a>
+<a href="/dmg_cpu_b_map/?view=c:ytor">YTOR</a>
+<a href="/dmg_cpu_b_map/?view=c:yxaj">YXAJ</a>
+<a href="/dmg_cpu_b_map/?view=c:yxow">YXOW</a>
+(17 total)
 </p>
 <h4 id="nand3">NAND3</h4>
 <p>NAND gate with three inputs.</p>
