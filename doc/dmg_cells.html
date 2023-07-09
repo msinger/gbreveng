@@ -132,13 +132,15 @@ Some I/O pads were also renamed, because the names did not fit the official docu
  </li>
  <li><a href="#ff">Storage elements</a>
   <ul>
-   <li><a href="#sr_latch">SR_LATCH</a></li>
+   <li><a href="#nand_latch">NAND_LATCH</a></li>
+   <li><a href="#nor_latch">NOR_LATCH</a></li>
    <li><a href="#d_latch_a">D_LATCH - Variant A</a></li>
+   <li><a href="#d_latch_a2">D_LATCH - Variant A2</a></li>
    <li><a href="#d_latch_b">D_LATCH - Variant B</a></li>
    <li><a href="#dr_latch">DR_LATCH</a></li>
    <li><a href="#dffr_a">DFFR - Variant A</a></li>
    <li><a href="#dffr_b">DFFR - Variant B</a></li>
-   <li><a href="#dffr_b2">DFFR - Variant B+</a></li>
+   <li><a href="#dffr_b2">DFFR - Variant B2</a></li>
    <li><a href="#dffsr">DFFSR</a></li>
    <li><a href="#tffd">TFFD</a></li>
   </ul>
@@ -173,7 +175,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="inv_a">INVERTER - Variant A</h4>
 <p>Simple inverter.</p>
 <table>
-<tr><td><img src="img/cells/inv_a_atar_ynur_ycux_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/inv_a_atar_ynur_base_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
@@ -937,7 +939,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="inv_b">INVERTER - Variant B</h4>
 <p>Inverter with higher driving strength.</p>
 <table>
-<tr><td><img src="img/cells/inv_b_efug_fado_wovu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/inv_b_efug_fado_boru_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
@@ -1230,7 +1232,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="nand2">NAND2</h4>
 <p>NAND gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand2_lela_avet_zado_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand2_lela_avet_lodo_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
@@ -1693,7 +1695,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor2">NOR2</h4>
 <p>NOR gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/tefa_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor2_boxo_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
@@ -2714,7 +2716,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <p>2-2 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_2</p>
 <table>
-<tr><td><img src="img/cells/jufy_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/ao2_jufy_fopy_doky_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i></td>
@@ -2864,7 +2866,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h3 id="muxi">MUXI</h3>
 <p>Inverting multiplexer with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/muxi_kena_roke_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/muxi_kena_roke_dazy_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D0</i>, <i>D1</i></td>
@@ -3042,7 +3044,7 @@ active-low enable input. This picture should help to identify them by highlighti
 <h4 id="tri_inv_if0">TRI_INV_IF0</h4>
 <p>Tri-state inverter with active-low enable input.</p>
 <table>
-<tr><td><img src="img/cells/tri_inv_if0_hacu_asox_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/tri_inv_if0_hacu_asox_laju_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
@@ -3660,7 +3662,7 @@ When low, <i>Q</i> is not driven.</td></tr>
 <p>There is one external connection always made on this cell (see pink line in the picture) that is
 required to connect the two <i>IN</i> inputs.</p>
 <table>
-<tr><td><img src="img/cells/tri_buf_if0_xygu_fyra_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/tri_buf_if0_xygu_fyra_sosa_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
@@ -3735,20 +3737,14 @@ When high, <i>Q</i> is not driven.</td></tr>
 (56 total)
 </p>
 <h2 id="ff">Storage elements</h2>
-<h4 id="sr_latch"><span id="nand_latch"></span><span id="nor_latch"></span>SR_LATCH</h4>
-<p>Set/reset latch.</p>
-<p>These are wrongly labelled OR and AND gates in the schematics.
-<a href="https://github.com/rgalland">Rgalland</a>
-just figured out the correct function of these cells.</p>
+<h4 id="nand_latch">NAND_LATCH</h4>
+<p>NAND-latch with inverted set/reset inputs.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AND2</p>
+<p><a href="https://github.com/rgalland">Rgalland</a> figured out the correct (NAND-latch) function of these cells.</p>
 <table>
-<tr><td><img src="img/cells/gugu_desc.png?v=0" style="min-width:300px;" alt=""><br>
-<img src="img/cells/dane_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/gugu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>SET</i></td>
-<td>Set input. When high, latch is set to 1.</td></tr>
-<tr><td><i>RESET</i></td>
-<td>Reset input. When high, latch is reset to 0.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>SET</i></span></td>
 <td>Inverted set input. When low, latch is set to 1.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>RESET</i></span></td>
@@ -3759,7 +3755,7 @@ just figured out the correct function of these cells.</p>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p>Instances of NAND latches:
+<p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:buta">BUTA</a>
 <a href="/dmg_cpu_b_map/?view=c:femu">FEMU</a>
 <a href="/dmg_cpu_b_map/?view=c:gexu">GEXU</a>
@@ -3768,7 +3764,26 @@ just figured out the correct function of these cells.</p>
 <a href="/dmg_cpu_b_map/?view=c:lony">LONY</a>
 <a href="/dmg_cpu_b_map/?view=c:taka">TAKA</a>
 (7 total)
-</p><p>Instances of NOR latches:
+</p>
+<h4 id="nor_latch">NOR_LATCH</h4>
+<p>NOR-latch with set/reset inputs.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OR2</p>
+<p><a href="https://github.com/rgalland">Rgalland</a> figured out the correct (NOR-latch) function of these cells.</p>
+<table>
+<tr><td><img src="img/cells/dane_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>SET</i></td>
+<td>Set input. When high, latch is set to 1.</td></tr>
+<tr><td><i>RESET</i></td>
+<td>Reset input. When high, latch is reset to 0.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:asol">ASOL</a>
 <a href="/dmg_cpu_b_map/?view=c:besu">BESU</a>
 <a href="/dmg_cpu_b_map/?view=c:cyto">CYTO</a>
@@ -3794,19 +3809,13 @@ just figured out the correct function of these cells.</p>
 <a href="/dmg_cpu_b_map/?view=c:xymu">XYMU</a>
 (23 total)
 </p>
-<h3 id="d_latch_a"><span id="d_latch_a2"></span>D_LATCH - Variant A</h3>
-<p>Gated data latch.</p>
+<h3 id="d_latch_a">D_LATCH - Variant A</h3>
+<p>Gated data latch with complementary enable inputs.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
-<p>There are instances of this cell that have their <span style="text-decoration:overline"><i>Q</i></span> output
-stripped off and are one row shorter beacuse of that. Those stripped cells can have an unrelated net run through the
-bottom row where the <span style="text-decoration:overline"><i>Q</i></span> output would have been. The cells named
-<a href="/dmg_cpu_b_map/?view=c:mytu">MYTU</a> and <a href="/dmg_cpu_b_map/?view=c:mofo">MOFO</a> are two
-examples of that.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF2</p>
 <table>
-<tr><td><img src="img/cells/d_latch_a_fyhy_wyso_desc.png?v=0" style="min-width:300px;" alt=""><br>
-<img src="img/cells/d_latch_a_rewo_peba_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/d_latch_a_fyhy_wyso_moxy_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -3823,9 +3832,9 @@ high again.</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/d_latch_a_layout.png?v=0" alt=""><img src="img/cells/d_latch_a2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/d_latch_a_layout.png?v=0" alt=""></p>
 <p><img src="img/cells/d_latch_a_sch.png?v=0" alt=""></p>
-<p>Instances with <span style="text-decoration:overline"><i>Q</i></span>:
+<p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abeg">ABEG</a>
 <a href="/dmg_cpu_b_map/?view=c:abop">ABOP</a>
 <a href="/dmg_cpu_b_map/?view=c:abug">ABUG</a>
@@ -3975,7 +3984,33 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zyty">ZYTY</a>
 <a href="/dmg_cpu_b_map/?view=c:zyve">ZYVE</a>
 (148 total)
-</p><p>Instances without <span style="text-decoration:overline"><i>Q</i></span>:
+</p>
+<h3 id="d_latch_a2">D_LATCH - Variant A2</h3>
+<p>Gated data latch with complementary enable inputs and without inverted output.</p>
+<p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
+cell nearby that generates the inverted enable signal.</p>
+<p>This cell type is very similar to <a href="#d_latch_a">D_LATCH - Varian A</a>, but it has no
+<span style="text-decoration:overline"><i>Q</i></span> output and is one row shorter beacuse of that.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF2</p>
+<table>
+<tr><td><img src="img/cells/d_latch_a2_rewo_peba_luzo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input.</td></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. When high, the value at <i>D</i> transparently propagates through the latch. As soon
+as <i>ENA</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ENA</i> goes
+high again.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
+<td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/d_latch_a2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/d_latch_a_sch.png?v=0" alt=""></p>
+<p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:legu">LEGU</a>
 <a href="/dmg_cpu_b_map/?view=c:luzo">LUZO</a>
 <a href="/dmg_cpu_b_map/?view=c:megu">MEGU</a>
@@ -4003,10 +4038,10 @@ high again.</td></tr>
 (24 total)
 </p>
 <h3 id="d_latch_b">D_LATCH - Variant B</h3>
-<p>Gated data latch.</p>
+<p>Gated data latch with active-high enable.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
 <table>
-<tr><td><img src="img/cells/d_latch_b_zeca_wyno_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/d_latch_b_zeca_wyno_raxy_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4076,12 +4111,12 @@ high again.</td></tr>
 (49 total)
 </p>
 <h3 id="dr_latch">DR_LATCH</h3>
-<p>Gated data latch with active-low reset.</p>
+<p>Gated data latch with complementary enable inputs and active-low reset.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
-<tr><td><img src="img/cells/dr_latch_xepe_daty_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dr_latch_xepe_daty_cyxu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4459,7 +4494,7 @@ each other (by the pink line in the picture).</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zuze">ZUZE</a>
 (11 total)
 </p>
-<h3 id="dffr_b2">DFFR - Variant B+</h3>
+<h3 id="dffr_b2">DFFR - Variant B2</h3>
 <p>Positive-edge-triggered data flip-flop with active-low asynchronous reset.</p>
 <p>This cell is basically the same as variant B but with an extension at the top. This extension seems
 to generate the inverted clock that is required.</p>
@@ -5280,8 +5315,9 @@ cells. For example, it is used for the interrupt flags register: The <a href="/d
 cell feeds a constant 1 into the data inputs of flip-flops (<a href="/dmg_cpu_b_map/?view=c:lope">LOPE</a>,
 <a href="/dmg_cpu_b_map/?view=c:ubul">UBUL</a>, ...). Whenever the clock inputs of those flip-flops get triggered
 by an interrupt, the constant 1 gets clocked in.</p>
+<p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: INVERTER? or BUFFER?</p>
 <table>
-<tr><td><img src="img/cells/supply_bone-bufy_wefe_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/const_bohy_wefe_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>0</i></td>
@@ -5290,8 +5326,8 @@ by an interrupt, the constant 1 gets clocked in.</p>
 <td>Constant 1 output. Connects to VDD.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/supply_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/supply_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/const_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/const_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:bohy">BOHY</a>
 <a href="/dmg_cpu_b_map/?view=c:pesu">PESU</a>
