@@ -5336,7 +5336,7 @@ by an interrupt, the constant 1 gets clocked in.</p>
 <p>Static RAM module with 6T bit cells.</p>
 <p>There are four instances of SRAMs on the DMG-CPU B chip: HRAM, Wave RAM and 2x OAM. The following picture shows
 the simplified structure of those SRAMs using the two least significant data lines of the Wave RAM as an example:</p>
-<p><img src="img/cells/sram_overview.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_overview.png?v=1" alt=""></p>
 <p>First of all, please note that the Wave RAM doesn't have output enable inputs
 (OE/<span style="text-decoration:overline">OE</span>). These are shown for completenes. The Wave RAM was selected
 as an example, because it is the smallest one. Also, the Wave RAM is the only one that has seperate data inputs
@@ -5357,7 +5357,7 @@ selecting one word line or row. A0 and A1 are used to select one of the four col
 very huge NMOS transistors, so again, only zeroes can really pass through.</p>
 <p>Bit description:</p>
 <table>
-<tr><td><img src="img/cells/sram_bit_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sram_bit_desc.png?v=1" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>WL</i></td>
@@ -5373,11 +5373,11 @@ When writing the bit, if <i>WL</i> is high: To change bit to a zero, <i>BL</i> n
 To change bit to a one, <span style="text-decoration:overline"><i>BL</i></span> needs to be forced being low.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sram_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_bit_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/sram_bit_sch.png?v=0" alt=""></p>
 <p>Bit line precharger description:</p>
 <table>
-<tr><td><img src="img/cells/sram_pch_desc.png?v=0" style="min-width:260px;" alt=""></td>
+<tr><td><img src="img/cells/sram_pch_desc.png?v=1" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>BL_PCH</i></span></td>
@@ -5388,11 +5388,11 @@ To change bit to a one, <span style="text-decoration:overline"><i>BL</i></span> 
 driven high.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sram_pch_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_pch_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/sram_pch_sch.png?v=0" alt=""></p>
 <p>Word line driver description:</p>
 <table>
-<tr><td><img src="img/cells/sram_wldrv_desc.png?v=0" style="min-width:280px;" alt=""></td>
+<tr><td><img src="img/cells/sram_wldrv_desc.png?v=1" style="min-width:280px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>WLDRV_PCH</i></span></td>
@@ -5410,11 +5410,11 @@ selected), then <i>WL</i> is driven high. If row isn't selected and word line dr
 then <i>WL</i> is driven low.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sram_wldrv_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_wldrv_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/sram_wldrv_sch.png?v=0" alt=""></p>
 <p>Sense amplifier, write logic and column muxer description - Variant A (used in HRAM and OAM):</p>
 <table>
-<tr><td><img src="img/cells/sram_sa_a_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/sram_sa_a_desc.png?v=1" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>BL[0..3]</i>, <span style="text-decoration:overline"><i>BL[0..3]</i></span></td>
@@ -5449,11 +5449,11 @@ is high and <i>D</i> is low, then <i>BLn</i> gets strongly driven low, causing t
 gets strongly driven low, causing the selected memory cell to flip to "one" state.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sram_sa_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_sa_a_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/sram_sa_a_sch.png?v=0" alt=""></p>
 <p>Sense amplifier, write logic and column muxer description - Variant B (used in Wave RAM):</p>
 <table>
-<tr><td><img src="img/cells/sram_sa_b_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/sram_sa_b_desc.png?v=1" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>BL[0..3]</i>, <span style="text-decoration:overline"><i>BL[0..3]</i></span></td>
@@ -5483,7 +5483,7 @@ is high and <i>DIN</i> is high, then <span style="text-decoration:overline"><i>B
 low, causing the selected memory cell to flip to "one" state.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sram_sa_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_sa_b_layout.png?v=1" alt=""></p>
 <p><img src="img/cells/sram_sa_b_sch.png?v=0" alt=""></p>
 <h4 id="wave_ram">WAVE_RAM</h4>
 <p>16 byte SRAM, organized in four rows and four columns for each of the eight bits.</p>
