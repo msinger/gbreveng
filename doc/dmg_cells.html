@@ -167,6 +167,11 @@ Some I/O pads were also renamed, because the names did not fit the official docu
      <li><a href="#wave_ram">WAVE_RAM</a></li>
     </ul>
    </li>
+   <li><a href="#rom">ROM</a>
+    <ul>
+     <li><a href="#boot_rom">BOOT_ROM</a></li>
+    </ul>
+   </li>
   </ul>
  </li>
 </ul>
@@ -1473,7 +1478,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 </p>
 <h4 id="nand2s">NAND2 - Spare Variant</h4>
 <p>NAND gate with two inputs.</p>
-</p>This variant of the NAND2 gate is only used for some spare cells. This variant may be easily changed to a NOR gate
+<p>This variant of the NAND2 gate is only used for some spare cells. This variant may be easily changed to a NOR gate
 by just making some changes on metal 1 layer during a post synthesis metal fix.</p>
 <table>
 <tr><td><img src="img/cells/nand2s_ybyw_ybyw_ynuj_desc.png?v=0" style="min-width:300px;" alt=""></td>
@@ -5492,6 +5497,101 @@ low, causing the selected memory cell to flip to "one" state.</td></tr>
 <p>For detailed information, see the <a href="#sram">SRAM</a> section above.</p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:wave_ram">WAVE_RAM</a>
+(1 total)
+</p>
+<h3 id="rom">ROM</h3>
+<p>Masked ROM module.</p>
+<p>There is only one ROM instance on the DMG-CPU B chip: The boot ROM. The following picture shows the simplified
+structure of the boot ROM. Only the two least significant bits are drawn:</p>
+<p><img src="img/cells/rom_overview.png?v=0" alt=""></p>
+<p>Each bit is represented by a single NMOS transistor. Only the transistors that are representing "zero" bits are actually
+connected to the respective bit line (column). "One" bits have a dummy transistor that has no connection to its drain. The
+sources of all transistors are connected to ground and the gates are connected to their respective word lines (rows).</p>
+<p>Bits description (picked random 16 bits from the boot ROM as example):</p>
+<table>
+<tr><td><img src="img/cells/rom_bits_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>WL[0..1]</i></td>
+<td>Active high word line. On polysilicon layer. Goes through all bits in the same row. If high, selects the bit row
+for reading. If the bit has a NMOS transistor, then this word line is connected to its gate.</tr>
+<tr><td><i>BL[0..7]</i></td>
+<td>Bit lines. On M1 layer. When reading the bit, if the respective word line is high: <i>BLn</i> will be low if the bit
+contains a zero. Zero bits have a NMOS transistor.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/rom_bits_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_bits_sch.png?v=0" alt=""></p>
+<p>Row selector description:</p>
+<table>
+<tr><td><img src="img/cells/rom_rowsel_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>WL_ENA</i></span></td>
+<td>Active low word line enable. On M1 layer. If low, then the word line selected by <i>A[2..3]</i> and
+<span style="text-decoration:overline"><i>ROW[0..3]</i></span> is driven high.</td></tr>
+<tr><td><i>A[2..3]</i>, <span style="text-decoration:overline"><i>A[2..3]</i></span></td>
+<td>Complementary row selectors. On M1 layer. Two of the address lines and their complements. Selects which one of the
+four identical "second stage" row selectors on the right hand side is enabled.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ROW[0..3]</i></span></td>
+<td>Active low row selectors. On polysilicon layer. Only one out of the four row selectors is allowed to be low at
+the same time. Together with <i>A[2..3]</i>, selects one of the sixteen word lines to be driven high when
+<span style="text-decoration:overline"><i>WL_ENA</i></span> is low.</td></tr>
+<tr><td><i>WL[0..15]</i></td>
+<td>Word lines. On polysilicon layer. Go through all bits in their respective rows.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/rom_rowsel_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_rowsel_sch.png?v=0" alt=""></p>
+<p>Word line precharger description:</p>
+<table>
+<tr><td><img src="img/cells/rom_pch_desc.png?v=0" style="min-width:150px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>WL_PCH</i></td>
+<td>Active high word line precharge. On polysilicon layer. If high, the word lines (<i>WLn</i>) are held low.</tr>
+<tr><td><i>WL[0..1]</i></td>
+<td>Word lines. On polysilicon layer. If <i>WL_PCH</i> is high, word lines are driven low.</tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/rom_pch_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_pch_sch.png?v=0" alt=""></p>
+<p>Sense amplifier and column muxer description:</p>
+<table>
+<tr><td><img src="img/cells/rom_sa_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>BL[0..15]</i></td>
+<td>Bit lines. On M1 layer. Connect to the sixteen columns of bits above.</td></tr>
+<tr><td><i>COL[0..3]</i></td>
+<td>Active high column selectors. On polysilicon layer. Only one out of the four column selectors is allowed to be
+high at the same time. Connects the respective bit lines (<i>BLn</i>) from the bit columns above to the second stage
+of the muxer.</td></tr>
+<tr><td><i>A[6..7]</i>, <span style="text-decoration:overline"><i>A[6..7]</i></span></td>
+<td>Complementary column selectors. On M1 layer. Two of the address lines and their complements. Selects which one of the
+four "pre-muxed" bit line signals from the first stage above gets connected to the big driving transistors below.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>BL_PCH</i></span></td>
+<td>Active low bit line precharge. On M1 layer. If low, then the bit lines below the column muxer (the part
+internal to this cell) are pulled high.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>OE</i></span></td>
+<td>Active low output enable. On M1 layer. If low, then the data I/O <i>D</i> is driven high whenever <i>BLn</i>
+is not pulled low, where <i>n</i> is the index of the column that is currently selected by <i>COL[0..3]</i>
+and <i>A[6..7]</i>.</td></tr>
+<tr><td><i>OE</i></td>
+<td>Active high output enable. On M1 layer. If high, then the data I/O <i>D</i> is driven low whenever <i>BLn</i>
+is pulled low, where <i>n</i> is the index of the column that is currently selected by <i>COL[0..3]</i>
+and <i>A[6..7]</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/rom_sa_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_sa_sch.png?v=0" alt=""></p>
+<h4 id="boot_rom">BOOT_ROM</h4>
+<p>256 byte masked ROM, organized in 16 rows and 16 columns for each of the eight bits.</p>
+<p>Position of all the I/Os of the Boot ROM:</p>
+<p><img src="img/cells/boot_rom_layout.png?v=0" alt=""></p>
+<p>For detailed information, see the <a href="#rom">ROM</a> section above.</p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:boot_rom">BOOT_ROM</a>
 (1 total)
 </p>
 </main><footer><hr>
