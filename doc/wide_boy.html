@@ -2687,6 +2687,7 @@ have room for that switch, unfortunately.</p>
 wasn't able to find those bitstream PROMs, though. If I'm not able to find one that behaves in a
 compatible way, then I would use a second FPGA to emulate the behaviour of the XC17S20XL PROM. This
 FPGA could also emulate the N64 CIC. Then it wouldn't be necessary to sacrifice a cartridge for that.</p>
+<p>UPDATE: I found the PROM <a href="https://www.win-source.net/products/detail/xilinx-inc/xc17s20lpc.html">here</a>.</p>
 <p>A better approach would be to replace the outdated Spartan FPGA, but then this would mean one has to
 implement the decoding of the display signals. The frame buffer interface to the N64 would also have to
 be replicated. I don't know what is easier: Reverse engineering the interface between the Spartan and
@@ -2709,6 +2710,7 @@ VCC. They also didn't leave the NC pin unconnected; they connected it to GND.</p
 <ul>
 <li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds060.pdf">Spartan and Spartan-XL FPGA Families Data Sheet</a></li>
 <li><a href="https://www.xilinx.com/support/documentation/data_sheets/ds030.pdf">Spartan/XL Family One-Time Programmable Configuration PROMs (XC17S00/XL)</a></li>
+<li><a href="http://ebook.pldworld.com/_Semiconductors/Xilinx/DataSource%20CD-ROM/Rev.3%20(Q1-2001)/documents/www.xilinx.com//support/programr/files/17s00.pdf">Xilinx Programmer Qualification Specification</a></li>
 <li><a href="https://dragaosemchama.com/en/2015/02/game-boy-advance-service-manual-and-schematics/">Game Boy Advance service manual and schematics</a></li>
 <li><a href="https://datasheetspdf.com/pdf/368919/NEC/UPD45128163/1">µPD45128163 - 128M-bit Synchronous DRAM</a></li>
 <li><a href="https://datasheetspdf.com/datasheet/LH28F320BJE-PTTL90.html">LH28F320BJE-PTTL90 - Flash Memory 32M</a></li>
@@ -2718,6 +2720,6 @@ VCC. They also didn't leave the NC pin unconnected; they connected it to GND.</p
 <li><a href="https://www.alldatasheet.com/datasheet-pdf/pdf/93094/MITSUMI/PST9140.html">PST9140 - System Reset</a></li>
 </ul>
 </main><footer><hr>
-<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </footer></body>
 </html>
