@@ -2687,7 +2687,11 @@ have room for that switch, unfortunately.</p>
 wasn't able to find those bitstream PROMs, though. If I'm not able to find one that behaves in a
 compatible way, then I would use a second FPGA to emulate the behaviour of the XC17S20XL PROM. This
 FPGA could also emulate the N64 CIC. Then it wouldn't be necessary to sacrifice a cartridge for that.</p>
-<p>UPDATE: I found the PROM <a href="https://www.win-source.net/products/detail/xilinx-inc/xc17s20lpc.html">here</a>.</p>
+<p>UPDATE: I found the PROM <a href="https://www.win-source.net/products/detail/xilinx-inc/xc17s20lpc.html">here</a>.
+I ordered ten chips, they arrived within five days! I dumped all ten chips to confirm that they are indeed
+empty/unused. When dumping those unprogrammed chips, the OE/RESET pin needs to be inverted, because that's
+how they are initially, when they are not configured yet.<br>
+<img src="img/wideboy_new_proms.png" alt=""></p>
 <p>A better approach would be to replace the outdated Spartan FPGA, but then this would mean one has to
 implement the decoding of the display signals. The frame buffer interface to the N64 would also have to
 be replicated. I don't know what is easier: Reverse engineering the interface between the Spartan and
