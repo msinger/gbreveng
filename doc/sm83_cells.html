@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SM83 Cells Reference</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Description of all the logic cells inside the SM83 Game Boy CPU core.">
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
+</head>
+<body>
+<nav><p><a href="http://iceboy.a-singer.de/">Home</a></p>
+<hr></nav>
+<main><h1>SM83 Cells Reference</h1>
+<p>This document provides information about the cells found in the SM83 CPU core of the Game Boy.
+<p>Please report any errors I made <a href="https://github.com/msinger/gbreveng/issues">here</a>.</p>
+<ul>
+ <li><a href="#logic">Basic logic gates</a>
+  <ul>
+   <li><a href="#inv">INVERTER gates</a>
+    <ul>
+     <li><a href="#inv_idu">INV_IDU</a></li>
+     <li><a href="#inv_irq">INV_IRQ</a></li>
+     <li><a href="#inv_reg">INV_REG</a></li>
+     <li><a href="#inv_reg_a_wr">INV_REG_A_WR</a></li>
+     <li><a href="#inv_reg_b_wr">INV_REG_B_WR</a></li>
+     <li><a href="#inv_reg_h_e_wr">INV_REG_H_E_WR</a></li>
+     <li><a href="#inv_reg_ie_wr">INV_REG_IE_WR</a></li>
+     <li><a href="#inv_reg_l_wr">INV_REG_L_WR</a></li>
+     <li><a href="#inv_reg_pc_wr">INV_REG_PC_WR</a></li>
+     <li><a href="#inv_reg_sp_wr">INV_REG_SP_WR</a></li>
+     <li><a href="#inv_reg_wr">INV_REG_WR</a></li>
+    </ul>
+   </li>
+   <li><a href="#inv_pre">INVERTER gates with precharge</a>
+    <ul>
+     <li><a href="#inv_alu_a">INV_ALU - Variant A</a></li>
+     <li><a href="#inv_alu_b">INV_ALU - Variant B</a></li>
+     <li><a href="#inv_dec3_a">INV_DEC3 - Variant A</a></li>
+     <li><a href="#inv_dec3_a2">INV_DEC3 - Variant A2</a></li>
+     <li><a href="#inv_dec3_b">INV_DEC3 - Variant B</a></li>
+     <li><a href="#inv_dec3_b2">INV_DEC3 - Variant B2</a></li>
+     <li><a href="#inv_dec3_c">INV_DEC3 - Variant C</a></li>
+    </ul>
+   </li>
+   <li><a href="#nand">NAND gates</a>
+    <ul>
+     <li><a href="#nand2_nand3_irq">NAND2_NAND3_IRQ</a></li>
+     <li><a href="#reg_a_out">REG_A_OUT</a></li>
+    </ul>
+   </li>
+   <li><a href="#nor_pre">NOR gates with precharge</a>
+    <ul>
+     <li><a href="#nor2_dec3">NOR2_DEC3</a></li>
+    </ul>
+   </li>
+   <li><a href="#and">AND gates</a>
+    <ul>
+     <li><a href="#and_reg">AND_REG</a></li>
+     <li><a href="#and2_and3_reg">AND2_AND3_REG</a></li>
+    </ul>
+   </li>
+   <li><a href="#xor">XOR gates</a>
+    <ul>
+     <li><a href="#xor_idu_h">XOR_IDU_H</a></li>
+     <li><a href="#xor_idu_l">XOR_IDU_L</a></li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li><a href="#compound">Compound logic gates</a>
+  <ul>
+   <li><a href="#oa_reg">OA_REG</a></li>
+   <li><a href="#mux_idu_h">MUX_IDU_H</a></li>
+   <li><a href="#mux_idu_l">MUX_IDU_L</a></li>
+  </ul>
+ </li>
+ <li><a href="#mixed">Mixed logic cells</a>
+  <ul>
+   <li><a href="#idu_bit0">IDU_BIT0</a></li>
+   <li><a href="#idu_bit123456">IDU_BIT123456</a></li>
+   <li><a href="#idu_bit7">IDU_BIT7</a></li>
+   <li><a href="#idu_irq_ctl">IDU_IRQ_CTL</a></li>
+   <li><a href="#irq_prio_bit0">IRQ_PRIO_BIT0</a></li>
+   <li><a href="#irq_prio_bit1">IRQ_PRIO_BIT1</a></li>
+   <li><a href="#irq_prio_bit2">IRQ_PRIO_BIT2</a></li>
+   <li><a href="#irq_prio_bit3">IRQ_PRIO_BIT3</a></li>
+   <li><a href="#irq_prio_bit4">IRQ_PRIO_BIT4</a></li>
+   <li><a href="#irq_prio_bit5">IRQ_PRIO_BIT5</a></li>
+   <li><a href="#irq_prio_bit6">IRQ_PRIO_BIT6</a></li>
+   <li><a href="#irq_prio_bit7">IRQ_PRIO_BIT7</a></li>
+   <li><a href="#nor2_inv_reg">NOR2_INV_REG</a></li>
+   <li><a href="#reg_bc_out">REG_BC_OUT</a></li>
+   <li><a href="#reg_bus_pch_a_bit0123">REG_BUS_PCH_A_BIT0123</a></li>
+   <li><a href="#reg_bus_pch_a_bit4">REG_BUS_PCH_A_BIT4</a></li>
+   <li><a href="#reg_bus_pch_a_bit5">REG_BUS_PCH_A_BIT5</a></li>
+   <li><a href="#reg_bus_pch_a_bit6">REG_BUS_PCH_A_BIT6</a></li>
+   <li><a href="#reg_bus_pch_a_bit7">REG_BUS_PCH_A_BIT7</a></li>
+   <li><a href="#reg_bus_pch_b">REG_BUS_PCH_B</a></li>
+   <li><a href="#reg_de_out">REG_DE_OUT</a></li>
+   <li><a href="#reg_hl_out">REG_HL_OUT</a></li>
+   <li><a href="#reg_pc_out_bit012">REG_PC_OUT_BIT012</a></li>
+   <li><a href="#reg_pc_out_bit345">REG_PC_OUT_BIT345</a></li>
+   <li><a href="#reg_pc_out_bit67">REG_PC_OUT_BIT67</a></li>
+   <li><a href="#reg_sp_out">REG_SP_OUT</a></li>
+   <li><a href="#reg_wz_out">REG_WZ_OUT</a></li>
+  </ul>
+ </li>
+ <li><a href="#ff">Storage elements</a>
+  <ul>
+   <li><a href="#d_latch_irq">D_LATCH_IRQ</a></li>
+   <li><a href="#dff_alu_flag">DFF_ALU_FLAG</a></li>
+   <li><a href="#dff_alu_tmp">DFF_ALU_TMP</a></li>
+   <li><a href="#dff_reg_bit_a">DFF_REG_BIT - Variant A</a></li>
+   <li><a href="#dff_reg_bit_b">DFF_REG_BIT - Variant B</a></li>
+   <li><a href="#dff_reg_sp_bit">DFF_REG_SP_BIT</a></li>
+   <li><a href="#dff_reg_wz_bit">DFF_REG_WZ_BIT</a></li>
+   <li><a href="#drff_reg_ie_bit">DRFF_REG_IE_BIT</a></li>
+   <li><a href="#dsff_reg_pc_bit">DSFF_REG_PC_BIT</a></li>
+  </ul>
+ </li>
+</ul>
+<h2 id="logic">Basic logic gates</h2>
+<h3 id="inv">INVERTER gates</h3>
+<h4 id="inv_idu">INV_IDU</h4>
+<p>Two simple inverters.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_idu0_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_IN</i></td>
+<td>Input to inverter A.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Outputs inverted <i>A_IN</i>.</td></tr>
+<tr><td><i>B_IN</i></td>
+<td>Input to inverter B.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Outputs inverted <i>B_IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_idu_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu_inv%5b0%5d">IDU_INV[0]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b1%5d">IDU_INV[1]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b2%5d">IDU_INV[2]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b3%5d">IDU_INV[3]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b4%5d">IDU_INV[4]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b5%5d">IDU_INV[5]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b6%5d">IDU_INV[6]</a>,
+<a href="/sm83_map/?view=c:idu_inv%5b7%5d">IDU_INV[7]</a>
+(8 total)
+</p>
+<h4 id="inv_irq">INV_IRQ</h4>
+<p>Five simple inverters.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_irq_desc.png?v=0" style="min-width:500px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_IN</i></td>
+<td>Input to inverter A.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Outputs inverted <i>A_IN</i>.</td></tr>
+<tr><td><i>B_IN</i></td>
+<td>Input to inverter B.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Outputs inverted <i>B_IN</i>.</td></tr>
+<tr><td><i>C_IN</i></td>
+<td>Input to inverter C.</td></tr>
+<tr><td><i>C_Q</i></td>
+<td>Outputs inverted <i>C_IN</i>.</td></tr>
+<tr><td><i>D_IN</i></td>
+<td>Input to inverter D.</td></tr>
+<tr><td><i>D_Q</i></td>
+<td>Outputs inverted <i>D_IN</i>.</td></tr>
+<tr><td><i>E_IN</i></td>
+<td>Input to inverter E.</td></tr>
+<tr><td><i>E_Q</i></td>
+<td>Outputs inverted <i>E_IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_irq_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv5_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_inv">IRQ_INV</a>
+(1 total)
+</p>
+<h4 id="inv_reg">INV_REG</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg0_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_inv%5b0%5d">REG_INV[0]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b1%5d">REG_INV[1]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b2%5d">REG_INV[2]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b3%5d">REG_INV[3]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b4%5d">REG_INV[4]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b5%5d">REG_INV[5]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b6%5d">REG_INV[6]</a>,
+<a href="/sm83_map/?view=c:reg_inv%5b7%5d">REG_INV[7]</a>
+(8 total)
+</p>
+<h4 id="inv_reg_a_wr">INV_REG_A_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_a_wr_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_a_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_a_wr">INV_A_WR</a>
+(1 total)
+</p>
+<h4 id="inv_reg_b_wr">INV_REG_B_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_b_wr_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_b_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_b_wr">INV_B_WR</a>
+(1 total)
+</p>
+<h4 id="inv_reg_h_e_wr">INV_REG_H_E_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_h_e_wr_h_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_h_e_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_e_wr">INV_E_WR</a>,
+<a href="/sm83_map/?view=c:inv_h_wr">INV_H_WR</a>
+(2 total)
+</p>
+<h4 id="inv_reg_ie_wr">INV_REG_IE_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_ie_wr_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_ie_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_ie_wr">INV_IE_WR</a>
+(1 total)
+</p>
+<h4 id="inv_reg_l_wr">INV_REG_L_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_l_wr_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_l_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_l_wr">INV_L_WR</a>
+(1 total)
+</p>
+<h4 id="inv_reg_pc_wr">INV_REG_PC_WR</h4>
+<p>Two simple inverters.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_pc_wr_pcl_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_IN</i></td>
+<td>Input to inverter A.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Outputs inverted <i>A_IN</i>.</td></tr>
+<tr><td><i>B_IN</i></td>
+<td>Input to inverter B.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Outputs inverted <i>B_IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_pc_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_pch_wr">INV_PCH_WR</a>,
+<a href="/sm83_map/?view=c:inv_pcl_wr">INV_PCL_WR</a>
+(2 total)
+</p>
+<h4 id="inv_reg_sp_wr">INV_REG_SP_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_sp_wr_spl_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_sp_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_sph_wr">INV_SPH_WR</a>,
+<a href="/sm83_map/?view=c:inv_spl_wr">INV_SPL_WR</a>
+(2 total)
+</p>
+<h4 id="inv_reg_wr">INV_REG_WR</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_reg_wr_w_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_reg_wr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:inv_c_wr">INV_C_WR</a>,
+<a href="/sm83_map/?view=c:inv_d_wr">INV_D_WR</a>,
+<a href="/sm83_map/?view=c:inv_ir_wr">INV_IR_WR</a>,
+<a href="/sm83_map/?view=c:inv_w_wr">INV_W_WR</a>,
+<a href="/sm83_map/?view=c:inv_z_wr">INV_Z_WR</a>
+(5 total)
+</p>
+<h3 id="inv_pre">INVERTER gates with precharge</h3>
+<h4 id="inv_alu_a">INV_ALU - Variant A</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_alu_a6_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_alu_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_inv1">ALU_INV1</a>,
+<a href="/sm83_map/?view=c:alu_inv2">ALU_INV2</a>,
+<a href="/sm83_map/?view=c:alu_inv3">ALU_INV3</a>,
+<a href="/sm83_map/?view=c:alu_inv4">ALU_INV4</a>,
+<a href="/sm83_map/?view=c:alu_inv5">ALU_INV5</a>,
+<a href="/sm83_map/?view=c:alu_inv6">ALU_INV6</a>,
+<a href="/sm83_map/?view=c:alu_inv7">ALU_INV7</a>,
+<a href="/sm83_map/?view=c:alu_inv8">ALU_INV8</a>,
+<a href="/sm83_map/?view=c:alu_inv10">ALU_INV10</a>
+(9 total)
+</p>
+<h4 id="inv_alu_b">INV_ALU - Variant B</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_alu_b_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_alu_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_inv9">ALU_INV9</a>
+(1 total)
+</p>
+<h4 id="inv_dec3_a">INV_DEC3 - Variant A</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec3_a_18_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec3_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec3_inv1">DEC3_INV1</a>,
+<a href="/sm83_map/?view=c:dec3_inv2">DEC3_INV2</a>,
+<a href="/sm83_map/?view=c:dec3_inv3">DEC3_INV3</a>,
+<a href="/sm83_map/?view=c:dec3_inv4">DEC3_INV4</a>,
+<a href="/sm83_map/?view=c:dec3_inv5">DEC3_INV5</a>,
+<a href="/sm83_map/?view=c:dec3_inv6">DEC3_INV6</a>,
+<a href="/sm83_map/?view=c:dec3_inv7">DEC3_INV7</a>,
+<a href="/sm83_map/?view=c:dec3_inv8">DEC3_INV8</a>,
+<a href="/sm83_map/?view=c:dec3_inv9">DEC3_INV9</a>,
+<a href="/sm83_map/?view=c:dec3_inv10">DEC3_INV10</a>,
+<a href="/sm83_map/?view=c:dec3_inv11">DEC3_INV11</a>,
+<a href="/sm83_map/?view=c:dec3_inv12">DEC3_INV12</a>,
+<a href="/sm83_map/?view=c:dec3_inv13">DEC3_INV13</a>,
+<a href="/sm83_map/?view=c:dec3_inv14">DEC3_INV14</a>,
+<a href="/sm83_map/?view=c:dec3_inv15">DEC3_INV15</a>,
+<a href="/sm83_map/?view=c:dec3_inv17">DEC3_INV17</a>,
+<a href="/sm83_map/?view=c:dec3_inv18">DEC3_INV18</a>,
+<a href="/sm83_map/?view=c:dec3_inv19">DEC3_INV19</a>,
+<a href="/sm83_map/?view=c:dec3_inv20">DEC3_INV20</a>,
+<a href="/sm83_map/?view=c:dec3_inv21">DEC3_INV21</a>,
+<a href="/sm83_map/?view=c:dec3_inv22">DEC3_INV22</a>,
+<a href="/sm83_map/?view=c:dec3_inv25">DEC3_INV25</a>,
+<a href="/sm83_map/?view=c:dec3_inv32">DEC3_INV32</a>,
+<a href="/sm83_map/?view=c:dec3_inv33">DEC3_INV33</a>,
+<a href="/sm83_map/?view=c:dec3_inv42">DEC3_INV42</a>,
+<a href="/sm83_map/?view=c:dec3_inv43">DEC3_INV43</a>,
+<a href="/sm83_map/?view=c:dec3_inv44">DEC3_INV44</a>,
+<a href="/sm83_map/?view=c:dec3_inv45">DEC3_INV45</a>,
+<a href="/sm83_map/?view=c:dec3_inv46">DEC3_INV46</a>,
+<a href="/sm83_map/?view=c:dec3_inv53">DEC3_INV53</a>,
+<a href="/sm83_map/?view=c:dec3_inv58">DEC3_INV58</a>,
+<a href="/sm83_map/?view=c:dec3_inv59">DEC3_INV59</a>,
+<a href="/sm83_map/?view=c:dec3_inv60">DEC3_INV60</a>,
+<a href="/sm83_map/?view=c:dec3_inv61">DEC3_INV61</a>,
+<a href="/sm83_map/?view=c:dec3_inv62">DEC3_INV62</a>,
+<a href="/sm83_map/?view=c:dec3_inv63">DEC3_INV63</a>,
+<a href="/sm83_map/?view=c:dec3_inv64">DEC3_INV64</a>,
+<a href="/sm83_map/?view=c:dec3_inv65">DEC3_INV65</a>,
+<a href="/sm83_map/?view=c:dec3_inv66">DEC3_INV66</a>,
+<a href="/sm83_map/?view=c:dec3_inv67">DEC3_INV67</a>
+(40 total)
+</p>
+<h4 id="inv_dec3_a2">INV_DEC3 - Variant A2</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec3_a2_24_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec3_a2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec3_inv24">DEC3_INV24</a>,
+<a href="/sm83_map/?view=c:dec3_inv31">DEC3_INV31</a>,
+<a href="/sm83_map/?view=c:dec3_inv37">DEC3_INV37</a>
+(3 total)
+</p>
+<h4 id="inv_dec3_b">INV_DEC3 - Variant B</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec3_b_50_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec3_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec3_inv16">DEC3_INV16</a>,
+<a href="/sm83_map/?view=c:dec3_inv30">DEC3_INV30</a>,
+<a href="/sm83_map/?view=c:dec3_inv49">DEC3_INV49</a>,
+<a href="/sm83_map/?view=c:dec3_inv50">DEC3_INV50</a>,
+<a href="/sm83_map/?view=c:dec3_inv51">DEC3_INV51</a>,
+<a href="/sm83_map/?view=c:dec3_inv52">DEC3_INV52</a>,
+<a href="/sm83_map/?view=c:dec3_inv56">DEC3_INV56</a>
+(7 total)
+</p>
+<h4 id="inv_dec3_b2">INV_DEC3 - Variant B2</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec3_b2_40_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec3_b2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec3_inv29">DEC3_INV29</a>,
+<a href="/sm83_map/?view=c:dec3_inv38">DEC3_INV38</a>,
+<a href="/sm83_map/?view=c:dec3_inv39">DEC3_INV39</a>,
+<a href="/sm83_map/?view=c:dec3_inv40">DEC3_INV40</a>,
+<a href="/sm83_map/?view=c:dec3_inv41">DEC3_INV41</a>
+(5 total)
+</p>
+<h4 id="inv_dec3_c">INV_DEC3 - Variant C</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec3_c_26_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec3_c_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec3_inv23">DEC3_INV23</a>,
+<a href="/sm83_map/?view=c:dec3_inv26">DEC3_INV26</a>,
+<a href="/sm83_map/?view=c:dec3_inv27">DEC3_INV27</a>,
+<a href="/sm83_map/?view=c:dec3_inv28">DEC3_INV28</a>,
+<a href="/sm83_map/?view=c:dec3_inv34">DEC3_INV34</a>,
+<a href="/sm83_map/?view=c:dec3_inv35">DEC3_INV35</a>,
+<a href="/sm83_map/?view=c:dec3_inv36">DEC3_INV36</a>,
+<a href="/sm83_map/?view=c:dec3_inv47">DEC3_INV47</a>,
+<a href="/sm83_map/?view=c:dec3_inv48">DEC3_INV48</a>,
+<a href="/sm83_map/?view=c:dec3_inv54">DEC3_INV54</a>,
+<a href="/sm83_map/?view=c:dec3_inv55">DEC3_INV55</a>,
+<a href="/sm83_map/?view=c:dec3_inv57">DEC3_INV57</a>
+(12 total)
+</p>
+<h3 id="nand">NAND gates</h3>
+<h4 id="nand2_nand3_irq">NAND2_NAND3_IRQ</h4>
+<p>NAND with two inputs and open-drain NAND with three inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nand2_nand3_irq0_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_IN1</i>, <i>A_IN2</i></td>
+<td>Inputs to NAND gate A.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Outputs <code>!(<i>A_IN1</i> &amp;&amp; <i>A_IN2</i>)</code>.</td></tr>
+<tr><td><i>B_IN1</i>, <i>B_IN2</i>, <i>B_IN3</i></td>
+<td>Inputs to NAND gate B.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-drain output. Outputs <code>!(<i>B_IN1</i> &amp;&amp; <i>B_IN2</i> &amp;&amp; <i>B_IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nand2_nand3_irq_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nand2_nand3_irq_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b0%5d">IRQ_NAND2_NAND3[0]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b1%5d">IRQ_NAND2_NAND3[1]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b2%5d">IRQ_NAND2_NAND3[2]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b3%5d">IRQ_NAND2_NAND3[3]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b4%5d">IRQ_NAND2_NAND3[4]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b5%5d">IRQ_NAND2_NAND3[5]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b6%5d">IRQ_NAND2_NAND3[6]</a>,
+<a href="/sm83_map/?view=c:irq_nand2_nand3%5b7%5d">IRQ_NAND2_NAND3[7]</a>
+(8 total)
+</p>
+<h4 id="reg_a_out">REG_A_OUT</h4>
+<p>Output drivers for A registers.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_a_out0_desc.png?v=0" style="min-width:120px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_ENA</i></td>
+<td>Input to NAND gate A.</td></tr>
+<tr><td><i>B_ENA</i></td>
+<td>Input to NAND gate B.</td></tr>
+<tr><td><i>IN</i></td>
+<td>Input to both NAND gates.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-drain output. Outputs <code>!(<i>A_ENA</i> &amp;&amp; <i>IN</i>)</code>.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-drain output. Outputs <code>!(<i>B_ENA</i> &amp;&amp; <i>IN</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_a_out_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_a_out_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_a_out%5b0%5d">REG_A_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b1%5d">REG_A_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b2%5d">REG_A_OUT[2]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b3%5d">REG_A_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b4%5d">REG_A_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b5%5d">REG_A_OUT[5]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b6%5d">REG_A_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_a_out%5b7%5d">REG_A_OUT[7]</a>
+(8 total)
+</p>
+<h3 id="nor_pre">NOR gates with precharge</h3>
+<h4 id="nor2_dec3">NOR2_DEC3</h4>
+<p>NOR gate with two inputs and precharge on input 1.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor2_dec3_1_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i></td>
+<td>Input to NOR gate. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>IN2</i></td>
+<td>Input to NOR gate.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN1</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor2_dec3_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor2_dec3_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec3_nor1">DEC3_NOR1</a>,
+<a href="/sm83_map/?view=c:dec3_nor2">DEC3_NOR2</a>
+(2 total)
+</p>
+<h3 id="and">AND gates</h3>
+<h4 id="and_reg">AND_REG</h4>
+<p>AND gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/and_reg_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to AND gate.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/and_reg_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/and_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_and">REG_AND</a>
+(1 total)
+</p>
+<h4 id="and2_and3_reg">AND2_AND3_REG</h4>
+<p>Group of two AND gates with two and three inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/and2_and3_reg_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_IN1</i>, <i>A_IN2</i></td>
+<td>Inputs to AND gate A.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Outputs <code>(<i>A_IN1</i> &amp;&amp; <i>A_IN2</i>)</code>.</td></tr>
+<tr><td><i>B_IN1</i>, <i>B_IN2</i>, <i>B_IN3</i></td>
+<td>Inputs to AND gate B.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Outputs <code>(<i>B_IN1</i> &amp;&amp; <i>B_IN2</i> &amp;&amp; <i>B_IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/and2_and3_reg_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/and2_and3_reg_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_and2_and3">REG_AND2_AND3</a>
+(1 total)
+</p>
+<h3 id="xor">XOR gates</h3>
+<h4 id="xor_idu_h">XOR_IDU_H</h4>
+<p>XOR gate with two inputs.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <i>IN1</i> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/xor_idu_h1_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to XOR gate. There are two <i>IN1</i> inputs to this cell, which are externally connected to each other
+(indicated by the orange line in the picture).</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>(<i>IN1</i> ^ <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/xor_idu_h_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/xor_idu_h_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu_xor_h%5b0%5d">IDU_XOR_H[0]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b1%5d">IDU_XOR_H[1]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b2%5d">IDU_XOR_H[2]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b3%5d">IDU_XOR_H[3]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b4%5d">IDU_XOR_H[4]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b5%5d">IDU_XOR_H[5]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b6%5d">IDU_XOR_H[6]</a>,
+<a href="/sm83_map/?view=c:idu_xor_h%5b7%5d">IDU_XOR_H[7]</a>
+(8 total)
+</p>
+<h4 id="xor_idu_l">XOR_IDU_L</h4>
+<p>XOR gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/xor_idu_l1_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to XOR gate.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>(<i>IN1</i> ^ <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/xor_idu_l_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/xor_idu_l_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu_xor_l%5b0%5d">IDU_XOR_L[0]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b1%5d">IDU_XOR_L[1]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b2%5d">IDU_XOR_L[2]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b3%5d">IDU_XOR_L[3]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b4%5d">IDU_XOR_L[4]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b5%5d">IDU_XOR_L[5]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b6%5d">IDU_XOR_L[6]</a>,
+<a href="/sm83_map/?view=c:idu_xor_l%5b7%5d">IDU_XOR_L[7]</a>
+(8 total)
+</p>
+<h2 id="compound">Compound logic gates</h2>
+<h3 id="oa_reg">OA_REG</h3>
+<p>2-1 OR-AND two-level compound gate.</p>
+<table>
+<tr><td><img src="img/cells/sm83/oa_reg2_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to OR gate.</td></tr>
+<tr><td><i>IN3</i></td>
+<td>Input to AND gate.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <code>((<i>IN1</i> || <i>IN2</i>) &amp;&amp; <i>IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/oa_reg_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/oa_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_oa1">REG_OA1</a>,
+<a href="/sm83_map/?view=c:reg_oa2">REG_OA2</a>
+(2 total)
+</p>
+<h3 id="mux_idu_h">MUX_IDU_H</h3>
+<p>Multiplexer with two inputs.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <i>SEL</i> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/mux_idu_h0_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D0</i>, <i>D1</i></td>
+<td>Data inputs.</td></tr>
+<tr><td><i>SEL</i></td>
+<td>Select input. There are two <i>SEL</i> inputs to this cell, which are externally connected to each other
+(indicated by the orange line in the picture).</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <i>D1</i> if <i>SEL</i> is high; outputs <i>D0</i>
+if <i>SEL</i> is low.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/mux_idu_h_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/mux_idu_h_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu_mux_h%5b0%5d">IDU_MUX_H[0]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b1%5d">IDU_MUX_H[1]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b2%5d">IDU_MUX_H[2]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b3%5d">IDU_MUX_H[3]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b4%5d">IDU_MUX_H[4]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b5%5d">IDU_MUX_H[5]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b6%5d">IDU_MUX_H[6]</a>,
+<a href="/sm83_map/?view=c:idu_mux_h%5b7%5d">IDU_MUX_H[7]</a>
+(8 total)
+</p>
+<h3 id="mux_idu_l">MUX_IDU_L</h3>
+<p>Multiplexer with two inputs.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <i>SEL</i> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/mux_idu_l1_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D0</i>, <i>D1</i></td>
+<td>Data inputs.</td></tr>
+<tr><td><i>SEL</i></td>
+<td>Select input. There are two <i>SEL</i> inputs to this cell, which are externally connected to each other
+(indicated by the orange line in the picture).</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <i>D1</i> if <i>SEL</i> is high; outputs <i>D0</i>
+if <i>SEL</i> is low.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/mux_idu_l_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/mux_idu_l_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu_mux_l%5b0%5d">IDU_MUX_L[0]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b1%5d">IDU_MUX_L[1]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b2%5d">IDU_MUX_L[2]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b3%5d">IDU_MUX_L[3]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b4%5d">IDU_MUX_L[4]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b5%5d">IDU_MUX_L[5]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b6%5d">IDU_MUX_L[6]</a>,
+<a href="/sm83_map/?view=c:idu_mux_l%5b7%5d">IDU_MUX_L[7]</a>
+(8 total)
+</p>
+<h2 id="mixed">Mixed logic cells</h2>
+<h3 id="idu_bit0">IDU_BIT0</h3>
+<p>Bits 0 and 8 of the 16 bit increment/decrement unit.</p>
+<table>
+<tr><td><img src="img/cells/sm83/idu_bit0_desc.png?v=0" style="min-width:400px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/idu_bit0_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/idu_bit0_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu%5b0%5d">IDU[0]</a>
+(1 total)
+</p>
+<h3 id="idu_bit123456">IDU_BIT123456</h3>
+<p>Bits 1-6 and 9-14 of the 16 bit increment/decrement unit.</p>
+<table>
+<tr><td><img src="img/cells/sm83/idu_bit123456_1_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/idu_bit123456_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/idu_bit123456_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu%5b1%5d">IDU[1]</a>
+<a href="/sm83_map/?view=c:idu%5b2%5d">IDU[2]</a>
+<a href="/sm83_map/?view=c:idu%5b3%5d">IDU[3]</a>
+<a href="/sm83_map/?view=c:idu%5b4%5d">IDU[4]</a>
+<a href="/sm83_map/?view=c:idu%5b5%5d">IDU[5]</a>
+<a href="/sm83_map/?view=c:idu%5b6%5d">IDU[6]</a>
+(6 total)
+</p>
+<h3 id="idu_bit7">IDU_BIT7</h3>
+<p>Bits 7 and 15 of the 16 bit increment/decrement unit.</p>
+<table>
+<tr><td><img src="img/cells/sm83/idu_bit7_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/idu_bit7_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/idu_bit7_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu%5b7%5d">IDU[7]</a>
+(1 total)
+</p>
+<h3 id="idu_irq_ctl">IDU_IRQ_CTL</h3>
+<p>Logic for increment/decrement unit and interrupts.</p>
+<table>
+<tr><td><img src="img/cells/sm83/idu_irq_ctl_desc.png?v=0" style="min-width:450px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/idu_irq_ctl_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/idu_irq_ctl_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:idu_irq_ctl">IDU_IRQ_CTL</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit0">IRQ_PRIO_BIT0</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit0_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit0_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit0_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b0%5d">IRQ_PRIO[0]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit1">IRQ_PRIO_BIT1</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit1_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit1_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit1_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b1%5d">IRQ_PRIO[1]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit2">IRQ_PRIO_BIT2</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit2_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b2%5d">IRQ_PRIO[2]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit3">IRQ_PRIO_BIT3</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit3_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit3_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit3_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b3%5d">IRQ_PRIO[3]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit4">IRQ_PRIO_BIT4</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit4_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit4_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit4_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b4%5d">IRQ_PRIO[4]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit5">IRQ_PRIO_BIT5</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit5_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit5_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit5_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b5%5d">IRQ_PRIO[5]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit6">IRQ_PRIO_BIT6</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit6_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit6_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit6_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b6%5d">IRQ_PRIO[6]</a>
+(1 total)
+</p>
+<h3 id="irq_prio_bit7">IRQ_PRIO_BIT7</h3>
+<p>Interrupt priority decoding and other interrupt related logic.</p>
+<p><img src="img/cells/sm83/irq_prio_bit7_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/irq_prio_bit7_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/irq_prio_bit7_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_prio%5b7%5d">IRQ_PRIO[7]</a>
+(1 total)
+</p>
+<h3 id="nor2_inv_reg">NOR2_INV_REG</h3>
+<p>NOR gate with two inputs and two inverters.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor2_inv_reg_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i></td>
+<td>Input to NOR/OR gate and inverter.</td></tr>
+<tr><td><i>IN2</i></td>
+<td>Input to NOR/OR gate.</td></tr>
+<tr><td><i>NOR_Q</i></td>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
+<tr><td><i>OR_Q</i></td>
+<td>Outputs <code>(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
+<tr><td><i>INV_Q</i></td>
+<td>Outputs inverted <i>IN1</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor2_inv_reg_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor2_inv_reg_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_nor2_inv">REG_NOR2_INV</a>
+(1 total)
+</p>
+<h3 id="reg_bc_out">REG_BC_OUT</h3>
+<p>Output drivers for BC registers.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bc_out0_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>B_IN</i></td>
+<td>Input to NAND gate B and AOI gate.</td></tr>
+<tr><td><i>C_IN</i></td>
+<td>Input to NAND gate C and AOI gate.</td></tr>
+<tr><td><i>ENA1</i></td>
+<td>Input to both NAND gates.</td></tr>
+<tr><td><i>B_ENA2</i>, <i>C_ENA2</i></td>
+<td>Inputs to AOI gate.</td></tr>
+<tr><td><i>B_Q1</i></td>
+<td>Open-drain output. Outputs <code>!(<i>ENA1</i> &amp;&amp; <i>B_IN</i>)</code>.</td></tr>
+<tr><td><i>C_Q1</i></td>
+<td>Open-drain output. Outputs <code>!(<i>ENA1</i> &amp;&amp; <i>C_IN</i>)</code>.</td></tr>
+<tr><td><i>Q2</i></td>
+<td>Open-drain output. Outputs <code>!((<i>B_ENA2</i> &amp;&amp; <i>B_IN</i>) || (<i>C_ENA2</i> &amp;&amp;
+<i>C_IN</i>))</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bc_out_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bc_out_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bc_out%5b0%5d">REG_BC_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b1%5d">REG_BC_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b2%5d">REG_BC_OUT[2]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b3%5d">REG_BC_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b4%5d">REG_BC_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b5%5d">REG_BC_OUT[5]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b6%5d">REG_BC_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_bc_out%5b7%5d">REG_BC_OUT[7]</a>
+(8 total)
+</p>
+<h3 id="reg_bus_pch_a_bit0123">REG_BUS_PCH_A_BIT0123</h3>
+<p>Precharger and zero output for register busses bits 0-3.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <span style="text-decoration:overline"><i>PCH</i></span> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bus_pch_a_bit0123_2_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, outputs <i>A_Q</i>, <i>B_Q</i> and <i>C_Q</i> get driven high for the
+purpose of precharging their respective nets. There are two <span style="text-decoration:overline"><i>PCH</i></span>
+inputs to this cell, which are externally connected to each other (indicated by the orange line in the
+picture).</td></tr>
+<tr><td><i>C_ZERO</i></td>
+<td>If <i>C_ZERO</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>B_Q</i></span></td>
+<td>Outputs inverted <i>B_Q</i>.</td></tr>
+<tr><td><i>C_Q</i></td>
+<td>Outputs low if <i>C_ZERO</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high.
+Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>C_Q</i></span></td>
+<td>Outputs inverted <i>C_Q</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit0123_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit0123_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b0%5d">REG_BUS_PCH_A[0]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b1%5d">REG_BUS_PCH_A[1]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b2%5d">REG_BUS_PCH_A[2]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b3%5d">REG_BUS_PCH_A[3]</a>
+(4 total)
+</p>
+<h3 id="reg_bus_pch_a_bit4">REG_BUS_PCH_A_BIT4</h3>
+<p>Precharger and zero output for register busses bit 4.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <span style="text-decoration:overline"><i>PCH</i></span> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bus_pch_a_bit4_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, outputs <i>A_Q</i>, <i>B_Q</i> and <i>C_Q</i> get driven high for the
+purpose of precharging their respective nets. There are two <span style="text-decoration:overline"><i>PCH</i></span>
+inputs to this cell, which are externally connected to each other (indicated by the orange line in the
+picture).</td></tr>
+<tr><td><i>C_ZERO_A</i></td>
+<td>If <i>C_ZERO_A</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>C_ZERO_B1</i>, <i>C_ZERO_B2</i></td>
+<td>If <i>C_ZERO_B1</i>, <i>C_ZERO_B2</i> and <span style="text-decoration:overline"><i>PCH</i></span> are high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>B_Q</i></span></td>
+<td>Outputs inverted <i>B_Q</i>.</td></tr>
+<tr><td><i>C_Q</i></td>
+<td>Outputs low if <code>((<i>C_ZERO_A</i> || (C_ZERO_B1 &amp;&amp; C_ZERO_B2)) &amp;&amp;
+<span style="text-decoration:overline"><i>PCH</i></span>)</code> is true. Outputs high if
+<span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>C_Q</i></span></td>
+<td>Outputs inverted <i>C_Q</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit4_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit4567_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b4%5d">REG_BUS_PCH_A[4]</a>
+(1 total)
+</p>
+<h3 id="reg_bus_pch_a_bit5">REG_BUS_PCH_A_BIT5</h3>
+<p>Precharger and zero output for register busses bit 5.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <span style="text-decoration:overline"><i>PCH</i></span> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bus_pch_a_bit5_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, outputs <i>A_Q</i>, <i>B_Q</i> and <i>C_Q</i> get driven high for the
+purpose of precharging their respective nets. There are two <span style="text-decoration:overline"><i>PCH</i></span>
+inputs to this cell, which are externally connected to each other (indicated by the orange line in the
+picture).</td></tr>
+<tr><td><i>C_ZERO_A</i></td>
+<td>If <i>C_ZERO_A</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>C_ZERO_B1</i>, <i>C_ZERO_B2</i></td>
+<td>If <i>C_ZERO_B1</i>, <i>C_ZERO_B2</i> and <span style="text-decoration:overline"><i>PCH</i></span> are high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>B_Q</i></span></td>
+<td>Outputs inverted <i>B_Q</i>.</td></tr>
+<tr><td><i>C_Q</i></td>
+<td>Outputs low if <code>((<i>C_ZERO_A</i> || (C_ZERO_B1 &amp;&amp; C_ZERO_B2)) &amp;&amp;
+<span style="text-decoration:overline"><i>PCH</i></span>)</code> is true. Outputs high if
+<span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>C_Q</i></span></td>
+<td>Outputs inverted <i>C_Q</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit5_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit4567_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b5%5d">REG_BUS_PCH_A[5]</a>
+(1 total)
+</p>
+<h3 id="reg_bus_pch_a_bit6">REG_BUS_PCH_A_BIT6</h3>
+<p>Precharger and zero output for register busses bit 6.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <span style="text-decoration:overline"><i>PCH</i></span> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bus_pch_a_bit6_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, outputs <i>A_Q</i>, <i>B_Q</i> and <i>C_Q</i> get driven high for the
+purpose of precharging their respective nets. There are two <span style="text-decoration:overline"><i>PCH</i></span>
+inputs to this cell, which are externally connected to each other (indicated by the orange line in the
+picture).</td></tr>
+<tr><td><i>C_ZERO_A</i></td>
+<td>If <i>C_ZERO_A</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>C_ZERO_B1</i>, <i>C_ZERO_B2</i></td>
+<td>If <i>C_ZERO_B1</i>, <i>C_ZERO_B2</i> and <span style="text-decoration:overline"><i>PCH</i></span> are high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>B_Q</i></span></td>
+<td>Outputs inverted <i>B_Q</i>.</td></tr>
+<tr><td><i>C_Q</i></td>
+<td>Outputs low if <code>((<i>C_ZERO_A</i> || (C_ZERO_B1 &amp;&amp; C_ZERO_B2)) &amp;&amp;
+<span style="text-decoration:overline"><i>PCH</i></span>)</code> is true. Outputs high if
+<span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>C_Q</i></span></td>
+<td>Outputs inverted <i>C_Q</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit6_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit4567_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b6%5d">REG_BUS_PCH_A[6]</a>
+(1 total)
+</p>
+<h3 id="reg_bus_pch_a_bit7">REG_BUS_PCH_A_BIT7</h3>
+<p>Precharger and zero output for register busses bit 7.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <span style="text-decoration:overline"><i>PCH</i></span> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bus_pch_a_bit7_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, outputs <i>A_Q</i>, <i>B_Q</i> and <i>C_Q</i> get driven high for the
+purpose of precharging their respective nets. There are two <span style="text-decoration:overline"><i>PCH</i></span>
+inputs to this cell, which are externally connected to each other (indicated by the orange line in the
+picture).</td></tr>
+<tr><td><i>C_ZERO_A</i></td>
+<td>If <i>C_ZERO_A</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>C_ZERO_B1</i>, <i>C_ZERO_B2</i></td>
+<td>If <i>C_ZERO_B1</i>, <i>C_ZERO_B2</i> and <span style="text-decoration:overline"><i>PCH</i></span> are high, <i>C_Q</i>
+outputs 0.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>B_Q</i></span></td>
+<td>Outputs inverted <i>B_Q</i>.</td></tr>
+<tr><td><i>C_Q</i></td>
+<td>Outputs low if <code>((<i>C_ZERO_A</i> || (C_ZERO_B1 &amp;&amp; C_ZERO_B2)) &amp;&amp;
+<span style="text-decoration:overline"><i>PCH</i></span>)</code> is true. Outputs high if
+<span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>C_Q</i></span></td>
+<td>Outputs inverted <i>C_Q</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit7_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bus_pch_a_bit4567_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bus_pch_a%5b7%5d">REG_BUS_PCH_A[7]</a>
+(1 total)
+</p>
+<h3 id="reg_bus_pch_b">REG_BUS_PCH_B</h3>
+<p>Precharger for register busses.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_bus_pch_b_bit3_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, outputs <i>A_Q</i> and <i>B_Q</i> get driven high for the purpose of
+precharging their respective nets.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Open-source output. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_bus_pch_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_bus_pch_b_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b0%5d">REG_BUS_PCH_B[0]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b1%5d">REG_BUS_PCH_B[1]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b2%5d">REG_BUS_PCH_B[2]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b3%5d">REG_BUS_PCH_B[3]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b4%5d">REG_BUS_PCH_B[4]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b5%5d">REG_BUS_PCH_B[5]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b6%5d">REG_BUS_PCH_B[6]</a>,
+<a href="/sm83_map/?view=c:reg_bus_pch_b%5b7%5d">REG_BUS_PCH_B[7]</a>
+(8 total)
+</p>
+<h3 id="reg_de_out">REG_DE_OUT</h3>
+<p>Output drivers for DE registers.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_de_out0_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D_IN</i></td>
+<td>Input to NAND gate D and AOI gate.</td></tr>
+<tr><td><i>E_IN</i></td>
+<td>Input to NAND gate E and AOI gate.</td></tr>
+<tr><td><i>ENA1</i></td>
+<td>Input to both NAND gates.</td></tr>
+<tr><td><i>D_ENA2</i>, <i>E_ENA2</i></td>
+<td>Inputs to AOI gate.</td></tr>
+<tr><td><i>D_ZERO1</i>, <i>D_ZERO2</i></td>
+<td>If <i>D_ZERO1</i> or <i>D_ZERO2</i> is high, <i>D_Q1</i> outputs 0.</td></tr>
+<tr><td><i>D_Q1</i></td>
+<td>Open-drain output. Outputs <code>(!(<i>ENA1</i> &amp;&amp; <i>D_IN</i>) &amp;&amp; !<i>D_ZERO1</i> &amp;&amp;
+!<i>D_ZERO2</i>)</code>.</td></tr>
+<tr><td><i>E_Q1</i></td>
+<td>Open-drain output. Outputs <code>!(<i>ENA1</i> &amp;&amp; <i>E_IN</i>)</code>.</td></tr>
+<tr><td><i>Q2</i></td>
+<td>Open-drain output. Outputs <code>!((<i>D_ENA2</i> &amp;&amp; <i>D_IN</i>) || (<i>E_ENA2</i> &amp;&amp;
+<i>E_IN</i>))</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_de_out_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_de_out_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_de_out%5b0%5d">REG_DE_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b1%5d">REG_DE_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b2%5d">REG_DE_OUT[2]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b3%5d">REG_DE_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b4%5d">REG_DE_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b5%5d">REG_DE_OUT[5]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b6%5d">REG_DE_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_de_out%5b7%5d">REG_DE_OUT[7]</a>
+(8 total)
+</p>
+<h3 id="reg_hl_out">REG_HL_OUT</h3>
+<p>Output drivers for HL registers.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_hl_out0_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_hl_out_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_hl_out_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_hl_out%5b0%5d">REG_HL_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b1%5d">REG_HL_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b2%5d">REG_HL_OUT[2]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b3%5d">REG_HL_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b4%5d">REG_HL_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b5%5d">REG_HL_OUT[5]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b6%5d">REG_HL_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_hl_out%5b7%5d">REG_HL_OUT[7]</a>
+(8 total)
+</p>
+<h3 id="reg_pc_out_bit012">REG_PC_OUT_BIT012</h3>
+<p>Output drivers for PC register bits 0-2.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_pc_out_bit012_1_desc.png?v=0" style="min-width:400px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_pc_out_bit012_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_pc_out_bit012_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_pc_out%5b0%5d">REG_PC_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_pc_out%5b1%5d">REG_PC_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_pc_out%5b2%5d">REG_PC_OUT[2]</a>
+(3 total)
+</p>
+<h3 id="reg_pc_out_bit345">REG_PC_OUT_BIT345</h3>
+<p>Output drivers for PC register bits 3-5.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_pc_out_bit345_3_desc.png?v=0" style="min-width:400px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_pc_out_bit345_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_pc_out_bit345_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_pc_out%5b3%5d">REG_PC_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_pc_out%5b4%5d">REG_PC_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_pc_out%5b5%5d">REG_PC_OUT[5]</a>
+(3 total)
+</p>
+<h3 id="reg_pc_out_bit67">REG_PC_OUT_BIT67</h3>
+<p>Output drivers for PC register bits 6 and 7.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_pc_out_bit67_6_desc.png?v=0" style="min-width:400px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_pc_out_bit67_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_pc_out_bit67_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_pc_out%5b6%5d">REG_PC_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_pc_out%5b7%5d">REG_PC_OUT[7]</a>
+(2 total)
+</p>
+<h3 id="reg_sp_out">REG_SP_OUT</h3>
+<p>Output drivers for SP registers.</p>
+<table>
+<tr><td><img src="img/cells/sm83/reg_sp_out0_desc.png?v=0" style="min-width:440px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_sp_out_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_sp_out_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_sp_out%5b0%5d">REG_SP_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b1%5d">REG_SP_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b2%5d">REG_SP_OUT[2]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b3%5d">REG_SP_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b4%5d">REG_SP_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b5%5d">REG_SP_OUT[5]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b6%5d">REG_SP_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_sp_out%5b7%5d">REG_SP_OUT[7]</a>
+(8 total)
+</p>
+<h3 id="reg_wz_out">REG_WZ_OUT</h3>
+<p>Output drivers for WZ registers.</p>
+<p><img src="img/cells/sm83/reg_wz_out0_desc.png?v=0" alt=""></p>
+<table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>&nbsp;</i></td>
+<td><b>TODO:</b> Describe I/Os</td></tr>
+</table>
+<p><img src="img/cells/sm83/reg_wz_out_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/reg_wz_out_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_wz_out%5b0%5d">REG_WZ_OUT[0]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b1%5d">REG_WZ_OUT[1]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b2%5d">REG_WZ_OUT[2]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b3%5d">REG_WZ_OUT[3]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b4%5d">REG_WZ_OUT[4]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b5%5d">REG_WZ_OUT[5]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b6%5d">REG_WZ_OUT[6]</a>,
+<a href="/sm83_map/?view=c:reg_wz_out%5b7%5d">REG_WZ_OUT[7]</a>
+(8 total)
+</p>
+<h2 id="ff">Storage elements</h2>
+<h3 id="d_latch_irq">D_LATCH_IRQ</h3>
+<p>Gated data latch with additionally gated inverted output.</p>
+<table>
+<tr><td><img src="img/cells/sm83/d_latch_irq1_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input.</td></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. When high, the value at <i>D</i> transparently propagates through the latch. As soon
+as <i>ENA</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ENA</i> goes
+high again.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
+<td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+<tr><td><i>GATED_<span style="text-decoration:overline">Q</span></i></td>
+<td>Dynamically gated inverted data output. Outputs <span style="text-decoration:overline"><i>Q</i></span> when
+<span style="text-decoration:overline"><i>ENA_Q</i></span> is low, otherwise outputs low. Needs to be precharged
+regularly by pulling <span style="text-decoration:overline"><i>PCH</i></span> low and making
+<span style="text-decoration:overline"><i>ENA_Q</i></span> hi-Z at the same time.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ENA_Q</i></span></td>
+<td>Active-low enable input for dynamically gated <i>GATED_<span style="text-decoration:overline">Q</span></i> output.
+Must be undriven (hi-Z) when <span style="text-decoration:overline"><i>PCH</i></span> is enabled/low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>GATED_<span style="text-decoration:overline">Q</span></i> gets driven
+low. Must be disabled/high when <span style="text-decoration:overline"><i>ENA_Q</i></span> is enabled/low.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/d_latch_irq_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/d_latch_irq_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:irq_latch%5b0%5d">IRQ_LATCH[0]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b1%5d">IRQ_LATCH[1]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b2%5d">IRQ_LATCH[2]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b3%5d">IRQ_LATCH[3]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b4%5d">IRQ_LATCH[4]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b5%5d">IRQ_LATCH[5]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b6%5d">IRQ_LATCH[6]</a>,
+<a href="/sm83_map/?view=c:irq_latch%5b7%5d">IRQ_LATCH[7]</a>
+(8 total)
+</p>
+<h3 id="dff_alu_flag">DFF_ALU_FLAG</h3>
+<p>Negative-edge-triggered semi-dynamic data flip-flop with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_alu_flag_n_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <span style="text-decoration:overline"><i>CLK</i></span> and
+<i>LOAD</i> are both high. However, the new data is only visible at the outputs <i>Q</i> and
+<span style="text-decoration:overline"><i>Q</i></span> after a negative edge on
+<span style="text-decoration:overline"><i>CLK</i></span>. Outputs high if
+<span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>D</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data from input
+into storage. When <span style="text-decoration:overline"><i>CLK</i></span> and <i>LOAD</i> are both high, the data
+input <i>D</i> gets stored in the flip-flop. After a negative edge on
+<span style="text-decoration:overline"><i>CLK</i></span>, the newly stored data is visible at the outputs <i>Q</i>
+and <span style="text-decoration:overline"><i>Q</i></span>. <span style="text-decoration:overline"><i>CLK</i></span>
+must not be held high for an extended amount of time, otherwise the stored data will decay.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> and
+<span style="text-decoration:overline"><i>CLK</i></span> are both high.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_alu_flag_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_alu_flag_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:flag_c">FLAG_C</a>,
+<a href="/sm83_map/?view=c:flag_h">FLAG_H</a>,
+<a href="/sm83_map/?view=c:flag_n">FLAG_N</a>,
+<a href="/sm83_map/?view=c:flag_z">FLAG_Z</a>
+(4 total)
+</p>
+<h3 id="dff_alu_tmp">DFF_ALU_TMP</h3>
+<p>Negative-edge-triggered semi-dynamic data flip-flop without inverted output.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_alu_tmp_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <span style="text-decoration:overline"><i>CLK</i></span> and
+<i>LOAD</i> are both high. However, the new data is only visible at the output <i>Q</i> after a negative edge on
+<span style="text-decoration:overline"><i>CLK</i></span>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data from input
+into storage. When <span style="text-decoration:overline"><i>CLK</i></span> and <i>LOAD</i> are both high, the data
+input <i>D</i> gets stored in the flip-flop. After a negative edge on
+<span style="text-decoration:overline"><i>CLK</i></span>, the newly stored data is visible at the output <i>Q</i>.
+<span style="text-decoration:overline"><i>CLK</i></span> must not be held high for an extended amount of time,
+otherwise the stored data will decay.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> and
+<span style="text-decoration:overline"><i>CLK</i></span> are both high.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_alu_tmp_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_alu_tmp_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_dff">ALU_DFF</a>
+(1 total)
+</p>
+<h3 id="dff_reg_bit_a">DFF_REG_BIT - Variant A</h3>
+<p>Single-edge-triggered semi-dynamic data flip-flop without inverted output.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_reg_bit_a_l3_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <i>CLK</i> is low and <i>LOAD</i> is high. However, the new data
+is only visible at the output <i>Q</i> after a positive edge on <i>CLK</i>.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data
+from input into storage. When <i>CLK</i> is low and <i>LOAD</i> is high, the data input <i>D</i> gets stored in
+the flip-flop. After a positive edge on <i>CLK</i>, the newly stored data is visible at the output <i>Q</i>.
+<i>CLK</i> must not be held low for an extended amount of time, otherwise the stored data will decay.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. Must always be the inverse of <i>CLK</i>.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> is high and <i>CLK</i>
+is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_reg_bit_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_reg_bit_a_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_b%5b0%5d">REG_B[0]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b1%5d">REG_B[1]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b2%5d">REG_B[2]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b3%5d">REG_B[3]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b4%5d">REG_B[4]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b5%5d">REG_B[5]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b6%5d">REG_B[6]</a>,
+<a href="/sm83_map/?view=c:reg_b%5b7%5d">REG_B[7]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b0%5d">REG_C[0]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b1%5d">REG_C[1]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b2%5d">REG_C[2]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b3%5d">REG_C[3]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b4%5d">REG_C[4]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b5%5d">REG_C[5]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b6%5d">REG_C[6]</a>,
+<a href="/sm83_map/?view=c:reg_c%5b7%5d">REG_C[7]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b0%5d">REG_D[0]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b1%5d">REG_D[1]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b2%5d">REG_D[2]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b3%5d">REG_D[3]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b4%5d">REG_D[4]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b5%5d">REG_D[5]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b6%5d">REG_D[6]</a>,
+<a href="/sm83_map/?view=c:reg_d%5b7%5d">REG_D[7]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b0%5d">REG_E[0]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b1%5d">REG_E[1]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b2%5d">REG_E[2]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b3%5d">REG_E[3]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b4%5d">REG_E[4]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b5%5d">REG_E[5]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b6%5d">REG_E[6]</a>,
+<a href="/sm83_map/?view=c:reg_e%5b7%5d">REG_E[7]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b0%5d">REG_H[0]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b1%5d">REG_H[1]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b2%5d">REG_H[2]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b3%5d">REG_H[3]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b4%5d">REG_H[4]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b5%5d">REG_H[5]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b6%5d">REG_H[6]</a>,
+<a href="/sm83_map/?view=c:reg_h%5b7%5d">REG_H[7]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b0%5d">REG_L[0]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b1%5d">REG_L[1]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b2%5d">REG_L[2]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b3%5d">REG_L[3]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b4%5d">REG_L[4]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b5%5d">REG_L[5]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b6%5d">REG_L[6]</a>,
+<a href="/sm83_map/?view=c:reg_l%5b7%5d">REG_L[7]</a>
+(48 total)
+</p>
+<h3 id="dff_reg_bit_b">DFF_REG_BIT - Variant B</h3>
+<p>Single-edge-triggered semi-dynamic data flip-flop with higher driving strength and without inverted output.</p>
+<p>In comparison to <a href="#dff_reg_bit_a">variant A</a>, this variant (B) has wider output transistors and
+therefore a higher driving strength. Other than that, both variants are identical.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_reg_bit_b_a3_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <i>CLK</i> is low and <i>LOAD</i> is high. However, the new data
+is only visible at the output <i>Q</i> after a positive edge on <i>CLK</i>.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data
+from input into storage. When <i>CLK</i> is low and <i>LOAD</i> is high, the data input <i>D</i> gets stored in
+the flip-flop. After a positive edge on <i>CLK</i>, the newly stored data is visible at the output <i>Q</i>.
+<i>CLK</i> must not be held low for an extended amount of time, otherwise the stored data will decay.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. Must always be the inverse of <i>CLK</i>.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> is high and <i>CLK</i>
+is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_reg_bit_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_reg_bit_b_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_a%5b0%5d">REG_A[0]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b1%5d">REG_A[1]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b2%5d">REG_A[2]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b3%5d">REG_A[3]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b4%5d">REG_A[4]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b5%5d">REG_A[5]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b6%5d">REG_A[6]</a>,
+<a href="/sm83_map/?view=c:reg_a%5b7%5d">REG_A[7]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b0%5d">REG_IR[0]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b1%5d">REG_IR[1]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b2%5d">REG_IR[2]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b3%5d">REG_IR[3]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b4%5d">REG_IR[4]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b5%5d">REG_IR[5]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b6%5d">REG_IR[6]</a>,
+<a href="/sm83_map/?view=c:reg_ir%5b7%5d">REG_IR[7]</a>
+(16 total)
+</p>
+<h3 id="dff_reg_sp_bit">DFF_REG_SP_BIT</h3>
+<p>Single-edge-triggered semi-dynamic data flip-flop with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_reg_sp_bit_sph1_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <i>CLK</i> is low and <i>LOAD</i> is high. However, the new data
+is only visible at the outputs <i>Q</i> and <span style="text-decoration:overline"><i>Q</i></span> after a positive
+edge on <i>CLK</i>. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>D</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data
+from input into storage. When <i>CLK</i> is low and <i>LOAD</i> is high, the data input <i>D</i> gets stored in
+the flip-flop. After a positive edge on <i>CLK</i>, the newly stored data is visible at the outputs <i>Q</i> and
+<span style="text-decoration:overline"><i>Q</i></span>. <i>CLK</i> must not be held low for an extended amount of
+time, otherwise the stored data will decay.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. Must always be the inverse of <i>CLK</i>.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> is high and <i>CLK</i>
+is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_reg_sp_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_reg_sp_bit_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_sph%5b0%5d">REG_SPH[0]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b1%5d">REG_SPH[1]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b2%5d">REG_SPH[2]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b3%5d">REG_SPH[3]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b4%5d">REG_SPH[4]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b5%5d">REG_SPH[5]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b6%5d">REG_SPH[6]</a>,
+<a href="/sm83_map/?view=c:reg_sph%5b7%5d">REG_SPH[7]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b0%5d">REG_SPL[0]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b1%5d">REG_SPL[1]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b2%5d">REG_SPL[2]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b3%5d">REG_SPL[3]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b4%5d">REG_SPL[4]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b5%5d">REG_SPL[5]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b6%5d">REG_SPL[6]</a>,
+<a href="/sm83_map/?view=c:reg_spl%5b7%5d">REG_SPL[7]</a>
+(16 total)
+</p>
+<h3 id="dff_reg_wz_bit">DFF_REG_WZ_BIT</h3>
+<p>Single-edge-triggered semi-dynamic data flip-flop without non-inverted output.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_reg_wz_bit_z4_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <i>CLK</i> is low and <i>LOAD</i> is high. However, the new data
+is only visible at the output <span style="text-decoration:overline"><i>Q</i></span> after a positive
+edge on <i>CLK</i>.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data
+from input into storage. When <i>CLK</i> is low and <i>LOAD</i> is high, the data input <i>D</i> gets stored in
+the flip-flop. After a positive edge on <i>CLK</i>, the newly stored data is visible at the output
+<span style="text-decoration:overline"><i>Q</i></span>. <i>CLK</i> must not be held low for an extended amount of
+time, otherwise the stored data will decay.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. Must always be the inverse of <i>CLK</i>.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> is high and <i>CLK</i>
+is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_reg_wz_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_reg_wz_bit_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_w%5b0%5d">REG_W[0]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b1%5d">REG_W[1]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b2%5d">REG_W[2]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b3%5d">REG_W[3]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b4%5d">REG_W[4]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b5%5d">REG_W[5]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b6%5d">REG_W[6]</a>,
+<a href="/sm83_map/?view=c:reg_w%5b7%5d">REG_W[7]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b0%5d">REG_Z[0]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b1%5d">REG_Z[1]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b2%5d">REG_Z[2]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b3%5d">REG_Z[3]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b4%5d">REG_Z[4]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b5%5d">REG_Z[5]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b6%5d">REG_Z[6]</a>,
+<a href="/sm83_map/?view=c:reg_z%5b7%5d">REG_Z[7]</a>
+(16 total)
+</p>
+<h3 id="drff_reg_ie_bit">DRFF_REG_IE_BIT</h3>
+<p>Single-edge-triggered semi-dynamic data flip-flop with active-high semi-asynchronous reset.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <i>RESET</i> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/drff_reg_ie_bit1_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <i>CLK</i> and <i>RESET</i> are both low and <i>LOAD</i> is high.
+However, the new data is only visible at the outputs <i>Q</i> and
+<span style="text-decoration:overline"><i>Q</i></span> after a positive edge on <i>CLK</i>.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data
+from input into storage. When <i>CLK</i> and <i>RESET</i> are both low and <i>LOAD</i> is high, the data input <i>D</i>
+gets stored in the flip-flop. After a positive edge on <i>CLK</i>, the newly stored data is visible at the outputs
+<i>Q</i> and <span style="text-decoration:overline"><i>Q</i></span>. <i>CLK</i> must not be held low for an extended
+amount of time, otherwise the stored data will decay.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. Must always be the inverse of <i>CLK</i>.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> is high and <i>CLK</i>
+and <i>RESET</i> are both low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><i>RESET</i></td>
+<td>Active-high reset input. Data inside the flip-flop gets reset to 0 when <i>RESET</i> is high. However, the change
+is not (yet) visible at the outputs <i>Q</i> and <span style="text-decoration:overline"><i>Q</i></span> while <i>CLK</i>
+is low. There are two <i>RESET</i> inputs to this cell, which are externally connected to each other (indicated by the
+orange line in the picture).</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/drff_reg_ie_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/drff_reg_ie_bit_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_ie%5b0%5d">REG_IE[0]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b1%5d">REG_IE[1]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b2%5d">REG_IE[2]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b3%5d">REG_IE[3]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b4%5d">REG_IE[4]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b5%5d">REG_IE[5]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b6%5d">REG_IE[6]</a>,
+<a href="/sm83_map/?view=c:reg_ie%5b7%5d">REG_IE[7]</a>
+(8 total)
+</p>
+<h3 id="dsff_reg_pc_bit">DSFF_REG_PC_BIT</h3>
+<p>Single-edge-triggered semi-dynamic data flip-flop with precharge and active-low semi-asynchronous set.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <span style="text-decoration:overline"><i>SET</i></span> inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dsff_reg_pc_bit_pch2_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop when <i>CLK</i> is low and <i>LOAD</i> and
+<span style="text-decoration:overline"><i>SET</i></span> are both high.
+However, the new data is only visible at the outputs <i>Q</i> and
+<span style="text-decoration:overline"><i>Q</i></span> after a positive edge on <i>CLK</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>D</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. Edge sensitive for presenting stored data at output; level sensitive for taking new data
+from input into storage. When <i>CLK</i> is low and <i>LOAD</i> and
+<span style="text-decoration:overline"><i>SET</i></span> are both high, the data input <i>D</i> gets stored in the
+flip-flop. After a positive edge on <i>CLK</i>, the newly stored data is visible at the outputs <i>Q</i> and
+<span style="text-decoration:overline"><i>Q</i></span>. <i>CLK</i> must not be held low for an extended amount of
+time, otherwise the stored data will decay.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. Must always be the inverse of <i>CLK</i>.</td></tr>
+<tr><td><i>LOAD</i></td>
+<td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> and
+<span style="text-decoration:overline"><i>SET</i></span> are both high and <i>CLK</i> is low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>LOAD</i></span></td>
+<td>Active-low load input. Must always be the inverse of <i>LOAD</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>SET</i></span></td>
+<td>Active-low set input. Data inside the flip-flop gets set to 1 when
+<span style="text-decoration:overline"><i>SET</i></span> is low. However, the change is not (yet) visible at the
+outputs <i>Q</i> and <span style="text-decoration:overline"><i>Q</i></span> while <i>CLK</i> is low. There are two
+<span style="text-decoration:overline"><i>SET</i></span> inputs to this cell, which are externally connected to
+each other (indicated by the orange line in the picture).</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dsff_reg_pc_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dsff_reg_pc_bit_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:reg_pch%5b0%5d">REG_PCH[0]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b1%5d">REG_PCH[1]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b2%5d">REG_PCH[2]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b3%5d">REG_PCH[3]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b4%5d">REG_PCH[4]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b5%5d">REG_PCH[5]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b6%5d">REG_PCH[6]</a>,
+<a href="/sm83_map/?view=c:reg_pch%5b7%5d">REG_PCH[7]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b0%5d">REG_PCL[0]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b1%5d">REG_PCL[1]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b2%5d">REG_PCL[2]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b3%5d">REG_PCL[3]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b4%5d">REG_PCL[4]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b5%5d">REG_PCL[5]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b6%5d">REG_PCL[6]</a>,
+<a href="/sm83_map/?view=c:reg_pcl%5b7%5d">REG_PCL[7]</a>
+(16 total)
+</p>
+</main><footer><hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</footer></body>
+</html>

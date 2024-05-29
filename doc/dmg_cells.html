@@ -1243,7 +1243,7 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand2_layout.png?v=0" alt=""></p>
@@ -1487,7 +1487,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand2s_layout.png?v=0" alt=""></p>
@@ -1521,7 +1521,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2 &amp;&amp; IN3)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand3_sch.png?v=1" alt=""></p>
@@ -1567,7 +1567,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2 &amp;&amp; IN3 &amp;&amp; IN4)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand4_sch.png?v=1" alt=""></p>
@@ -1626,7 +1626,8 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2 &amp;&amp; IN3 &amp;&amp; IN4 &amp;&amp; IN5)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i> &amp;&amp;
+<i>IN5</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand5_sch.png?v=1" alt=""></p>
@@ -1665,7 +1666,8 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2 &amp;&amp; IN3 &amp;&amp; IN4 &amp;&amp; IN5 &amp;&amp; IN6)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i> &amp;&amp;
+<i>IN5</i> &amp;&amp; <i>IN6</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand6_sch.png?v=1" alt=""></p>
@@ -1683,7 +1685,8 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i>, <i>IN7</i></td>
 <td>Inputs to NAND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 &amp;&amp; IN2 &amp;&amp; IN3 &amp;&amp; IN4 &amp;&amp; IN5 &amp;&amp; IN6 &amp;&amp; IN7)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i> &amp;&amp;
+<i>IN5</i> &amp;&amp; <i>IN6</i> &amp;&amp; <i>IN7</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nand7_sch.png?v=1" alt=""></p>
@@ -1706,7 +1709,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to NOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 || IN2)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nor2_sch.png?v=0" alt=""></p>
@@ -1906,7 +1909,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to NOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 || IN2 || IN3)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nor3_sch.png?v=0" alt=""></p>
@@ -1959,7 +1962,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to NOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 || IN2 || IN3 || IN4)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nor4_sch.png?v=0" alt=""></p>
@@ -2004,7 +2007,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i></td>
 <td>Inputs to NOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 || IN2 || IN3 || IN4 || IN5)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nor5_sch.png?v=0" alt=""></p>
@@ -2027,7 +2030,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i></td>
 <td>Inputs to NOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 || IN2 || IN3 || IN4 || IN5 || IN6)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i> || <i>IN6</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nor6_sch.png?v=0" alt=""></p>
@@ -2045,7 +2048,8 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i>, <i>IN7</i>, <i>IN8</i></td>
 <td>Inputs to NOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 || IN2 || IN3 || IN4 || IN5 || IN6 || IN7 || IN8)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i> || <i>IN6</i> ||
+<i>IN7</i> || <i>IN8</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/nor8_sch.png?v=0" alt=""></p>
@@ -2064,7 +2068,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to AND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 &amp;&amp; IN2)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/and2_sch.png?v=1" alt=""></p>
@@ -2277,7 +2281,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to AND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 &amp;&amp; IN2 &amp;&amp; IN3)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/and3_sch.png?v=1" alt=""></p>
@@ -2329,7 +2333,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to AND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 &amp;&amp; IN2 &amp;&amp; IN3 &amp;&amp; IN4)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/and4_sch.png?v=1" alt=""></p>
@@ -2364,7 +2368,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to OR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 || IN2)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/or2_sch.png?v=0" alt=""></p>
@@ -2479,7 +2483,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to OR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 || IN2 || IN3)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> || <i>IN2</i> || <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/or3_sch.png?v=0" alt=""></p>
@@ -2518,7 +2522,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to OR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 || IN2 || IN3 || IN4)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/or4_sch.png?v=0" alt=""></p>
@@ -2538,7 +2542,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to XNOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!(IN1 ^ IN2)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> ^ <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/xnor_layout.png?v=1" alt=""></p>
@@ -2575,7 +2579,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to XOR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>(IN1 ^ IN2)</code>.</td></tr>
+<td>Outputs <code>(<i>IN1</i> ^ <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/xor_layout.png?v=1" alt=""></p>
@@ -2706,7 +2710,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN3</i></td>
 <td>Input to OR gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>((IN1 &amp;&amp; IN2) || IN3)</code>.</td></tr>
+<td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/ao1_sch.png?v=0" alt=""></p>
@@ -2727,7 +2731,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to AND gates.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>((IN1 &amp;&amp; IN2) || (IN3 &amp;&amp; IN4))</code>.</td></tr>
+<td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/ao2_sch.png?v=0" alt=""></p>
@@ -2762,7 +2766,8 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i>; <i>IN5</i>, <i>IN6</i></td>
 <td>Inputs to AND gates.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>((IN1 &amp;&amp; IN2) || (IN3 &amp;&amp; IN4) || (IN5 &amp;&amp; IN6))</code>.</td></tr>
+<td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>) || (<i>IN5</i>
+&amp;&amp; <i>IN6</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/ao3_layout.png?v=1" alt=""></p>
@@ -2782,7 +2787,8 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i>; <i>IN5</i>, <i>IN6</i>; <i>IN7</i>, <i>IN8</i></td>
 <td>Inputs to AND gates.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>((IN1 &amp;&amp; IN2) || (IN3 &amp;&amp; IN4) || (IN5 &amp;&amp; IN6) || (IN7 &amp;&amp; IN8))</code>.</td></tr>
+<td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>) || (<i>IN5</i>
+&amp;&amp; <i>IN6</i>) || (<i>IN7</i> &amp;&amp; <i>IN8</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/ao4_sch.png?v=0" alt=""></p>
@@ -2811,7 +2817,9 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <i>IN9</i>, <i>IN10</i>; <i>IN11</i>, <i>IN12</i></td>
 <td>Inputs to AND gates.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>((IN1 &amp;&amp; IN2) || (IN3 &amp;&amp; IN4) || (IN5 &amp;&amp; IN6) || (IN7 &amp;&amp; IN8) || (IN9 &amp;&amp; IN10) || (IN11 &amp;&amp; IN12))</code>.</td></tr>
+<td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>) || (<i>IN5</i>
+&amp;&amp; <i>IN6</i>) || (<i>IN7</i> &amp;&amp; <i>IN8</i>) || (<i>IN9</i> &amp;&amp; <i>IN10</i>) ||
+(<i>IN11</i> &amp;&amp; <i>IN12</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/ao6_sch.png?v=0" alt=""></p>
@@ -2831,7 +2839,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN3</i></td>
 <td>Input to AND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>!((IN1 || IN2) &amp;&amp; IN3)</code>.</td></tr>
+<td>Outputs <code>!((<i>IN1</i> || <i>IN2</i>) &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/oai_sch.png?v=0" alt=""></p>
@@ -2851,7 +2859,7 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <tr><td><i>IN3</i></td>
 <td>Input to AND gate.</td></tr>
 <tr><td><i>Q</i></td>
-<td>Outputs <code>((IN1 || IN2) &amp;&amp; IN3)</code>.</td></tr>
+<td>Outputs <code>((<i>IN1</i> || <i>IN2</i>) &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/oa_sch.png?v=0" alt=""></p>
@@ -2979,9 +2987,9 @@ if <i>SEL</i> is low.</td></tr>
 <tr><td><i>A</i>, <i>B</i></td>
 <td>Summand inputs.</td></tr>
 <tr><td><i>COUT</i></td>
-<td>Carry output. Outputs <code>(A &amp;&amp; B)</code>.</td></tr>
+<td>Carry output. Outputs <code>(<i>A</i> &amp;&amp; <i>B</i>)</code>.</td></tr>
 <tr><td><i>SUM</i></td>
-<td>Sum output. Outputs <code>(A ^ B)</code>.</td></tr>
+<td>Sum output. Outputs <code>(<i>A</i> ^ <i>B</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/hadd_sch.png?v=0" alt=""></p>
@@ -3001,9 +3009,10 @@ if <i>SEL</i> is low.</td></tr>
 <tr><td><i>CIN</i></td>
 <td>Carry input.</td></tr>
 <tr><td><i>COUT</i></td>
-<td>Carry output. Outputs <code>((A &amp;&amp; B) || (CIN &amp;&amp; (A ^ B)))</code>.</td></tr>
+<td>Carry output. Outputs <code>((<i>A</i> &amp;&amp; <i>B</i>) || (<i>CIN</i> &amp;&amp; (<i>A</i> ^
+<i>B</i>)))</code>.</td></tr>
 <tr><td><i>SUM</i></td>
-<td>Sum output. Outputs <code>(A ^ B ^ CIN)</code>.</td></tr>
+<td>Sum output. Outputs <code>(<i>A</i> ^ <i>B</i> ^ <i>CIN</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p>Instances:
@@ -3672,7 +3681,7 @@ connecting the two <i>IN</i> inputs, even though they are connected internally o
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
-<td>Input. There are two inputs to this cell, which are externally connected to each other (by the
+<td>Input. There are two inputs to this cell, which are externally connected to each other (indicated by the
 pink line in the picture).</td></tr>
 <tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
 <td>Active-low enable input. When low, the value at <i>IN</i> gets passed through to <i>Q</i>.
@@ -4412,7 +4421,7 @@ a positive edge on the <i>CLK</i> input at the same time.</td></tr>
 <td>Active-low reset input. Data inside the flip-flop gets reset to 0 when
 <span style="text-decoration:overline"><i>RESET</i></span> is low. There are two
 <span style="text-decoration:overline"><i>RESET</i></span> inputs to this cell, which are externally connected to
-each other (by the pink line in the picture).</td></tr>
+each other (indicated by the pink line in the picture).</td></tr>
 <tr><td><i>Q</i></td>
 <td>Data output.</td></tr>
 </table></td></tr>
@@ -4478,7 +4487,7 @@ a positive edge on the <i>CLK</i> input at the same time.</td></tr>
 <td>Active-low reset input. Data inside the flip-flop gets reset to 0 when
 <span style="text-decoration:overline"><i>RESET</i></span> is low. There are two
 <span style="text-decoration:overline"><i>RESET</i></span> inputs to this cell, which are externally connected to
-each other (by the pink line in the picture).</td></tr>
+each other (indicated by the pink line in the picture).</td></tr>
 <tr><td><i>Q</i></td>
 <td>Data output.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
@@ -4525,7 +4534,7 @@ positive clock edge. The pink connection is required to connect the two
 <td>Active-low reset input. Data inside the flip-flop gets reset to 0 when
 <span style="text-decoration:overline"><i>RESET</i></span> is low. There are two
 <span style="text-decoration:overline"><i>RESET</i></span> inputs to this cell, which are externally connected
-to each other (by the pink line in the picture).</td></tr>
+to each other (indicated by the pink line in the picture).</td></tr>
 <tr><td><i>Q</i></td>
 <td>Data output.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
@@ -4845,7 +4854,7 @@ inputs.</p>
 <td>Active-low set input. Data inside the flip-flop gets set to 1 when
 <span style="text-decoration:overline"><i>SET</i></span> is low. There are two
 <span style="text-decoration:overline"><i>SET</i></span> inputs to this cell, which are externally connected to
-each other (by the orange line in the picture). The <span style="text-decoration:overline"><i>RESET</i></span>
+each other (indicated by the orange line in the picture). The <span style="text-decoration:overline"><i>RESET</i></span>
 input has priority over <span style="text-decoration:overline"><i>SET</i></span>, meaning when
 <span style="text-decoration:overline"><i>RESET</i></span> is low,
 <span style="text-decoration:overline"><i>SET</i></span> has no effect.</td></tr>
@@ -4979,12 +4988,12 @@ negative clock edge. The orange and cyan connections are required to connect the
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
 <td>Data input. Gets stored in the flip-flop when <i>LOAD</i> is high. There are two <i>D</i> inputs
-to this cell, which are externally connected to each other (by the orange line in the picture).</td></tr>
+to this cell, which are externally connected to each other (indicated by the orange line in the picture).</td></tr>
 <tr><td><span style="text-decoration:overline"><i>TCLK</i></span></td>
 <td>Clock input. On a negative edge the data inside the flip-flop gets inverted.</td></tr>
 <tr><td><i>LOAD</i></td>
 <td>Active-high load input. Input <i>D</i> gets stored in the flip-flop when <i>LOAD</i> is high. There are
-two <i>LOAD</i> inputs to this cell, which are externally connected to each other (by the cyan line in
+two <i>LOAD</i> inputs to this cell, which are externally connected to each other (indicated by the cyan line in
 the picture).</td></tr>
 <tr><td><i>Q</i></td>
 <td>Data output.</td></tr>
