@@ -17,7 +17,8 @@ ROMS = \
 	stop.s \
 	halt.s \
 	sck-in.s \
-	eidi.s
+	eidi.s \
+	rout.s
 
 EXTRA_DIST = common.s $(ROMS)
 
