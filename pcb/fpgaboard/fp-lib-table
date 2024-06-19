@@ -1,10 +1,5 @@
 (fp_lib_table
-  (lib (name conn_audio)(type KiCad)(uri ${KIPRJMOD}/../conn_audio.pretty)(options "")(descr ""))
-  (lib (name conn_card)(type KiCad)(uri ${KIPRJMOD}/../conn_card.pretty)(options "")(descr ""))
-  (lib (name conn_usb)(type KiCad)(uri ${KIPRJMOD}/../conn_usb.pretty)(options "")(descr ""))
-  (lib (name fcc)(type KiCad)(uri ${KIPRJMOD}/fcc.pretty)(options "")(descr ""))
-  (lib (name gb_conn)(type KiCad)(uri ${KIPRJMOD}/gb_conn.pretty)(options "")(descr ""))
-  (lib (name bga)(type KiCad)(uri ${KIPRJMOD}/../bga.pretty)(options "")(descr ""))
-  (lib (name housing)(type KiCad)(uri ${KIPRJMOD}/housing.pretty)(options "")(descr ""))
-  (lib (name logo)(type KiCad)(uri ${KIPRJMOD}/logo.pretty)(options "")(descr ""))
+  (version 7)
+  (lib (name "Connector_GameBoy")(type "KiCad")(uri "${KIPRJMOD}/../lib/Connector_GameBoy.pretty")(options "")(descr "Game Boy connector footprints"))
+  (lib (name "logo")(type "KiCad")(uri "${KIPRJMOD}/logo.pretty")(options "")(descr "Game Boy themed bitmaps"))
 )
