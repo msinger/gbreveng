@@ -1,3 +1,4 @@
 (fp_lib_table
-  (lib (name fcc)(type KiCad)(uri /home/michael/projects/gbreveng/pcb/fpgaboard/fcc.pretty)(options "")(descr ""))
+  (version 7)
+  (lib (name "Connector_GameBoy")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/Connector_GameBoy.pretty")(options "")(descr ""))
 )

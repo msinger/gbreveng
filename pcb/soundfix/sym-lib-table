@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Amplifier_Audio_TDA7050")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/Amplifier_Audio_TDA7050.kicad_sym")(options "")(descr ""))
+)

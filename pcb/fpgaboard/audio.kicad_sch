@@ -21,7 +21,7 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at 3.81 6.35 0)
+				(at 1.27 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -29,7 +29,7 @@
 				)
 			)
 			(property "Value" "TDA7050"
-				(at 3.81 3.81 0)
+				(at 3.81 -5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -64,6 +64,14 @@
 					(hide yes)
 				)
 			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(property "ki_keywords" "audio amplifier"
 				(at 0 0 0)
 				(effects
@@ -82,7 +90,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "TDA7050_0_1"
+			(symbol "TDA7050_1_1"
 				(polyline
 					(pts
 						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -95,8 +103,6 @@
 						(type background)
 					)
 				)
-			)
-			(symbol "TDA7050_1_1"
 				(pin input line
 					(at -7.62 2.54 0)
 					(length 2.54)
@@ -133,24 +139,6 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -2.54 -7.62 90)
-					(length 3.81)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 				(pin output line
 					(at 7.62 0 180)
 					(length 2.54)
@@ -169,26 +157,20 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -2.54 7.62 270)
-					(length 3.81)
-					(name "V+"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 			)
 			(symbol "TDA7050_2_1"
+				(polyline
+					(pts
+						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
 				(pin input line
 					(at -7.62 -2.54 0)
 					(length 2.54)
@@ -225,24 +207,6 @@
 						)
 					)
 				)
-				(pin power_in line
-					(at -2.54 -7.62 90)
-					(length 3.81)
-					(name "GND"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
 				(pin output line
 					(at 7.62 0 180)
 					(length 2.54)
@@ -254,6 +218,26 @@
 						)
 					)
 					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "TDA7050_3_1"
+				(pin power_in line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(name "V-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2493,12 +2477,6 @@
 		(uuid "1579f887-e0de-40f1-a74e-c9f769f60cfe")
 	)
 	(junction
-		(at 110.49 152.4)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "19f65341-33b8-4abe-81dd-1c393f5b734f")
-	)
-	(junction
 		(at 96.52 91.44)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2601,12 +2579,6 @@
 		(uuid "78f6b768-a33d-40df-962b-99803f07a806")
 	)
 	(junction
-		(at 110.49 91.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "84fcbf7d-a8c5-4e37-9ad0-759ce4655b9a")
-	)
-	(junction
 		(at 93.98 69.85)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2617,12 +2589,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8b2f149f-3a34-430c-8962-4c7db3701cf8")
-	)
-	(junction
-		(at 110.49 170.18)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "93414206-9de0-46ea-a8c8-59e2ff4ef63e")
 	)
 	(junction
 		(at 96.52 124.46)
@@ -2742,16 +2708,6 @@
 	)
 	(wire
 		(pts
-			(xy 99.06 170.18) (xy 110.49 170.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0de52a64-49b6-4d1d-8a72-de381bf82c6e")
-	)
-	(wire
-		(pts
 			(xy 83.82 53.34) (xy 83.82 50.8)
 		)
 		(stroke
@@ -2802,7 +2758,7 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 170.18) (xy 137.16 170.18)
+			(xy 99.06 170.18) (xy 137.16 170.18)
 		)
 		(stroke
 			(width 0)
@@ -2862,16 +2818,6 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 107.95) (xy 110.49 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "21864ad2-0eca-4d40-9a85-34bc943a4aea")
-	)
-	(wire
-		(pts
 			(xy 110.49 140.97) (xy 110.49 142.24)
 		)
 		(stroke
@@ -2912,7 +2858,7 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 152.4) (xy 125.73 152.4)
+			(xy 96.52 152.4) (xy 125.73 152.4)
 		)
 		(stroke
 			(width 0)
@@ -2979,16 +2925,6 @@
 			(type default)
 		)
 		(uuid "346fb137-e55f-4029-b162-da2ad8331547")
-	)
-	(wire
-		(pts
-			(xy 114.3 91.44) (xy 110.49 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "36f77a14-51cf-4b39-8920-cc42e1c4de57")
 	)
 	(wire
 		(pts
@@ -3062,7 +2998,7 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 81.28) (xy 114.3 82.55)
+			(xy 110.49 81.28) (xy 110.49 82.55)
 		)
 		(stroke
 			(width 0)
@@ -3072,7 +3008,7 @@
 	)
 	(wire
 		(pts
-			(xy 110.49 91.44) (xy 96.52 91.44)
+			(xy 96.52 91.44) (xy 110.49 91.44)
 		)
 		(stroke
 			(width 0)
@@ -3159,26 +3095,6 @@
 			(type default)
 		)
 		(uuid "4b8c1b73-46e2-42e2-8b88-35b84acb7029")
-	)
-	(wire
-		(pts
-			(xy 114.3 81.28) (xy 110.49 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4f9c1640-58e2-4e43-8654-49981e4afca9")
-	)
-	(wire
-		(pts
-			(xy 110.49 168.91) (xy 110.49 170.18)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "542a618b-de3e-4e9c-9c49-a6cf397a8296")
 	)
 	(wire
 		(pts
@@ -3302,7 +3218,7 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 91.44) (xy 114.3 90.17)
+			(xy 110.49 91.44) (xy 110.49 90.17)
 		)
 		(stroke
 			(width 0)
@@ -3379,16 +3295,6 @@
 			(type default)
 		)
 		(uuid "7b389563-1c89-44cd-8c3e-0c09345aec80")
-	)
-	(wire
-		(pts
-			(xy 110.49 91.44) (xy 110.49 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7c5d6956-136e-4fde-a339-bbfcc46b0784")
 	)
 	(wire
 		(pts
@@ -3512,16 +3418,6 @@
 	)
 	(wire
 		(pts
-			(xy 99.06 109.22) (xy 110.49 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "93374fb8-bab3-473f-8a9b-5d98be3addd5")
-	)
-	(wire
-		(pts
 			(xy 110.49 22.86) (xy 110.49 27.94)
 		)
 		(stroke
@@ -3559,16 +3455,6 @@
 			(type default)
 		)
 		(uuid "9e574e8e-34f0-46ee-8f6e-115ce6823e73")
-	)
-	(wire
-		(pts
-			(xy 110.49 152.4) (xy 110.49 153.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9f64aa6b-6d71-4b0c-bdcc-6c3ff32f2c5c")
 	)
 	(wire
 		(pts
@@ -3729,16 +3615,6 @@
 			(type default)
 		)
 		(uuid "c8dc8ea4-4e2e-4ab2-8b25-c56a62515fec")
-	)
-	(wire
-		(pts
-			(xy 96.52 152.4) (xy 110.49 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c98d10b6-4fb3-4c21-8ac9-a7f7261990e8")
 	)
 	(wire
 		(pts
@@ -4099,7 +3975,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005c228ef3")
 		(property "Reference" "U23"
-			(at 116.84 66.04 0)
+			(at 114.3 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4107,7 +3983,7 @@
 			)
 		)
 		(property "Value" "TDA7050"
-			(at 116.84 68.58 0)
+			(at 116.84 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4166,12 +4042,6 @@
 		(pin "7"
 			(uuid "1693f1eb-1825-481f-9871-1a1f890e4e71")
 		)
-		(pin "5"
-			(uuid "073f7d8e-ff1d-47d3-8e9c-e47ac262e86e")
-		)
-		(pin "8"
-			(uuid "92ea4e4b-43eb-491f-b6bd-5e16912bfd77")
-		)
 		(instances
 			(project ""
 				(path "/48db9807-b007-455a-951c-7ea167fb2069/00000000-0000-0000-0000-00005c3829f9"
@@ -4191,7 +4061,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005c228f85")
 		(property "Reference" "U23"
-			(at 116.84 93.98 0)
+			(at 114.3 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4199,7 +4069,7 @@
 			)
 		)
 		(property "Value" "TDA7050"
-			(at 116.84 96.52 0)
+			(at 116.84 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4257,12 +4127,6 @@
 		)
 		(pin "6"
 			(uuid "0b876ed1-2b20-4276-a59d-ab710425e9df")
-		)
-		(pin "5"
-			(uuid "38ca6af0-2e51-46c6-978e-a5b8df7c8ec1")
-		)
-		(pin "8"
-			(uuid "d4265deb-5810-41cc-b185-2987cff169ca")
 		)
 		(instances
 			(project ""
@@ -4706,7 +4570,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005c22c318")
 		(property "Reference" "U24"
-			(at 116.84 127 0)
+			(at 114.3 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4714,7 +4578,7 @@
 			)
 		)
 		(property "Value" "TDA7050"
-			(at 116.84 129.54 0)
+			(at 116.84 138.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4752,9 +4616,6 @@
 		(pin "5"
 			(uuid "ab5f02e6-5ece-4bd2-8749-becde60d610e")
 		)
-		(pin "8"
-			(uuid "d68bc871-6de3-47d1-b682-83f07c8b1dad")
-		)
 		(pin "1"
 			(uuid "005f1b00-e8b7-4e53-a33e-e3d0c13709be")
 		)
@@ -4772,9 +4633,6 @@
 		)
 		(pin "6"
 			(uuid "281e4f6c-947a-4864-a947-7833916d0333")
-		)
-		(pin "5"
-			(uuid "e3a027fc-8abe-483a-b7c2-80d3477ac58b")
 		)
 		(pin "8"
 			(uuid "dc3d99aa-aa1a-47b3-886c-144d74071a79")
@@ -4798,7 +4656,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005c22c45d")
 		(property "Reference" "U24"
-			(at 116.84 154.94 0)
+			(at 114.3 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4806,7 +4664,7 @@
 			)
 		)
 		(property "Value" "TDA7050"
-			(at 116.84 157.48 0)
+			(at 116.84 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4841,9 +4699,6 @@
 				(hide yes)
 			)
 		)
-		(pin "5"
-			(uuid "db38a3cb-4c65-489c-b12d-511ceeca0e43")
-		)
 		(pin "8"
 			(uuid "01f5f0b9-4a49-4e23-adb5-097e97074951")
 		)
@@ -4867,9 +4722,6 @@
 		)
 		(pin "5"
 			(uuid "7b4fe71f-708e-43eb-9e60-06213172ee29")
-		)
-		(pin "8"
-			(uuid "942dcd67-6bf9-4642-bf72-cd1ceba2d5e3")
 		)
 		(instances
 			(project ""
@@ -5758,7 +5610,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 114.3 86.36 0)
+		(at 110.49 86.36 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5766,7 +5618,7 @@
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-00005c235e1e")
 		(property "Reference" "C104"
-			(at 114.935 83.82 0)
+			(at 111.125 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5775,7 +5627,7 @@
 			)
 		)
 		(property "Value" "100n"
-			(at 114.935 88.9 0)
+			(at 111.125 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5784,7 +5636,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric_Pad0.74x0.62mm_HandSolder"
-			(at 115.2652 90.17 0)
+			(at 111.4552 90.17 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5793,7 +5645,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 114.3 86.36 0)
+			(at 110.49 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5802,7 +5654,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 114.3 86.36 0)
+			(at 110.49 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6391,6 +6243,182 @@
 				(path "/48db9807-b007-455a-951c-7ea167fb2069/00000000-0000-0000-0000-00005c3829f9"
 					(reference "C110")
 					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Audio_TDA7050:TDA7050")
+		(at 113.03 133.35 0)
+		(unit 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "377cac51-3196-4e32-a8ba-9ef9fda69284")
+		(property "Reference" "U24"
+			(at 114.3 128.27 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "TDA7050"
+			(at 116.84 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm_Socket"
+			(at 113.03 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://eandc.ru/pdf/import/tda7050.pdf"
+			(at 113.03 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Low voltage mono/stereo poweramplifier"
+			(at 113.03 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "581b66ce-fde2-4827-b898-aa3da62135ac")
+		)
+		(pin "5"
+			(uuid "992e9416-a784-4fcd-96ca-b1df59aa8d7d")
+		)
+		(pin "3"
+			(uuid "feaa73ed-cd0a-4db4-b3d2-a14c9c42a3a0")
+		)
+		(pin "7"
+			(uuid "9da2d2eb-5106-4854-a0da-0f418c682bb4")
+		)
+		(pin "8"
+			(uuid "b65d2cee-2bda-449e-aef3-28f3032bf3d3")
+		)
+		(pin "1"
+			(uuid "d358f724-80e3-4bce-afae-22dea90abfca")
+		)
+		(pin "2"
+			(uuid "270c9713-6c4a-435a-80bf-cc2f5914b9a7")
+		)
+		(pin "6"
+			(uuid "9f53b7c2-6368-40b8-b0b3-33469789b50d")
+		)
+		(instances
+			(project ""
+				(path "/48db9807-b007-455a-951c-7ea167fb2069/00000000-0000-0000-0000-00005c3829f9"
+					(reference "U24")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Amplifier_Audio_TDA7050:TDA7050")
+		(at 113.03 72.39 0)
+		(unit 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9013a234-7042-469a-b329-b9703f268499")
+		(property "Reference" "U23"
+			(at 114.3 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "TDA7050"
+			(at 116.84 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm_Socket"
+			(at 113.03 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://eandc.ru/pdf/import/tda7050.pdf"
+			(at 113.03 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Low voltage mono/stereo poweramplifier"
+			(at 113.03 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "8"
+			(uuid "fd57e260-fdc0-43f3-8b8f-33727fb713f7")
+		)
+		(pin "7"
+			(uuid "a800b2cb-815e-458c-934c-8362a53c1f49")
+		)
+		(pin "5"
+			(uuid "adad0f6a-63bb-4e20-b160-299ce9fdb5bd")
+		)
+		(pin "6"
+			(uuid "add2aa06-ec75-48d0-bc7f-e72c320c4f91")
+		)
+		(pin "3"
+			(uuid "880b67a6-f547-4d52-a3c4-c1b561c0ab7d")
+		)
+		(pin "2"
+			(uuid "3f48b6c5-6f82-4e2e-b37f-b652f9e6a4c9")
+		)
+		(pin "1"
+			(uuid "5cdf9aa5-abfa-45d2-abcb-be4e296edde5")
+		)
+		(pin "4"
+			(uuid "ac0e99b9-3146-4cc2-81de-a12d2d94afe8")
+		)
+		(instances
+			(project ""
+				(path "/48db9807-b007-455a-951c-7ea167fb2069/00000000-0000-0000-0000-00005c3829f9"
+					(reference "U23")
+					(unit 3)
 				)
 			)
 		)

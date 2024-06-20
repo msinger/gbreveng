@@ -10,7 +10,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(property "Reference" "U"
-			(at 3.81 6.35 0)
+			(at 1.27 5.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18,7 +18,7 @@
 			)
 		)
 		(property "Value" "TDA7050"
-			(at 3.81 3.81 0)
+			(at 3.81 -5.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -53,6 +53,14 @@
 				(hide yes)
 			)
 		)
+		(property "ki_locked" ""
+			(at 0 0 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(property "ki_keywords" "audio amplifier"
 			(at 0 0 0)
 			(effects
@@ -71,7 +79,7 @@
 				(hide yes)
 			)
 		)
-		(symbol "TDA7050_0_1"
+		(symbol "TDA7050_1_1"
 			(polyline
 				(pts
 					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -84,8 +92,6 @@
 					(type background)
 				)
 			)
-		)
-		(symbol "TDA7050_1_1"
 			(pin input line
 				(at -7.62 2.54 0)
 				(length 2.54)
@@ -122,24 +128,6 @@
 					)
 				)
 			)
-			(pin power_in line
-				(at -2.54 -7.62 90)
-				(length 3.81)
-				(name "GND"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
 			(pin output line
 				(at 7.62 0 180)
 				(length 2.54)
@@ -158,26 +146,20 @@
 					)
 				)
 			)
-			(pin power_in line
-				(at -2.54 7.62 270)
-				(length 3.81)
-				(name "V+"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "8"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
 		)
 		(symbol "TDA7050_2_1"
+			(polyline
+				(pts
+					(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
 			(pin input line
 				(at -7.62 -2.54 0)
 				(length 2.54)
@@ -214,24 +196,6 @@
 					)
 				)
 			)
-			(pin power_in line
-				(at -2.54 -7.62 90)
-				(length 3.81)
-				(name "GND"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-				(number "5"
-					(effects
-						(font
-							(size 1.27 1.27)
-						)
-					)
-				)
-			)
 			(pin output line
 				(at 7.62 0 180)
 				(length 2.54)
@@ -243,6 +207,26 @@
 					)
 				)
 				(number "6"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+			)
+		)
+		(symbol "TDA7050_3_1"
+			(pin power_in line
+				(at -2.54 -7.62 90)
+				(length 3.81)
+				(name "V-"
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(number "5"
 					(effects
 						(font
 							(size 1.27 1.27)
