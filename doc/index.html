@@ -44,7 +44,7 @@ IceStorm</a>.</p>
 <p style="margin: 1em;">&rarr; <a href="https://sourceforge.net/projects/iceboy/">IceBoy project on SourceForge</a></p>
 <p>The first prototype was running on a
 <a href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/iCE40HX8KBreakoutBoard.aspx">iCE40-HX8K
-Breakout Board</a> with a perfboard attached to it for memory, and a LCD display with UC1611 driver that I got with an
+Breakout Board</a> with a perfboard attached to it for memory, and an LCD display with UC1611 driver that I got with an
 <a href="https://web.archive.org/web/20080705022650/http://www.conitec.com/english/linuxboard.htm">ARM evaluation board</a>
 over a decade ago.</p>
 <table><tr><td><a href="doc/img/prototype.jpg"><img src="doc/img/prototype.jpg"
@@ -63,7 +63,7 @@ style="max-width: 50%;"></a></p>
 <p>I let <a href="https://www.seeedstudio.com/fusion.html">SeeedStudio</a> manufacture and assemble two of those PCBs.
 I used their PCB manufacturing services multiple times now and so far I'm very happy with their quality. The board has
 all the memory the Game Boy needs onboard. It has even more than the perfboard had. There's 2x1 MiB for the ROM file,
-128 KiB for the cartridge RAM and I had added another RAM that has it's own data and address bus, so it can be used as
+128 KiB for the cartridge RAM and I had added another RAM that has its own data and address bus, so it can be used as
 video RAM. There is a cartridge connector at the top, which can be used instead of loading a ROM file over UART. Just
 like on the real Game Boy, the cartridge connector is also sharing its data and address bus with the work RAM. The big
 pin header at the far left edge of the PCB can be connected to a real Game Boy using the
@@ -86,14 +86,14 @@ This is just some basic stuff like what's visible on the external bus when the G
 address ranges.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/nocrystal.jpg" alt=""></td><td>
 <a href="doc/skip_ff50.html">Skip write to 0xff50 register before leaving boot ROM</a><br>
-Of course I wanted to experiment on the boot ROM skip like everybody else did already. I found out which single
+Of course, I wanted to experiment on the boot ROM skip like everybody else did already. I found out which single
 clock tick needs to be shortened for the CPU to make a deterministic jump to one specific address.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/wideboy.jpg" alt=""></td><td>
 <a href="doc/wide_boy.html">Wide-Boy64 Research</a><br>
 I have reverse engineered the schematics of the Wide-Boy64 AGB and was able to dump the Spartan bitstream from
-the PROM.</td></tr>
+the PROM and also the N64 code from the flash.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/clkgen.png" alt=""></td><td>
-<a href="doc/dmg_reset.html">Weird DMG-CPU Reset Behaviour</a><br>
+<a href="doc/dmg_reset.html">Weird DMG-CPU Reset Behavior</a><br>
 I discovered that some state of the clock generation logic inside the DMG-CPU B chip is not properly reset, which
 is actually measurable from outside the chip.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/schematics.png" alt=""></td><td>
@@ -118,8 +118,8 @@ Here I'm trying to figure out the purpose of each connection from/to the CPU cor
 <tr><td style="min-width:100px"><img src="doc/img/thumb/db.jpg" alt=""></td><td>
 <a href="db.html">Game Boy Database</a><br>
 A database of all the Game Boys and cartridges I've collected. I stole this idea from Gekkio, there's really no other
-way to put it. Check out his huge <a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot tracking down
-all the different CPU revisions on ebay, based on the serial numbers on the back.</td></tr>
+way to put it. Check out his huge <a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot to track down
+all the different CPU revisions on eBay, based on the serial numbers on the back.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/map.jpg" alt=""></td><td>
 <a href="dmg_cpu_b_map/">Game Boy DMG-CPU B Map</a><br>
 <a href="sm83_map/">SM83 Map</a><br>
@@ -148,10 +148,10 @@ These ought to be "reference manuals" for all the cells used inside the DMG-CPU 
 <ul>
 <li><s>Reverse engineer WB64AGB schematics</s> - <i><a href="doc/wideboy64agb_sch.pdf">done</a> 2021-07-22</i></li>
 <li><s>Dump WB64AGB PROM (FPGA bitstream)</s> - <i>done 2021-05-13</i></li>
-<li>Dump WB64AGB EEPROM (likely to be empty)</li>
-<li>Desolder and dump WB64AGB Flash (N64 ROM)</li>
+<li>Dump WB64AGB EEPROM and figure out which setting is stored where</li>
+<li><s>Desolder and dump WB64AGB Flash (N64 ROM)</s> - <i>done 2024-06-30</i></li>
 <li>Develop WB64AGB clone</li>
-<li>Find and buy WB64CGB on ebay</li>
+<li>Find and buy WB64CGB on eBay</li>
 </ul></li>
 </ul>
 </article></main><footer>

@@ -27,6 +27,7 @@ drv_dmglcd/Makefile
 shiva/Makefile
 test_hw/Makefile
 wb64agb_prom_dump/Makefile
+wb64agb_flash_dump/Makefile
 Makefile
 ])
 

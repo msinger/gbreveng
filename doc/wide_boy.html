@@ -41,7 +41,8 @@
 </ul></li>
 <li><a href="#wideboy64agb">Wide-Boy64 AGB</a><ul>
 <li><a href="#agbcomponents">Components</a></li>
-<li><a href="#agbbitstream">Spartan Bitstream</a></li>
+<li><a href="#agbbitstream">Spartan bitstream</a></li>
+<li><a href="#agbflashdump">Flash content</a></li>
 <li><a href="#agb40pin">40-pin connector (CN3) pinout on Wide-Boy64 AGB</a></li>
 <li><a href="#agbmem">Memories connected to FPGA (and each other) on Wide-Boy64 AGB</a><ul>
 <li><a href="#agbflash">Flash</a></li>
@@ -56,7 +57,7 @@
 <li><a href="#links">Links</a></li>
 </ul>
 <h2 id="overview">Overview</h2>
-<p>I got my hands on a Wide-Boy64 AGB that I found on Ebay. It's in a very good condition.</p>
+<p>I got my hands on a Wide-Boy64 AGB that I found on eBay. It's in a very good condition.</p>
 <p><img src="img/wideboy64agb.png" alt=""><br>
 <i><u>Picture 1</u><br>
 Wide-Boy64 AGB</i></p>
@@ -67,16 +68,16 @@ Cable that came with the Wide-Boy64</i></p>
 The smaller black connector of this cable fits into the white connector on the front side of the Wide-Boy.
 The bigger white connector fits into the connector on a Wide-Boy64 CGB cartridge port adapter that is used to
 connect a specially prepped Game Boy Color to a Wide-Boy64 CGB. I bought such an adapter from the same seller
-on Ebay from which I got the Wide-Boy64 AGB. Though this adapter obviously can't be used with the AGB version
+on eBay from which I got the Wide-Boy64 AGB. Though this adapter obviously can't be used with the AGB version
 of the Wide-Boy. I bought it out of curiosity. The Wide-Boy64 AGB that I have doesn't even have the 40 pin
-connector that you need for that. The connector is not soldered onto the PCB and there is no hole cut for it
+connector that you need for that. The connector is not soldered onto the PCB, and there is no hole cut for it
 into the front of the shell. I could solder it in myself, but then I would also need to cut a hole for it. I
 don't want to modify the original shell. It would look very ugly when <i>I</i> do it.<p>
 <p>You can't connect any regular Game Boy to a Wide-Boy. The ones you use as a controller for the Wide-Boy
 don't have a Game Boy CPU. They have a different PCB that just connects the cartridge port to the display,
 buttons and the audio amplifier. So they just act as an I/O device.<p>
 <h2 id="wideboy64cgb">Wide-Boy64 CGB</h2>
-<p>Since I don't have the CGB variant of the Wide-Boy64 (yet), I can only describe it's adapter here.</p>
+<p>Since I don't have the CGB variant of the Wide-Boy64 (yet), I can only describe its adapter here.</p>
 <h3 id="cgbadapter">CGB Adapter</h3>
 <p>This is the CGB Adapter I bought:</p>
 <p><img src="img/wideboy64cgb_adapter_front.png" alt=""><img src="img/wideboy64cgb_adapter_back.png" alt=""><br>
@@ -86,7 +87,7 @@ Wide-Boy64 CGB Adapter</i></p>
 <i><u>Picture 5&6</u><br>
 Wide-Boy64 CGB Adapter PCB</i></p>
 <p>I have drawn a schematic for the PCB: <a href="dmg_cart_probe.pdf">dmg_cart_probe.pdf</a></p>
-<p>I labelled the pins on the cartridge connector with the signals that they ususally have on a cartridge
+<p>I labelled the pins on the cartridge connector with the signals that they usually have on a cartridge
 (address, data, ...), not the display and button signals that the Wide-Boy puts onto them. The fact that they
 didn't connect pin 31 (the analog pin) makes me think that this PCB wasn't designed specifically for the
 Wide-Boy in mind. They might have used this for probing the signals between a Game Boy and a cartridge.
@@ -99,16 +100,26 @@ be found in my <a href="../db/wb64agb_iceboy_1.html">Game Boy database</a>.)</p>
 <p><img src="img/wideboy64agb_components.png" alt=""><br>
 <i><u>Picture 7</u><br>
 Components of the Wide-Boy64 AGB</i></p>
-<p>The EEPROM in the bottom left (BU9850) is used in many N64 cartridges that allow to save the game. I don't
+<p>The EEPROM in the bottom left (BU9850) is used in many N64 cartridges that allow to save the game. <s>I don't
 know what it is used for in the Wide-Boy. My guess is, they designed it in just in case they need it, but then
 never used it for anything. The Wide-Boy64 AGB does not save any settings. It doesn't even have a menu or
-something. I haven't checked the contents of this EEPROM yet. I expect it to be all 0xFF. Ah, and yes, it is
+something. I haven't checked the contents of this EEPROM yet. I expect it to be all 0xFF.</s> Ah, and yes, it is
 connected to the N64 connector at the bottom, so it can be accessed by the N64.</p>
+<p>UPDATE: A dump of the EEPROM was done by <i>togemet2</i>:
+<a href="https://github.com/msinger/wideboy/discussions/2#discussioncomment-9796702">See GitHub discussion.</a>
+(The EEPROM is <b>not</b> empty!)<br>
+In the same GitHub discussion, I was informed that the Wide-Boy has a menu that can be accessed when attaching
+a second controller to the N64. The information came from this
+<a href="https://www.nesworld.com/n64-wideboy.php">website</a>. I tried it out and it works. You actually need a
+second controller for the menu to work. Both controllers need to be plugged in ports 1 &amp; 2 during boot.
+You access the menu by pressing Start on the second controller. Color saturation and brightness of the Game Boy
+image can be adjusted in this menu. There is also the software version shown in the bottom right corner. I noticed
+that the color and brightness values that you configure in this menu are persistent across power cycles. This
+means that those settings are stored in the EEPROM.</p>
 <p>There is a second place at the top center of the PCB where a Game Boy External Link Port could be soldered
 in. Seems like when the PCB was designed, they haven't decided yet where to put the connector.</p>
 <p>Luckily, the CIC, EEPROM and PROM chips are socketed. This makes it easy to change the region and dump the
-EEPROM and PROM contents. The Flash is not socketed though. I don't know yet if all it's contents can be
-accessed by the N64 or if the FPGA reads some other data than the N64 software from it as well.</p>
+EEPROM and PROM contents. The Flash is not socketed though.</p>
 <p>The clock generator (U15) to the left of the FPGA provides a ~48.6 MHz clock to the FPGA pin 70. See page 3
 of my schematic of the Wide-Boy64 AGB for details: <a href="wideboy64agb_sch.pdf">wideboy64agb_sch.pdf</a><br>
 Note that the 250 MHz clock output (RCLK) just gets drained through resistor R24.</p>
@@ -117,12 +128,63 @@ Note that the 250 MHz clock output (RCLK) just gets drained through resistor R24
 <p><img src="img/wideboy64agb_prom_dump.png" alt=""><br>
 <i><u>Picture 8</u><br>
 Wide-Boy64 AGB PROM connected to iCE40HX-8K Breakout Board</i></p>
-<p>The code I used for dumping it on a 1MBit UART can be found <a href="https://sourceforge.net/p/iceboy/reveng/ci/master/tree/wb64agb_prom_dump/dump.sv">here</a>.</p>
+<p>The code I used for dumping it on a 1Mbit UART can be found <a href="https://github.com/msinger/gbreveng/blob/master/wb64agb_prom_dump/dump.sv">here</a>.</p>
 <p>The PROM contains 179160 bits (22395 bytes) and when stored LSB-first it has the following hashes:</p>
 <ul>
 <li>MD5: 536e776798fa2ab103e49cd322fb5669</li>
 <li>SHA256: b41f2e84b0d14a2065dfcc17bfb7d49056a277c9c2f0ace1124c7e48b831b49f</li>
 </ul>
+<h3 id="agbflashdump">Flash content</h3>
+<p>I dumped the flash content in two different ways: First by dumping the Wide-Boy like an N64 cartridge, and
+second by desoldering the flash chip, putting it into a socket and connecting it to an iCE40HX-8K Breakout
+Board.</p>
+<p>For me, the <a href="https://dragonbox.de/en/cartridge-dumper/retrode2.html">Retrode 2</a> looked like the
+best option for dumping N64 cartridges, because it doesn't require any proprietary software that only runs on
+garbage operating systems that you are even expected to pay money for. It just acts as a USB storage device. The
+problem with the Retrode 2 however is, that it isn't actually designed for dumping development cartridges like
+the Wide-Boy. It doesn't provide the 12 volts that the Wide-Boy requires. But if you solder some wires at the
+back of the regulators U3 or U4, which take the 12 V as inputs, you can just power them externally.</p>
+<p>The flash when dumped as a 4 MiB N64 cartridge has the following hashes:</p>
+<ul>
+<li>MD5: 035d3b6fea083ab2d779c0f611ef11fa</li>
+<li>SHA256: 06da122ff65557ecc4c258a1338854cfcaafbadc04c432e5e1c183e34f411209</li>
+</ul>
+<p>I used <a href="https://de.aliexpress.com/item/4000100679714.html?spm=a2g0o.order_list.order_list_main.33.229f5c5fwq7TVV&gatewayAdapt=glo2deu">this socket</a>
+connected to an iCE40HX-8K Breakout Board for dumping the desoldered flash chip directly.</p>
+<p><img src="img/wideboy64agb_flash_dump.png" alt=""><br>
+<i><u>Picture 9</u><br>
+Wide-Boy64 AGB Flash connected to iCE40HX-8K Breakout Board</i></p>
+<p>The code I used for dumping it on a 1Mbit UART can be found <a href="https://github.com/msinger/gbreveng/blob/master/wb64agb_flash_dump/dump.sv">here</a>.</p>
+<p>The flash is 4 MiB in size. The first half of the flash turned out to be empty (0xFF). At address 0x200000
+the actual data starts that I had also seen after the N64 cartridge dump. But the data is byte swapped in 16 bit
+words. Here's how the hex dumps look like:</p>
+<p>Dumped as cartridge:</p>
+<pre>
+00000000  80 37 12 40 00 00 00 0f  80 02 5c 00 00 00 14 49  |.7.@......\....I|
+00000010  d1 71 2d 97 9f 82 40 91  00 00 00 00 00 00 00 00  |.q-...@.........|
+00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000040  40 80 68 00 40 80 48 00  40 80 58 00 3c 08 a4 70  |@.h.@.H.@.X.&lt;..p|
+...
+</pre>
+<p>Dumped directly:</p>
+<pre>
+00000000  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+*
+00200000  37 80 40 12 00 00 0f 00  02 80 00 5c 00 00 49 14  |7.@........\..I.|
+00200010  71 d1 97 2d 82 9f 91 40  00 00 00 00 00 00 00 00  |q..-...@........|
+00200020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00200040  80 40 00 68 80 40 00 48  80 40 00 58 08 3c 70 a4  |.@.h.@.H.@.X.&lt;p.|
+...
+</pre>
+<p>The flash when dumped directly has the following hashes:</p>
+<ul>
+<li>MD5: 529f0a6d80ef479b68c9c18e6d225b7f</li>
+<li>SHA256: 3391da27efea6931ffe35a09d844dcff794e29a07d9c01a3b329469acf312d36</li>
+</ul>
+<p>I also executed the "Read Identifier Codes" command on the flash (see datasheet) and read the entire thing again.
+I didn't find anything. Only the factory part of the OTP block is programmed. The customer part is 0xFF.</p>
 <h3 id="agb40pin">40-pin connector (CN3) pinout on Wide-Boy64 AGB</h3>
 <table class="default">
 <tr>
@@ -2681,11 +2743,11 @@ took from the
 where I thought they are most likely the same parts, but I still put a question mark after the value to
 emphasize that I'm not 100% sure about them.</p>
 <p>Desoldering the Cartridge Slot from a GBA could be a bit of a pain, I haven't tried it yet. I bought
-them on <a href="https://aliexpress.com/item/32867654481.html">AliExpress</a>, but those ones don't
-have room for that switch, unfortunately.</p>
+them on <a href="https://aliexpress.com/item/32867654481.html">AliExpress</a>, but those don't have room
+for that switch, unfortunately.</p>
 <p>The Spartan XCS20XL is not produced anymore, but you can still buy some on, again, AliExpress. I
 wasn't able to find those bitstream PROMs, though. If I'm not able to find one that behaves in a
-compatible way, then I would use a second FPGA to emulate the behaviour of the XC17S20XL PROM. This
+compatible way, then I would use a second FPGA to emulate the behavior of the XC17S20XL PROM. This
 FPGA could also emulate the N64 CIC. Then it wouldn't be necessary to sacrifice a cartridge for that.</p>
 <p>UPDATE: I found the PROM <a href="https://www.win-source.net/products/detail/xilinx-inc/xc17s20lpc.html">here</a>.
 I ordered ten chips, they arrived within five days! I dumped all ten chips to confirm that they are indeed
@@ -2699,15 +2761,15 @@ the N64 software inside the flash, or writing the N64 code from scratch as well.
 <h2 id="misc">Random stuff</h2>
 <p>Fun fact: On the Wide-Boy64 AGB PCB, the CIC chip is labelled "CTC".</p>
 <p><img src="img/wideboy64agb_below_cic.png" alt=""><br>
-<i><u>Picture 9</u><br>
+<i><u>Picture 10</u><br>
 Silk print on the Wide-Boy64 AGB PCB under the CIC and EEPROM chips</i></p>
 <p>I assume the correct notation of Wide-Boy64 is with a hyphen between the words and without a space
-before the number, like it is printed on the labels on the front and back side of the device. However
+before the number, like it is printed on the labels on the front and back side of the device. However,
 on the PCB it is written as one word, WIDEBOY AGB. On Wikipedia and many other sites, it is written as
 Wide-Boy 64, with a space before the number. TBH, I just mention the different notations here to make
 this page more likely to show up on Google.</p>
 <p>I don't understand for what reason there is a 4.0 V reset controller (U6) on the Wide-Boy64 AGB,
-watching the 3.3 V comming from the N64. On top of that, they didn't put a capacitor between GND and
+watching the 3.3 V coming from the N64. On top of that, they didn't put a capacitor between GND and
 the VOUT pin, like it is recommended in the data sheet of the PST9140N. They put one between GND and
 VCC. They also didn't leave the NC pin unconnected; they connected it to GND.</p>
 <h2 id="links">Links</h2>

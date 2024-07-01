@@ -1,0 +1,64 @@
+# For the iCE40HX-8K Breakout Board
+
+# Clock
+set_io clk12m    J3
+
+# Start signal
+set_io start     T1
+
+# LEDs
+set_io led[0]    C3
+set_io led[1]    B3
+set_io led[2]    C4
+set_io led[3]    C5
+set_io led[4]    A1
+set_io led[5]    A2
+set_io led[6]    B4
+set_io led[7]    B5
+
+# UART
+set_io rx        B10
+set_io tx        B12
+set_io rts       B13
+set_io cts       A15
+set_io dtr       A16
+set_io dsr       B14
+set_io dcd       B15
+
+# Sharp LH28F320BJE-PTTL90 Flash
+set_io a[0]      R16    # A-1
+set_io a[1]      T15    # A0
+set_io a[2]      T13    # A1
+set_io a[3]      N12    # A2
+set_io a[4]      N10    # A3
+set_io a[5]      T11    # A4
+set_io a[6]      T10    # A5
+set_io a[7]      P8     # A6
+set_io a[8]      T9     # A7
+set_io a[9]      T7     # A8
+set_io a[10]     T6     # A9
+set_io a[11]     T5     # A10
+set_io a[12]     R3     # A11
+set_io a[13]     R2     # A12
+set_io a[14]     T16    # A13
+set_io a[15]     T14    # A14
+set_io a[16]     M11    # A15
+set_io a[17]     P10    # A16
+set_io a[18]     R10    # A17
+set_io a[19]     P9     # A18
+set_io a[20]     R9     # A19
+set_io a[21]     T8     # A20
+set_io d[0]      R6
+set_io d[1]      R5
+set_io d[2]      R4
+set_io d[3]      T3
+set_io d[4]      T2
+set_io d[5]      P1
+set_io d[6]      N3
+set_io d[7]      M2
+set_io ready     L3
+set_io n_reset   K3
+set_io n_ce      J2
+set_io n_oe      H2
+set_io n_we      G2
+
