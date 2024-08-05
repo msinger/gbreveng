@@ -29,21 +29,21 @@ module top(
 		output logic            p14 = 1,
 		output logic            p15 = 1,
 
-		output logic     [20:0] madr       = 0,
-		output logic     [7:0]  mdata      = '1,
-		output logic            n_mrd      = 1,
-		output logic            n_mwr      = 1,
+		output logic     [20:0] madr,
+		output logic     [7:0]  mdata,
+		output logic            n_mrd,
+		output logic            n_mwr,
 		output logic            n_prog     = 1,
-		output logic            n_mcs_rom  = 1,
-		output logic            n_mcs_xram = 1,
+		output logic            n_mcs_rom,
+		output logic            n_mcs_xram,
 		output logic            n_mcs_wram = 1,
 		output logic            n_mcs_crom = 1,
 		output logic            n_mcs_cram = 1,
-		output logic            mphi       = 1,
+		output logic            mphi,
 		inout  tri logic        n_mreset,
 		output logic            n_moe      = 0,
-		output logic            n_moed     = 0,
-		output logic            mdir       = 1,
+		output logic            n_moed,
+		output logic            mdir,
 
 		input  logic     [14:0] adr,
 		inout  tri logic [7:0]  data,
@@ -131,6 +131,7 @@ module top(
 	logic cs_cpu_atom;
 	logic cs_cpu_ones_set;
 	logic cs_cpu_rec, cs_cpu_rec_cfg;
+	logic cs_cpu_pt_cfg;
 	logic cs_cpu_pa;
 	logic cs_cpu_dut;
 
@@ -223,6 +224,16 @@ module top(
 	logic [NUM_BUS_COMPARATORS-1:0] dut_data_compare_set, dut_data_compare_mask_set;
 
 	logic [7:0] irq, f_irq;
+
+	logic passthrough, data_passthrough, passthrough_trigger;
+
+	logic       cart_data_dir_out,     r_cart_data_dir_out;
+	logic       cart_data_lvl_dir_out, r_cart_data_lvl_dir_out;
+	logic       cart_data_lvl_ena,     r_cart_data_lvl_ena;
+	logic [7:0] cart_data_ext,         cart_data_in;
+	logic       n_cart_reset_ext,      cart_reset_in;
+	cdc #(1) cart_data_cdc[7:0](pllclk, cart_data_ext,     cart_data_in);
+	cdc #(1) cart_reset_cdc    (pllclk, !n_cart_reset_ext, cart_reset_in);
 
 	logic [7:0]  sysram[0:4095];
 	logic [7:0]  dut_ro_ram[0:4095];
@@ -334,10 +345,90 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_01),
+			.PIN_TYPE('b 0101_01)
+		) madr_io[20:0] (
+			.PACKAGE_PIN(madr),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0({ 6'b000000, dut_adr_in })
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 1101_00),
+			.PULLUP(1)
+		) mdata_io[7:0] (
+			.PACKAGE_PIN(mdata),
+			.OUTPUT_CLK(pllclk),
+			.INPUT_CLK(pllclk),
+			.OUTPUT_ENABLE(cart_data_dir_out),
+			.D_OUT_0(dut_data_in),
+			.D_IN_0(cart_data_ext)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) n_mrd_io (
+			.PACKAGE_PIN(n_mrd),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(!dut_rd_in)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) n_mwr_io (
+			.PACKAGE_PIN(n_mwr),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(!dut_wr_in)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) n_mcs_rom_io (
+			.PACKAGE_PIN(n_mcs_rom),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(!dut_cs_rom_in || !passthrough)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) n_mcs_xram_io (
+			.PACKAGE_PIN(n_mcs_xram),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(!dut_cs_xram_in || !passthrough)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) mphi_io (
+			.PACKAGE_PIN(mphi),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(dut_phi_in)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 1101_00),
 			.PULLUP(1)
 		) n_mreset_io (
-			.PACKAGE_PIN(n_mreset)
+			.PACKAGE_PIN(n_mreset),
+			.OUTPUT_CLK(pllclk),
+			.INPUT_CLK(pllclk),
+			.OUTPUT_ENABLE(dut_reset_out),
+			.D_IN_0(n_cart_reset_ext)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) n_moed_io (
+			.PACKAGE_PIN(n_moed),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(!cart_data_lvl_ena)
+		);
+
+	SB_IO #(
+			.PIN_TYPE('b 0101_01)
+		) mdir_io (
+			.PACKAGE_PIN(mdir),
+			.OUTPUT_CLK(pllclk),
+			.D_OUT_0(cart_data_lvl_dir_out)
 		);
 
 	SB_IO #(
@@ -413,7 +504,7 @@ module top(
 			.PACKAGE_PIN(n_reset),
 			.OUTPUT_CLK(pllclk),
 			.INPUT_CLK(pllclk),
-			.OUTPUT_ENABLE(dut_reset_out),
+			.OUTPUT_ENABLE(dut_reset_out || (passthrough && cart_reset_in)),
 			.D_IN_0(n_dut_reset_ext)
 		);
 
@@ -565,6 +656,8 @@ module top(
 			data_cpu_in = atom[31:24];
 		cs_cpu_rec_cfg:
 			data_cpu_in = { 7'b0, data_rec_cyclic };
+		cs_cpu_pt_cfg:
+			data_cpu_in = { 7'b0, data_passthrough };
 		cs_cpu_pa && adr_cpu[1:0] == 0:
 			data_cpu_in = data_pa_out[7:0];
 		cs_cpu_pa && adr_cpu[1:0] == 1:
@@ -599,6 +692,7 @@ module top(
 		cs_cpu_ones_set = 0;
 		cs_cpu_rec      = 0;
 		cs_cpu_rec_cfg  = 0;
+		cs_cpu_pt_cfg   = 0;
 		cs_cpu_pa       = 0;
 		cs_cpu_dut      = 0;
 		cs_cpu_io_if    = 0;
@@ -631,6 +725,8 @@ module top(
 			cs_cpu_rec = 1;
 		'b 1111_1111_0001_0110: /* 0xff16:        Recording Config */
 			cs_cpu_rec_cfg = 1;
+		'b 1111_1111_0001_0111: /* 0xff17:        Passthrough Config */
+			cs_cpu_pt_cfg = 1;
 		'b 1111_1111_0010_00??: /* 0xff20-0xff23: Counter 0 */
 			if (NUM_COUNTERS > 0) cs_cpu_counter[0] = 1;
 		'b 1111_1111_0010_01??: /* 0xff24-0xff27: Counter 1 */
@@ -762,26 +858,34 @@ module top(
 		dut_data_lvl_ena     = r_dut_data_lvl_ena;
 		dut_reset_out        = r_dut_reset_out;
 
+		cart_data_dir_out     = r_cart_data_dir_out;
+		cart_data_lvl_dir_out = r_cart_data_lvl_dir_out;
+		cart_data_lvl_ena     = r_cart_data_lvl_ena;
+
 		dut_any_cs = (prev_rom_cs && dut_cs_rom_in) ||
 		             ((prev_xram_cs && dut_cs_xram_in) && buffered_adr[13] && !buffered_adr[14]);
 
-		dut_data_out = dut_data_ovr ? dut_data_ovr_out : buffered_data_out;
+		dut_data_out = dut_data_ovr ? dut_data_ovr_out : (passthrough ? cart_data_in : buffered_data_out);
 
 		case (1)
 		dut_rd_in && dut_any_cs:
 			unique case (data_lvl_state)
 				lvl_in, lvl_ch_in: begin
-					data_lvl_state       = lvl_off;
-					dut_data_lvl_ena     = 0;
+					data_lvl_state        = lvl_off;
+					dut_data_lvl_ena      = 0;
+					cart_data_dir_out     = 0;
+					cart_data_lvl_ena     = 0;
 				end
 				lvl_off, lvl_rst: begin
-					data_lvl_state       = lvl_ch_out;
-					dut_data_dir_out     = 1;
-					dut_data_lvl_dir_out = 1;
+					data_lvl_state        = lvl_ch_out;
+					dut_data_dir_out      = 1;
+					dut_data_lvl_dir_out  = 1;
+					cart_data_lvl_dir_out = 0;
 				end
 				lvl_ch_out: begin
-					data_lvl_state       = lvl_out;
-					dut_data_lvl_ena     = 1;
+					data_lvl_state        = lvl_out;
+					dut_data_lvl_ena      = 1;
+					cart_data_lvl_ena     = 1;
 				end
 				lvl_out:;
 			endcase
@@ -796,19 +900,24 @@ module top(
 						dut_data_dir_out = 0;
 						dut_data_lvl_ena = 0;
 					end
+					cart_data_lvl_ena     = 0;
 				end
 				lvl_rst: begin
-					data_lvl_state       = lvl_off;
-					dut_data_dir_out     = 0;
-					dut_data_lvl_ena     = 0;
+					data_lvl_state        = lvl_off;
+					dut_data_dir_out      = 0;
+					dut_data_lvl_ena      = 0;
+					cart_data_lvl_ena     = 0;
 				end
 				lvl_off: begin
-					data_lvl_state       = lvl_ch_in;
-					dut_data_lvl_dir_out = 0;
+					data_lvl_state        = lvl_ch_in;
+					dut_data_lvl_dir_out  = 0;
+					cart_data_dir_out     = 1;
+					cart_data_lvl_dir_out = 1;
 				end
 				lvl_ch_in: begin
-					data_lvl_state       = lvl_in;
-					dut_data_lvl_ena     = 1;
+					data_lvl_state        = lvl_in;
+					dut_data_lvl_ena      = 1;
+					cart_data_lvl_ena     = 1;
 				end
 				lvl_in:;
 			endcase
@@ -817,10 +926,12 @@ module top(
 		dut_reset_out = (dut_reset_out || dut_reset_set_mask) && !dut_reset_reset_mask;
 
 		if (f_reset) begin
-			dut_reset_out    = 0;
-			data_lvl_state   = lvl_off;
-			dut_data_lvl_ena = 0;
-			dut_data_dir_out = 0;
+			dut_reset_out     = 0;
+			data_lvl_state    = lvl_off;
+			dut_data_lvl_ena  = 0;
+			dut_data_dir_out  = 0;
+			cart_data_lvl_ena = 0;
+			cart_data_dir_out = 0;
 		end
 	end
 
@@ -832,7 +943,7 @@ module top(
 	   instruction (0xfa) always triggers those glitches. The glitches in the address would cause us to change
 	   the data again that we read from dut_ro_ram[] and output on dut_data_out. This would be a feedback loop,
 	   producing more and more glitches. Somehow, due to these repeated glitches, the Game Boy's 5V supply (or at
-	   least what is measurable at the J18 connector of out board) dips down to ~3V. These supply voltage dips cause
+	   least what is measurable at the J18 connector of our board) dips down to ~3V. These supply voltage dips cause
 	   either the Game Boy or our level converters to detect wrong logic levels. This also happens for the 4 MHz
 	   clock. Effectively, this causes overclocking events for the Game Boy, making PHI in this instances only half
 	   as long as usual. Very weird stuff happens.
@@ -858,6 +969,10 @@ module top(
 		r_dut_data_lvl_dir_out <= dut_data_lvl_dir_out;
 		r_dut_data_lvl_ena     <= dut_data_lvl_ena;
 		r_dut_reset_out        <= dut_reset_out;
+
+		r_cart_data_dir_out     <= cart_data_dir_out;
+		r_cart_data_lvl_dir_out <= cart_data_lvl_dir_out;
+		r_cart_data_lvl_ena     <= cart_data_lvl_ena;
 
 		if (dut_wr_in && dut_cs_xram_in && buffered_adr[13] &&
 		    r_dut_data_lvl_ena && !r_dut_data_lvl_dir_out && !r_dut_data_dir_out)
@@ -1273,5 +1388,19 @@ module top(
 		if (start || stop)
 			rec_running <= start;
 	end
+
+	dp_reg passthrough_reg(
+		.fclk(pllclk),
+		.sclk(cpuclk),
+		.frst(f_reset),
+
+		.fvalue_out(passthrough),
+
+		.svalue_in(data_cpu_out[0]),
+		.svalue_mask(passthrough_trigger),
+		.svalue_out(data_passthrough)
+	);
+
+	assign passthrough_trigger = wr_cpu && cs_cpu_pt_cfg;
 
 endmodule

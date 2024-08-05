@@ -37,6 +37,9 @@ FF15          REC_CTRL
 FF16          REC_CFG
   0 r/w       If 1, record in cyclic mode, don't stop at end of record RAM.
 
+FF17          PASSTHROUGH_CFG
+  0 r/w       If 1, passthrough to cartridge connector is enabled.
+
 FF20 (LSB)    COUNT0
 FF21
 FF22
