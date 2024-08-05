@@ -32,6 +32,15 @@ module dp_reg #(
 	logic [WIDTH-1:0] s2f_mask;
 	logic [WIDTH-1:0] s2f_value;
 
+	initial begin
+		fvalue_out = 0;
+		svalue_out = 0;
+		f2s_fseq   = 0;
+		f2s_sack   = 0;
+		s2f_sseq   = 0;
+		s2f_fack   = 0;
+	end
+
 	always_ff @(posedge sclk) begin
 		if (f2s_sseq != f2s_sack) begin
 			svalue_out <= f2s_value;
