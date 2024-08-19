@@ -6,7 +6,8 @@ lr35902_dbg_ifc.v \
 ft245_ifc.v \
 counter.sv \
 counter_block.sv \
-dp_reg.sv
+dp_reg.sv \
+debounce.sv
 
 NODIST_SRC = \
 pll.v

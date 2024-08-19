@@ -188,30 +188,35 @@ module top(
 	logic [30:0] dut_data_compare_mask[0:NUM_BUS_COMPARATORS-1];
 	wire logic [NUM_ROUTES-1:0] dut_data_compare_trig_set[0:NUM_BUS_COMPARATORS-1];
 	wire logic [NUM_ROUTES-1:0] dut_data_compare_edge_trig_set[0:NUM_BUS_COMPARATORS-1];
-	logic [14:0] dut_adr_ext,          dut_adr_in;
+	logic [14:0] dut_adr_ext,          dut_adr_bounce,         dut_adr_in;
 	logic        dut_data_dir_out,     r_dut_data_dir_out;
 	logic        dut_data_lvl_dir_out, r_dut_data_lvl_dir_out;
 	logic        dut_data_lvl_ena,     r_dut_data_lvl_ena;
 	logic [7:0]  dut_data_out;
 	logic [7:0]  dut_data_ovr_out;
-	logic [7:0]  dut_data_ext,         dut_data_in;
-	logic        n_dut_rd_ext,         dut_rd_in;
-	logic        n_dut_wr_ext,         dut_wr_in;
-	logic        n_dut_cs_rom_ext,     dut_cs_rom_in;
-	logic        n_dut_cs_xram_ext,    dut_cs_xram_in;
-	logic        dut_phi_ext,          dut_phi_in;
+	logic [7:0]  dut_data_ext,         dut_data_bounce,        dut_data_in;
+	logic        n_dut_rd_ext,         dut_rd_bounce,          dut_rd_in, r_dut_rd_in, dut_rd_pt;
+	logic        n_dut_wr_ext,         dut_wr_bounce,          dut_wr_in,              dut_wr_pt;
+	logic        n_dut_cs_rom_ext,     dut_cs_rom_bounce,      dut_cs_rom_in,          dut_cs_rom_pt;
+	logic        n_dut_cs_xram_ext,    dut_cs_xram_bounce,     dut_cs_xram_in,         dut_cs_xram_pt;
+	logic        dut_phi_ext,          dut_phi_bounce,         dut_phi_in;
 	logic        dut_reset_out,        r_dut_reset_out;
 	logic        n_dut_reset_ext,      dut_reset_in;
-	cdc #(1) dut_adr_cdc[14:0](pllclk, dut_adr_ext,        dut_adr_in);
-	cdc #(1) dut_data_cdc[7:0](pllclk, dut_data_ext,       dut_data_in);
-	cdc #(1) dut_rd_cdc       (pllclk, !n_dut_rd_ext,      dut_rd_in);
-	cdc #(1) dut_wr_cdc       (pllclk, !n_dut_wr_ext,      dut_wr_in);
-	cdc #(1) dut_cs_rom_cdc   (pllclk, !n_dut_cs_rom_ext,  dut_cs_rom_in);
-	cdc #(1) dut_cs_xram_cdc  (pllclk, !n_dut_cs_xram_ext, dut_cs_xram_in);
-	cdc #(1) dut_phi_cdc      (pllclk, dut_phi_ext,        dut_phi_in);
+	cdc #(1) dut_adr_cdc[14:0](pllclk, dut_adr_ext,        dut_adr_bounce);
+	cdc #(1) dut_data_cdc[7:0](pllclk, dut_data_ext,       dut_data_bounce);
+	cdc #(1) dut_rd_cdc       (pllclk, !n_dut_rd_ext,      dut_rd_bounce);
+	cdc #(1) dut_wr_cdc       (pllclk, !n_dut_wr_ext,      dut_wr_bounce);
+	cdc #(1) dut_cs_rom_cdc   (pllclk, !n_dut_cs_rom_ext,  dut_cs_rom_bounce);
+	cdc #(1) dut_cs_xram_cdc  (pllclk, !n_dut_cs_xram_ext, dut_cs_xram_bounce);
+	cdc #(1) dut_phi_cdc      (pllclk, dut_phi_ext,        dut_phi_bounce);
 	cdc #(1) dut_reset_cdc    (pllclk, !n_dut_reset_ext,   dut_reset_in);
-
-	logic dut_any_cs;
+	debounce      dut_adr_debounce[14:0](pllclk, dut_adr_bounce,     dut_adr_in);
+	debounce #(2) dut_data_debounce[7:0](pllclk, dut_data_bounce,    dut_data_in);
+	debounce      dut_rd_debounce       (pllclk, dut_rd_bounce,      dut_rd_in,      dut_rd_pt);
+	debounce      dut_wr_debounce       (pllclk, dut_wr_bounce,      dut_wr_in,      dut_wr_pt);
+	debounce      dut_cs_rom_debounce   (pllclk, dut_cs_rom_bounce,  dut_cs_rom_in,  dut_cs_rom_pt);
+	debounce      dut_cs_xram_debounce  (pllclk, dut_cs_xram_bounce, dut_cs_xram_in, dut_cs_xram_pt);
+	debounce      dut_phi_debounce      (pllclk, dut_phi_bounce,     dut_phi_in);
 
 	logic r_dut_trigger;
 	logic dut_trigger;
@@ -230,10 +235,11 @@ module top(
 	logic       cart_data_dir_out,     r_cart_data_dir_out;
 	logic       cart_data_lvl_dir_out, r_cart_data_lvl_dir_out;
 	logic       cart_data_lvl_ena,     r_cart_data_lvl_ena;
-	logic [7:0] cart_data_ext,         cart_data_in;
+	logic [7:0] cart_data_ext,         cart_data_in, cart_data_bounce;
 	logic       n_cart_reset_ext,      cart_reset_in;
-	cdc #(1) cart_data_cdc[7:0](pllclk, cart_data_ext,     cart_data_in);
+	cdc #(1) cart_data_cdc[7:0](pllclk, cart_data_ext,     cart_data_bounce);
 	cdc #(1) cart_reset_cdc    (pllclk, !n_cart_reset_ext, cart_reset_in);
+	debounce #(2) cart_data_debounce[7:0](pllclk, cart_data_bounce, cart_data_in);
 
 	logic [7:0]  sysram[0:4095];
 	logic [7:0]  dut_ro_ram[0:4095];
@@ -345,7 +351,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01)
+			.PIN_TYPE('b 0110_01)
 		) madr_io[20:0] (
 			.PACKAGE_PIN(madr),
 			.OUTPUT_CLK(pllclk),
@@ -353,7 +359,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 1101_00),
+			.PIN_TYPE('b 1110_01),
 			.PULLUP(1)
 		) mdata_io[7:0] (
 			.PACKAGE_PIN(mdata),
@@ -365,39 +371,39 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01)
+			.PIN_TYPE('b 0110_01)
 		) n_mrd_io (
 			.PACKAGE_PIN(n_mrd),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(!dut_rd_in)
+			.D_OUT_0(dut_rd_pt)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01)
+			.PIN_TYPE('b 0110_01)
 		) n_mwr_io (
 			.PACKAGE_PIN(n_mwr),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(!dut_wr_in)
+			.D_OUT_0(dut_wr_pt)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01)
+			.PIN_TYPE('b 0110_01)
 		) n_mcs_rom_io (
 			.PACKAGE_PIN(n_mcs_rom),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(!dut_cs_rom_in || !passthrough)
+			.D_OUT_0(dut_cs_rom_pt)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01)
+			.PIN_TYPE('b 0110_01)
 		) n_mcs_xram_io (
 			.PACKAGE_PIN(n_mcs_xram),
 			.OUTPUT_CLK(pllclk),
-			.D_OUT_0(!dut_cs_xram_in || !passthrough)
+			.D_OUT_0(dut_cs_xram_pt)
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0101_01)
+			.PIN_TYPE('b 0110_01)
 		) mphi_io (
 			.PACKAGE_PIN(mphi),
 			.OUTPUT_CLK(pllclk),
@@ -405,7 +411,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 1101_00),
+			.PIN_TYPE('b 1110_01),
 			.PULLUP(1)
 		) n_mreset_io (
 			.PACKAGE_PIN(n_mreset),
@@ -432,7 +438,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_00),
+			.PIN_TYPE('b 0000_01),
 			.PULLUP(1)
 		) adr_io[14:0] (
 			.PACKAGE_PIN(adr),
@@ -441,7 +447,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 1101_00),
+			.PIN_TYPE('b 1101_01),
 			.PULLUP(1)
 		) data_io[7:0] (
 			.PACKAGE_PIN(data),
@@ -453,7 +459,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_00),
+			.PIN_TYPE('b 0000_01),
 			.PULLUP(1)
 		) n_rd_io (
 			.PACKAGE_PIN(n_rd),
@@ -462,7 +468,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_00),
+			.PIN_TYPE('b 0000_01),
 			.PULLUP(1)
 		) n_wr_io (
 			.PACKAGE_PIN(n_wr),
@@ -471,7 +477,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_00),
+			.PIN_TYPE('b 0000_01),
 			.PULLUP(1)
 		) n_cs_rom_io (
 			.PACKAGE_PIN(n_cs_rom),
@@ -480,7 +486,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_00),
+			.PIN_TYPE('b 0000_01),
 			.PULLUP(1)
 		) n_cs_xram_io (
 			.PACKAGE_PIN(n_cs_xram),
@@ -489,7 +495,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 0000_00),
+			.PIN_TYPE('b 0000_01),
 			.PULLUP(1)
 		) phi_io (
 			.PACKAGE_PIN(phi),
@@ -498,7 +504,7 @@ module top(
 		);
 
 	SB_IO #(
-			.PIN_TYPE('b 1101_00),
+			.PIN_TYPE('b 1110_01),
 			.PULLUP(1)
 		) n_reset_io (
 			.PACKAGE_PIN(n_reset),
@@ -844,14 +850,17 @@ module top(
 	);
 
 	logic [2:0] data_lvl_state, r_data_lvl_state;
-	localparam int lvl_off    = 0;
-	localparam int lvl_ch_in  = 1;
-	localparam int lvl_ch_out = 2;
-	localparam int lvl_in     = 3;
-	localparam int lvl_out    = 4;
-	localparam int lvl_rst    = 6;
 
 	always_comb begin
+		localparam int lvl_off    = 0;
+		localparam int lvl_ch_in  = 1;
+		localparam int lvl_ch_out = 2;
+		localparam int lvl_in     = 3;
+		localparam int lvl_out    = 4;
+		localparam int lvl_rst    = 6;
+
+		logic cart_drv;
+
 		data_lvl_state       = r_data_lvl_state;
 		dut_data_dir_out     = r_dut_data_dir_out;
 		dut_data_lvl_dir_out = r_dut_data_lvl_dir_out;
@@ -862,13 +871,13 @@ module top(
 		cart_data_lvl_dir_out = r_cart_data_lvl_dir_out;
 		cart_data_lvl_ena     = r_cart_data_lvl_ena;
 
-		dut_any_cs = (prev_rom_cs && dut_cs_rom_in) ||
-		             ((prev_xram_cs && dut_cs_xram_in) && buffered_adr[13] && !buffered_adr[14]);
+		// Cartridge can drive data lines if DUT reads and WRAM is not selected.
+		cart_drv = (dut_rd_in || r_dut_rd_in) && !(prev_xram_cs && dut_cs_xram_in && buffered_adr[14]);
 
 		dut_data_out = dut_data_ovr ? dut_data_ovr_out : (passthrough ? cart_data_in : buffered_data_out);
 
 		case (1)
-		dut_rd_in && dut_any_cs:
+		cart_drv:
 			unique case (data_lvl_state)
 				lvl_in, lvl_ch_in: begin
 					data_lvl_state        = lvl_off;
@@ -969,6 +978,7 @@ module top(
 		r_dut_data_lvl_dir_out <= dut_data_lvl_dir_out;
 		r_dut_data_lvl_ena     <= dut_data_lvl_ena;
 		r_dut_reset_out        <= dut_reset_out;
+		r_dut_rd_in            <= dut_rd_in;
 
 		r_cart_data_dir_out     <= cart_data_dir_out;
 		r_cart_data_lvl_dir_out <= cart_data_lvl_dir_out;
