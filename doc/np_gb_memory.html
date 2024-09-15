@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Nintendo Power Game Boy Memory cartridge documentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Documentation about the NP GB Memory flash cartridges.">
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
+</head>
+<body>
+<nav><p><a href="http://iceboy.a-singer.de/">Home</a></p>
+<hr></nav>
+<main><h1>Nintendo Power Game Boy Memory cartridge documentation</h1>
+<p>Here I document as much as I know about the white NP GB Memory flash cartridges that were available in Japan:</p>
+<table>
+<tr><td><img src="img/np_gb_memory.png?v=0" alt=""></td>
+<td><img src="img/np_gb_memory_menu.png?v=0" alt=""><br>
+<small><i>Game selection menu of cartridge containing three games.</i></small></td></tr>
+</table>
+<p>I used the information from here as a starting point for my investigation:<br>
+<a href="https://github.com/sanni/cartreader/blob/master/Cart_Reader/GBM.ino">https://github.com/sanni/cartreader/blob/master/Cart_Reader/GBM.ino</a><br>
+I don't know where they got their information from, though.<br>
+I also found a datasheet for a flash that has a command set that looks similar to the commands used by the flash in
+the cartridge:<br>
+<a href="http://support.technologicalarts.ca/docs/Components/Am29F400.pdf">http://support.technologicalarts.ca/docs/Components/Am29F400.pdf</a></p>
+<p>Please report any errors I made here:<br>
+<a href="https://github.com/msinger/gbreveng/issues">https://github.com/msinger/gbreveng/issues</a><br>
+Also, I would be happy if you have any additional information. Just create an issue or a discussion in this repository.
+Of course, feel free to ask questions there if anything is unclear, maybe I can answer.</p>
+<ul>
+ <li><a href="#overview">Overview</a></li>
+ <li><a href="#mmc_commands">MMC commands</a></li>
+ <li><a href="#mmc_registers">MMC registers</a></li>
+ <li><a href="#map_layout">Map layout</a></li>
+ <li><a href="#map_entry_format">Map entry format</a></li>
+ <li><a href="#flash_commands">Flash commands</a>
+  <ul>
+   <li><a href="#flash_status">Status bits of flash program/erase operations</a></li>
+   <li><a href="#flash_program">Flash program operations</a></li>
+  </ul></li>
+ <li><a href="#gbm_procedures">Pseudocode procedures</a></li>
+</ul>
+<h2 id="overview">Overview</h2>
+<p>For an explanation of what this cartridge is, please read the
+<a href="https://en.wikipedia.org/wiki/Nintendo_Power_(cartridge)">Wikipedia</a> article. This article states that the
+cartridge is partitioned into 8 flash blocks and 16 RAM blocks. This partitioning is purely artificial, though. It is
+only implemented by the menu. The hardware allows a more fine-grained partitioning of the two memory chips. The mapping
+definitions for the flash are actually quantized in 32 KiB steps. So you could partition the 1 MiB flash into 32x32 KiB
+blocks. You would have to implement a game selection menu software that fits into one of those 32 KiB blocks, since the
+original menu requires 128 KiB and only supports up to seven game entries.</p>
+<p>The MegaChips MX15002 chip on the cartridge PCB is labeled "G-MMC1". I don't know what this stands for, but for the
+sake of a short name, I will just call this chip "MMC" in this documentation. The MMC chip is able to emulate different
+MBC chip versions.</p>
+<p>The flash chip not only stores 1 MiB of data, it also contains a much smaller hidden sector that stores an
+additional 128 bytes. We call this hidden sector the "map", because it is used to store the memory mapping configuration
+that gets read by the MMC chip to configure itself.</p>
+<p>If you build your own hardware for reading the NP GB Memory cartridge, you must take care that the /WR signal is high
+during power up. Otherwise, the MMC chip is in some kind of lockdown. When in lockdown, you can only access the first
+32 KiB of the flash and the MMC chip doesn't react to any commands. I don't know if this is some kind of protection or if
+it is an unintentional bug. I haven't found a way to exit this lockdown mode, other than power cycling the cartridge with
+the /WR pin held high. The /RST signal doesn't fix this state.</p>
+<p>The following image roughly shows the topology of the cartridge:</p>
+<p><img src="img/np_gb_memory_overview.png?v=0" alt=""></p>
+<p>There are three "entities" you can send commands to or access registers of: The MMC, the emulated MBC and the flash.
+In order to send commands to the flash, you need to be able to control A0-A14 of the flash. A14 is controlled by the
+emulated MBC, though. Before issuing a command to the flash, you first have to select an odd bank in the MBC, so that A14
+actually goes high when you access the address range 0x4000-0x7fff.</p>
+<p>Just to be clear: In this entire document, when I talk about "writing to the flash", I mean the memory bus access itself,
+which is just a way of communicating with the flash chip. No non-volatile storage elements within the flash chip are meant
+to be changed when using the term "write". When I use the terms "programming" and "erasing", that's when the actual flash
+content is modified.</p>
+<h2 id="mmc_commands">MMC commands</h2>
+<p>Commands send to the MMC chip have the following structure:</p>
+<ol><li>Command ID is written to address 0x0120.</li>
+<li>Some commands require arguments, which are written to addresses 0x0121-0x0127.</li>
+<li>Command is terminated by writing 0xa5 to address 0x013f.</li></ol>
+<p>Take note, that if an MBC chip is being emulated and if MBC registers are enabled, issuing MMC commands will always
+cause the RAM access to be disabled, because MMC commands are written to addresses 0x0120-0x013f, which triggers MBC
+register 0x0000.</p>
+<p>The following table contains all known MMC commands:</p>
+<table class="default">
+<tr><th>Command ID</th><th>Sequence<br>(ADR&nbsp;&lt;&#x2011;&nbsp;DATA)</th><th>Description</th></tr>
+<tr><td><b>0x02</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x02
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Disable flash write protection</b><br>
+Disables the flash write protection. For this command to have an effect, bit 0 of MMC register 0x0121 needs to be set.
+MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of its outputs connected to a WP (write
+protect) input of the flash. This command (and its counterpart 0x03) control the state of this WP signal. Bit 1 of MMC
+register 0x0121 will go high when the write protection is disabled.</td></tr>
+<tr><td><b>0x03</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x03
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Enable flash write protection</b><br>
+Enables the flash write protection. For this command to have an effect, bit 0 of MMC register 0x0121 needs to be set.
+MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of its outputs connected to a WP (write
+protect) input of the flash. This command (and its counterpart 0x02) control the state of this WP signal. Bit 1 of MMC
+register 0x0121 will go low when the write protection is enabled.</td></tr>
+<tr><td><b>0x04</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x04
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Disable memory mapping</b><br>
+Disables the memory mapping and allows you to access the entire flash and RAM within the cartridge. An MBC will be
+emulated that behaves like the MBC5, except that it doesn't allow you to switch the banked ROM area (0x4000-0x7fff) to
+ROM bank 0, like an MBC5 chip would allow you to do. In
+<a href="https://github.com/sanni/cartreader/blob/master/Cart_Reader/GBM.ino">this</a> file, they talk about "MBC4". I
+don't know where they have this information from and if it is true. I find it unlikely, because MBC4 chips don't exist
+in real life. If you have seen one, please tell me. MBC registers will be reset to their defaults (ROM bank 1 is selected,
+RAM bank 0 is selected, RAM access is disabled). The previous content of the MBC registers is backed up. Whether MBC
+registers are enabled is not changed by this command. Command 0x05 can be used to re-enable/restore the memory mapping and
+to restore the backed up content of the MBC registers. Commands 0xc0-0xff can be used to re-enable the memory mapping using
+a different mapping configuration than before.<br><br>
+<b>TODO:</b> Try to figure out if there are more differences to the emulated MBC5.</td></tr>
+<tr><td><b>0x05</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x05
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Enable memory mapping</b><br>
+Enables the memory mapping that was active before disabling it with command 0x04. Bits 2-7 of MMC register 0x0121 store the
+index of the selected mapping entry. This index is used to restore the mapping. The content of the MBC registers is restored
+with backed up values from the last time the command 0x04 was called. If command 0x04 was never called before, then the MBC
+registers are zeroed: ROM and RAM bank 0 is selected, and RAM access is disabled. Unlike commands 0xc0-0xff, this command
+(0x05) doesn't disable MMC registers and commands after restoring the mapping, nor does it enable MBC registers.</td></tr>
+<tr><td><b>0x08</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x08
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Disable MMC registers and commands</b><br>
+Disables the MMC registers and commands that you can access through addresses 0x0120-0x013f. You need to disable MMC
+registers to be able to see the flash content at addresses 0x0120-0x013f. Also, if you are writing the flash, you
+need to disable MMC commands to be able to write to flash addresses 0x0120-0x013f. While MMC commands are enabled,
+write access to this address range will not go through to the flash. However, if MBC emulation is active, writing to
+this address range will always trigger a write event to MBC register 0x0000, no matter if MMC commands are enabled or not.
+Writing to MBC register 0x0000 disables RAM access (except if 0x0a is written, of course). On power up, MMC registers
+and commands are disabled.</td></tr>
+<tr><td><b>0x09</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x09
+0x0121&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x0122&nbsp;&lt;&#x2011;&nbsp;0x55
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Enable MMC registers and commands</b><br>
+Enables the MMC registers and commands that you can access through addresses 0x0120-0x013f. This is the only command that
+the MMC reacts to while MMC commands are disabled. On power up, MMC registers and commands are disabled, so you have to
+send this command (0x09) first, before any other MMC commands can be used. When this command is being written while MMC
+commands are disabled, all writes will <i>still</i> go through to the flash. This is normally not an issue, because the flash
+is normally read-only. You have to be aware of this though, when you try to program the flash, it will taint the write
+buffer at addresses 0xXX20, 0xXX21, 0xXX22 and 0xXX3f. (For more information about that, read
+<a href="#avoid_writing_0120">further below</a>.)</td></tr>
+<tr><td><b>0x0a</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x0a
+0x0125&nbsp;&lt;&#x2011;&nbsp;0x62
+0x0126&nbsp;&lt;&#x2011;&nbsp;0x04
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Unlock changing flash write protection</b><br>
+This command sets bit 0 of the MMC register 0x0121. The bit gets cleared when MMC command 0x08 is sent. The bit must be set
+in order for MMC commands 0x02 and 0x03 to have an effect.</td></tr>
+<tr><td><b>0x0f</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x0f
+0x0125&nbsp;&lt;&#x2011;&nbsp;<i>&lt;ADR_H&gt;</i>
+0x0126&nbsp;&lt;&#x2011;&nbsp;<i>&lt;ADR_L&gt;</i>
+0x0127&nbsp;&lt;&#x2011;&nbsp;<i>&lt;DATA&gt;</i>
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Perform write access on flash</b><br>
+Triggers the MMC to perform a write memory access on the flash with address <i>&lt;ADR_H&gt;&lt;ADR_L&gt;</i>
+and data <i>&lt;DATA&gt;</i>. Normally when MBC registers are enabled, regular write accesses to addresses 0x0000-0x7fff,
+which are not performed by command 0x0f, will not go through to the flash. Similarly, when MMC registers are enabled,
+regular write accesses to addresses 0x0120-0x013f will not go through. This command can be used to bypass MMC and MBC
+registers, even when they are enabled. The higher address lines are still controlled by the emulated MBC.<br><br>
+<b>TODO:</b> Figure out how exactly A14 and A15 behave. From my tests it looks like as if any of A14 and A15 are set in
+this command, the memory bank number configured in the MBC is applied to A14, A15, A16, ...<br><br>
+<b>TODO:</b> Figure out if flash offset of current memory mapping is applied to address.</td></tr>
+<tr><td><b>0x10</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x10
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Disable MBC registers</b><br>
+Disables access to MBC registers. MBC registers need to be disabled when you want to write to the flash chip. If you don't
+disable MBC registers, then you may accidentally switch the memory banks and the writes will be intercepted by the MBC
+registers and never reach the flash. Even if no MBC emulation is enabled in the current memory mapping, write access to the
+flash is blocked when MBC registers are enabled. Disabling MBC registers does not disable the MBC's function and its
+control over the higher address lines. Their content just can't be changed anymore. Alternatively, you can use the MMC
+command 0x0f to bypass the MBC registers without disabling them.</td></tr>
+<tr><td><b>0x11</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x11
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Enable MBC registers</b><br>
+Enables access to MBC registers. When MBC registers are enabled, write access to the flash is blocked. This is even the case
+when the current memory mapping has no MBC selected.</td></tr>
+<tr><td><b>0xc0-0xff</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0xc0|<i>&lt;IDX&gt;</i>
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Switch memory mapping</b><br>
+Switches to memory mapping entry <i>&lt;IDX&gt;</i>. <i>&lt;IDX&gt;</i> can be in the range 0-63; it is given in the lower
+six bits of the command ID itself, not as an argument. Switching to mapping entries 43-63 will result in a simple no-MBC,
+no-RAM mapping, because those indices point outside the 128 byte map region. So only indices 0-42 actually make sense.
+Read <a href="#map_layout">further below</a> for an explanation about the format of the mapping entries stored in the map
+region. This command automatically enables memory mapping, disables MMC registers and commands, enables MBC registers, and
+resets MBC register contents to their defaults (ROM bank 1, RAM bank 0, RAM access disabled).</td></tr>
+</table>
+<h2 id="mmc_registers">MMC registers</h2>
+<p>While MMC registers are enabled (see MMC command 0x09), the MMC registers can be read in address range 0x0120-0x013f. All
+MMC registers are read-only. The following table describes all the MMC registers:</p>
+<table class="default">
+<tr><th>Address</th><th>Description</th></tr>
+<tr><td><b>0x0120</b></td><td>Always reads as 0x21.</td></tr>
+<tr><td><b>0x0121</b></td><td><b>Mapping entry index and flash write protection status</b>
+<dl><dt>Bits 7-2</dt><dd>Index of the currently selected mapping entry. Those bits will keep their value when the
+mapping gets disabled (see MMC command 0x04). The stored value is probably used to restore the previous mapping
+when MMC command 0x05 is called.</dd>
+<dt>Bit 1</dt><dd>High, if flash write protection is disabled, otherwise, false. See MMC commands 0x02 and 0x03.</dd>
+<dt>Bit 0</dt><dd>High, if flash write protection is allowed to be changed, otherwise, false. This bit is set when
+MMC command 0x0a is called. It is cleared when MMC command 0x08 is called.</dd></dl>
+On power up, this register is 0x00.</td></tr>
+<tr><td><b>0x0122-0x0124</b></td><td><b>Memory mapping configuration</b><br>
+Three bytes read from the currently selected memory mapping entry. Read the map entry format description
+<a href="#map_entry_format">below</a> for more information about its format. On power up, these registers are filled
+with the three bytes read from address 0x00-0x02 (mapping entry index 0) of the map region. If the mapping entry is
+invalid, or if the entire map region is invalid (because it is missing the zero byte at the end, see
+<a href="#map_layout">below</a>), then these registers are 0x00 0x00 0x00. When MMC command 0x04 is called, these
+registers are set to 0x9a 0x80 0x00, which is a mapping that makes all flash and RAM accessible.</td></tr>
+<tr><td><b>0x0125</b></td><td>Always reads as 0x87.</td></tr>
+<tr><td><b>0x0126</b></td><td>Always reads as 0x78.</td></tr>
+<tr><td><b>0x0127</b></td><td>Always reads as 0x5a.</td></tr>
+<tr><td><b>0x0128-0x013e</b></td><td>Always read as 0x00.</td></tr>
+<tr><td><b>0x013f</b></td><td>Always reads as 0xa5.</td></tr>
+</table>
+<h2 id="map_layout">Map layout</h2>
+<p>The map is located in a hidden region of the flash. For information how to access it, see flash command 0x77 0x77 further
+below. The map region is 128 bytes in size. When the map is made visible, it is mapped to all addresses dividable by 256
+across the whole address space. For example, it starts at address 0x0000, address 0x0100, 0x0200, ... The 128 byte space
+in between always reads as 0xff.</p>
+<p>This is an example map of a cartridge containing three games (Kirby no Kirakira Kids, Yoshi no Cookie and Momotarou
+Densetsu Jr.):</p>
+<pre>
+00000000  <span style="background-color:#ffe0e0;">a8 00 00</span> <span style="background-color:#e0ffe0;">2d 04 00</span> <span style="background-color:#e0e0ff;">28 0c  04</span> <span style="background-color:#ffe0ff;">31 10 04</span> ff ff ff ff  |...-..(..1......|
+00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000020  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000030  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000040  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000050  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000060  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff <span style="background-color:#ffffe0;">0d 00</span>  |................|
+00000070  <span style="background-color:#ffffe0;">30 19 99 10 30 12 37 17  ff ff ff ff ff ff 00</span> <span style="background-color:#e0e0e0;">00</span>  |0...0.7.........|
+</pre>
+<p>The red, green, blue and magenta bytes are mapping entries. The red one (entry #0) is for the menu. The green, blue and
+magenta ones (entries #1, #2 and #3) are for the three games. Entry #0 is automatically loaded during power up, so it must
+be the menu. Each entry is three bytes. The yellow bytes are similar, but not equal, on each cartridge. I don't know what
+it contains, but it is not relevant for the hardware and the menu. From a hardware perspective, the yellow bytes will be
+interpreted as mapping entries number ~36 to ~42, when commands 0xe4-0xea were used to switch to those mappings. The menu
+only uses entries 1-7 (commands 0xc1-0xc7), though. The last byte with the gray background must be set to 0x00. If it is
+not zero, then the MMC will ignore the mapping region completely and will treat it as if each byte in the mapping region
+was 0xff.</p>
+<p>On cartridges that contain a 1 MiB game, they store additional information in the map region. Here is an example from
+Super Mario Bros. Deluxe:</p>
+<pre>
+00000000  <span style="background-color:#ffe0e0;">b5 00 00</span> ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000010  ff ff ff ff ff ff ff ff  <span style="background-color:#e0ffe0;">08 00 40 00 43 47 42 20</span>  |..........@.CGB |
+00000020  <span style="background-color:#e0ffe0;">2d 41 48 59 4a 2d 20 20  82 4f 82 57 82 60 83 58</span>  |-AHYJ-  .O.W.`.X|
+00000030  <span style="background-color:#e0ffe0;">81 5b 83 70 81 5b 83 7d  83 8a 83 49 83 75 83 89</span>  |.[.p.[.}...I.u..|
+00000040  <span style="background-color:#e0ffe0;">83 55 81 5b 83 59 83 66  83 89 83 62 83 4e 83 58</span>  |.U.[.Y.f...b.N.X|
+00000050  <span style="background-color:#e0ffe0;">20 20 20 20 30 31 2f 30  31 2f 32 30 30 31 31 39</span>  |    01/01/200119|
+00000060  <span style="background-color:#e0ffe0;">3a 32 37 3a 33 36 4c 41  57 30 37 30 38 35</span> <span style="background-color:#ffffe0;">01 00</span>  |:27:36LAW07085..|
+00000070  <span style="background-color:#ffffe0;">30 1e 00 03 31 08 42 37  ff ff ff ff ff ff 00</span> <span style="background-color:#e0e0e0;">00</span>  |0...1.B7........|
+</pre>
+<p>The red bytes contain the mapping entry for the game. Since all space is used up for the game itself, this cartridge
+doesn't have a menu. The green bytes contain information about the game. Like the yellow ones, these are not relevant for
+the hardware. The MMC would interpret them as mapping entries.</p>
+<p>Functionally, the following map would be exactly the same as the previous one:</p>
+<pre>
+00000000  <span style="background-color:#ffe0e0;">b5 00 00</span> ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000010  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000020  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000030  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000040  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000050  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000060  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff  |................|
+00000070  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff <span style="background-color:#e0e0e0;">00</span>  |................|
+</pre>
+<p>My guess is that these green and yellow bytes are just read by the Kiosk devices that were used to program the
+cartridges. What can be seen in the green area is the ROM identifier (CGB -AHYJ- in this example), a date and time (probably
+time of purchase of the game), and other data. Maybe transaction ID or something. The yellow area could be a cartridge
+serial number, maybe. Again, none of it is relevant.</p>
+<p>So, in short, the map looks like this: Map entry <i>n</i>, where 0 &le; <i>n</i> &le; 63, starts at address
+<i>n</i> * 3. Byte at address 0x7f must be 0x00. Only entries 0-41 are fully usable, because the others are located outside
+the 128 byte range.</p>
+<h2 id="map_entry_format">Map entry format</h2>
+<p>Each entry is three bytes in size. It is divided into five fields:</p>
+<table class="default">
+<tr><th colspan=8>Byte&nbsp;0</th><th colspan=8>Byte&nbsp;1</th><th colspan=8>Byte&nbsp;2</th></tr>
+<tr><th style="background-color:#e0e0ff">7</th><th style="background-color:#e0e0ff">6</th>
+<th style="background-color:#e0e0ff">5</th><th style="background-color:#ffffe0">4</th>
+<th style="background-color:#ffffe0">3</th><th style="background-color:#ffffe0">2</th>
+<th style="background-color:#ffe0e0">1</th><th style="background-color:#ffe0e0">0</th>
+<th style="background-color:#ffe0e0">7</th><th>6</th><th>5</th><th style="background-color:#e0ffe0">4</th>
+<th style="background-color:#e0ffe0">3</th><th style="background-color:#e0ffe0">2</th>
+<th style="background-color:#e0ffe0">1</th><th style="background-color:#e0ffe0">0</th>
+<th>7</th><th>6</th><th style="background-color:#ffe0ff">5</th><th style="background-color:#ffe0ff">4</th>
+<th style="background-color:#ffe0ff">3</th><th style="background-color:#ffe0ff">2</th>
+<th style="background-color:#ffe0ff">1</th><th style="background-color:#ffe0ff">0</th></tr>
+<tr><td colspan=3 style="background-color:#e0e0ff">MBC type</td>
+<td colspan=3 style="background-color:#ffffe0">ROM size</td>
+<td colspan=3 style="background-color:#ffe0e0">RAM size</td>
+<td colspan=2 style="text-align:center;">-</td>
+<td colspan=5 style="background-color:#e0ffe0">ROM offset in 32 KiB steps</td>
+<td colspan=2 style="text-align:center;">-</td>
+<td colspan=6 style="background-color:#ffe0ff">RAM offset in 2 KiB steps</td></tr>
+</table>
+<p>Byte 1 bits 5&amp;6 and byte 2 bits 6&amp;7 are ignored and can have any value.</p>
+<p><span style="background-color:#e0e0ff">MBC type</span> can be one of the following:</p>
+<table class="default">
+<tr><th style="background-color:#e0e0ff">Value</th><th>Description</th></tr>
+<tr><td style="background-color:#e0e0ff">0</td>
+<td><b>No MBC</b><br>
+A cartridge without any MBC chip is emulated. Writing to MBC registers has no effect, memory banks can't be changed.</td></tr>
+<tr><td style="background-color:#e0e0ff">1</td>
+<td><b>MBC1</b><br>
+A cartridge with MBC1 chip is emulated.</td></tr>
+<tr><td style="background-color:#e0e0ff">2</td>
+<td><b>MBC2</b><br>
+A cartridge with MBC2 chip is emulated. This emulated version of the MBC2 chip allows reading and writing of full bytes in
+RAM. A "real" MBC2 chip only has the lower four data lines connected and stores only half-bytes in each RAM
+location. It is possible to have 8 KiB of RAM with this emulated version. Even more RAM could be selected, but MBC2 doesn't
+have registers for RAM bank switching, so more than 8 KiB is not accessible.</td></tr>
+<tr><td style="background-color:#e0e0ff">3</td>
+<td><b>MBC3</b><br>
+A cartridge with MBC3 chip is emulated. The RTC registers of the emulated MBC3 chip do nothing and always read 0x00.<br><br>
+<b>TODO:</b> Try soldering crystal to X1. Maybe RTC registers will work then.</td></tr>
+<tr><td style="background-color:#e0e0ff">4</td>
+<td><b>MBC5-ish</b><br>
+A cartridge with MBC5-ish chip is emulated. "-ish", because in contrast to MBC5, this MBC doesn't allow you to select ROM
+bank 0 on address range 0x4000-0x7fff.<br><br>
+This setting is used when the MMC command 0x04 is called. I have never seen this in the map region of any cartridge.
+Use value 5, if you want an MBC5 chip.</td></tr>
+<tr><td style="background-color:#e0e0ff">5</td>
+<td><b>MBC5</b><br>
+A cartridge with MBC5 chip is emulated.</td></tr>
+<tr><td style="background-color:#e0e0ff">6, 7</td>
+<td><b>Invalid entry</b><br>
+Invalidates the mapping entry and causes the MMC to load a null entry (00 00 00) instead. So, basically it emulates
+a cartridge without MBC chip and ignores all the other fields of the entry, setting them to 0: 32 KiB ROM, no RAM, no offsets.</td></tr>
+</table>
+<p><span style="background-color:#ffffe0">ROM size</span> can be one of the following:</p>
+<table class="default">
+<tr><th style="background-color:#ffffe0">Value</th><th>Description</th></tr>
+<tr><td style="background-color:#ffffe0">0</td>
+<td><b>32 KiB ROM</b></td></tr>
+<tr><td style="background-color:#ffffe0">1</td>
+<td><b>64 KiB ROM</b></td></tr>
+<tr><td style="background-color:#ffffe0">2</td>
+<td><b>128 KiB ROM</b></td></tr>
+<tr><td style="background-color:#ffffe0">3</td>
+<td><b>256 KiB ROM</b></td></tr>
+<tr><td style="background-color:#ffffe0">4</td>
+<td><b>512 KiB ROM</b></td></tr>
+<tr><td style="background-color:#ffffe0">5</td>
+<td><b>1 MiB ROM</b></td></tr>
+<tr><td style="background-color:#ffffe0">6</td>
+<td><b>1 MiB ROM</b><br>
+This setting is used when the MMC command 0x04 is called. I have never seen this in the map region of any cartridge.
+Use value 5, if you want 1 MiB ROM size.</td></tr>
+<tr><td style="background-color:#ffffe0">7</td>
+<td><b>16 KiB ROM</b><br>
+This maps the same 16 KiB block at address 0x0000-0x3fff and again at address 0x4000-0x7fff. I don't think this
+setting was ever used, since there is no game with less than 32 KiB ROM.</td></tr>
+</table>
+<p><span style="background-color:#ffe0e0">RAM size</span> can be one of the following:</p>
+<table class="default">
+<tr><th style="background-color:#ffe0e0">Value</th><th>Description</th></tr>
+<tr><td style="background-color:#ffe0e0">0</td>
+<td><b>No RAM</b><br>
+A cartridge without any RAM is emulated. Writing to addresses 0xa000-0xbfff has no effect, reading them is
+undefined.</td></tr>
+<tr><td style="background-color:#ffe0e0">1</td>
+<td><b>2 KiB RAM (or 512 bytes with MBC2)</b><br>
+This maps the same 2 KiB block four times within the 8 KiB cartridge RAM address space, at addresses 0xa000, 0xa800,
+0xb000 and 0xb800. When MBC2 is selected as <span style="background-color:#e0e0ff">MBC type</span>, then it is 512 bytes
+repeated 16 times.</td></tr>
+<tr><td style="background-color:#ffe0e0">2</td>
+<td><b>8 KiB RAM</b></td></tr>
+<tr><td style="background-color:#ffe0e0">3</td>
+<td><b>32 KiB RAM</b></td></tr>
+<tr><td style="background-color:#ffe0e0">4</td>
+<td><b>64 KiB RAM</b></td></tr>
+<tr><td style="background-color:#ffe0e0">5</td>
+<td><b>128 KiB RAM</b></td></tr>
+<tr><td style="background-color:#ffe0e0">6, 7</td>
+<td><b>No RAM</b><br>
+I have never seen this in the map region of any cartridge. Use value 0, if you don't want any RAM.</td></tr>
+</table>
+<p><span style="background-color:#e0ffe0">ROM offset</span> is given in 32 KiB steps. For example, an offset of 1 means
+that address 0x0000 from the Game Boy's perspective is mapped to address 0x8000 of the flash (which is 1 times 32768).
+Keep in mind, the cartridges that got programmed by the official Kiosks are partitioned in 128 KiB blocks, so they will
+have offsets of 0, 4, 8, 12, etc. (The lower two bits are 0.) The mapping wraps around at the end of the flash. For example,
+if <span style="background-color:#e0ffe0">ROM offset</span> is set to 1 and the
+<span style="background-color:#ffffe0">ROM size</span> is set to value 5 (1 MiB), then ROM banks 62 and 63, which would be
+outside the 1 MiB range after applying the offset, are actually mapped to flash addresses 0x0000 and 0x4000. Of course,
+such wrapped around mappings are not done by the official Kiosks.</p>
+<p><span style="background-color:#ffe0ff">RAM offset</span> is given in 2 KiB steps. It works the same way as the
+<span style="background-color:#e0ffe0">ROM offset</span>, just with a smaller step size, and it wraps around at 128 KiB.</p>
+<h2 id="flash_commands">Flash commands</h2>
+<p>Except for the reset command, commands send to the flash chip have the following structure:</p>
+<ol><li>0xaa is written to address 0x5555.</li>
+<li>0x55 is written to address 0x2aaa.</li>
+<li>Command ID is written to address 0x5555.</li></ol>
+<p>Most commands consist of two command IDs. For those commands, steps 1-3 are repeated. Only address lines A0-A14 are
+relevant for commands. Address lines A15 and higher are ignored. There is an exception to this: The erase flash sector
+command (0x80; 0x30). To erase a sector, the second command ID (0x30) needs to be written to an address that lies within
+that sector, instead of address 0x5555.</p>
+<p>For these commands to work properly when an MBC chip is emulated, you need to select an odd ROM bank first. Otherwise,
+A14 won't be high when writing to address 0x5555. Also, you have to disable MBC registers using the MMC command 0x10.
+If MBC registers are enabled, then write accesses won't go through to the flash.</p>
+<p>The following table contains all known flash commands:</p>
+<table class="default">
+<tr><th>Command ID(s)</th><th>Sequence<br>(ADR&nbsp;&lt;&#x2011;&nbsp;DATA)</th><th>Description</th></tr>
+<tr><td><b>0xf0</b></td><td><pre>0xXXXX&nbsp;&lt;&#x2011;&nbsp;0xf0</pre></td>
+<td><b>Reset</b><br>
+Can be written to any address. Used to exit from read ID (0x90) and read map (0x77; 0x77) commands. Also used to exit
+from any commands that provide status bits to communicate the completion of the operation, like program and erase commands.
+(Yes, I have just listed all known flash commands. So in short: The reset command is used to exit all the other commands.)
+After issuing a reset command, you will be able to read the array data (the contents stored in the flash) again.<br><br>
+It may be good practice to always issue a second reset command to the same address, if the chip is in an unknown state.
+This safely exits the program flash command (0xa0) or the program map command (0x60; 0xe0) without triggering the program
+operation.</td></tr>
+<tr><td><b>0x90</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x90</pre></td>
+<td><b>Read ID</b><br>
+After issuing this command, the array data (flash contents) can't be read anymore. Instead, you will be able to read
+the manufacturer and device ID. The following four bytes are read across the whole address space repeatedly:<br>
+<pre>0xXXX0&nbsp;&#x2011;&gt;&nbsp;0xc2 (manufacturer ID: Macronix)
+0xXXX1&nbsp;&#x2011;&gt;&nbsp;0x89 (device ID: 29F008ATC)
+0xXXX2&nbsp;&#x2011;&gt;&nbsp;0xc2 (?)
+0xXXX3&nbsp;&#x2011;&gt;&nbsp;0xff (?)</pre>
+Use the reset command (0xf0) to exit this mode.<br><br>
+Source: I found a
+<a href="https://chromium.googlesource.com/chromiumos/third_party/flashrom/+/798d2adc9527f724bc5096a646cf99efdbb6b59e/flashchips.h">file</a>
+listing 0xc2 as the ID for Macronix, the vendor of this flash chip. So we know that the 0xc2 is the manufacturer ID
+and the 0x89 must be the device ID for this specific chip. You can also google for any datasheet of Macronix chips listed
+in this file. They all document 0xc2 as Macronix' ID.</td></tr>
+<tr><td><b>0xa0</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xa0</pre></td>
+<td><b>Program flash</b><br>
+Programs 128 bytes of flash memory at any 128 byte aligned address. See further <a href="#flash_program">below</a> for an
+explanation on how to transfer the 128 bytes for the programming operation. The programming operation can only change bits
+from 1 to 0. Use the mass erase flash command (0x80; 0x10) or the erase flash sector command (0x80; 0x30) first to change
+bits back to 1.<br><br>
+The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
+the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
+no effect while the operation is still in progress.</td></tr>
+<tr><td><b>0x60; 0x04</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x04</pre></td>
+<td><b>Erase map</b><br>
+Erases the hidden 128 byte map region.<br><br>
+The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
+the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
+no effect while the operation is still in progress.</td></tr>
+<tr><td><b>0x60; 0xe0</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xe0</pre></td>
+<td><b>Program map</b><br>
+Programs the hidden 128 byte map. See further <a href="#flash_program">below</a> for an explanation on how to transfer
+the 128 bytes for the programming operation. The programming operation can only change bits from 1 to 0. Use the erase map
+command (0x60; 0x04) first to change bits back to 1.<br><br>
+The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
+the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
+no effect while the operation is still in progress.</td></tr>
+<tr><td><b>0x77; 0x77</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x77
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x77</pre></td>
+<td><b>Read map</b><br>
+After issuing this command, the array data (flash contents) can't be read anymore. Instead, you will be able to read
+the hidden 128 byte map. Read the <a href="#map_layout">map layout</a> section above for more information. Use the reset
+command (0xf0) to exit this mode.</td></tr>
+<tr><td><b>0x80; 0x10</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x80
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x10</pre></td>
+<td><b>Mass erase flash</b><br>
+Erases the whole 1 MiB flash. The hidden 128 byte map region is preserved.<br><br>
+The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
+the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
+no effect while the operation is still in progress.</td></tr>
+<tr><td><b>0x80; 0x30</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+0x5555&nbsp;&lt;&#x2011;&nbsp;0x80
+0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
+0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
+<i>&lt;ADR&gt;</i>&nbsp;&lt;&#x2011;&nbsp;0x30</pre></td>
+<td><b>Erase flash sector</b><br>
+Erases one flash sector selected by the address <i>&lt;ADR&gt;</i>. The flash is divided into eight individually erasable
+sectors, each 128 KiB. The last written byte in the sequence of this command must be written to an address within the sector
+that should be erased. This means for the last byte in the sequence, address lines A17-A19 contain the sector number 0-7;
+address lines A0-A16 are ignored.<br><br>
+The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
+the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
+no effect while the operation is still in progress.</td></tr>
+</table>
+<h3 id="flash_status">Status bits of flash program/erase operations</h3>
+<p>During and after any program or erase operation, status bits can be read from the flash chip; the address being read
+doesn't matter. These are the status bits:</p>
+<dl><dt>Bit 7</dt><dd>Low, while a program or erase operation is in progress. High, when the operation is complete.
+In case of program operations, it is also high when the actual operation hasn't been triggered yet by writing to the same
+buffer location twice.</dd>
+<dt>Bit 6</dt><dd>undriven/undefined</dd>
+<dt>Bits 5-4</dt><dd>driven/unknown; only seen as low</dd>
+<dt>Bits 3-2</dt><dd>undriven/undefined</dd>
+<dt>Bit 1</dt><dd>driven/unknown; only seen as low</dd>
+<dt>Bit 0</dt><dd>undriven/undefined</dd></dl>
+<h3 id="flash_program">Flash program operations</h3>
+<p>Programming the flash contents and programming the map works both in the same way. The only difference is the flash
+command you use to initiate the procedure. In both programming procedures, you have to write up to 128 bytes into a buffer
+in the flash chip and then trigger the actual programming. These are the steps to take:</p>
+<ol>
+<li>Issue the flash command: Either program flash (0xa0) or program map (0x60; 0xe0).
+<ul>
+<li>After issuing the command, reading from the flash chip will return status bits instead of flash contents. There is no
+need to read the status bits now, but if you would read them, then status bit 7 will be set, which means that no operation
+is going on yet.</li>
+<li>The 128 byte buffer that you have to fill will be initialized with 0xff. So if you skip writing into this buffer and
+trigger the programming, then flash contents won't be changed, because the programming operation can only change bits from
+1 to 0, not from 0 to 1.</li>
+</ul></li>
+<li>Write data to the buffer.
+<ul>
+<li>The lower seven address lines (A6-A0) select the byte position inside the buffer that is
+being written to. The other address lines (A19-A7) will be ignored.</li>
+<li>You can write the bytes into the buffer in any order you want, but don't write to the same location twice in a row,
+because this will trigger the programming operation. Since the upper address lines are ignored, writing to address 0x0181
+and then to 0x0201 would be considered the <i>same location</i>, and therefore trigger the programming. (0x0181 &amp; 0x7f ==
+0x0001 and also 0x0201 &amp; 0x7f == 0x0001) You can overwrite bytes that you have already written into the buffer if you
+want as long as you don't write to the same location consecutively without writing to another location in between.</li>
+<li>You don't have to write to all locations. If you just want to change one single byte in the flash, then just write that
+single byte.</li>
+</ul>
+</li>
+<li>Trigger programming operation.
+<ul>
+<li>Triggering the operation is done by writing to the same buffer location that you have written to last. For example,
+if you filled the buffer by writing to addresses 0x0000, 0x0001, 0x0002, ..., 0x007f in that order, then writing to address
+0x007f again will trigger the operation. During this repeated write access to the same location, the data written doesn't
+matter (with one small exception). You can write 0x00, you can write 0xff, or whatever, it won't change the data in the
+buffer, as long as A6-A0 stay the same as in the previous write access. The small exception is: Writing 0xf0 will be
+interpreted as a reset command and abort the programming procedure.</li>
+<li>When writing the trigger, address lines A19-A7 determine the address to which the 128 buffer will be programmed to.
+For example, if you write to address 0x127f to trigger the operation, then the buffer will be programmed to address 0x1200,
+because 0x127f &amp; ~0x7f == 0x1200.</li>
+<li>When programming the map, A19-A7 are also ignored when triggering the operation. You can program the map to address
+0x0080, and it will still end up at address 0x0000, 0x0100, 0x0200, ... instead of 0x0080, 0x0180, ...</li>
+</ul>
+</li>
+<li>Wait for operation to complete.
+<ul>
+<li>After triggering the operation, status bit 7 will be low until the operation completes.</li>
+</ul>
+</li>
+</ol>
+<p>Afterward, you can issue another flash command to write the next 128 bytes, or any other command, like the reset command
+(0xf0), to make the flash contents visible again.</p>
+<h2 id="gbm_procedures">Pseudocode procedures</h2>
+<p>Writing to the flash can get very complicated, because the state of the MMC and the MBC will impact if and how write
+accesses reach the flash chip. To make things simpler, I provide a few procedures here that consider all three
+<i>devices</i> (MMC, MBC and flash) and provide explanation in comments.</p>
+<p>In this pseudocode, I use read() and write() functions. Those depict memory accesses on the cartridge bus from the
+perspective of the Game Boy or your custom hardware.</p>
+<pre>
+<span style="color:#007f00">/* Sends command to MMC chip. */</span>
+<span style="color:#0000ff">procedure</span> <b>mmc_command</b>(command, [optional] address, [optional] data)
+{
+	<span style="color:#007f00">/* Write command ID. */</span>
+	write(0x0120, command);
+
+	<span style="color:#007f00">/* Some commands require additional data. */</span>
+	<span style="color:#0000ff">switch</span> (command) {
+		<span style="color:#0000ff">case</span> 0x09:
+			<span style="color:#007f00">/* Command 0x09 needs an unlock sequence. */</span>
+			write(0x0121, 0xaa);
+			write(0x0122, 0x55);
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 0x0a:
+			<span style="color:#007f00">/* Command 0x0a needs an unlock sequence. */</span>
+			write(0x0125, 0x62);
+			write(0x0126, 0x04);
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 0x0f:
+			<span style="color:#007f00">/* Command 0x0f needs two arguments: address and data. */</span>
+			write(0x0125, address &gt;&gt; 8);
+			write(0x0126, address &amp; 0xff);
+			write(0x0127, data);
+			<span style="color:#0000ff">break</span>;
+	}
+
+	<span style="color:#007f00">/* Write termination. */</span>
+	write(0x013f, 0xa5);
+}
+
+<span style="color:#007f00">/* Restores the state that the flash chip will have on power up. */</span>
+<span style="color:#0000ff">procedure</span> <b>reset_flash</b>()
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable MBC registers.
+	 * We need to disable MBC registers, otherwise write accesses won't go
+	 * through to the flash. */</span>
+	mmc_command(0x10);
+
+	<span style="color:#007f00">/* Issue reset command to flash.
+	 * We issue two reset commands to the same address in direct succession,
+	 * just in case the flash chip is currently receiving data into its write
+	 * buffer prior to a program operation. Two reset commands issued to the
+	 * same address will cause exiting from this mode without starting the
+	 * program operation. */</span>
+	write(0x0000, 0xf0);
+	write(0x0000, 0xf0);
+
+	<span style="color:#007f00">/* Wait for 100 milliseconds.
+	 * Due to my measurements, the longest program or erase operation takes around
+	 * 6 milliseconds, so 100 milliseconds will be on the safe side. */</span>
+	sleep(0.1);
+
+	<span style="color:#007f00">/* We try resetting the flash a third time after 100 ms, just in case
+	 * there was a program or erase operation ongoing the first and second
+	 * time. Reset has no effect during such an operation. */</span>
+	write(0x0000, 0xf0);
+}
+
+<span style="color:#007f00">/* Restores the state that the cartridge will have on power up. */</span>
+<span style="color:#0000ff">procedure</span> <b>reset_cartridge</b>()
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	mmc_command(0x0a);
+	mmc_command(0x03);
+
+	<span style="color:#007f00">/* Make flash chip exit any special mode and make flash contents accessible. */</span>
+	reset_flash();
+
+	<span style="color:#007f00">/* Select mapping entry 0. This automatically disables MMC commands,
+	 * enables MBC registers, and resets MBC register contents. */</span>
+	mmc_command(0xc0);
+}
+
+<span style="color:#007f00">/* Makes the hidden map accessible for reading. */</span>
+<span style="color:#0000ff">procedure</span> <b>read_map</b>()
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable mapping so that we can access the whole flash. */</span>
+	mmc_command(0x04);
+
+	<span style="color:#007f00">/* Enable MBC registers. */</span>
+	mmc_command(0x11);
+
+	<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select).
+	 * Select bank 1 so that A14 is high if accessing address 0x4000-0x7fff. */</span>
+	write(0x2000, 1);
+
+	<span style="color:#007f00">/* Disable MBC registers.
+	 * We need to disable MBC registers, otherwise write accesses won't go
+	 * through to the flash. */</span>
+	mmc_command(0x10);
+
+	<span style="color:#007f00">/* Issue read map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x77);
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x77);
+
+	<span style="color:#007f00">/* Now, the 128 byte map can be read from the flash chip.
+	 * Issue the flash reset command (0xf0) when done reading. */</span>
+}
+
+<span style="color:#007f00">/* Erases the whole 1 MiB of flash. */</span>
+<span style="color:#0000ff">procedure</span> <b>mass_erase_flash</b>()
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable mapping so that we can access the whole flash. */</span>
+	mmc_command(0x04);
+
+	<span style="color:#007f00">/* Enable MBC registers. */</span>
+	mmc_command(0x11);
+
+	<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select).
+	 * Select bank 1 so that A14 is high if accessing address 0x4000-0x7fff. */</span>
+	write(0x2000, 1);
+
+	<span style="color:#007f00">/* Disable MBC registers.
+	 * We need to disable MBC registers, otherwise write accesses won't go
+	 * through to the flash. */</span>
+	mmc_command(0x10);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	mmc_command(0x0a);
+	mmc_command(0x02);
+
+	<span style="color:#007f00">/* Issue mass erase flash command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x80);
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x10);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x0000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	mmc_command(0x03);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x0000, 0xf0);
+}
+
+<span style="color:#007f00">/* Erases one 128 KiB flash sector.
+ *  <i>sector_idx</i>: Sector index 0-7. */</span>
+<span style="color:#0000ff">procedure</span> <b>erase_flash_sector</b>(sector_idx)
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable mapping so that we can access the whole flash. */</span>
+	mmc_command(0x04);
+
+	<span style="color:#007f00">/* Enable MBC registers. */</span>
+	mmc_command(0x11);
+
+	<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select).
+	 * Select bank ((<i>sector_idx</i> * 0x20000 [&lt;- sector size]) / 0x4000 [&lt;- bank size]) + 1.
+	 * +1, because address needs to be odd, so that A14 is high if accessing address 0x4000-0x7fff. */</span>
+	write(0x2000, sector_idx * 8 + 1);
+
+	<span style="color:#007f00">/* Disable MBC registers.
+	 * We need to disable MBC registers, otherwise write accesses won't go
+	 * through to the flash. */</span>
+	mmc_command(0x10);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	mmc_command(0x0a);
+	mmc_command(0x02);
+
+	<span style="color:#007f00">/* Issue sector erase flash command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x80);
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x30); <span style="color:#007f00">/* We could use any address here that is in the range 0x4000-0x7fff. */</span>
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x0000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	mmc_command(0x03);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x0000, 0xf0);
+}
+
+<span style="color:#007f00">/* Erases the 128 byte map. */</span>
+<span style="color:#0000ff">procedure</span> <b>erase_map</b>()
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable mapping so that we can access the whole flash. */</span>
+	mmc_command(0x04);
+
+	<span style="color:#007f00">/* Enable MBC registers. */</span>
+	mmc_command(0x11);
+
+	<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select).
+	 * Select bank 1 so that A14 is high if accessing address 0x4000-0x7fff. */</span>
+	write(0x2000, 1);
+
+	<span style="color:#007f00">/* Disable MBC registers.
+	 * We need to disable MBC registers, otherwise write accesses won't go
+	 * through to the flash. */</span>
+	mmc_command(0x10);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	mmc_command(0x0a);
+	mmc_command(0x02);
+
+	<span style="color:#007f00">/* Issue erase map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x04);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x0000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	mmc_command(0x03);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x0000, 0xf0);
+}
+
+<span style="color:#007f00">/* Programs the 1 MiB flash with data from an array. */</span>
+<span style="color:#0000ff">procedure</span> <b>program_flash</b>(data[1048576])
+{
+	<span style="color:#0000ff">var</span> index   = 0;
+	<span style="color:#0000ff">var</span> address = 0;
+
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable mapping so that we can access the whole flash. */</span>
+	mmc_command(0x04);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	mmc_command(0x0a);
+	mmc_command(0x02);
+
+	<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> bank = 1; bank &lt; 64; bank++) {
+		<span style="color:#0000ff">if</span> (bank &gt; 1)
+			address = 0x4000;
+
+		<span style="color:#0000ff">for</span> (; address &lt; 0x7fff; address += 128) {
+			<span style="color:#007f00">/* Enable MBC registers. */</span>
+			mmc_command(0x11);
+
+			<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select).
+			 * Select bank 1 so that A14 is high if accessing address 0x4000-0x7fff. */</span>
+			write(0x2000, 1);
+
+			<span style="color:#007f00">/* Disable MBC registers.
+			 * We need to disable MBC registers, otherwise write accesses won't go
+			 * through to the flash. */</span>
+			mmc_command(0x10);
+
+			<span style="color:#007f00">/* Issue program flash command sequence. */</span>
+			write(0x5555, 0xaa);
+			write(0x2aaa, 0x55);
+			write(0x5555, 0xa0);
+
+			<span style="color:#007f00">/* Enable MBC registers. */</span>
+			mmc_command(0x11);
+
+			<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select). 
+			 * Select current bank number for programming data into the flash. */</span>
+			write(0x2000, bank);
+
+			<span style="color:#007f00">/* Disable MBC registers.
+			 * We need to disable MBC registers, otherwise write accesses won't go
+			 * through to the flash. */</span>
+			mmc_command(0x10);
+
+			<span style="color:#007f00" id="avoid_writing_0120">/* Fill the 128 byte write buffer with data from the array.
+			 * We always begin writing at address 0x0000, so we will never get into the
+			 * address range 0x0120-0x013f, which is used for MMC commands. Therefore, we
+			 * don't need to bother with disabling the MMC commands and reenabling them
+			 * all the time, which makes things much easier. */</span>
+			<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> i = 0; i &lt;= 128; i++) {
+				write(i, data[index++]);
+			}
+
+			<span style="color:#007f00">/* Write to the last written buffer location twice, but apply the target
+			 * address this time. This triggers the actual programming operation. The
+			 * written data doesn't matter as long as it isn't the reset command 0xf0. */</span>
+			write(address + 127, 0);
+
+			<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+			<span style="color:#0000ff">while</span> (!(read(0x0000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+		}
+	}
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	mmc_command(0x03);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x0000, 0xf0);
+}
+
+<span style="color:#007f00">/* Programs the 128 byte map with data from an array. */</span>
+<span style="color:#0000ff">procedure</span> <b>program_map</b>(data[128])
+{
+	<span style="color:#007f00">/* Enable MMC commands. */</span>
+	mmc_command(0x09);
+
+	<span style="color:#007f00">/* Disable mapping so that we can access the whole flash. */</span>
+	mmc_command(0x04);
+
+	<span style="color:#007f00">/* Enable MBC registers. */</span>
+	mmc_command(0x11);
+
+	<span style="color:#007f00">/* Write to MBC register 0x2000 (ROM bank select).
+	 * Select bank 1 so that A14 is high if accessing address 0x4000-0x7fff. */</span>
+	write(0x2000, 1);
+
+	<span style="color:#007f00">/* Disable MBC registers.
+	 * We need to disable MBC registers, otherwise write accesses won't go
+	 * through to the flash. */</span>
+	mmc_command(0x10);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	mmc_command(0x0a);
+	mmc_command(0x02);
+
+	<span style="color:#007f00">/* Issue program map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x2aaa, 0x55);
+	write(0x5555, 0xe0);
+
+	<span style="color:#007f00">/* Fill the 128 byte write buffer with data from the array. */</span>
+	<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> i = 0; i &lt;= 128; i++) {
+		write(i, data[i]);
+	}
+
+	<span style="color:#007f00">/* Write to the last written buffer location twice.
+	 * This triggers the actual programming operation. The written
+	 * data doesn't matter as long as it isn't the reset command 0xf0. */</span>
+	write(0x007f, 0);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x0000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	mmc_command(0x03);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x0000, 0xf0);
+}
+</pre>
+</main><footer><hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</footer></body>
+</html>
