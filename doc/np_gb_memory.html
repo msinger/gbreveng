@@ -51,6 +51,13 @@ the cartridge:<br>
 <a href="https://github.com/msinger/gbreveng/issues">https://github.com/msinger/gbreveng/issues</a><br>
 Also, I would be happy if you have any additional information. Just create an issue or a discussion in this repository.
 Of course, feel free to ask questions there if anything is unclear, maybe I can answer.</p>
+<p>I noticed the MBC6 game <a href="/db/cart_CGB-BMVJ-0_iceboy_1.html">Net de Get - Mini-Game@100</a> has a flash chip
+with very similar part number. The Nintendo Power cartridges have 29F008ATC, Net de Get has 29F008TC. I tested the
+flash chip in Net de Get and I couldn't find any difference to the NP flash chips that I documented here. They have the
+same erase sector size and even the same 256 byte hidden region. I don't know if this region was used in Net de Get,
+because I only have cartridges with empty flashes. The part of this documentation about the flash can also be used for
+Net de Get. For a documentation about the MBC6 chip, I'd recommend
+<a href="https://gbdev.io/pandocs/MBC6.html">Pan Docs</a>.</p>
 <ul>
  <li><a href="#overview">Overview</a></li>
  <li><a href="#mmc_commands">MMC commands</a></li>
@@ -62,7 +69,8 @@ Of course, feel free to ask questions there if anything is unclear, maybe I can 
    <li><a href="#flash_status">Status bits of flash program/erase operations</a></li>
    <li><a href="#flash_program">Flash program operations</a></li>
   </ul></li>
- <li><a href="#gbm_procedures">Pseudocode procedures</a></li>
+ <li><a href="#gbm_procedures">Pseudocode procedures for Nintendo Power cartridges</a></li>
+ <li><a href="#mbc6_procedures">Pseudocode procedures for Net de Get (MBC6) cartridges</a></li>
 </ul>
 <h2 id="overview">Overview</h2>
 <p>For an explanation of what this cartridge is, please read the
@@ -642,7 +650,7 @@ two 128 byte blocks. A7 selects which of the two halves of the map gets programm
 </ol>
 <p>Afterward, you can issue another flash command to write the next 128 bytes, or any other command, like the reset command
 (0xf0), to make the flash contents visible again.</p>
-<h2 id="gbm_procedures">Pseudocode procedures</h2>
+<h2 id="gbm_procedures">Pseudocode procedures for Nintendo Power cartridges</h2>
 <p>Writing to the flash can get very complicated, because the state of the MMC and the MBC will impact if and how write
 accesses reach the flash chip. To make things simpler, I provide a few procedures here that consider all three
 <i>devices</i> (MMC, MBC and flash) and provide explanation in comments.</p>
@@ -1105,6 +1113,373 @@ perspective of the Game Boy or your custom hardware.</p>
 
 	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
 	write(0x0000, 0xf0);
+}
+</pre>
+<h2 id="mbc6_procedures">Pseudocode procedures for Net de Get (MBC6) cartridges</h2>
+<p>Getting the commands through to the flash on a Net de Get cartridge is maybe as confusing as on a Nintendo
+Power cartridge. You have two address ranges that you can select a flash bank to be mapped to. And you have only 13 address
+lines (A12-A0) that you can control directly, instead of 14. A19-A13 are determined by the selected flash banks in the MBC6
+chip.</p>
+<pre>
+<span style="color:#007f00">/* Configure MBC6 so that flash is visible. */</span>
+<span style="color:#0000ff">procedure</span> <b>enable_flash</b>()
+{
+	write(0x1000, 1);
+	write(0x0c00, 1);
+	write(0x1000, 0);
+	write(0x2800, 8);
+	write(0x3800, 8);
+}
+
+<span style="color:#007f00">/* Restores the state that the flash chip will have on power up. */</span>
+<span style="color:#0000ff">procedure</span> <b>reset_flash</b>()
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Issue reset command to flash.
+	 * We issue two reset commands to the same address in direct succession,
+	 * just in case the flash chip is currently receiving data into its write
+	 * buffer prior to a program operation. Two reset commands issued to the
+	 * same address will cause exiting from this mode without starting the
+	 * program operation. */</span>
+	write(0x4000, 0xf0);
+	write(0x4000, 0xf0);
+
+	<span style="color:#007f00">/* Wait for 100 milliseconds.
+	 * Due to my measurements, the longest program or erase operation takes around
+	 * 6 milliseconds, so 100 milliseconds will be on the safe side. */</span>
+	sleep(0.1);
+
+	<span style="color:#007f00">/* We try resetting the flash a third time after 100 ms, just in case
+	 * there was a program or erase operation ongoing the first and second
+	 * time. Reset has no effect during such an operation. */</span>
+	write(0x4000, 0xf0);
+}
+
+<span style="color:#007f00">/* Restores the state that the cartridge will have on power up. */</span>
+<span style="color:#0000ff">procedure</span> <b>reset_cartridge</b>()
+{
+	<span style="color:#007f00">/* Make flash chip exit any special mode. */</span>
+	reset_flash();
+
+	<span style="color:#007f00">/* Restore state of all MBC6 registers to their defaults. */</span>
+	write(0x0000, 0);
+	write(0x1000, 1);
+	write(0x0c00, 0);
+	write(0x1000, 0);
+	write(0x2800, 0);
+	write(0x3800, 0);
+	write(0x0400, 0);
+	write(0x0800, 1);
+	write(0x2000, 2);
+	write(0x3000, 3);
+}
+
+<span style="color:#007f00">/* Returns true, if sector 0 is protected; false, if it is unprotected. */</span>
+<span style="color:#0000ff">function</span> <b>is_sector0_protected</b>()
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Select flash banks so that
+	 * accessing address 0x5555 results in flash address 0x05555; and
+	 * accessing address 0x6aaa results in flash address 0x02aaa. */</span>
+	write(0x2000, 2);
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Issue program flash command sequence, so we can read the status byte
+	 * from the flash. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0xa0);
+
+	<span style="color:#007f00">/* Being in program mode allows us to read the status byte. */</span>
+	<span style="color:#0000ff">var</span> status = read(0x4000);
+
+	<span style="color:#007f00">/* Abort the program flash command. */</span>
+	reset_flash();
+
+	<span style="color:#0000ff">return</span> (status &amp; 0x02) != 0x00;
+}
+
+<span style="color:#007f00">/* Makes the hidden map accessible for reading. */</span>
+<span style="color:#0000ff">procedure</span> <b>read_map</b>()
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Select flash banks so that
+	 * accessing address 0x5555 results in flash address 0x05555; and
+	 * accessing address 0x6aaa results in flash address 0x02aaa. */</span>
+	write(0x2000, 2);
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Issue read map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x77);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x77);
+
+	<span style="color:#007f00">/* Now, the 256 byte map can be read from the flash chip.
+	 * Issue the flash reset command (0xf0) when done reading. */</span>
+}
+
+<span style="color:#007f00">/* Erases the whole 1 MiB of flash. */</span>
+<span style="color:#0000ff">procedure</span> <b>mass_erase_flash</b>()
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Select flash banks so that
+	 * accessing address 0x5555 results in flash address 0x05555; and
+	 * accessing address 0x6aaa results in flash address 0x02aaa. */</span>
+	write(0x2000, 2);
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	write(0x1000, 1);
+
+	<span style="color:#007f00">/* Issue unprotect sector 0 flash command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x40);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Issue mass erase flash command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x80);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x10);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	write(0x1000, 0);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x4000, 0xf0);
+}
+
+<span style="color:#007f00">/* Erases one 128 KiB flash sector.
+ *  <i>sector_idx</i>: Sector index 0-7. */</span>
+<span style="color:#0000ff">procedure</span> <b>erase_flash_sector</b>(sector_idx)
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Select bank ((<i>sector_idx</i> * 0x20000 [&lt;- sector size]) / 0x2000 [&lt;- bank size]) + 2.
+	 * +2, because bank number needs to end in 0b10, so that A14 is high and A13 is low
+	 * if accessing address 0x4000-0x5fff. This way, we have the sector number in A19-A17
+	 * and we can still use 0x5555 for the command sequence. */</span>
+	write(0x2000, sector_idx * 16 + 1);
+
+	<span style="color:#007f00">/* Select the second flash bank so that accessing address 0x6aaa results
+	 * in flash address 0x02aaa. */</span>
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	write(0x1000, 1);
+
+	<span style="color:#0000ff">if</span> (sector == 0) {
+		<span style="color:#007f00">/* Issue unprotect sector 0 flash command sequence. */</span>
+		write(0x5555, 0xaa);
+		write(0x6aaa, 0x55);
+		write(0x5555, 0x60);
+		write(0x5555, 0xaa);
+		write(0x6aaa, 0x55);
+		write(0x5555, 0x40);
+
+		<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+		<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+	}
+
+	<span style="color:#007f00">/* Issue sector erase flash command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x80);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x30); <span style="color:#007f00">/* We could use any address here that is in the range 0x4000-0x5fff. */</span>
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	write(0x1000, 0);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x4000, 0xf0);
+}
+
+<span style="color:#007f00">/* Erases the 256 byte map. */</span>
+<span style="color:#0000ff">procedure</span> <b>erase_map</b>()
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Select flash banks so that
+	 * accessing address 0x5555 results in flash address 0x05555; and
+	 * accessing address 0x6aaa results in flash address 0x02aaa. */</span>
+	write(0x2000, 2);
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	write(0x1000, 1);
+
+	<span style="color:#007f00">/* Issue erase map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x04);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	write(0x1000, 0);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x4000, 0xf0);
+}
+
+<span style="color:#007f00">/* Programs the 1 MiB flash with data from an array. */</span>
+<span style="color:#0000ff">procedure</span> <b>program_flash</b>(data[1048576])
+{
+	<span style="color:#0000ff">var</span> index = 0;
+
+	enable_flash();
+
+	<span style="color:#007f00">/* Select the second flash bank so that accessing address 0x6aaa results
+	 * in flash address 0x02aaa. */</span>
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	write(0x1000, 1);
+
+	<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> bank = 0; bank &lt; 128; bank++) {
+		<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> address = 0x4000; address &lt; 0x5fff; address += 128) {
+			<span style="color:#007f00">/* Select the first flash bank so that accessing address 0x5555
+			 * results in flash address 0x05555. */</span>
+			write(0x2000, 2);
+
+			<span style="color:#007f00">/* Issue program flash command sequence. */</span>
+			write(0x5555, 0xaa);
+			write(0x6aaa, 0x55);
+			write(0x5555, 0xa0);
+
+			<span style="color:#007f00">/* Select first flash bank for programming data into the flash. */</span>
+			write(0x2000, bank);
+
+			<span style="color:#007f00" id="avoid_writing_0120">/* Fill the 128 byte write buffer with data from the array. */</span>
+			<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> i = 0; i &lt;= 128; i++) {
+				write(0x4000 + i, data[index++]);
+			}
+
+			<span style="color:#007f00">/* Write to the last written buffer location twice, but apply the target
+			 * address this time. This triggers the actual programming operation. The
+			 * written data doesn't matter as long as it isn't the reset command 0xf0. */</span>
+			write(address + 127, 0);
+
+			<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+			<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+		}
+	}
+
+	<span style="color:#007f00">/* Select the first flash bank so that accessing address 0x5555
+	 * results in flash address 0x05555. */</span>
+	write(0x2000, 2);
+
+	<span style="color:#007f00">/* Issue protect sector 0 flash command sequence. */
+	/* <b>TODO:</b> I'm not sure if Net de Get cartridges have a protected
+	 *       sector 0 when their flash contains dowloaded content.
+	 *       Maybe this step shouldn't be done. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x20);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	write(0x1000, 0);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x4000, 0xf0);
+}
+
+<span style="color:#007f00">/* Programs the 256 byte map with data from an array. */</span>
+<span style="color:#0000ff">procedure</span> <b>program_map</b>(data[256])
+{
+	enable_flash();
+
+	<span style="color:#007f00">/* Select flash banks so that
+	 * accessing address 0x5555 results in flash address 0x05555; and
+	 * accessing address 0x6aaa results in flash address 0x02aaa. */</span>
+	write(0x2000, 2);
+	write(0x3000, 1);
+
+	<span style="color:#007f00">/* Disable flash write protection. */</span>
+	write(0x1000, 1);
+
+	<span style="color:#007f00">/* Issue program map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0xe0);
+
+	<span style="color:#007f00">/* Fill the 128 byte write buffer with first half of data
+	 * from the array. */</span>
+	<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> i = 0; i &lt;= 128; i++) {
+		write(0x4000 + i, data[i]);
+	}
+
+	<span style="color:#007f00">/* Write to the last written buffer location twice.
+	 * This triggers the actual programming operation. The written
+	 * data doesn't matter as long as it isn't the reset command 0xf0. */</span>
+	write(0x407f, 0);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Issue program map command sequence. */</span>
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0x60);
+	write(0x5555, 0xaa);
+	write(0x6aaa, 0x55);
+	write(0x5555, 0xe0);
+
+	<span style="color:#007f00">/* Fill the 128 byte write buffer with second half of data
+	 * from the array. */</span>
+	<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> i = 0; i &lt;= 128; i++) {
+		write(0x4000 + i, data[i + 128]);
+	}
+
+	<span style="color:#007f00">/* Write to the last written buffer location twice.
+	 * This triggers the actual programming operation. The written
+	 * data doesn't matter as long as it isn't the reset command 0xf0. */</span>
+	write(0x40ff, 0);
+
+	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
+	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
+
+	<span style="color:#007f00">/* Enable flash write protection. */</span>
+	write(0x1000, 0);
+
+	<span style="color:#007f00">/* Issue reset command to flash to make contents accessible again. */</span>
+	write(0x4000, 0xf0);
 }
 </pre>
 </main><footer><hr>
