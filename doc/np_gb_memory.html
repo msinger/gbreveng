@@ -102,7 +102,7 @@ which is just a way of communicating with the flash chip. No non-volatile storag
 to be changed when using the term "write". When I use the terms "programming" and "erasing", that's when the actual flash
 content is modified.</p>
 <h2 id="mmc_commands">MMC commands</h2>
-<p>Commands send to the MMC chip have the following structure:</p>
+<p>Commands sent to the MMC chip have the following structure:</p>
 <ol><li>Command ID is written to address 0x0120.</li>
 <li>Some commands require arguments, which are written to addresses 0x0121-0x0127.</li>
 <li>Command is terminated by writing 0xa5 to address 0x013f.</li></ol>
@@ -445,7 +445,7 @@ byte. Bit #5 of the middle byte gets transferred to the registers, so it must ha
 <p><span style="background-color:#ffe0ff">RAM offset</span> is given in 2 KiB steps. It works the same way as the
 <span style="background-color:#e0ffe0">ROM offset</span>, just with a smaller step size, and it wraps around at 128 KiB.</p>
 <h2 id="flash_commands">Flash commands</h2>
-<p>Except for the reset command, commands send to the flash chip have the following structure:</p>
+<p>Except for the reset command, commands sent to the flash chip have the following structure:</p>
 <ol><li>0xaa is written to address 0x5555.</li>
 <li>0x55 is written to address 0x2aaa.</li>
 <li>Command ID is written to address 0x5555.</li></ol>
