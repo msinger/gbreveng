@@ -71,8 +71,11 @@ Net de Get. For a documentation about the MBC6 chip, I'd recommend
    <li><a href="#flash_status">Status bits of flash program/erase operations</a></li>
    <li><a href="#flash_program">Flash program operations</a></li>
   </ul></li>
+ <li><a href="#mmc_reset">MMC power up and reset behavior</a></li>
  <li><a href="#gbm_procedures">Pseudocode procedures for Nintendo Power cartridges</a></li>
  <li><a href="#mbc6_procedures">Pseudocode procedures for Net de Get (MBC6) cartridges</a></li>
+ <li><a href="#mmc_pinout">MMC chip pinout</a></li>
+ <li><a href="#flash_pinout">Flash chip pinout</a></li>
 </ul>
 <h2 id="overview">Overview</h2>
 <p>For an explanation of what this cartridge is, please read the
@@ -118,16 +121,20 @@ register 0x0000.</p>
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Disable flash write protection</b><br>
 Disables the flash write protection. For this command to have an effect, bit 0 of MMC register 0x0121 needs to be set.
-MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of its outputs connected to a WP (write
-protect) input of the flash. This command (and its counterpart 0x03) control the state of this WP signal. Bit 1 of MMC
-register 0x0121 will go high when the write protection is disabled.</td></tr>
+MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of its outputs connected to a
+<span style="text-decoration:overline">WP</span> (write protect) input of the flash. This command (and its counterpart
+0x03) control the state of this <span style="text-decoration:overline">WP</span> signal. MMC's
+FLASH_<span style="text-decoration:overline">WP</span> pin and bit 1 of MMC register 0x0121 will go high when the write
+protection is disabled.</td></tr>
 <tr><td><b>0x03</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x03
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Enable flash write protection</b><br>
 Enables the flash write protection. For this command to have an effect, bit 0 of MMC register 0x0121 needs to be set.
-MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of its outputs connected to a WP (write
-protect) input of the flash. This command (and its counterpart 0x02) control the state of this WP signal. Bit 1 of MMC
-register 0x0121 will go low when the write protection is enabled.</td></tr>
+MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of its outputs connected to a
+<span style="text-decoration:overline">WP</span> (write protect) input of the flash. This command (and its counterpart
+0x02) control the state of this <span style="text-decoration:overline">WP</span> signal. MMC's
+FLASH_<span style="text-decoration:overline">WP</span> pin and bit 1 of MMC register 0x0121 will go low when the write
+protection is enabled.</td></tr>
 <tr><td><b>0x04</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x04
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Disable memory mapping</b><br>
@@ -211,11 +218,36 @@ when the current memory mapping has no MBC selected.</td></tr>
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Switch memory mapping</b><br>
 Switches to memory mapping entry <i>&lt;IDX&gt;</i>. <i>&lt;IDX&gt;</i> can be in the range 0-63; it is given in the lower
-six bits of the command ID itself, not as an argument. Switching to mapping entries 43-63 will result in a simple no-MBC,
-no-RAM mapping, because those indices point outside the 128 byte map region. So only indices 0-42 actually make sense.
+six bits of the command ID itself, not as an argument. The mapping entry gets read from the flash chip directly after
+this command was issued. Reading the entry takes about 22 µs, so the host system must not issue any memory accesses to
+the cartridge or the work RAM during that time, otherwise the data on the bus will get scrambled. These are the read and
+write accesses the MMC performs on the flash chip:
+<pre>
+write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (1/6). */</span>
+write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (2/6). */</span>
+write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (3/6). */</span>
+write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (4/6). */</span>
+write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (5/6). */</span>
+write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (6/6). */</span>
+<span style="color:#0000ff">var</span> tmp = read(0x0007f);
+<span style="color:#0000ff">if</span> (tmp != 0x00) { <span style="color:#007f00">/* If map is invalid... */</span>
+	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
+}
+<span style="color:#0000ff">var</span> byte0 = read(<i>IDX</i> * 3);
+<span style="color:#0000ff">if</span> ((byte0 &amp; 0xe0) == 0xc0 || (byte0 &amp; 0xe0) == 0xe0) { <span style="color:#007f00">/* If MBC type is invalid... */</span>
+	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
+}
+<span style="color:#0000ff">var</span> byte1 = read(<i>IDX</i> * 3 + 1);
+<span style="color:#0000ff">var</span> byte2 = read(<i>IDX</i> * 3 + 2);
+write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+<span style="color:#0000ff">return</span> { byte0, byte1, byte2 };
+</pre>
 Read <a href="#map_layout">further below</a> for an explanation about the format of the mapping entries stored in the map
-region. This command automatically enables memory mapping, disables MMC registers and commands, enables MBC registers, and
-resets MBC register contents to their defaults (ROM bank 1, RAM bank 0, RAM access disabled).</td></tr>
+region. This command automatically enables memory mapping, disables MMC registers and commands, enables MBC registers,
+and resets MBC register contents to their defaults (ROM bank 1, RAM bank 0, RAM access disabled).</td></tr>
 </table>
 <h2 id="mmc_registers">MMC registers</h2>
 <p>While MMC registers are enabled (see MMC command 0x09), the MMC registers can be read in address range 0x0120-0x013f. All
@@ -225,9 +257,9 @@ MMC registers are read-only. The following table describes all the MMC registers
 <tr><td><b>0x0120</b></td><td>Always reads as 0x21.</td></tr>
 <tr><td><b>0x0121</b></td><td><b>Mapping entry index and flash write protection status</b>
 <dl><dt>Bits 7-2</dt><dd>Index of the currently selected mapping entry. Those bits will keep their value when the
-mapping gets disabled (see MMC command 0x04). The stored value is probably used to restore the previous mapping
-when MMC command 0x05 is called.</dd>
-<dt>Bit 1</dt><dd>High, if flash write protection is disabled, otherwise, false. See MMC commands 0x02 and 0x03.</dd>
+mapping gets disabled (see MMC command 0x04).</dd>
+<dt>Bit 1</dt><dd>High, if flash write protection is disabled, otherwise, false. See MMC commands 0x02 and 0x03.
+This bit reflects the state of MMC pin FLASH_<span style="text-decoration:overline">WP</span>.</dd>
 <dt>Bit 0</dt><dd>High, if flash write protection is allowed to be changed, otherwise, false. This bit is set when
 MMC command 0x0a is called. It is cleared when MMC command 0x08 is called.</dd></dl>
 On power up, this register is 0x00.</td></tr>
@@ -237,7 +269,11 @@ Three bytes read from the currently selected memory mapping entry. Read the map 
 with the three bytes read from address 0x00-0x02 (mapping entry index 0) of the map region. If the mapping entry is
 invalid, or if the entire map region is invalid (because it is missing the zero byte at the end, see
 <a href="#map_layout">below</a>), then these registers are 0x00 0x00 0x00. When MMC command 0x04 is called, these
-registers are set to 0x9a 0x80 0x00, which is a mapping that makes all flash and RAM accessible.</td></tr>
+registers read 0x9a 0x80 0x00, which is a mapping that makes all flash and RAM accessible. MMC command 0x04 does not
+overwrite the contents of these registers, the values 0x9a 0x80 0x00 are just <i>overlaid</i>. Issuing MMC command
+0x05 will show the previous mapping entry again, even if command 0x04 was issued more than once. This behavior is
+different from the MBC register backups. The MBC register backups are overwritten each time command 0x04 is
+issued.</td></tr>
 <tr><td><b>0x0125</b></td><td>Always reads as 0x87.</td></tr>
 <tr><td><b>0x0126</b></td><td>Always reads as 0x78.</td></tr>
 <tr><td><b>0x0127</b></td><td>Always reads as 0x5a.</td></tr>
@@ -652,6 +688,49 @@ two 128 byte blocks. A7 selects which of the two halves of the map gets programm
 </ol>
 <p>Afterward, you can issue another flash command to write the next 128 bytes, or any other command, like the reset command
 (0xf0), to make the flash contents visible again.</p>
+<h2 id="mmc_reset">MMC power up and reset behavior</h2>
+<p>On power up, the MMC reads mapping entry 0 from the flash. While doing that, it holds the Game Boy's reset signal
+low, so that the Game Boy CPU doesn't start running before the mapping entry got read. These are the read and write accesses
+the MMC performs to read the mapping entry:</p>
+<pre>
+write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (1/6). */</span>
+write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (2/6). */</span>
+write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (3/6). */</span>
+write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (4/6). */</span>
+write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (5/6). */</span>
+write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (6/6). */</span>
+<span style="color:#0000ff">var</span> unknown = read(0x00030); <span style="color:#007f00">/* I don't know why it reads this address on power up. */</span>
+<span style="color:#0000ff">var</span> tmp = read(0x0007f);
+<span style="color:#0000ff">if</span> (tmp != 0x00) { <span style="color:#007f00">/* If map is invalid... */</span>
+	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
+}
+<span style="color:#0000ff">var</span> byte0 = read(0x00000);
+<span style="color:#0000ff">if</span> ((byte0 &amp; 0xe0) == 0xc0 || (byte0 &amp; 0xe0) == 0xe0) { <span style="color:#007f00">/* If MBC type is invalid... */</span>
+	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
+}
+<span style="color:#0000ff">var</span> byte1 = read(0x00001);
+<span style="color:#0000ff">var</span> byte2 = read(0x00002);
+write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+<span style="color:#0000ff">return</span> { byte0, byte1, byte2 };
+</pre>
+<p>I don't know why it reads address 0x00030. The value at that location doesn't seem to affect anything. When issuing
+MMC command 0xc0-0xff, a very similar sequence is run to read the mapping entry, but it is missing this particular read
+from address 0x00030.</p>
+<p>If at any time after the power up sequence, the reset signal on the cartridge bus gets pulled low, the MMC chip reacts
+to the falling edge event with the following actions:</p>
+<ul>
+<li>Flash reset command (0xf0) gets written to the flash on address 0x07fff. It probably keeps the reset signal held low
+while it issues the reset command to the flash, like it does on power up, but I haven't tried a short enough reset pulse
+to be able to verify that.</li>
+<li>MMC commands and registers get disabled.
+<li>MBC registers get enabled and reset to their defaults.</li>
+<li>Memory mapping gets enabled. The mapping entry is <b>not</b> re-read from flash.</li>
+</ul>
+<p>The currently selected mapping is <b>not</b> reset to index 0. This means, it doesn't switch back to the menu.
+Also worth mentioning is, the current state of the flash write protection is <b>not</b> changed during reset.</p>
 <h2 id="gbm_procedures">Pseudocode procedures for Nintendo Power cartridges</h2>
 <p>Writing to the flash can get very complicated, because the state of the MMC and the MBC will impact if and how write
 accesses reach the flash chip. To make things simpler, I provide a few procedures here that consider all three
@@ -1379,7 +1458,7 @@ chip.</p>
 			<span style="color:#007f00">/* Select first flash bank for programming data into the flash. */</span>
 			write(0x2000, bank);
 
-			<span style="color:#007f00" id="avoid_writing_0120">/* Fill the 128 byte write buffer with data from the array. */</span>
+			<span style="color:#007f00">/* Fill the 128 byte write buffer with data from the array. */</span>
 			<span style="color:#0000ff">for</span> (<span style="color:#0000ff">var</span> i = 0; i &lt;= 128; i++) {
 				write(0x4000 + i, data[index++]);
 			}
@@ -1484,6 +1563,146 @@ chip.</p>
 	write(0x4000, 0xf0);
 }
 </pre>
+<h2 id="mmc_pinout">MMC chip pinout</h2>
+<p>The following table lists all pins of the MMC chip (MegaChips MX15002):</p>
+<table class="default">
+<tr><th>Pin#</th><th>Description</th><th>Pin#</th><th>Description</th></tr>
+<tr><td><b>1</b></td><td><b>VDD</b>*</td>
+<td><b>41</b></td><td><b>A1_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>2</b></td><td><b>GND</b>*</td>
+<td><b>42</b></td><td><b>A14_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>3</b></td><td><b><span style="text-decoration:overline">WR</span>_IN</b><br>Write signal input from Game Boy.</td>
+<td><b>43</b></td><td><b>A15_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>4</b></td><td><b><span style="text-decoration:overline">RD</span>_IN</b><br>Read signal input from Game Boy.</td>
+<td><b>44</b></td><td><b>A16_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>5</b></td><td><b><span style="text-decoration:overline">CS</span>_IN</b><br>RAM chip select signal input from Game Boy.</td>
+<td><b>45</b></td><td><b>A17_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>6</b></td><td><b>A0_IN</b><br>Address input from Game Boy.</td>
+<td><b>46</b></td><td><b>A18_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>7</b></td><td><b>A1_IN</b><br>Address input from Game Boy.</td>
+<td><b>47</b></td><td><b>A19_OUT</b><br>Address output to flash and SRAM.</td></tr>
+<tr><td><b>8</b></td><td><b>A2_IN</b><br>Address input from Game Boy.</td>
+<td><b>48</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>9</b></td><td><b>A3_IN</b><br>Address input from Game Boy.</td>
+<td><b>49</b></td><td><b>FLASH_<span style="text-decoration:overline">CE</span></b><br>Chip enable output to flash.</td></tr>
+<tr><td><b>10</b></td><td><b>A4_IN</b><br>Address input from Game Boy.</td>
+<td><b>50</b></td><td><b>FLASH_<span style="text-decoration:overline">WP</span></b><br>Write protect output to flash.
+This pin is controlled by MMC commands 0x02 and 0x03.</td></tr>
+<tr><td><b>11</b></td><td><b>A5_IN</b><br>Address input from Game Boy.</td>
+<td><b>51</b></td><td><b><span style="text-decoration:overline">OE</span>_OUT</b><br>Read signal to flash and SRAM.</td></tr>
+<tr><td><b>12</b></td><td><b>GND</b>*</td>
+<td><b>52</b></td><td><b><span style="text-decoration:overline">WE</span>_OUT</b><br>Write signal to flash and SRAM.
+This signal is blocked if flash is accessed while MBC registers are enabled.</td></tr>
+<tr><td><b>13</b></td><td><b>A6_IN</b><br>Address input from Game Boy.</td>
+<td><b>53</b></td><td><b>VDD</b>*</td></tr>
+<tr><td><b>14</b></td><td><b>A7_IN</b><br>Address input from Game Boy.</td>
+<td><b>54</b></td><td>Unknown. Connected to MMC pin 58 and nothing else. Probably NC. **</td></tr>
+<tr><td><b>15</b></td><td><b>A8_IN</b><br>Address input from Game Boy.</td>
+<td><b>55</b></td><td><b>TODO:</b> Figure out if this is flash RESET# output or flash READY input.</td></tr>
+<tr><td><b>16</b></td><td><b>A9_IN</b><br>Address input from Game Boy.</td>
+<td><b>56</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>17</b></td><td><b>A10_IN</b><br>Address input from Game Boy.</td>
+<td><b>57</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>18</b></td><td><b>A11_IN</b><br>Address input from Game Boy.</td>
+<td><b>58</b></td><td>Unknown. Connected to MMC pin 54 and nothing else. Probably NC. **</td></tr>
+<tr><td><b>19</b></td><td><b>A12_IN</b><br>Address input from Game Boy.</td>
+<td><b>59</b></td><td>Unknown. Connected to capacitor C2 (120 nF), which is connected to GND.</td></tr>
+<tr><td><b>20</b></td><td><b>A13_IN</b><br>Address input from Game Boy.</td>
+<td><b>60</b></td><td><b>TODO:</b> Figure out if this is flash RESET# output or flash READY input.</td></tr>
+<tr><td><b>21</b></td><td><b>A14_IN</b><br>Address input from Game Boy.</td>
+<td><b>61</b></td><td><b>SRAM_<span style="text-decoration:overline">CE</span></b><br>Chip enable output to SRAM.
+This signal can be blocked by MBC register 0x0000.</td></tr>
+<tr><td><b>22</b></td><td><b>A15_IN</b><br>ROM chip select signal input (active low) from Game Boy aka. A15.</td>
+<td><b>62</b></td><td><b>BAT_VIN</b><br>Battery input.</td></tr>
+<tr><td><b>23</b></td><td><b>TODO:</b> Figure out if this is system RESET# input or output.</td>
+<td><b>63</b></td><td><b>VDD</b>*</td></tr>
+<tr><td><b>24</b></td><td><b>TODO:</b> Figure out if this is system RESET# input or output.</td>
+<td><b>64</b></td><td><b>SRAM_VOUT</b><br>Power supply for SRAM.<br><b>TODO:</b> Figure out if this is regulated.</td></tr>
+<tr><td><b>25</b></td><td><b>A0_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>65</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>26</b></td><td><b>A13_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>66</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>27</b></td><td><b>A12_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>67</b></td><td>Unknown. Connected to resistor R5 (10 k), which is connected to VDD. Also connected to
+unpopulated resistor R4, which would be connected to GND.</td></tr>
+<tr><td><b>28</b></td><td><b>GND</b>*</td>
+<td><b>68</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>29</b></td><td><b>A11_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>69</b></td><td><b>VDD</b>*</td></tr>
+<tr><td><b>30</b></td><td><b>A9_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>70</b></td><td><b>D7</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>31</b></td><td><b>A8_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>71</b></td><td><b>D6</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>32</b></td><td><b>A7_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>72</b></td><td><b>D5</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>33</b></td><td><b>VDD</b>*</td>
+<td><b>73</b></td><td><b>D4</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>34</b></td><td><b>A6_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>74</b></td><td><b>D3</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>35</b></td><td><b>A5_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>75</b></td><td><b>D0</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>36</b></td><td><b>A4_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>76</b></td><td><b>D1</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>37</b></td><td><b>A10_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>77</b></td><td><b>D2</b><br>Data I/O from/to Game Boy, flash and SRAM.</td></tr>
+<tr><td><b>38</b></td><td><b>GND</b>*</td>
+<td><b>78</b></td><td><b>GND</b>*</td></tr>
+<tr><td><b>39</b></td><td><b>A3_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>79</b></td><td><b>OSC_OUT</b><br>Oscillator output. Crystal is not populated.</td></tr>
+<tr><td><b>40</b></td><td><b>A2_OUT</b><br>Address output to flash and SRAM.</td>
+<td><b>80</b></td><td><b>OSC_IN</b><br>Oscillator input. Crystal is not populated, instead this input is pulled high
+by resistor R3 (10 k).</td></tr>
+</table>
+<p><i>* I'm not sure about VDD and GND pins. Some of them could be pulled-up or pulled-down inputs.</i></p>
+<p><i>** Pin 54 and 58 are probably NC. They are both connected with each other, and they would be connected to GND if there
+wasn't a hole drilled to disconnect them from GND. So, the reason they are connected to each other might just be because
+of that undone GND connection.</i></p>
+<h2 id="flash_pinout">Flash chip pinout</h2>
+<p>The following table lists all pins of the flash chip (Macronix 29F008ATC):</p>
+<table class="default">
+<tr><th>Pin#</th><th>Description</th><th>Pin#</th><th>Description</th></tr>
+<tr><td><b>1</b></td><td><b>A16</b><br>Address input.</td>
+<td><b>21</b></td><td><b>A0</b><br>Address input.</td></tr>
+<tr><td><b>2</b></td><td><b>A15</b><br>Address input.</td>
+<td><b>22</b></td><td><b><span style="text-decoration:overline">CE</span></b><br>Chip enable input.</td></tr>
+<tr><td><b>3</b></td><td><b>A14</b><br>Address input.</td>
+<td><b>23</b></td><td><b>GND</b></td></tr>
+<tr><td><b>4</b></td><td><b>A13</b><br>Address input.</td>
+<td><b>24</b></td><td><b><span style="text-decoration:overline">OE</span></b><br>Output enable input.</td></tr>
+<tr><td><b>5</b></td><td><b>A12</b><br>Address input.</td>
+<td><b>25</b></td><td><b>D0</b><br>Data I/O.</td></tr>
+<tr><td><b>6</b></td><td><b>A11</b><br>Address input.</td>
+<td><b>26</b></td><td><b>D1</b><br>Data I/O.</td></tr>
+<tr><td><b>7</b></td><td><b>A9</b><br>Address input.</td>
+<td><b>27</b></td><td><b>D2</b><br>Data I/O.</td></tr>
+<tr><td><b>8</b></td><td><b>A8</b><br>Address input.</td>
+<td><b>28</b></td><td><b>D3</b><br>Data I/O.</td></tr>
+<tr><td><b>9</b></td><td><b><span style="text-decoration:overline">WE</span></b><br>Write enable input.</td>
+<td><b>29</b></td><td>NC</td></tr>
+<tr><td><b>10</b></td><td><b><span style="text-decoration:overline">RESET</span></b><br>Reset input.</td>
+<td><b>30</b></td><td><b>VDD</b></td></tr>
+<tr><td><b>11</b></td><td>NC</td>
+<td><b>31</b></td><td><b>VDD</b></td></tr>
+<tr><td><b>12</b></td><td><b><span style="text-decoration:overline">WP</span></b><br>Write protect input.</td>
+<td><b>32</b></td><td><b>D4</b><br>Data I/O.</td></tr>
+<tr><td><b>13</b></td><td><b>A18</b><br>Address input.</td>
+<td><b>33</b></td><td><b>D5</b><br>Data I/O.</td></tr>
+<tr><td><b>14</b></td><td><b>A7</b><br>Address input.</td>
+<td><b>34</b></td><td><b>D6</b><br>Data I/O.</td></tr>
+<tr><td><b>15</b></td><td><b>A6</b><br>Address input.</td>
+<td><b>35</b></td><td><b>D7</b><br>Data I/O.</td></tr>
+<tr><td><b>16</b></td><td><b>A5</b><br>Address input.</td>
+<td><b>36</b></td><td><b>A10</b><br>Address input.</td></tr>
+<tr><td><b>17</b></td><td><b>A4</b><br>Address input.</td>
+<td><b>37</b></td><td><b>A19</b><br>Address input.</td></tr>
+<tr><td><b>18</b></td><td><b>A3</b><br>Address input.</td>
+<td><b>38</b></td><td>NC</td></tr>
+<tr><td><b>19</b></td><td><b>A2</b><br>Address input.</td>
+<td><b>39</b></td><td><b>GND</b></td></tr>
+<tr><td><b>20</b></td><td><b>A1</b><br>Address input.</td>
+<td><b>40</b></td><td><b>A17</b><br>Address input.</td></tr>
+</table>
+<p>This table could also be correct for the Macronix 29F008TC, but that's not tested.</p>
 </main><footer><hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </footer></body>
