@@ -690,9 +690,12 @@ two 128 byte blocks. A7 selects which of the two halves of the map gets programm
 (0xf0), to make the flash contents visible again.</p>
 <h2 id="mmc_reset">MMC power up and reset behavior</h2>
 <p>On power up, the MMC reads mapping entry 0 from the flash. While doing that, it holds the Game Boy's reset signal
-low, so that the Game Boy CPU doesn't start running before the mapping entry got read. These are the read and write accesses
-the MMC performs to read the mapping entry:</p>
+low, so that the Game Boy CPU doesn't start running before the mapping entry got read. The reading process is actually
+triggered by the release of the reset signal at MMC's pin 55. These are the read and write accesses the MMC performs
+to read the mapping entry:</p>
 <pre>
+host_reset_out(0); <span style="color:#007f00">/* Assert reset on Game Boy. */</span>
+usleep(910); <span style="color:#007f00">/* Wait ~910 µs. */</span>
 write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
 write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (1/6). */</span>
 write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (2/6). */</span>
@@ -704,16 +707,19 @@ write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (
 <span style="color:#0000ff">var</span> tmp = read(0x0007f);
 <span style="color:#0000ff">if</span> (tmp != 0x00) { <span style="color:#007f00">/* If map is invalid... */</span>
 	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */</span>
 	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
 }
 <span style="color:#0000ff">var</span> byte0 = read(0x00000);
 <span style="color:#0000ff">if</span> ((byte0 &amp; 0xe0) == 0xc0 || (byte0 &amp; 0xe0) == 0xe0) { <span style="color:#007f00">/* If MBC type is invalid... */</span>
 	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */</span>
 	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
 }
 <span style="color:#0000ff">var</span> byte1 = read(0x00001);
 <span style="color:#0000ff">var</span> byte2 = read(0x00002);
 write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */</span>
 <span style="color:#0000ff">return</span> { byte0, byte1, byte2 };
 </pre>
 <p>I don't know why it reads address 0x00030. The value at that location doesn't seem to affect anything. When issuing
@@ -722,9 +728,8 @@ from address 0x00030.</p>
 <p>If at any time after the power up sequence, the reset signal on the cartridge bus gets pulled low, the MMC chip reacts
 to the falling edge event with the following actions:</p>
 <ul>
-<li>Flash reset command (0xf0) gets written to the flash on address 0x07fff. It probably keeps the reset signal held low
-while it issues the reset command to the flash, like it does on power up, but I haven't tried a short enough reset pulse
-to be able to verify that.</li>
+<li>Flash reset command (0xf0) gets written to the flash on address 0x07fff. The MMC doesn't pull the reset signal low
+while it issues the reset command to the flash, unlike it does on power up.</li>
 <li>MMC commands and registers get disabled.
 <li>MBC registers get enabled and reset to their defaults.</li>
 <li>Memory mapping gets enabled. The mapping entry is <b>not</b> re-read from flash.</li>
@@ -1598,7 +1603,12 @@ This signal is blocked if flash is accessed while MBC registers are enabled.</td
 <tr><td><b>14</b></td><td><b>A7_IN</b><br>Address input from Game Boy.</td>
 <td><b>54</b></td><td>Unknown. Connected to MMC pin 58 and nothing else. Probably NC. **</td></tr>
 <tr><td><b>15</b></td><td><b>A8_IN</b><br>Address input from Game Boy.</td>
-<td><b>55</b></td><td><b>TODO:</b> Figure out if this is flash RESET# output or flash READY input.</td></tr>
+<td><b>55</b></td><td><b><span style="text-decoration:overline">RESET</span>_IN</b><br>
+Reset input. Connected to MMC's pin 60. If pulled low, it resets the whole MMC chip and causes it to read mapping entry 0
+from the flash as described <a href="#mmc_reset">here</a>. If you disconnect this pin from pin 60 and pull it high during
+power up, then mapping entry 0 won't be read from flash. So this reset input is actually the trigger for that reading
+process. It doesn't seem to have any internal pull-up or pull-down resistors. If it is floating, it constantly triggers
+the reading process.</td></tr>
 <tr><td><b>16</b></td><td><b>A9_IN</b><br>Address input from Game Boy.</td>
 <td><b>56</b></td><td><b>GND</b>*</td></tr>
 <tr><td><b>17</b></td><td><b>A10_IN</b><br>Address input from Game Boy.</td>
@@ -1608,15 +1618,24 @@ This signal is blocked if flash is accessed while MBC registers are enabled.</td
 <tr><td><b>19</b></td><td><b>A12_IN</b><br>Address input from Game Boy.</td>
 <td><b>59</b></td><td>Unknown. Connected to capacitor C2 (120 nF), which is connected to GND.</td></tr>
 <tr><td><b>20</b></td><td><b>A13_IN</b><br>Address input from Game Boy.</td>
-<td><b>60</b></td><td><b>TODO:</b> Figure out if this is flash RESET# output or flash READY input.</td></tr>
+<td><b>60</b></td><td><b><span style="text-decoration:overline">RESET</span>_OUT</b><br>
+Reset output. MMC drives this pin low on power up for ~50 ms. After that, it stays high forever. It is used for resetting
+the flash and the MMC itself, since it is also connected to MMC's pin 55.</td></tr>
 <tr><td><b>21</b></td><td><b>A14_IN</b><br>Address input from Game Boy.</td>
 <td><b>61</b></td><td><b>SRAM_<span style="text-decoration:overline">CE</span></b><br>Chip enable output to SRAM.
 This signal can be blocked by MBC register 0x0000.</td></tr>
 <tr><td><b>22</b></td><td><b>A15_IN</b><br>ROM chip select signal input (active low) from Game Boy aka. A15.</td>
 <td><b>62</b></td><td><b>BAT_VIN</b><br>Battery input.</td></tr>
-<tr><td><b>23</b></td><td><b>TODO:</b> Figure out if this is system RESET# input or output.</td>
+<tr><td><b>23</b></td><td><b>HOST_<span style="text-decoration:overline">RESET</span>_IN</b><br>
+Host system reset input. Like pin 24, this pin is connected to the
+<span style="text-decoration:overline">RST</span> signal of the cartridge connector. If pulled low by the host system,
+some parts in the MMC are reset and the MMC sends a reset command (0xf0) to the flash. For details, see
+<a href="#mmc_reset">here</a>.</td>
 <td><b>63</b></td><td><b>VDD</b>*</td></tr>
-<tr><td><b>24</b></td><td><b>TODO:</b> Figure out if this is system RESET# input or output.</td>
+<tr><td><b>24</b></td><td><b>HOST_<span style="text-decoration:overline">RESET</span>_OUT</b><br>
+Open-drain host system reset output. Like pin 23, this pin is connected to the
+<span style="text-decoration:overline">RST</span> signal of the cartridge connector. It gets pulled low by the MMC while it
+reads mapping entry 0 from flash during power up, as described <a href="#mmc_reset">here</a>.</td>
 <td><b>64</b></td><td><b>SRAM_VOUT</b><br>Power supply for SRAM.<br><b>TODO:</b> Figure out if this is regulated.</td></tr>
 <tr><td><b>25</b></td><td><b>A0_OUT</b><br>Address output to flash and SRAM.</td>
 <td><b>65</b></td><td><b>GND</b>*</td></tr>
@@ -1679,7 +1698,8 @@ of that undone GND connection.</i></p>
 <td><b>28</b></td><td><b>D3</b><br>Data I/O.</td></tr>
 <tr><td><b>9</b></td><td><b><span style="text-decoration:overline">WE</span></b><br>Write enable input.</td>
 <td><b>29</b></td><td>NC</td></tr>
-<tr><td><b>10</b></td><td><b><span style="text-decoration:overline">RESET</span></b><br>Reset input.</td>
+<tr><td><b>10</b></td><td><b><span style="text-decoration:overline">RESET</span></b><br>Reset input.
+Flash needs to be reset after power up, otherwise it returns only garbage.</td>
 <td><b>30</b></td><td><b>VDD</b></td></tr>
 <tr><td><b>11</b></td><td>NC</td>
 <td><b>31</b></td><td><b>VDD</b></td></tr>
@@ -1702,7 +1722,7 @@ of that undone GND connection.</i></p>
 <tr><td><b>20</b></td><td><b>A1</b><br>Address input.</td>
 <td><b>40</b></td><td><b>A17</b><br>Address input.</td></tr>
 </table>
-<p>This table could also be correct for the Macronix 29F008TC, but that's not tested.</p>
+<p>This table could also be correct for the Macronix 29F008TC (Net de Get), but that's not tested.</p>
 </main><footer><hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
 </footer></body>
