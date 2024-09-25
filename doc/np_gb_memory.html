@@ -402,8 +402,7 @@ location. It is possible to have 8 KiB of RAM with this emulated version. Even m
 have registers for RAM bank switching, so more than 8 KiB is not accessible.</td></tr>
 <tr><td style="background-color:#e0e0ff">3</td>
 <td><b>MBC3</b><br>
-A cartridge with MBC3 chip is emulated. The RTC registers of the emulated MBC3 chip do nothing and always read 0x00.<br><br>
-<b>TODO:</b> Try soldering crystal to X1. Maybe RTC registers will work then.</td></tr>
+A cartridge with MBC3 chip is emulated. The RTC registers of the emulated MBC3 chip do nothing and always read 0x00.</td></tr>
 <tr><td style="background-color:#e0e0ff">4</td>
 <td><b>MBC5-ish</b><br>
 A cartridge with MBC5-ish chip is emulated. "-ish", because in contrast to MBC5, this MBC doesn't allow you to select ROM
@@ -1636,14 +1635,17 @@ some parts in the MMC are reset and the MMC sends a reset command (0xf0) to the 
 Open-drain host system reset output. Like pin 23, this pin is connected to the
 <span style="text-decoration:overline">RST</span> signal of the cartridge connector. It gets pulled low by the MMC while it
 reads mapping entry 0 from flash during power up, as described <a href="#mmc_reset">here</a>.</td>
-<td><b>64</b></td><td><b>SRAM_VOUT</b><br>Power supply for SRAM.<br><b>TODO:</b> Figure out if this is regulated.</td></tr>
+<td><b>64</b></td><td><b>SRAM_VOUT</b><br>Power supply for SRAM. If cartridge is powered by the host system, this is 5V;
+otherwise this is the battery voltage from pin 62. There is no voltage drop for either of those two input voltages.</td></tr>
 <tr><td><b>25</b></td><td><b>A0_OUT</b><br>Address output to flash and SRAM.</td>
 <td><b>65</b></td><td><b>GND</b>*</td></tr>
 <tr><td><b>26</b></td><td><b>A13_OUT</b><br>Address output to flash and SRAM.</td>
 <td><b>66</b></td><td><b>GND</b>*</td></tr>
 <tr><td><b>27</b></td><td><b>A12_OUT</b><br>Address output to flash and SRAM.</td>
-<td><b>67</b></td><td>Unknown. Connected to resistor R5 (10 k), which is connected to VDD. Also connected to
-unpopulated resistor R4, which would be connected to GND.</td></tr>
+<td><b>67</b></td><td><b>INTERNAL_OSC</b><br>Connected to resistor R5 (10 k), which is connected to VDD. Also connected to
+unpopulated resistor R4, which would be connected to GND. If connected to VDD via R5, the internal digital oscillator
+is enabled and the external crystal oscillator on pins 79 and 80 is disabled. If connected to GND via R4, the external
+crystal oscillator is enabled and the internal digital oscillator is disabled.</td></tr>
 <tr><td><b>28</b></td><td><b>GND</b>*</td>
 <td><b>68</b></td><td><b>GND</b>*</td></tr>
 <tr><td><b>29</b></td><td><b>A11_OUT</b><br>Address output to flash and SRAM.</td>
@@ -1667,7 +1669,11 @@ unpopulated resistor R4, which would be connected to GND.</td></tr>
 <tr><td><b>38</b></td><td><b>GND</b>*</td>
 <td><b>78</b></td><td><b>GND</b>*</td></tr>
 <tr><td><b>39</b></td><td><b>A3_OUT</b><br>Address output to flash and SRAM.</td>
-<td><b>79</b></td><td><b>OSC_OUT</b><br>Oscillator output. Crystal is not populated.</td></tr>
+<td><b>79</b></td><td><b>OSC_OUT</b><br>Oscillator output. Crystal is not populated. If pin 67 is high, this output is
+always high. If pin 67 is low, this oscillator output is the inverse of the oscillator input pin 80. If you enable the
+external crystal oscillator by pulling pin 67 low, you need to populate X1 with a 2 MiHz crystal to archive the same
+timings as with the internal oscillator. Also, R3 needs to be removed and R2 needs to be populated with 1 M or 1.5 M, I'm
+not sure.</td></tr>
 <tr><td><b>40</b></td><td><b>A2_OUT</b><br>Address output to flash and SRAM.</td>
 <td><b>80</b></td><td><b>OSC_IN</b><br>Oscillator input. Crystal is not populated, instead this input is pulled high
 by resistor R3 (10 k).</td></tr>
