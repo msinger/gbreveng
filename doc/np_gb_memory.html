@@ -562,11 +562,12 @@ no effect while the operation is still in progress.</td></tr>
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
 0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
-0x5555&nbsp;&lt;&#x2011;&nbsp;0x20</pre></td>
+0xXXXX&nbsp;&lt;&#x2011;&nbsp;0x20</pre></td>
 <td><b>Protect sector 0</b><br>
 Restores the erase and program protection of sector 0. If sector 0 is protected, it can't be erased or programmed, and
 status bit 1 is permanently high. The mass erase flash command (0x80; 0x10) will still erase sectors 1-7, if the
 protection of sector 0 is enabled.<br><br>
+The last byte of this command sequence must be written to any address within sector 0.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
 no effect while the operation is still in progress.</td></tr>
@@ -575,12 +576,13 @@ no effect while the operation is still in progress.</td></tr>
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
 0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
-0x5555&nbsp;&lt;&#x2011;&nbsp;0x40</pre></td>
+0xXXXX&nbsp;&lt;&#x2011;&nbsp;0x40</pre></td>
 <td><b>Unprotect sector 0</b><br>
 Normally, sector 0 of Nintendo Power GB Memory cartridges is protected. It needs to be unprotected by this command before
 it can be erased or programmed. Once sector 0 is unprotected, it will stay unprotected, even after power cycling the
 cartridge. Use the protect sector 0 command (0x60; 0x20) to re-enabling the protection of sector 0. If sector 0 is
 protected, status bit 1 is permanently high.<br><br>
+The last byte of this command sequence must be written to any address within sector 0.<br><br>
 The flash chips in Net de Get cartridges do not seem to have this protection. I only own ones with empty flash, so
 maybe the protection would have been set when someone had downloaded some DLCs.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
@@ -1118,11 +1120,9 @@ perspective of the Game Boy or your custom hardware.</p>
 		}
 	}
 
-	<span style="color:#007f00">/* Since we programmed the whole flash, we should have selected
-	 * ROM bank #63 at this point. 63 is an odd number, so it already
-	 * ensures, that A14 is high if accessing address 0x4000-0x7fff.
-	 * In this case, we don't need to switch to bank 1 before issuing
-	 * the command sequence that is following. */</span>
+	<span style="color:#007f00">/* Again, we use the "disable MMC commands" command to select ROM bank 1.
+	 * The "protect sector 0" command needs to be written to an address within sector 0. */</span>
+	mmc_command(0x04);
 
 	<span style="color:#007f00">/* Issue protect sector 0 flash command sequence. */</span>
 	write(0x5555, 0xaa);
@@ -1130,7 +1130,7 @@ perspective of the Game Boy or your custom hardware.</p>
 	write(0x5555, 0x60);
 	write(0x5555, 0xaa);
 	write(0x2aaa, 0x55);
-	write(0x5555, 0x20);
+	write(0x5555, 0x20); <span style="color:#007f00">/* We could use any address here that is in the range 0x4000-0x7fff. */</span>
 
 	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
 	<span style="color:#0000ff">while</span> (!(read(0x0000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
@@ -1504,7 +1504,7 @@ chip.</p>
 	write(0x5555, 0x60);
 	write(0x5555, 0xaa);
 	write(0x6aaa, 0x55);
-	write(0x5555, 0x20);
+	write(0x5555, 0x20); <span style="color:#007f00">/* We could use any address here that is in the range 0x4000-0x5fff. */</span>
 
 	<span style="color:#007f00">/* Poll status and wait until operation completes. */</span>
 	<span style="color:#0000ff">while</span> (!(read(0x4000) &amp; 0x80)) { <span style="color:#007f00">/* do nothing; just wait */</span> }
