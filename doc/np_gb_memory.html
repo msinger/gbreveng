@@ -1696,7 +1696,8 @@ some parts in the MMC are reset and the MMC sends a reset command (0xf0) to the 
 <tr><td><b>24</b></td><td><b>HOST_<span style="text-decoration:overline">RESET</span>_OUT</b><br>
 Open-drain host system reset output. Like pin 23, this pin is connected to the
 <span style="text-decoration:overline">RST</span> signal of the cartridge connector. It gets pulled low by the MMC while it
-reads mapping entry 0 from flash during power up, as described <a href="#mmc_reset">here</a>.</td>
+reads mapping entry 0 from flash during power up, as described <a href="#mmc_reset">here</a>. It is also pulled low by
+the MMC when MMC command 0x80-0xbf gets called.</td>
 <td><b>64</b></td><td><b>SRAM_VOUT</b><br>Power supply for SRAM. If cartridge is powered by the host system, this is 5V;
 otherwise this is the battery voltage from pin 62. There is no voltage drop for either of those two input voltages.</td></tr>
 <tr><td><b>25</b></td><td><b>A0_OUT</b><br>Address output to flash and SRAM.</td>
