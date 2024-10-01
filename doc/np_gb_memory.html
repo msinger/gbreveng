@@ -148,16 +148,17 @@ don't know where they have this information from and if it is true. I find it un
 in real life. If you have seen one, please tell me. MBC registers will be reset to their defaults (ROM bank 1 is selected,
 RAM bank 0 is selected, RAM access is disabled). The previous content of the MBC registers is backed up. Whether MBC
 registers are enabled is not changed by this command. Command 0x05 can be used to re-enable/restore the memory mapping and
-to restore the backed up content of the MBC registers. Commands 0xc0-0xff can be used to re-enable the memory mapping using
-a different mapping configuration than before.</td></tr>
+to restore the backed up content of the MBC registers. Commands 0x80-0xbf or 0xc0-0xff can be used to re-enable the memory
+mapping using a different mapping configuration than before.</td></tr>
 <tr><td><b>0x05</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x05
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Enable memory mapping</b><br>
 Enables the memory mapping that was active before disabling it with command 0x04. Bits 2-7 of MMC register 0x0121 store the
 index of the selected mapping entry. This index is used to restore the mapping. The content of the MBC registers is restored
 with backed up values from the last time the command 0x04 was called. If command 0x04 was never called before, then the MBC
-registers are zeroed: ROM and RAM bank 0 is selected, and RAM access is disabled. Unlike commands 0xc0-0xff, this command
-(0x05) doesn't disable MMC registers and commands after restoring the mapping, nor does it enable MBC registers.</td></tr>
+registers are zeroed: ROM and RAM bank 0 is selected, and RAM access is disabled. Unlike commands 0x80-0xbf or 0xc0-0xff,
+this command (0x05) doesn't disable MMC registers and commands after restoring the mapping, nor does it enable MBC
+registers.</td></tr>
 <tr><td><b>0x08</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x08
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Disable MMC registers and commands</b><br>
@@ -221,14 +222,57 @@ command 0x0f to bypass the MBC registers without disabling them.</td></tr>
 <td><b>Enable MBC registers</b><br>
 Enables access to MBC registers. When MBC registers are enabled, write access to the flash is blocked. This is even the case
 when the current memory mapping has no MBC selected.</td></tr>
+<tr><td><b>0x80-0xbf</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x80|<i>&lt;IDX&gt;</i>
+0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
+<td><b>Switch memory mapping while resetting host</b><br>
+Switches to memory mapping entry <i>&lt;IDX&gt;</i> while the host (Game Boy) gets reset. <i>&lt;IDX&gt;</i> can be in the
+range 0-63; it is given in the lower six bits of the command ID itself, not as an argument. The host reset gets pulled low
+directly after this command was issued. Normally when the host reset gets pulled low by external means, the MMC sends a reset
+command to the flash directly after the falling edge; however, when the MMC itself causes this falling edge, it ignores it and
+doesn't send this reset command. The host reset is held low (asserted) for about 900 µs before the MMC starts reading the
+mapping entry from the flash chip. Reading the entry takes about 22 µs. These are the read and write accesses the MMC
+performs on the flash chip:
+<pre>
+host_reset_out(0); <span style="color:#007f00">/* Assert reset on Game Boy. */</span>
+usleep(900); <span style="color:#007f00">/* Wait ~900 µs. */</span>
+write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (1/6). */</span>
+write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (2/6). */</span>
+write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (3/6). */</span>
+write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (4/6). */</span>
+write(0x02aaa, 0x55); <span style="color:#007f00">/* Read map command sequence (5/6). */</span>
+write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (6/6). */</span>
+<span style="color:#0000ff">var</span> tmp = read(0x0007f);
+<span style="color:#0000ff">if</span> (tmp != 0x00) { <span style="color:#007f00">/* If map is invalid... */</span>
+	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */</span>
+	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
+}
+<span style="color:#0000ff">var</span> byte0 = read(<i>IDX</i> * 3);
+<span style="color:#0000ff">if</span> ((byte0 &amp; 0xe0) == 0xc0 || (byte0 &amp; 0xe0) == 0xe0) { <span style="color:#007f00">/* If MBC type is invalid... */</span>
+	write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+	host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */</span>
+	<span style="color:#0000ff">return</span> { 0x00, 0x00, 0x00 };
+}
+<span style="color:#0000ff">var</span> byte1 = read(<i>IDX</i> * 3 + 1);
+<span style="color:#0000ff">var</span> byte2 = read(<i>IDX</i> * 3 + 2);
+write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
+host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */</span>
+<span style="color:#0000ff">return</span> { byte0, byte1, byte2 };
+</pre>
+This command is used by the Game Boy Color variant of the game selection menu. On Game Boy Color, the Game Boy always gets
+reset and runs the boot ROM when a game was selected in the menu.<br><br>
+Read <a href="#map_layout">further below</a> for an explanation about the format of the mapping entries stored in the map
+region. This command automatically enables memory mapping, disables MMC registers and commands, enables MBC registers,
+and resets MBC register contents to their defaults (ROM bank 1, RAM bank 0, RAM access disabled).</td></tr>
 <tr><td><b>0xc0-0xff</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0xc0|<i>&lt;IDX&gt;</i>
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
-<td><b>Switch memory mapping</b><br>
-Switches to memory mapping entry <i>&lt;IDX&gt;</i>. <i>&lt;IDX&gt;</i> can be in the range 0-63; it is given in the lower
-six bits of the command ID itself, not as an argument. The mapping entry gets read from the flash chip directly after
-this command was issued. Reading the entry takes about 22 µs, so the host system must not issue any memory accesses to
-the cartridge or the work RAM during that time, otherwise the data on the bus will get scrambled. These are the read and
-write accesses the MMC performs on the flash chip:
+<td><b>Switch memory mapping without host reset</b><br>
+Switches to memory mapping entry <i>&lt;IDX&gt;</i> without resetting the host (Game Boy). <i>&lt;IDX&gt;</i> can be in the
+range 0-63; it is given in the lower six bits of the command ID itself, not as an argument. The mapping entry gets read from
+the flash chip directly after this command was issued. Reading the entry takes about 22 µs, so the host system must not
+issue any memory accesses to the cartridge or the work RAM during that time, otherwise the data on the bus will get
+scrambled. These are the read and write accesses the MMC performs on the flash chip:
 <pre>
 write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
 write(0x05555, 0xaa); <span style="color:#007f00">/* Read map command sequence (1/6). */</span>
@@ -252,6 +296,8 @@ write(0x05555, 0x77); <span style="color:#007f00">/* Read map command sequence (
 write(0x07fff, 0xf0); <span style="color:#007f00">/* Flash reset command. */</span>
 <span style="color:#0000ff">return</span> { byte0, byte1, byte2 };
 </pre>
+This command is used by the DMG variant of the game selection menu. On monochrome Game Boys, the Game Boy never gets
+reset when a game is selected in the menu.<br><br>
 Read <a href="#map_layout">further below</a> for an explanation about the format of the mapping entries stored in the map
 region. This command automatically enables memory mapping, disables MMC registers and commands, enables MBC registers,
 and resets MBC register contents to their defaults (ROM bank 1, RAM bank 0, RAM access disabled).</td></tr>
@@ -738,8 +784,8 @@ host_reset_out(1); <span style="color:#007f00">/* Deassert reset on Game Boy. */
 <span style="color:#0000ff">return</span> { byte0, byte1, byte2 };
 </pre>
 <p>I don't know why it reads address 0x00030. The value at that location doesn't seem to affect anything. When issuing
-MMC command 0xc0-0xff, a very similar sequence is run to read the mapping entry, but it is missing this particular read
-from address 0x00030.</p>
+MMC commands 0x80-0xbf or 0xc0-0xff, a very similar sequence is run to read the mapping entry, but it is missing this
+particular read from address 0x00030.</p>
 <p>If at any time after the power up sequence, the reset signal on the cartridge bus gets pulled low, the MMC chip reacts
 to the falling edge event with the following actions:</p>
 <ul>
