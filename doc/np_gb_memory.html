@@ -464,7 +464,9 @@ read.</td></tr>
 <tr><td style="background-color:#e0e0ff">4</td>
 <td><b>MBC5-ish</b><br>
 A cartridge with MBC5-ish chip is emulated. "-ish", because in contrast to MBC5, this MBC doesn't allow you to select ROM
-bank 0 on address range 0x4000-0x7fff.<br><br>
+bank 0 on address range 0x4000-0x7fff. Another difference between this and MBC5 is, when you enable RAM access by writing
+0x0a to register 0x0000, this MBC5-ish MBC ignores bits 4-7, so you can write 0xfa instead. MBC5 requires bits 4-7 to be
+0.<br><br>
 This setting is used when the MMC command 0x04 is called. I have never seen this in the map region of any cartridge.
 Use value 5, if you want an MBC5 chip.</td></tr>
 <tr><td style="background-color:#e0e0ff">5</td>
@@ -1695,9 +1697,10 @@ Reset output. MMC drives this pin low on power up for ~50 ms. After that, it sta
 the flash and the MMC itself, since it is also connected to MMC's pin 55.</td></tr>
 <tr><td><b>21</b></td><td><b>A14_IN</b><br>Address input from Game Boy.</td>
 <td><b>61</b></td><td><b>SRAM_<span style="text-decoration:overline">CE</span></b><br>Chip enable output to SRAM.
-This signal can be blocked by MBC register 0x0000. It is also blocked when the current memory mapping has SRAM
-disabled. The MMC only maps host system memory accesses to/from address range 0xa000-0xbfff to the cartridge SRAM;
-the so-called "echo area" 0xe000-0xf??? does <i>not</i> assert this chip enable signal.</td></tr>
+This signal can be blocked by MBC register 0x0000, or if an invalid RAM bank was selected in MBC3 mode. It is also blocked
+when the current memory mapping has SRAM disabled. The MMC only maps host system memory accesses to/from address range
+0xa000-0xbfff to the cartridge SRAM; the so-called "echo area" 0xe000-0xf??? does <i>not</i> assert this chip enable
+signal.</td></tr>
 <tr><td><b>22</b></td><td><b>A15_IN</b><br>ROM chip select signal input (active low) from Game Boy aka. A15.</td>
 <td><b>62</b></td><td><b>BAT_VIN</b><br>Battery input.</td></tr>
 <tr><td><b>23</b></td><td><b>HOST_<span style="text-decoration:overline">RESET</span>_IN</b><br>
@@ -2013,6 +2016,128 @@ mmc_command(0x05);
 </pre>
 <p>The selected ROM bank is still 1 after this, so it must be adjusted sometime after restoring the backups. You can try
 this method with an MBC5 mapping instead. There you will see that ROM bank 0 will be selected afterward.</p>
+<p>I did a lot more tests not shown here. I can say with certainty that the backup and restore operations of MMC commands
+0x04 and 0x05 do indeed <i>not</i> mask the MBC registers. The MBC registers are ANDed with specific masks only when they are
+set, and when they are used to calculate an address for memory accesses. The following table contains all the MBC registers
+that exist. They exist in two sets: The currently used ones, and the backup set.</p>
+<table class="default">
+<tr><th>Register</th><th>Width</th><th>Description</th></tr>
+<tr><td><b>rom_bank</b></td><td>6 bits</td><td>Stores the ROM bank number. This is what you set when writing MBC
+register 0x2000 for most MBCs or 0x2100 for MBC2.</td></tr>
+<tr><td><b>ram_bank</b></td><td>4 bits</td><td>Stores the RAM bank number. This is what you set when writing MBC
+register 0x4000 for most MBCs.</td></tr>
+<tr><td><b>ram_enable</b></td><td>1 bit</td><td>Enables/disables RAM access. This is what you set when writing MBC
+register 0x0000 for most MBCs.</td></tr>
+<tr><td><b>mbc1_mode</b></td><td>1 bit</td><td>Selects mode of MBC1. This is what you set when writing MBC
+register 0x6000 for MBC1.</td></tr>
+<tr><td><b>mbc3_invalid_bank</b></td><td>1 bit</td><td>Set when you select a RAM bank for MBC3 by writing to MBC
+register 0x4000 with bits 2 or 3 set. Writing values 0-3 would set <b>ram_bank</b> to that value and
+<b>mbc3_invalid_bank</b> to 0. Writing values like 4, 7, 8, 15 will not change <b>ram_bank</b> but set
+<b>mbc3_invalid_bank</b> to 1.</td></tr>
+</table>
+<p>All these registers will be backed up and restored without being modified in the process when using MMC commands
+0x04 and 0x05. When you switch memory mappings, they will be set to the following default values, independent of the used
+MBC type or ROM size etc.:</p>
+<table class="default">
+<tr><th>Register</th><th>Default value</th></tr>
+<tr><td><b>rom_bank</b></td><td>1</td></tr>
+<tr><td><b>ram_bank</b></td><td>0</td></tr>
+<tr><td><b>ram_enable</b></td><td>0</td></tr>
+<tr><td><b>mbc1_type</b></td><td>0</td></tr>
+<tr><td><b>mbc3_invalid_bank</b></td><td>0</td></tr>
+</table>
+<p>The backup set for these registers is not modified when you switch memory mappings. It is initialized <b>all zero</b>
+one time, when the MMC is powered up (or more precisely, when the MMC gets reset by pin 55).</p>
+<p>When you write to any of the MBC registers, the written value will be ANDed with a mask before it is written into the
+register. This mask depends on the currently selected MBC type. The ROM/RAM sizes don't have an effect on the mask.
+This table shows the masks used when setting registers:</p>
+<table class="default">
+<tr><th>Register</th><th>no MBC</th><th>MBC1</th><th>MBC2</th><th>MBC3</th><th>Type 4</th><th>MBC5</th></tr>
+<tr><td><b>rom_bank</b></td><td>n/a*</td><td>0x3f**</td><td>0x0f</td><td>0x3f</td><td>0x3f</td><td>0x3f</td></tr>
+<tr><td><b>ram_bank</b></td><td>n/a*</td><td>0x03***</td><td>n/a*</td><td>0x03</td><td>0x0f</td><td>0x0f</td></tr>
+<tr><td><b>ram_enable</b>*****</td><td>n/a*</td><td>0x0f</td><td>0x0f</td><td>0x0f</td><td>0x0f</td><td>0xff</td></tr>
+<tr><td><b>mbc1_type</b></td><td>n/a*</td><td>0x01</td><td>n/a*</td><td>n/a*</td><td>n/a*</td><td>n/a*</td></tr>
+<tr><td><b>mbc3_invalid_bank</b></td><td>n/a*</td><td>n/a*</td><td>n/a*</td><td>0x0c****</td><td>n/a*</td><td>n/a*</td></tr>
+</table>
+<p><i>* MBC type doesn't have this register mapped to any address, therefore you can't change it.</i></p>
+<p><i>** Yes, MBC1 allows you to set 6 bits of the <b>rom_bank</b> register, even though the real MBC1 chip has only
+5 bits in this register. However, the highest bit (bit 5) isn't being used. When determining the actual ROM bank number
+for memory accesses, the lowest bit of <b>ram_bank</b> is used as ROM bank bit 5, just like the real MBC1 does it.</i></p>
+<p><i>*** When setting the <b>ram_bank</b> register for MBC1, the value in the <b>rom_bank</b> register isn't changed,
+even though, the lowest bit of the <b>ram_bank</b> register affects the ROM bank number later, when it is used to
+access memory range 0x4000-0x7fff.</i></p>
+<p><i>**** The mask 0x0c is applied when writing to register 0x4000. The emulated MBC3 doesn't implement any RTC registers,
+so it just marks the RAM bank as invalid when applying this mask results in a value that is not 0.</i></p>
+<p><i>***** The masks 0x0f or 0xff are applied to the value 0x0a that needs to be written to register 0x0000 to enable the
+RAM. Only MBC5 requires you to write 0x0a exactly. All other MBCs accept values like 0xfa, 0x5a, 0xaa, ...</i></p>
+<p>The following pseudocode functions describe how the actual ROM and RAM bank numbers are calculated based on the MBC
+register contents, which are passed to the address calculation functions shown <a href="#address_calc">above</a>:</p>
+<pre>
+<span style="color:#007f00">/* Calculate ROM bank number that is passed to <b>rom_address</b> function, based
+ * on MBC type and MBC register content.
+ *  <i>mbc_type</i>:  MBC type value (0-5) selected by current memory mapping.
+ *  <i>rom_bank</i>:  ROM bank number (0-63) stored in the current <b>rom_bank</b> register.
+ *  <i>ram_bank</i>:  RAM bank number (0-15) stored in the current <b>ram_bank</b> register. */</span>
+<span style="color:#0000ff">function</span> <b>final_rom_bank</b>(mbc_type, rom_bank, ram_bank)
+{
+	<span style="color:#0000ff">var</span> r;
+
+	<span style="color:#0000ff">switch</span> (mbc_type) {
+		<span style="color:#0000ff">case</span> 0: <span style="color:#007f00">/* no MBC */</span>
+			r = 1;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 1: <span style="color:#007f00">/* MBC1 */</span>
+			r = rom_bank &amp; 0x1f;
+			<span style="color:#0000ff">if</span> (r == 0) r = 1;
+			r |= (ram_bank &amp; 1) &lt;&lt; 5;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 2: <span style="color:#007f00">/* MBC2 */</span>
+			r = rom_bank &amp; 0x0f;
+			<span style="color:#0000ff">if</span> (r == 0) r = 1;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 3: <span style="color:#007f00">/* MBC3 */</span>
+		<span style="color:#0000ff">case</span> 4:
+			r = rom_bank &amp; 0x3f;
+			<span style="color:#0000ff">if</span> (r == 0) r = 1;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 5: <span style="color:#007f00">/* MBC5 */</span>
+			r = rom_bank &amp; 0x3f;
+			<span style="color:#0000ff">break</span>;
+	}
+
+	<span style="color:#0000ff">return</span> r;
+}
+
+<span style="color:#007f00">/* Calculate RAM bank number that is passed to <b>ram_address</b> function, based
+ * on MBC type and MBC register content.
+ *  <i>mbc_type</i>:   MBC type value (0-5) selected by current memory mapping.
+ *  <i>ram_bank</i>:   RAM bank number (0-15) stored in the current <b>ram_bank</b> register.
+ *  <i>mbc1_mode</i>:  MBC1 mode (0 or 1) stored in the current <b>mbc1_mode</b> register. */</span>
+<span style="color:#0000ff">function</span> <b>final_ram_bank</b>(mbc_type, ram_bank, mbc1_mode)
+{
+	<span style="color:#0000ff">var</span> r;
+
+	<span style="color:#0000ff">switch</span> (mbc_type) {
+		<span style="color:#0000ff">case</span> 0: <span style="color:#007f00">/* no MBC */</span>
+		<span style="color:#0000ff">case</span> 2: <span style="color:#007f00">/* MBC2 */</span>
+			r = 0;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 1: <span style="color:#007f00">/* MBC1 */</span>
+			r = ram_bank &amp; 0x03;
+			<span style="color:#0000ff">if</span> (mbc1_mode == 0) r = 0;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 3: <span style="color:#007f00">/* MBC3 */</span>
+			r = ram_bank &amp; 0x03;
+			<span style="color:#0000ff">break</span>;
+		<span style="color:#0000ff">case</span> 4:
+		<span style="color:#0000ff">case</span> 5: <span style="color:#007f00">/* MBC5 */</span>
+			r = rom_bank &amp; 0x0f;
+			<span style="color:#0000ff">break</span>;
+	}
+
+	<span style="color:#0000ff">return</span> r;
+}
+</pre>
 <p>Scans of the empty PCB:</p>
 <table>
 <tr><td><img src="img/np_gb_memory_pcb_front.jpg?v=0" alt=""></td>
