@@ -136,7 +136,10 @@ MMC command 0x0a can be used to set bit 0 of register 0x0121. The MMC has one of
 <span style="text-decoration:overline">WP</span> (write protect) input of the flash. This command (and its counterpart
 0x02) control the state of this <span style="text-decoration:overline">WP</span> signal. MMC's
 FLASH_<span style="text-decoration:overline">WP</span> pin and bit 1 of MMC register 0x0121 will go low when the write
-protection is enabled.</td></tr>
+protection is enabled.<br><br>
+If the flash write protection is enabled, flash sector 0 and the hidden map region can't be erased or programmed. Also,
+the state of the sector 0 protection can't be changed, if the flash write protection is enabled. Flash sectors 1-7
+can always be erased and programmed, even if the flash write protection is enabled.</td></tr>
 <tr><td><b>0x04</b></td><td><pre>0x0120&nbsp;&lt;&#x2011;&nbsp;0x04
 0x013f&nbsp;&lt;&#x2011;&nbsp;0xa5</pre></td>
 <td><b>Disable memory mapping</b><br>
@@ -589,6 +592,8 @@ Programs 128 bytes of flash memory at any 128 byte aligned address. See further 
 explanation on how to transfer the 128 bytes for the programming operation. The programming operation can only change bits
 from 1 to 0. Use the mass erase flash command (0x80; 0x10) or the erase flash sector command (0x80; 0x30) first to change
 bits back to 1.<br><br>
+Flash sector 0 can only be programmed if the flash write protection is disabled and if the sector 0 protection is removed
+(see command 0x60; 0x40).<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
 no effect while the operation is still in progress.</td></tr>
@@ -602,7 +607,9 @@ no effect while the operation is still in progress.</td></tr>
 Erases the hidden 256 byte map region.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
-no effect while the operation is still in progress.</td></tr>
+no effect while the operation is still in progress.<br><br>
+This command sequence is ignored if the flash write protection is enabled. When ignored, no status stage is entered
+afterward.</td></tr>
 <tr><td><b>0x60; 0x20</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
@@ -616,7 +623,9 @@ protection of sector 0 is enabled.<br><br>
 The last byte of this command sequence must be written to any address within sector 0.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
-no effect while the operation is still in progress.</td></tr>
+no effect while the operation is still in progress.<br><br>
+This command sequence is ignored if the flash write protection is enabled. When ignored, no status stage is entered
+afterward.</td></tr>
 <tr><td><b>0x60; 0x40</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
@@ -629,11 +638,13 @@ it can be erased or programmed. Once sector 0 is unprotected, it will stay unpro
 cartridge. Use the protect sector 0 command (0x60; 0x20) to re-enabling the protection of sector 0. If sector 0 is
 protected, status bit 1 is permanently high.<br><br>
 The last byte of this command sequence must be written to any address within sector 0.<br><br>
-The flash chips in Net de Get cartridges do not seem to have this protection. I only own ones with empty flash, so
+The flash chips in Net de Get cartridges do not seem to have this protection enabled. I only own ones with empty flash, so
 maybe the protection would have been set when someone had downloaded some DLCs.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high, or directly issue
-an erase operation next. The reset command has no effect while the operation is still in progress.</td></tr>
+an erase operation next. The reset command has no effect while the operation is still in progress.<br><br>
+This command sequence is ignored if the flash write protection is enabled. When ignored, no status stage is entered
+afterward.</td></tr>
 <tr><td><b>0x60; 0xe0</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x60
@@ -646,7 +657,9 @@ transfer the 128 bytes for the programming operation. The programming operation 
 erase map command (0x60; 0x04) first to change bits back to 1.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
-no effect while the operation is still in progress.</td></tr>
+no effect while the operation is still in progress.<br><br>
+This command sequence is ignored if the flash write protection is enabled. When ignored, no status stage is entered
+afterward.</td></tr>
 <tr><td><b>0x77; 0x77</b></td><td><pre>0x5555&nbsp;&lt;&#x2011;&nbsp;0xaa
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x77
@@ -664,9 +677,9 @@ command (0xf0) to exit this mode.</td></tr>
 0x2aaa&nbsp;&lt;&#x2011;&nbsp;0x55
 0x5555&nbsp;&lt;&#x2011;&nbsp;0x10</pre></td>
 <td><b>Mass erase flash</b><br>
-Erases the whole 1 MiB flash. The hidden 256 byte map region is preserved. Sector 0 will also be preserved, if the
-sector 0 protection is enabled. Use the unprotect sector 0 command (0x60; 0x40) before mass erasing the flash, if you
-want to erase sector 0 too.<br><br>
+Erases the whole 1 MiB flash. The hidden 256 byte map region is preserved. Sector 0 will also be preserved, if the flash
+write protection or the sector 0 protection is enabled. Disable the flash write protection and use the unprotect sector 0
+command (0x60; 0x40) before mass erasing the flash, if you want to erase sector 0 too.<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
 no effect while the operation is still in progress.</td></tr>
@@ -680,8 +693,8 @@ no effect while the operation is still in progress.</td></tr>
 Erases one flash sector selected by the address <i>&lt;ADR&gt;</i>. The flash is divided into eight individually erasable
 sectors, each 128 KiB. The last written byte in the sequence of this command must be written to an address within the sector
 that should be erased. This means for the last byte in the sequence, address lines A17-A19 contain the sector number 0-7;
-address lines A0-A16 are ignored. If you want to erase sector 0, make sure that you remove the protection first using the
-unprotect sector 0 command (0x60; 0x40).<br><br>
+address lines A0-A16 are ignored. If you want to erase sector 0, make sure that you first disable the flash write protection
+and remove the sector 0 protection using the unprotect sector 0 command (0x60; 0x40).<br><br>
 The status of the operation can be read from the flash chip. See <a href="#flash_status">below</a> for a description of
 the status bits. Use the reset command (0xf0) to exit this operation after status bit 7 went high. The reset command has
 no effect while the operation is still in progress.</td></tr>
@@ -1630,7 +1643,7 @@ chip.</p>
 <h2 id="mmc_pinout">MMC chip pinout</h2>
 <p>The following table lists all pins of the MMC chip (MegaChips MX15002):</p>
 <table class="default">
-<tr><th>Pin#</th><th>Description</th><th>Pin#</th><th>Description</th></tr>
+<tr><th>Pin#</th><th style="min-width:45%;">Description</th><th>Pin#</th><th style="min-width:45%;">Description</th></tr>
 <tr><td><b>1</b></td><td><b>VDD</b>*</td>
 <td><b>41</b></td><td><b>A1_OUT</b><br>Address output to flash and SRAM.</td></tr>
 <tr><td><b>2</b></td><td><b>GND</b>*</td>
@@ -1748,7 +1761,7 @@ of that undone GND connection.</i></p>
 <h2 id="flash_pinout">Flash chip pinout</h2>
 <p>The following table lists all pins of the flash chip (Macronix 29F008ATC):</p>
 <table class="default">
-<tr><th>Pin#</th><th>Description</th><th>Pin#</th><th>Description</th></tr>
+<tr><th>Pin#</th><th style="min-width:45%;">Description</th><th>Pin#</th><th style="min-width:45%;">Description</th></tr>
 <tr><td><b>1</b></td><td><b>A16</b><br>Address input.</td>
 <td><b>21</b></td><td><b>A0</b><br>Address input.</td></tr>
 <tr><td><b>2</b></td><td><b>A15</b><br>Address input.</td>
@@ -1772,7 +1785,9 @@ Flash needs to be reset after power up, otherwise it returns only garbage.</td>
 <td><b>30</b></td><td><b>VDD</b></td></tr>
 <tr><td><b>11</b></td><td>NC</td>
 <td><b>31</b></td><td><b>VDD</b></td></tr>
-<tr><td><b>12</b></td><td><b><span style="text-decoration:overline">WP</span></b><br>Write protect input.</td>
+<tr><td><b>12</b></td><td><b><span style="text-decoration:overline">WP</span></b><br>Write protect input.
+If low, then flash sector 0 and the hidden map region can't be erased or programmed, and sector 0 protection can't be
+changed. Has no effect on sectors 1-7.</td>
 <td><b>32</b></td><td><b>D4</b><br>Data I/O.</td></tr>
 <tr><td><b>13</b></td><td><b>A18</b><br>Address input.</td>
 <td><b>33</b></td><td><b>D5</b><br>Data I/O.</td></tr>
