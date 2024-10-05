@@ -1284,9 +1284,7 @@ chip.</p>
 <span style="color:#007f00">/* Configure MBC6 so that flash is visible. */</span>
 <span style="color:#0000ff">procedure</span> <b>enable_flash</b>()
 {
-	write(0x1000, 1);
 	write(0x0c00, 1);
-	write(0x1000, 0);
 	write(0x2800, 8);
 	write(0x3800, 8);
 }
@@ -1324,7 +1322,6 @@ chip.</p>
 
 	<span style="color:#007f00">/* Restore state of all MBC6 registers to their defaults. */</span>
 	write(0x0000, 0);
-	write(0x1000, 1);
 	write(0x0c00, 0);
 	write(0x1000, 0);
 	write(0x2800, 0);
@@ -1339,6 +1336,10 @@ chip.</p>
 <span style="color:#0000ff">function</span> <b>is_sector0_protected</b>()
 {
 	enable_flash();
+
+	<span style="color:#007f00">/* Make sure flash write protection is enabled.
+	 * We don't want to accidentally overwrite something. */</span>
+	write(0x1000, 0);
 
 	<span style="color:#007f00">/* Select flash banks so that
 	 * accessing address 0x5555 results in flash address 0x05555; and
