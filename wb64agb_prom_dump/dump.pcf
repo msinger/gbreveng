@@ -28,5 +28,6 @@ set_io dcd       B15
 # Xilinx XCS20XL PROM
 set_io data      R16
 set_io clk       T15
+set_io reset     T14
 set_io n_reset   T13
 set_io n_ce      T16

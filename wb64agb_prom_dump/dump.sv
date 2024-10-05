@@ -14,7 +14,8 @@ module dump(
 		input  logic       start,
 		input  logic       data,
 		output logic       clk     = 0,
-		output logic       n_reset = 0,
+		output logic       reset   = 1,  /* un-programmed PROMs have high-active RESET */
+		output logic       n_reset = 0,  /* PROM in WideBoy has low-active /RESET */
 		output logic       n_ce    = 1
 	);
 
@@ -56,6 +57,7 @@ module dump(
 	always_ff @(posedge clk1m) case (state)
 		0: begin
 			led     <= 0;
+			reset   <= 1;
 			n_reset <= 0;
 			n_ce    <= 1;
 			clk     <= 0;
@@ -71,13 +73,16 @@ module dump(
 		end
 
 		2: begin
+			reset   <= 1;
 			n_reset <= 0;
 			n_ce    <= 0;
 			clk     <= 0;
 			dvalid  <= 0;
 
-			if (count >= 4)
+			if (count >= 4) begin
+				reset   <= 0;
 				n_reset <= 1;
+			end
 
 			if (count == 15)
 				state <= 3;
