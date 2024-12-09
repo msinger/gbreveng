@@ -1,4 +1,4 @@
 (fp_lib_table
   (version 7)
-  (lib (name "Connector_GameBoy")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/Connector_GameBoy.pretty")(options "")(descr ""))
+  (lib (name "Connector_GameBoy")(type "KiCad")(uri "${KIPRJMOD}/../lib/Connector_GameBoy.pretty")(options "")(descr ""))
 )

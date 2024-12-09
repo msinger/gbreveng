@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Game Boy reverse eng. FPGA board")
-		(date "2024-06-19")
+		(date "2024-12-09")
 		(rev "1")
 		(company "CC-BY-SA-4.0 Michael Singer")
 		(comment 1 "https://github.com/msinger/gbreveng/")
@@ -14544,6 +14544,28 @@
 			(type default)
 		)
 		(uuid "fff1f8a7-d14c-4566-aefd-62607b7272c3")
+	)
+	(text "JP1: Load EEPROM to CRAM"
+		(exclude_from_sim no)
+		(at 19.304 57.404 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+			)
+			(justify left top)
+		)
+		(uuid "be34c841-32f0-458d-bd42-f424dbcaea90")
+	)
+	(text "J1:  Close 1,3 and 2,4 for programming Flash\n     Close 3,4 and 1,2 for writing CRAM directly"
+		(exclude_from_sim no)
+		(at 67.818 72.898 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+			)
+			(justify left top)
+		)
+		(uuid "caad1517-a8c6-4d19-a8aa-91e924687cd0")
 	)
 	(label "SS"
 		(at 127 54.61 180)

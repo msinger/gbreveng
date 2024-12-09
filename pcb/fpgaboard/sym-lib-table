@@ -1,7 +1,7 @@
 (sym_lib_table
   (version 7)
-  (lib (name "Regulator_Linear_LT3030")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/Regulator_Linear_LT3030.kicad_sym")(options "")(descr ""))
-  (lib (name "Memory_RAM_IS62WV10248ExLL")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/Memory_RAM_IS62WV10248ExLL.kicad_sym")(options "")(descr ""))
-  (lib (name "Amplifier_Audio_TDA7050")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/Amplifier_Audio_TDA7050.kicad_sym")(options "")(descr ""))
-  (lib (name "FPGA_Lattice_ICE40HX8K")(type "KiCad")(uri "/home/michael/projects/gbreveng/pcb/lib/FPGA_Lattice_ICE40HX8K.kicad_sym")(options "")(descr ""))
+  (lib (name "Regulator_Linear_LT3030")(type "KiCad")(uri "${KIPRJMOD}/../lib/Regulator_Linear_LT3030.kicad_sym")(options "")(descr ""))
+  (lib (name "Memory_RAM_IS62WV10248ExLL")(type "KiCad")(uri "${KIPRJMOD}/../lib/Memory_RAM_IS62WV10248ExLL.kicad_sym")(options "")(descr ""))
+  (lib (name "Amplifier_Audio_TDA7050")(type "KiCad")(uri "${KIPRJMOD}/../lib/Amplifier_Audio_TDA7050.kicad_sym")(options "")(descr ""))
+  (lib (name "FPGA_Lattice_ICE40HX8K")(type "KiCad")(uri "${KIPRJMOD}/../lib/FPGA_Lattice_ICE40HX8K.kicad_sym")(options "")(descr ""))
 )

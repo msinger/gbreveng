@@ -6,7 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "Game Boy reverse eng. FPGA board")
-		(date "2024-06-19")
+		(date "2024-12-09")
 		(rev "1")
 		(company "CC-BY-SA-4.0 Michael Singer")
 		(comment 1 "https://github.com/msinger/gbreveng/")
