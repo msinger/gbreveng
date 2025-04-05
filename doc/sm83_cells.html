@@ -42,6 +42,10 @@
   <ul>
    <li><a href="#inv">INVERTER gates</a>
     <ul>
+     <li><a href="#inv_dec2_a">INV_DEC2 - Variant A</a></li>
+     <li><a href="#inv_dec2_a2">INV_DEC2 - Variant A2</a></li>
+     <li><a href="#inv_dec2_b">INV_DEC2 - Variant B</a></li>
+     <li><a href="#inv_dec2_c">INV_DEC2 - Variant C</a></li>
      <li><a href="#inv_idu">INV_IDU</a></li>
      <li><a href="#inv_irq">INV_IRQ</a></li>
      <li><a href="#inv_reg">INV_REG</a></li>
@@ -59,11 +63,19 @@
     <ul>
      <li><a href="#inv_alu_a">INV_ALU - Variant A</a></li>
      <li><a href="#inv_alu_b">INV_ALU - Variant B</a></li>
+     <li><a href="#inv_dec1_a">INV_DEC1 - Variant A</a></li>
+     <li><a href="#inv_dec1_b">INV_DEC1 - Variant B</a></li>
+     <li><a href="#inv_dec2_d">INV_DEC2 - Variant D</a></li>
      <li><a href="#inv_dec3_a">INV_DEC3 - Variant A</a></li>
      <li><a href="#inv_dec3_a2">INV_DEC3 - Variant A2</a></li>
      <li><a href="#inv_dec3_b">INV_DEC3 - Variant B</a></li>
      <li><a href="#inv_dec3_b2">INV_DEC3 - Variant B2</a></li>
      <li><a href="#inv_dec3_c">INV_DEC3 - Variant C</a></li>
+    </ul>
+   </li>
+   <li><a href="#buf">BUFFER gates</a>
+    <ul>
+     <li><a href="#buf_dec2">BUF_DEC2</a></li>
     </ul>
    </li>
    <li><a href="#nand">NAND gates</a>
@@ -145,6 +157,104 @@
 </ul>
 <h2 id="logic">Basic logic gates</h2>
 <h3 id="inv">INVERTER gates</h3>
+<h4 id="inv_dec2_a">INV_DEC2 - Variant A</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec2_a_13_desc.png?v=0" style="min-width:100px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec2_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec2_inv1">DEC2_INV1</a>,
+<a href="/sm83_map/?view=c:dec2_inv2">DEC2_INV2</a>,
+<a href="/sm83_map/?view=c:dec2_inv3">DEC2_INV3</a>,
+<a href="/sm83_map/?view=c:dec2_inv4">DEC2_INV4</a>,
+<a href="/sm83_map/?view=c:dec2_inv5">DEC2_INV5</a>,
+<a href="/sm83_map/?view=c:dec2_inv9">DEC2_INV9</a>,
+<a href="/sm83_map/?view=c:dec2_inv11">DEC2_INV11</a>,
+<a href="/sm83_map/?view=c:dec2_inv12">DEC2_INV12</a>,
+<a href="/sm83_map/?view=c:dec2_inv13">DEC2_INV13</a>,
+<a href="/sm83_map/?view=c:dec2_inv14">DEC2_INV14</a>,
+<a href="/sm83_map/?view=c:dec2_inv16">DEC2_INV16</a>,
+<a href="/sm83_map/?view=c:dec2_inv19">DEC2_INV19</a>,
+<a href="/sm83_map/?view=c:dec2_inv20">DEC2_INV20</a>,
+<a href="/sm83_map/?view=c:dec2_inv22">DEC2_INV22</a>,
+<a href="/sm83_map/?view=c:dec2_inv23">DEC2_INV23</a>,
+<a href="/sm83_map/?view=c:dec2_inv24">DEC2_INV24</a>,
+<a href="/sm83_map/?view=c:dec2_inv25">DEC2_INV25</a>,
+<a href="/sm83_map/?view=c:dec2_inv26">DEC2_INV26</a>,
+<a href="/sm83_map/?view=c:dec2_inv27">DEC2_INV27</a>,
+<a href="/sm83_map/?view=c:dec2_inv28">DEC2_INV28</a>,
+<a href="/sm83_map/?view=c:dec2_inv29">DEC2_INV29</a>,
+<a href="/sm83_map/?view=c:dec2_inv31">DEC2_INV31</a>
+(22 total)
+</p>
+<h4 id="inv_dec2_a2">INV_DEC2 - Variant A2</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec2_a2_15_desc.png?v=0" style="min-width:100px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec2_a2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec2_inv10">DEC2_INV10</a>,
+<a href="/sm83_map/?view=c:dec2_inv15">DEC2_INV15</a>,
+<a href="/sm83_map/?view=c:dec2_inv30">DEC2_INV30</a>
+(3 total)
+</p>
+<h4 id="inv_dec2_b">INV_DEC2 - Variant B</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec2_b_8_desc.png?v=0" style="min-width:150px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec2_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_2p_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec2_inv7">DEC2_INV7</a>,
+<a href="/sm83_map/?view=c:dec2_inv8">DEC2_INV8</a>,
+<a href="/sm83_map/?view=c:dec2_inv17">DEC2_INV17</a>,
+<a href="/sm83_map/?view=c:dec2_inv18">DEC2_INV18</a>
+(4 total)
+</p>
+<h4 id="inv_dec2_c">INV_DEC2 - Variant C</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec2_c_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec2_c_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_2p_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec2_inv6">DEC2_INV6</a>
+(1 total)
+</p>
 <h4 id="inv_idu">INV_IDU</h4>
 <p>Two simple inverters.</p>
 <table>
@@ -439,6 +549,125 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:alu_inv9">ALU_INV9</a>
 (1 total)
 </p>
+<h4 id="inv_dec1_a">INV_DEC1 - Variant A</h4>
+<p>Two inverters with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec1_a_23_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A_IN</i></td>
+<td>Input to inverter A. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>A_Q</i></td>
+<td>Outputs inverted <i>A_IN</i>.</td></tr>
+<tr><td><i>B_IN</i></td>
+<td>Input to inverter B. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>B_Q</i></td>
+<td>Outputs inverted <i>B_IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>A_IN</i> and <i>B_IN</i> get driven high for the purpose of
+precharging the nets connected to the inputs.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec1_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv2_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec1_inv1">DEC1_INV1</a>,
+<a href="/sm83_map/?view=c:dec1_inv2">DEC1_INV2</a>,
+<a href="/sm83_map/?view=c:dec1_inv3">DEC1_INV3</a>,
+<a href="/sm83_map/?view=c:dec1_inv4">DEC1_INV4</a>,
+<a href="/sm83_map/?view=c:dec1_inv5">DEC1_INV5</a>,
+<a href="/sm83_map/?view=c:dec1_inv6">DEC1_INV6</a>,
+<a href="/sm83_map/?view=c:dec1_inv7">DEC1_INV7</a>,
+<a href="/sm83_map/?view=c:dec1_inv8">DEC1_INV8</a>,
+<a href="/sm83_map/?view=c:dec1_inv9">DEC1_INV9</a>,
+<a href="/sm83_map/?view=c:dec1_inv10">DEC1_INV10</a>,
+<a href="/sm83_map/?view=c:dec1_inv11">DEC1_INV11</a>,
+<a href="/sm83_map/?view=c:dec1_inv12">DEC1_INV12</a>,
+<a href="/sm83_map/?view=c:dec1_inv13">DEC1_INV13</a>,
+<a href="/sm83_map/?view=c:dec1_inv14">DEC1_INV14</a>,
+<a href="/sm83_map/?view=c:dec1_inv15">DEC1_INV15</a>,
+<a href="/sm83_map/?view=c:dec1_inv16">DEC1_INV16</a>,
+<a href="/sm83_map/?view=c:dec1_inv17">DEC1_INV17</a>,
+<a href="/sm83_map/?view=c:dec1_inv18">DEC1_INV18</a>,
+<a href="/sm83_map/?view=c:dec1_inv19">DEC1_INV19</a>,
+<a href="/sm83_map/?view=c:dec1_inv20">DEC1_INV20</a>,
+<a href="/sm83_map/?view=c:dec1_inv21">DEC1_INV21</a>,
+<a href="/sm83_map/?view=c:dec1_inv22">DEC1_INV22</a>,
+<a href="/sm83_map/?view=c:dec1_inv23">DEC1_INV23</a>,
+<a href="/sm83_map/?view=c:dec1_inv24">DEC1_INV24</a>,
+<a href="/sm83_map/?view=c:dec1_inv25">DEC1_INV25</a>,
+<a href="/sm83_map/?view=c:dec1_inv26">DEC1_INV26</a>,
+<a href="/sm83_map/?view=c:dec1_inv27">DEC1_INV27</a>,
+<a href="/sm83_map/?view=c:dec1_inv28">DEC1_INV28</a>,
+<a href="/sm83_map/?view=c:dec1_inv29">DEC1_INV29</a>,
+<a href="/sm83_map/?view=c:dec1_inv30">DEC1_INV30</a>,
+<a href="/sm83_map/?view=c:dec1_inv31">DEC1_INV31</a>,
+<a href="/sm83_map/?view=c:dec1_inv32">DEC1_INV32</a>,
+<a href="/sm83_map/?view=c:dec1_inv33">DEC1_INV33</a>,
+<a href="/sm83_map/?view=c:dec1_inv34">DEC1_INV34</a>,
+<a href="/sm83_map/?view=c:dec1_inv35">DEC1_INV35</a>,
+<a href="/sm83_map/?view=c:dec1_inv36">DEC1_INV36</a>,
+<a href="/sm83_map/?view=c:dec1_inv37">DEC1_INV37</a>,
+<a href="/sm83_map/?view=c:dec1_inv38">DEC1_INV38</a>,
+<a href="/sm83_map/?view=c:dec1_inv39">DEC1_INV39</a>,
+<a href="/sm83_map/?view=c:dec1_inv40">DEC1_INV40</a>,
+<a href="/sm83_map/?view=c:dec1_inv41">DEC1_INV41</a>,
+<a href="/sm83_map/?view=c:dec1_inv42">DEC1_INV42</a>,
+<a href="/sm83_map/?view=c:dec1_inv43">DEC1_INV43</a>,
+<a href="/sm83_map/?view=c:dec1_inv44">DEC1_INV44</a>,
+<a href="/sm83_map/?view=c:dec1_inv45">DEC1_INV45</a>,
+<a href="/sm83_map/?view=c:dec1_inv46">DEC1_INV46</a>,
+<a href="/sm83_map/?view=c:dec1_inv47">DEC1_INV47</a>,
+<a href="/sm83_map/?view=c:dec1_inv48">DEC1_INV48</a>,
+<a href="/sm83_map/?view=c:dec1_inv49">DEC1_INV49</a>,
+<a href="/sm83_map/?view=c:dec1_inv50">DEC1_INV50</a>,
+<a href="/sm83_map/?view=c:dec1_inv51">DEC1_INV51</a>,
+<a href="/sm83_map/?view=c:dec1_inv52">DEC1_INV52</a>,
+<a href="/sm83_map/?view=c:dec1_inv53">DEC1_INV53</a>
+(53 total)
+</p>
+<h4 id="inv_dec1_b">INV_DEC1 - Variant B</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec1_b_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec1_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec1_inv54">DEC1_INV54</a>
+(1 total)
+</p>
+<h4 id="inv_dec2_d">INV_DEC2 - Variant D</h4>
+<p>Inverter with precharge.</p>
+<table>
+<tr><td><img src="img/cells/sm83/inv_dec2_d_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span> is low.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If low, <i>IN</i> gets driven high for the purpose of precharging the net
+connected to the input.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/inv_dec2_d_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/inv_pch_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec2_inv21">DEC2_INV21</a>
+(1 total)
+</p>
 <h4 id="inv_dec3_a">INV_DEC3 - Variant A</h4>
 <p>Inverter with precharge.</p>
 <table>
@@ -605,6 +834,32 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:dec3_inv55">DEC3_INV55</a>,
 <a href="/sm83_map/?view=c:dec3_inv57">DEC3_INV57</a>
 (12 total)
+</p>
+<h3 id="buf">BUFFER gates</h3>
+<h4 id="buf_dec2">BUF_DEC2</h4>
+<p>Simple buffer.</p>
+<table>
+<tr><td><img src="img/cells/sm83/buf_dec2_3_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to buffer.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Outputs <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/buf_dec2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/buf_2p_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dec2_buf1">DEC2_BUF1</a>,
+<a href="/sm83_map/?view=c:dec2_buf2">DEC2_BUF2</a>,
+<a href="/sm83_map/?view=c:dec2_buf3">DEC2_BUF3</a>,
+<a href="/sm83_map/?view=c:dec2_buf4">DEC2_BUF4</a>,
+<a href="/sm83_map/?view=c:dec2_buf5">DEC2_BUF5</a>,
+<a href="/sm83_map/?view=c:dec2_buf6">DEC2_BUF6</a>,
+<a href="/sm83_map/?view=c:dec2_buf7">DEC2_BUF7</a>,
+<a href="/sm83_map/?view=c:dec2_buf8">DEC2_BUF8</a>
+(8 total)
 </p>
 <h3 id="nand">NAND gates</h3>
 <h4 id="nand2_nand3_irq">NAND2_NAND3_IRQ</h4>

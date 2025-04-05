@@ -1,0 +1,11 @@
+Generate layout images:
+
+1. In Electric VLSI set technology scale to 8000.
+2. Export as sm83.cif.
+3. Run
+     cifconv.exe --png out.png
+                 sm83.cif
+                 --bg ffffffff
+                 --scale 0.002
+                 --sym inv_dec1_a
+                 --blacklist p-well
