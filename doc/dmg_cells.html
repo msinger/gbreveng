@@ -18,16 +18,22 @@
   border-right:  1px solid #4c4c4c;
  }
  table.default tr th {
-   border-top:    1px solid #4c4c4c;
-   border-left:   1px solid #4c4c4c;
-   border-bottom: 1px solid #b2b2b2;
-   border-right:  1px solid #b2b2b2;
+  border-top:    1px solid #4c4c4c;
+  border-left:   1px solid #4c4c4c;
+  border-bottom: 1px solid #b2b2b2;
+  border-right:  1px solid #b2b2b2;
  }
  table.default tr td {
-   border-top:    1px solid #4c4c4c;
-   border-left:   1px solid #4c4c4c;
-   border-bottom: 1px solid #b2b2b2;
-   border-right:  1px solid #b2b2b2;
+  border-top:    1px solid #4c4c4c;
+  border-left:   1px solid #4c4c4c;
+  border-bottom: 1px solid #b2b2b2;
+  border-right:  1px solid #b2b2b2;
+ }
+ a:not([href]) {
+  visibility: hidden;
+  display:    inline-block;
+  height:     0;
+  width:      0;
  }
 </style>
 </head>
@@ -53,19 +59,19 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <ul>
  <li><a href="#logic">Basic logic gates</a>
   <ul>
-   <li><a href="#inv">INVERTER gates</a>
+   <li><a href="#not">NOT gates</a>
     <ul>
-     <li><a href="#inv_a">INVERTER - Variant A</a></li>
-     <li><a href="#inv_b">INVERTER - Variant B</a></li>
-     <li><a href="#inv_c">INVERTER - Variant C</a></li>
-     <li><a href="#inv_d">INVERTER - Variant D</a></li>
-     <li><a href="#inv_e">INVERTER - Variant E</a></li>
+     <li><a href="#not_x1">NOT_X1</a> (A)</li>
+     <li><a href="#not_x2">NOT_X2</a> (B)</li>
+     <li><a href="#not_x3">NOT_X3</a> (C)</li>
+     <li><a href="#not_x4">NOT_X4</a> (D)</li>
+     <li><a href="#not_x6">NOT_X6</a> (E)</li>
     </ul>
    </li>
    <li><a href="#nand">NAND gates</a>
     <ul>
      <li><a href="#nand2">NAND2</a></li>
-     <li><a href="#nand2s">NAND2 - Spare Variant</a></li>
+     <li><a href="#eco_nand2">ECO_NAND2</a></li>
      <li><a href="#nand3">NAND3</a></li>
      <li><a href="#nand4">NAND4</a></li>
      <li><a href="#nand5">NAND5</a></li>
@@ -103,13 +109,13 @@ Some I/O pads were also renamed, because the names did not fit the official docu
  </li>
  <li><a href="#compound">Compound logic gates</a>
   <ul>
-   <li><a href="#ao1">AO1</a></li>
-   <li><a href="#ao2">AO2</a></li>
-   <li><a href="#ao3">AO3</a></li>
-   <li><a href="#ao4">AO4</a></li>
-   <li><a href="#ao6">AO6</a></li>
-   <li><a href="#oai">OAI</a></li>
-   <li><a href="#oa">OA</a></li>
+   <li><a href="#ao21">AO21</a></li>
+   <li><a href="#ao22">AO22</a></li>
+   <li><a href="#ao222">AO222</a></li>
+   <li><a href="#ao2222">AO2222</a></li>
+   <li><a href="#ao222222">AO222222</a></li>
+   <li><a href="#oai21">OAI21</a></li>
+   <li><a href="#oa21">OA21</a></li>
    <li><a href="#muxi">MUXI</a></li>
    <li><a href="#mux">MUX</a></li>
   </ul>
@@ -122,47 +128,47 @@ Some I/O pads were also renamed, because the names did not fit the official docu
  </li>
  <li><a href="#tri">Tri-state drivers</a>
   <ul>
-   <li><a href="#tri_inv">Tri-state inverters</a>
+   <li><a href="#not_if">Tri-state inverters</a>
     <ul>
-     <li><a href="#tri_inv_if0">TRI_INV_IF0</a></li>
-     <li><a href="#tri_inv_if1">TRI_INV_IF1</a></li>
+     <li><a href="#not_if0">NOT_IF0</a></li>
+     <li><a href="#not_if1">NOT_IF1</a></li>
     </ul>
    </li>
-   <li><a href="#tri_buf_if0">TRI_BUF_IF0</a></li>
+   <li><a href="#buf_if0">BUF_IF0</a></li>
   </ul>
  </li>
  <li><a href="#ff">Storage elements</a>
   <ul>
    <li><a href="#nand_latch">NAND_LATCH</a></li>
    <li><a href="#nor_latch">NOR_LATCH</a></li>
-   <li><a href="#d_latch_a">D_LATCH - Variant A</a></li>
-   <li><a href="#d_latch_a2">D_LATCH - Variant A2</a></li>
-   <li><a href="#d_latch_b">D_LATCH - Variant B</a></li>
-   <li><a href="#dr_latch">DR_LATCH</a></li>
-   <li><a href="#dffr_a">DFFR - Variant A</a></li>
-   <li><a href="#dffr_b">DFFR - Variant B</a></li>
-   <li><a href="#dffr_b2">DFFR - Variant B2</a></li>
+   <li><a href="#dlatch_ee">DLATCH_EE</a> (A)</li>
+   <li><a href="#dlatch_ee_q">DLATCH_EE_Q</a> (A2)</li>
+   <li><a href="#dlatch">DLATCH</a> (B)</li>
+   <li><a href="#drlatch_ee">DRLATCH_EE</a></li>
+   <li><a href="#dffr_cc_q">DFFR_CC_Q</a> (A)</li>
+   <li><a href="#dffr_cc">DFFR_CC</a> (B)</li>
+   <li><a href="#dffr">DFFR</a> (B2)</li>
    <li><a href="#dffsr">DFFSR</a></li>
-   <li><a href="#tffd">TFFD</a></li>
+   <li><a href="#tffnl">TFFNL</a></li>
   </ul>
  </li>
- <li><a href="#io">I/O buffers</a>
+ <li><a href="#pad">I/O pads</a>
   <ul>
-   <li><a href="#iobuf_a">IOBUFFER - Variant A</a></li>
-   <li><a href="#iobuf_b">IOBUFFER - Variant B</a></li>
-   <li><a href="#iobuf_c">IOBUFFER - Variant C</a></li>
-   <li><a href="#ibuf_a">IBUFFER - Variant A</a></li>
-   <li><a href="#ibuf_b">IBUFFER - Variant B</a></li>
-   <li><a href="#obuf_a">OBUFFER - Variant A</a></li>
-   <li><a href="#obuf_b">OBUFFER - Variant B</a></li>
-   <li><a href="#osc">OSC</a></li>
-   <li><a href="#aibuf">AIBUFFER</a></li>
-   <li><a href="#aobuf">AOBUFFER</a></li>
+   <li><a href="#pad_bidir">PAD_BIDIR</a> (A)</li>
+   <li><a href="#pad_bidir_ena_pu">PAD_BIDIR_ENA_PU</a> (B)</li>
+   <li><a href="#pad_bidir_sck">PAD_BIDIR_SCK</a> (C)</li>
+   <li><a href="#pad_in">PAD_IN</a> (A)</li>
+   <li><a href="#pad_in_pu">PAD_IN_PU</a> (B)</li>
+   <li><a href="#pad_out">PAD_OUT</a> (A)</li>
+   <li><a href="#pad_out_diff">PAD_OUT_DIFF</a> (B)</li>
+   <li><a href="#pad_xtal">PAD_XTAL</a></li>
+   <li><a href="#pad_in_an">PAD_IN_AN</a></li>
+   <li><a href="#pad_out_an">PAD_OUT_AN</a></li>
   </ul>
  </li>
  <li><a href="#other">Other</a>
   <ul>
-   <li><a href="#const">CONST</a></li>
+   <li><a href="#tie">TIE</a></li>
    <li><a href="#sram">SRAM</a>
     <ul>
      <li><a href="#wave_ram">WAVE_RAM</a></li>
@@ -177,21 +183,21 @@ Some I/O pads were also renamed, because the names did not fit the official docu
  </li>
 </ul>
 <h2 id="logic">Basic logic gates</h2>
-<h3 id="inv">INVERTER gates</h3>
-<h4 id="inv_a">INVERTER - Variant A</h4>
+<h3 id="not"><a id="inv" aria-hidden="true"></a>NOT gates</h3>
+<h4 id="not_x1"><a id="inv_a" aria-hidden="true"></a>NOT_X1 (A)</h4>
 <p>Simple inverter.</p>
 <table>
-<tr><td><img src="img/cells/inv_a_atar_ynur_base_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_x1_atar_ynur_base_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input to inverter.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_a_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/inv_a_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x1_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x1_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abaf">ABAF</a>
 <a href="/dmg_cpu_b_map/?view=c:abez">ABEZ</a>
@@ -942,20 +948,20 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <a href="/dmg_cpu_b_map/?view=c:zyro">ZYRO</a>
 (747 total) (many inverters for clock complements are missing in this list)
 </p>
-<h4 id="inv_b">INVERTER - Variant B</h4>
-<p>Inverter with higher driving strength.</p>
+<h4 id="not_x2"><a id="inv_b" aria-hidden="true"></a>NOT_X2 (B)</h4>
+<p>Inverter with 2&times; drive strength.</p>
 <table>
-<tr><td><img src="img/cells/inv_b_efug_fado_boru_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_x2_efug_fado_boru_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input to inverter.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_b_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/inv_b_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x2_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abef">ABEF</a>
 <a href="/dmg_cpu_b_map/?view=c:abon">ABON</a>
@@ -1128,19 +1134,19 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <a href="/dmg_cpu_b_map/?view=c:zone">ZONE</a>
 (169 total)
 </p>
-<h4 id="inv_c">INVERTER - Variant C</h4>
-<p>Inverter with higher driving strength.</p>
+<h4 id="not_x3"><a id="inv_c" aria-hidden="true"></a>NOT_X3 (C)</h4>
+<p>Inverter with 3&times; drive strength.</p>
 <table>
-<tr><td><img src="img/cells/inv_c_meco_cazu_wahe_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_x3_meco_cazu_wahe_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input to inverter.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_c_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x3_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abuz">ABUZ</a>
 <a href="/dmg_cpu_b_map/?view=c:aler">ALER</a>
@@ -1173,19 +1179,19 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <a href="/dmg_cpu_b_map/?view=c:vypu">VYPU</a>
 (29 total)
 </p>
-<h4 id="inv_d">INVERTER - Variant D</h4>
-<p>Inverter with higher driving strength.</p>
+<h4 id="not_x4"><a id="inv_d" aria-hidden="true"></a>NOT_X4 (D)</h4>
+<p>Inverter with 4&times; drive strength.</p>
 <table>
-<tr><td><img src="img/cells/inv_d_adad_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_x4_adad_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input to inverter.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_d_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x4_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:adad">ADAD</a>
 <a href="/dmg_cpu_b_map/?view=c:asot">ASOT</a>
@@ -1201,19 +1207,19 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <a href="/dmg_cpu_b_map/?view=c:zeme">ZEME</a>
 (12 total)
 </p>
-<h4 id="inv_e">INVERTER - Variant E</h4>
-<p>Inverter with higher driving strength.</p>
+<h4 id="not_x6"><a id="inv_e" aria-hidden="true"></a>NOT_X6 (E)</h4>
+<p>Inverter with 6&times; drive strength.</p>
 <table>
-<tr><td><img src="img/cells/inv_e_keba_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_x6_keba_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input to inverter.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs inverted <i>IN</i>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/inv_e_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_x6_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:aguz">AGUZ</a>
 <a href="/dmg_cpu_b_map/?view=c:amuk">AMUK</a>
@@ -1238,17 +1244,17 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <h4 id="nand2">NAND2</h4>
 <p>NAND gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand2_lela_avet_lodo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand2_lela_avet_lodo_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand2_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/nand2_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/nand2_layout.png?v=1" alt=""></p>
+<p><img src="img/cells/nand2_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:afeg">AFEG</a>
 <a href="/dmg_cpu_b_map/?view=c:agyn">AGYN</a>
@@ -1477,22 +1483,22 @@ Some I/O pads were also renamed, because the names did not fit the official docu
 <a href="/dmg_cpu_b_map/?view=c:zado">ZADO</a>
 (225 total)
 </p>
-<h4 id="nand2s">NAND2 - Spare Variant</h4>
-<p>NAND gate with two inputs.</p>
-<p>This variant of the NAND2 gate is only used for some spare cells. This variant may be easily changed to a NOR gate
-by just making some changes on metal 1 layer during a post synthesis metal fix.</p>
+<h4 id="eco_nand2"><a id="nand2s" aria-hidden="true"></a>ECO_NAND2</h4>
+<p>ECO configurable NAND gate with two inputs.</p>
+<p>This variant of the NAND2 gate is only used for some spare cells. It can be converted to a NOR2 gate via metal 1
+changes. The layout includes pre-routed vias to facilitate this change during post-silicon ECO.</p>
 <table>
-<tr><td><img src="img/cells/nand2s_ybyw_ybyw_ynuj_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/eco_nand2_ybyw_ybyw_ynuj_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand2s_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/nand2_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/eco_nand2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/nand2_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:ybyw">YBYW</a>
 <a href="/dmg_cpu_b_map/?view=c:ycaw">YCAW</a>
@@ -1516,16 +1522,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nand3">NAND3</h4>
 <p>NAND gate with three inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand3_egom_egom_woly_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand3_egom_egom_woly_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand3_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/nand3_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:bota">BOTA</a>
 <a href="/dmg_cpu_b_map/?view=c:buge">BUGE</a>
@@ -1562,16 +1568,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nand4">NAND4</h4>
 <p>NAND gate with four inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand4_tegy_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand4_tegy_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand4_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/nand4_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:acom">ACOM</a>
 <a href="/dmg_cpu_b_map/?view=c:atoz">ATOZ</a>
@@ -1621,17 +1627,17 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nand5">NAND5</h4>
 <p>NAND gate with five inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand5_palo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand5_palo_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i> &amp;&amp;
 <i>IN5</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand5_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/nand5_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:aper">APER</a>
 <a href="/dmg_cpu_b_map/?view=c:cuty">CUTY</a>
@@ -1661,17 +1667,17 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nand6">NAND6</h4>
 <p>NAND gate with six inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand6_wota_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand6_wota_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i> &amp;&amp;
 <i>IN5</i> &amp;&amp; <i>IN6</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand6_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/nand6_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:navo">NAVO</a>
 <a href="/dmg_cpu_b_map/?view=c:wota">WOTA</a>
@@ -1680,17 +1686,17 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nand7">NAND7</h4>
 <p>NAND gate with seven inputs.</p>
 <table>
-<tr><td><img src="img/cells/nand7_wale_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nand7_wale_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i>, <i>IN7</i></td>
 <td>Inputs to NAND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i> &amp;&amp;
 <i>IN5</i> &amp;&amp; <i>IN6</i> &amp;&amp; <i>IN7</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nand7_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/nand7_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:tebo">TEBO</a>
 <a href="/dmg_cpu_b_map/?view=c:tece">TECE</a>
@@ -1704,16 +1710,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor2">NOR2</h4>
 <p>NOR gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/nor2_boxo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor2_boxo_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to NOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nor2_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nor2_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:afar">AFAR</a>
 <a href="/dmg_cpu_b_map/?view=c:afas">AFAS</a>
@@ -1904,16 +1910,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor3">NOR3</h4>
 <p>NOR gate with three inputs.</p>
 <table>
-<tr><td><img src="img/cells/nor3_azug_vybo_azug_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor3_azug_vybo_azug_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to NOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nor3_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nor3_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:ajuj">AJUJ</a>
 <a href="/dmg_cpu_b_map/?view=c:bapy">BAPY</a>
@@ -1957,16 +1963,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor4">NOR4</h4>
 <p>NOR gate with four inputs.</p>
 <table>
-<tr><td><img src="img/cells/nor4_ewam_zadu_zadu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor4_ewam_zadu_zadu_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to NOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nor4_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nor4_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:cehu">CEHU</a>
 <a href="/dmg_cpu_b_map/?view=c:cogy">COGY</a>
@@ -2002,16 +2008,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor5">NOR5</h4>
 <p>NOR gate with five inputs.</p>
 <table>
-<tr><td><img src="img/cells/nor5_daro_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor5_daro_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i></td>
 <td>Inputs to NOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nor5_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nor5_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:daro">DARO</a>
 <a href="/dmg_cpu_b_map/?view=c:emyr">EMYR</a>
@@ -2025,16 +2031,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor6">NOR6</h4>
 <p>NOR gate with six inputs.</p>
 <table>
-<tr><td><img src="img/cells/nor6_amus_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor6_amus_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i></td>
 <td>Inputs to NOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i> || <i>IN6</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nor6_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nor6_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:amus">AMUS</a>
 <a href="/dmg_cpu_b_map/?view=c:tyro">TYRO</a>
@@ -2043,17 +2049,17 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="nor8">NOR8</h4>
 <p>NOR gate with eight inputs.</p>
 <table>
-<tr><td><img src="img/cells/nor8_neru_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/nor8_neru_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i>, <i>IN7</i>, <i>IN8</i></td>
 <td>Inputs to NOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i> || <i>IN6</i> ||
 <i>IN7</i> || <i>IN8</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/nor8_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/nor8_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:neru">NERU</a>
 <a href="/dmg_cpu_b_map/?view=c:tulo">TULO</a>
@@ -2063,16 +2069,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="and2">AND2</h4>
 <p>AND gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/and2_myxe_xono_mumy_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/and2_myxe_xono_mumy_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to AND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/and2_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/and2_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abov">ABOV</a>
 <a href="/dmg_cpu_b_map/?view=c:aceg">ACEG</a>
@@ -2276,16 +2282,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="and3">AND3</h4>
 <p>AND gate with three inputs.</p>
 <table>
-<tr><td><img src="img/cells/and3_care_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/and3_care_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to AND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/and3_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/and3_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:asyt">ASYT</a>
 <a href="/dmg_cpu_b_map/?view=c:bave">BAVE</a>
@@ -2328,16 +2334,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="and4">AND4</h4>
 <p>AND gate with four inputs.</p>
 <table>
-<tr><td><img src="img/cells/and4_tace_teky_tace_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/and4_tace_teky_tace_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to AND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i> &amp;&amp; <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/and4_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/and4_sch.png?v=2" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:acat">ACAT</a>
 <a href="/dmg_cpu_b_map/?view=c:dofa">DOFA</a>
@@ -2363,16 +2369,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="or2">OR2</h4>
 <p>OR gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/or2_byby_wyxo_wype_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/or2_byby_wyxo_wype_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to OR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/or2_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/or2_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abak">ABAK</a>
 <a href="/dmg_cpu_b_map/?view=c:apet">APET</a>
@@ -2478,16 +2484,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="or3">OR3</h4>
 <p>OR gate with three inputs.</p>
 <table>
-<tr><td><img src="img/cells/or3_voto_voto_wazo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/or3_voto_voto_wazo_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
 <td>Inputs to OR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> || <i>IN2</i> || <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/or3_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/or3_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:asam">ASAM</a>
 <a href="/dmg_cpu_b_map/?view=c:bebu">BEBU</a>
@@ -2517,16 +2523,16 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h4 id="or4">OR4</h4>
 <p>OR gate with four inputs.</p>
 <table>
-<tr><td><img src="img/cells/or4_kery_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/or4_kery_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to OR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/or4_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/or4_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:ateg">ATEG</a>
 <a href="/dmg_cpu_b_map/?view=c:awet">AWET</a>
@@ -2537,17 +2543,17 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h3 id="xnor">XNOR</h3>
 <p>XNOR gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/xnor_nezo_puwu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/xnor_nezo_puwu_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to XNOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!(<i>IN1</i> ^ <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/xnor_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/xnor_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/xnor_layout.png?v=2" alt=""></p>
+<p><img src="img/cells/xnor_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:hura">HURA</a>
 <a href="/dmg_cpu_b_map/?view=c:mylo">MYLO</a>
@@ -2574,17 +2580,17 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h3 id="xor">XOR</h3>
 <p>XOR gate with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/xor_bahu_tery_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/xor_bahu_tery_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to XOR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>(<i>IN1</i> ^ <i>IN2</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/xor_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/xor_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/xor_layout.png?v=2" alt=""></p>
+<p><img src="img/cells/xor_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:bahu">BAHU</a>
 <a href="/dmg_cpu_b_map/?view=c:bazy">BAZY</a>
@@ -2699,22 +2705,22 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 (110 total)
 </p>
 <h2 id="compound">Compound logic gates</h2>
-<h3 id="ao1">AO1</h3>
+<h3 id="ao21"><a id="ao1" aria-hidden="true"></a>AO21</h3>
 <p>2-1 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AO3</p>
 <table>
-<tr><td><img src="img/cells/ao1_wyja_tynu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/ao21_wyja_tynu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to AND gate.</td></tr>
 <tr><td><i>IN3</i></td>
 <td>Input to OR gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ao1_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/ao21_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:lagu">LAGU</a>
 <a href="/dmg_cpu_b_map/?view=c:loxo">LOXO</a>
@@ -2722,20 +2728,20 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <a href="/dmg_cpu_b_map/?view=c:wyja">WYJA</a>
 (4 total)
 </p>
-<h3 id="ao2">AO2</h3>
+<h3 id="ao22"><a id="ao2" aria-hidden="true"></a>AO22</h3>
 <p>2-2 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_2</p>
 <table>
-<tr><td><img src="img/cells/ao2_jufy_fopy_doky_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/ao22_jufy_fopy_doky_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i></td>
 <td>Inputs to AND gates.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ao2_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/ao22_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:apag">APAG</a>
 <a href="/dmg_cpu_b_map/?view=c:doky">DOKY</a>
@@ -2757,42 +2763,42 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <a href="/dmg_cpu_b_map/?view=c:kupa">KUPA</a>
 (18 total)
 </p>
-<h3 id="ao3">AO3</h3>
+<h3 id="ao222"><a id="ao3" aria-hidden="true"></a>AO222</h3>
 <p>2-2-2 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_3</p>
 <table>
-<tr><td><img src="img/cells/ao3_evug_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/ao222_evug_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i>; <i>IN5</i>, <i>IN6</i></td>
 <td>Inputs to AND gates.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>) || (<i>IN5</i>
 &amp;&amp; <i>IN6</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ao3_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/ao3_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/ao222_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/ao222_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:evug">EVUG</a>
 <a href="/dmg_cpu_b_map/?view=c:ezag">EZAG</a>
 (2 total)
 </p>
-<h3 id="ao4">AO4</h3>
+<h3 id="ao2222"><a id="ao4" aria-hidden="true"></a>AO2222</h3>
 <p>2-2-2-2 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_4</p>
 <table>
-<tr><td><img src="img/cells/ao4_waly_nura_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/ao2222_waly_nura_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i>; <i>IN5</i>, <i>IN6</i>; <i>IN7</i>, <i>IN8</i></td>
 <td>Inputs to AND gates.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>) || (<i>IN5</i>
 &amp;&amp; <i>IN6</i>) || (<i>IN7</i> &amp;&amp; <i>IN8</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ao4_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/ao2222_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:dary">DARY</a>
 <a href="/dmg_cpu_b_map/?view=c:duna">DUNA</a>
@@ -2807,63 +2813,63 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <a href="/dmg_cpu_b_map/?view=c:wufu">WUFU</a>
 (11 total)
 </p>
-<h3 id="ao6">AO6</h3>
+<h3 id="ao222222"><a id="ao6" aria-hidden="true"></a>AO222222</h3>
 <p>2-2-2-2-2-2 AND-OR two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AOI_MUX_6</p>
 <table>
-<tr><td><img src="img/cells/ao6_etyr_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/ao222222_etyr_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i>; <i>IN3</i>, <i>IN4</i>; <i>IN5</i>, <i>IN6</i>; <i>IN7</i>, <i>IN8</i>;
 <i>IN9</i>, <i>IN10</i>; <i>IN11</i>, <i>IN12</i></td>
 <td>Inputs to AND gates.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; <i>IN4</i>) || (<i>IN5</i>
 &amp;&amp; <i>IN6</i>) || (<i>IN7</i> &amp;&amp; <i>IN8</i>) || (<i>IN9</i> &amp;&amp; <i>IN10</i>) ||
 (<i>IN11</i> &amp;&amp; <i>IN12</i>))</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ao6_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/ao222222_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:etyr">ETYR</a>
 (1 total)
 </p>
-<h3 id="oai">OAI</h3>
+<h3 id="oai21"><a id="oai" aria-hidden="true"></a>OAI21</h3>
 <p>2-1 OR-AND-INVERT two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: NAO</p>
 <table>
-<tr><td><img src="img/cells/oai_cufe_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/oai21_cufe_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to OR gate.</td></tr>
 <tr><td><i>IN3</i></td>
 <td>Input to AND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>!((<i>IN1</i> || <i>IN2</i>) &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/oai_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/oai21_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:cufe">CUFE</a>
 (1 total)
 </p>
-<h3 id="oa">OA</h3>
+<h3 id="oa21"><a id="oa" aria-hidden="true"></a>OA21</h3>
 <p>2-1 OR-AND two-level compound gate.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OA3</p>
 <table>
-<tr><td><img src="img/cells/oa_eguv_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/oa21_eguv_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN1</i>, <i>IN2</i></td>
 <td>Inputs to OR gate.</td></tr>
 <tr><td><i>IN3</i></td>
 <td>Input to AND gate.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <code>((<i>IN1</i> || <i>IN2</i>) &amp;&amp; <i>IN3</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/oa_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/oa21_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:agut">AGUT</a>
 <a href="/dmg_cpu_b_map/?view=c:byha">BYHA</a>
@@ -2880,20 +2886,20 @@ by just making some changes on metal 1 layer during a post synthesis metal fix.<
 <h3 id="muxi">MUXI</h3>
 <p>Inverting multiplexer with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/muxi_kena_roke_dazy_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/muxi_kena_roke_dazy_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D0</i>, <i>D1</i></td>
 <td>Data inputs.</td></tr>
 <tr><td><i>SEL</i></td>
 <td>Select input.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs inverted <i>D1</i> if <i>SEL</i> is high; outputs
 inverted <i>D0</i> if <i>SEL</i> is low.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/muxi_layout.png?v=2" alt=""></p>
-<p><img src="img/cells/muxi_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/muxi_layout.png?v=3" alt=""></p>
+<p><img src="img/cells/muxi_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:cave">CAVE</a>
 <a href="/dmg_cpu_b_map/?view=c:copo">COPO</a>
@@ -2919,20 +2925,20 @@ inverted <i>D0</i> if <i>SEL</i> is low.</td></tr>
 <h3 id="mux">MUX</h3>
 <p>Multiplexer with two inputs.</p>
 <table>
-<tr><td><img src="img/cells/mux_feme_amet_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/mux_feme_amet_desc.png?v=1" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D0</i>, <i>D1</i></td>
 <td>Data inputs.</td></tr>
 <tr><td><i>SEL</i></td>
 <td>Select input.</td></tr>
-<tr><td><i>Q</i></td>
+<tr><td><i>Y</i></td>
 <td>Outputs <i>D1</i> if <i>SEL</i> is high; outputs <i>D0</i>
 if <i>SEL</i> is low.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/mux_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/mux_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/mux_layout.png?v=1" alt=""></p>
+<p><img src="img/cells/mux_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:afum">AFUM</a>
 <a href="/dmg_cpu_b_map/?view=c:agyl">AGYL</a>
@@ -2982,7 +2988,7 @@ if <i>SEL</i> is low.</td></tr>
 <h3 id="half_add">HALF_ADD</h3>
 <p>Half adder.</p>
 <table>
-<tr><td><img src="img/cells/hadd_atad_fafo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/half_add_atad_fafo_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>A</i>, <i>B</i></td>
@@ -2993,7 +2999,7 @@ if <i>SEL</i> is low.</td></tr>
 <td>Sum output. Outputs <code>(<i>A</i> ^ <i>B</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/hadd_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/half_add_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:atad">ATAD</a>
 <a href="/dmg_cpu_b_map/?view=c:fafo">FAFO</a>
@@ -3002,7 +3008,7 @@ if <i>SEL</i> is low.</td></tr>
 <h3 id="full_add">FULL_ADD</h3>
 <p>Full adder.</p>
 <table>
-<tr><td><img src="img/cells/fadd_fego_eruc_daba_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/full_add_fego_eruc_daba_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>A</i>, <i>B</i></td>
@@ -3053,27 +3059,27 @@ if <i>SEL</i> is low.</td></tr>
 (33 total)
 </p>
 <h2 id="tri">Tri-state drivers</h2>
-<h3 id="tri_inv">Tri-state inverters</h3>
+<h3 id="not_if"><a id="tri_inv" aria-hidden="true"></a>Tri-state inverters</h3>
 <p>Tri-state inverters come in two very similar looking shapes: One has an active-high enable input; the other has an
 active-low enable input. This picture should help to identify them by highlighting the difference between the two:</p>
 <p><img src="img/cells/tawu_hope.png?v=0" alt=""></p>
-<h4 id="tri_inv_if0">TRI_INV_IF0</h4>
+<h4 id="not_if0"><a id="tri_inv_if0" aria-hidden="true"></a>NOT_IF0</h4>
 <p>Tri-state inverter with active-low enable input.</p>
 <table>
-<tr><td><img src="img/cells/tri_inv_if0_hacu_asox_laju_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_if0_hacu_asox_laju_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
-<td>Active-low enable input. When low, the value at <i>IN</i> gets inverted at <i>Q</i>.
-When high, <i>Q</i> is not driven.</td></tr>
-<tr><td><i>Q</i></td>
+<td>Active-low enable input. When low, the value at <i>IN</i> gets inverted at <i>Y</i>.
+When high, <i>Y</i> is not driven.</td></tr>
+<tr><td><i>Y</i></td>
 <td>Inverted tri-state output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/tri_inv_if0_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/tri_inv_if0_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_if0_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/not_if0_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abem">ABEM</a>
 <a href="/dmg_cpu_b_map/?view=c:acot">ACOT</a>
@@ -3556,23 +3562,23 @@ When high, <i>Q</i> is not driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zyto">ZYTO</a>
 (479 total)
 </p>
-<h4 id="tri_inv_if1">TRI_INV_IF1</h4>
+<h4 id="not_if1"><a id="tri_inv_if1" aria-hidden="true"></a>NOT_IF1</h4>
 <p>Tri-state inverter with active-high enable input.</p>
 <table>
-<tr><td><img src="img/cells/tri_inv_if1_desa_baty_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/not_if1_desa_baty_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input.</td></tr>
 <tr><td><i>ENA</i></td>
-<td>Active-high enable input. When high, the value at <i>IN</i> gets inverted at <i>Q</i>.
-When low, <i>Q</i> is not driven.</td></tr>
-<tr><td><i>Q</i></td>
+<td>Active-high enable input. When high, the value at <i>IN</i> gets inverted at <i>Y</i>.
+When low, <i>Y</i> is not driven.</td></tr>
+<tr><td><i>Y</i></td>
 <td>Inverted tri-state output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/tri_inv_if1_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/tri_inv_if1_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/not_if1_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/not_if1_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:bade">BADE</a>
 <a href="/dmg_cpu_b_map/?view=c:baty">BATY</a>
@@ -3671,28 +3677,28 @@ When low, <i>Q</i> is not driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:wuga">WUGA</a>
 (95 total)
 </p>
-<h3 id="tri_buf_if0">TRI_BUF_IF0</h3>
+<h3 id="buf_if0"><a id="tri_buf_if0" aria-hidden="true"></a>BUF_IF0</h3>
 <p>Tri-state buffer with active-low enable input.</p>
-<p>The output of this cell has a higher driving strength, comparable to the
-<a href="#inv_b">INVERTER - Variant B</a>.</p>
+<p>The output of this cell has a higher driving strength, comparable to
+<a href="#not_x2">NOT_X2</a>.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that is
 connecting the two <i>IN</i> inputs, even though they are connected internally on poly layer.</p>
 <table>
-<tr><td><img src="img/cells/tri_buf_if0_xygu_fyra_sosa_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/buf_if0_xygu_fyra_sosa_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>IN</i></td>
 <td>Input. There are two inputs to this cell, which are externally connected to each other (indicated by the
 pink line in the picture).</td></tr>
 <tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
-<td>Active-low enable input. When low, the value at <i>IN</i> gets passed through to <i>Q</i>.
-When high, <i>Q</i> is not driven.</td></tr>
-<tr><td><i>Q</i></td>
+<td>Active-low enable input. When low, the value at <i>IN</i> gets passed through to <i>Y</i>.
+When high, <i>Y</i> is not driven.</td></tr>
+<tr><td><i>Y</i></td>
 <td>Tri-state output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/tri_buf_if0_layout.png?v=2" alt=""></p>
-<p><img src="img/cells/tri_buf_if0_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/buf_if0_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/buf_if0_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:ajov">AJOV</a>
 <a href="/dmg_cpu_b_map/?view=c:akan">AKAN</a>
@@ -3825,13 +3831,13 @@ When high, <i>Q</i> is not driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:xymu">XYMU</a>
 (23 total)
 </p>
-<h3 id="d_latch_a">D_LATCH - Variant A</h3>
-<p>Gated data latch with complementary enable inputs.</p>
+<h3 id="dlatch_ee"><a id="d_latch_a" aria-hidden="true"></a>DLATCH_EE (A)</h3>
+<p>Gated data latch with externally inverted enable inputs.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF2</p>
 <table>
-<tr><td><img src="img/cells/d_latch_a_fyhy_wyso_moxy_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dlatch_ee_fyhy_wyso_moxy_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -3848,8 +3854,8 @@ high again.</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/d_latch_a_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/d_latch_a_sch.png?v=2" alt=""></p>
+<p><img src="img/cells/dlatch_ee_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/dlatch_ee_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abeg">ABEG</a>
 <a href="/dmg_cpu_b_map/?view=c:abop">ABOP</a>
@@ -4001,15 +4007,15 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zyve">ZYVE</a>
 (148 total)
 </p>
-<h3 id="d_latch_a2">D_LATCH - Variant A2</h3>
-<p>Gated data latch with complementary enable inputs and without inverted output.</p>
+<h3 id="dlatch_ee_q"><a id="d_latch_a2" aria-hidden="true"></a>DLATCH_EE_Q (A2)</h3>
+<p>Gated data latch with externally inverted enable inputs and no inverted output.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
-<p>This cell type is very similar to <a href="#d_latch_a">D_LATCH - Varian A</a>, but it has no
+<p>This cell type is very similar to <a href="#dlatch_ee">DLATCH_EE</a>, but it has no
 <span style="text-decoration:overline"><i>Q</i></span> output and is one row shorter beacuse of that.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DFF2</p>
 <table>
-<tr><td><img src="img/cells/d_latch_a2_rewo_peba_luzo_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dlatch_ee_q_rewo_peba_luzo_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4024,8 +4030,8 @@ high again.</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/d_latch_a2_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/d_latch_a2_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/dlatch_ee_q_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/dlatch_ee_q_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:legu">LEGU</a>
 <a href="/dmg_cpu_b_map/?view=c:luzo">LUZO</a>
@@ -4053,11 +4059,11 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:suto">SUTO</a>
 (24 total)
 </p>
-<h3 id="d_latch_b">D_LATCH - Variant B</h3>
+<h3 id="dlatch"><a id="d_latch_b" aria-hidden="true"></a>DLATCH (B)</h3>
 <p>Gated data latch with active-high enable.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: LATCH</p>
 <table>
-<tr><td><img src="img/cells/d_latch_b_zeca_wyno_raxy_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dlatch_zeca_wyno_raxy_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4072,8 +4078,8 @@ high again.</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/d_latch_b_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/d_latch_b_sch.png?v=2" alt=""></p>
+<p><img src="img/cells/dlatch_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/dlatch_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:alor">ALOR</a>
 <a href="/dmg_cpu_b_map/?view=c:alyr">ALYR</a>
@@ -4126,13 +4132,13 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zuve">ZUVE</a>
 (49 total)
 </p>
-<h3 id="dr_latch">DR_LATCH</h3>
-<p>Gated data latch with complementary enable inputs and active-low reset.</p>
+<h3 id="drlatch_ee"><a id="dr_latch" aria-hidden="true"></a>DRLATCH_EE</h3>
+<p>Gated data latch with externally inverted enable inputs and active-low reset.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted enable signal.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
-<tr><td><img src="img/cells/dr_latch_xepe_daty_cyxu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/drlatch_ee_xepe_daty_cyxu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4152,8 +4158,8 @@ high again.</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/dr_latch_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/dr_latch_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/drlatch_ee_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/drlatch_ee_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:adek">ADEK</a>
 <a href="/dmg_cpu_b_map/?view=c:adyk">ADYK</a>
@@ -4395,18 +4401,18 @@ high again.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zyjo">ZYJO</a>
 (238 total)
 </p>
-<h3 id="dffr_a">DFFR - Variant A</h3>
-<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<h3 id="dffr_cc_q"><a id="dffr_a" aria-hidden="true"></a>DFFR_CC_Q (A)</h3>
+<p>Single-edge-triggered data flip-flop with complementary clock inputs, active-low asynchronous reset, and no inverted output.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>CLK</i> and a negative
 edge of <span style="text-decoration:overline"><i>CLK</i></span>.</p>
 <p>There is one external connection always made on this cell (see pink line in the picture) that is required
 to connect the two <span style="text-decoration:overline"><i>RESET</i></span> inputs.</p>
-<p>This variant is similar to variant B, but it is missing the <span style="text-decoration:overline"><i>Q</i></span>
-output. Furthermore, it is one row shorter.</p>
+<p>This cell type is similar to <a href="#dffr_cc">DFFR_CC</a>, but it is missing the
+<span style="text-decoration:overline"><i>Q</i></span> output. Furthermore, it is one row shorter.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
-<tr><td><img src="img/cells/dffr_a_eter_gyme_powy_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dffr_cc_q_eter_gyme_powy_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4427,8 +4433,8 @@ each other (indicated by the pink line in the picture).</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/dffr_a_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/dffr_a_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/dffr_cc_q_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/dffr_cc_q_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:defa">DEFA</a>
 <a href="/dmg_cpu_b_map/?view=c:dele">DELE</a>
@@ -4462,8 +4468,8 @@ each other (indicated by the pink line in the picture).</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:rawu">RAWU</a>
 (30 total)
 </p>
-<h3 id="dffr_b">DFFR - Variant B</h3>
-<p>Single-edge-triggered data flip-flop with active-low asynchronous reset.</p>
+<h3 id="dffr_cc"><a id="dffr_b" aria-hidden="true"></a>DFFR_CC (B)</h3>
+<p>Single-edge-triggered data flip-flop with complementary clock inputs and active-low asynchronous reset.</p>
 <p>There are two clock inputs to this cell. They need to be inverted towards each other. There is usually an inverter
 cell nearby that generates the inverted clock. The flip-flop triggers on a positive edge of <i>CLK</i> and a negative
 edge of <span style="text-decoration:overline"><i>CLK</i></span>. Sometimes the clock inputs are driven by the <i>Q</i>
@@ -4472,7 +4478,7 @@ and <span style="text-decoration:overline"><i>Q</i></span> outputs of another fl
 to connect the two <span style="text-decoration:overline"><i>RESET</i></span> inputs.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
-<tr><td><img src="img/cells/dffr_b_zuze_dape_xadu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dffr_cc_zuze_dape_xadu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4495,8 +4501,8 @@ each other (indicated by the pink line in the picture).</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/dffr_b_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/dffr_b_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/dffr_cc_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/dffr_cc_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:afer">AFER</a>
 <a href="/dmg_cpu_b_map/?view=c:cagy">CAGY</a>
@@ -4511,11 +4517,11 @@ each other (indicated by the pink line in the picture).</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:zuze">ZUZE</a>
 (11 total)
 </p>
-<h3 id="dffr_b2">DFFR - Variant B2</h3>
+<h3 id="dffr"><a id="dffr_b2" aria-hidden="true"></a>DFFR (B2)</h3>
 <p>Positive-edge-triggered data flip-flop with active-low asynchronous reset.</p>
-<p>This cell is basically the same as variant B but with an extension at the top. This extension inverts
-the clock signal two times to regenerate a possibly degraded clock signal and also provide the complement
-clock in the process.</p>
+<p>This cell is basically the same as <a href="#dffr_cc">DFFR_CC</a> but with an extension at the top. This
+extension inverts the clock signal twice to regenerate a possibly degraded clock and to provide the
+complementary clock in the process.</p>
 <p>There are three external connections always made on this cell (see cyan, green and pink lines in the
 picture). The cyan and green connections feed the positive and negative clocks generated by the extension to
 where they would be connected to if this was a cell of variant B without extension. There is not a single
@@ -4524,7 +4530,7 @@ positive clock edge. The pink connection is required to connect the two
 <span style="text-decoration:overline"><i>RESET</i></span> inputs.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: DTFF</p>
 <table>
-<tr><td><img src="img/cells/dffr_b2_keru_elyn_tufu_desc.png?v=1" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/dffr_keru_elyn_tufu_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -4555,8 +4561,8 @@ to each other (indicated by the pink line in the picture).</td></tr>
 <td>Input receiving the clock from <span style="color:gray"><i>CLK OUT</i></span>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/dffr_b2_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/dffr_b2_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/dffr_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/dffr_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:abel">ABEL</a>
 <a href="/dmg_cpu_b_map/?view=c:acef">ACEF</a>
@@ -4830,9 +4836,9 @@ to each other (indicated by the pink line in the picture).</td></tr>
 <h3 id="dffsr">DFFSR</h3>
 <p>Positive-edge-triggered data flip-flop with active-low asynchronous set and reset.</p>
 <p>There are five big inverters at the bottom of the cell. Two of them are inverting the clock signal two times
-to regenerate a possibly degraded clock signal and also provide the complement clock in the process. The third
+to regenerate a possibly degraded clock and also to provide the complement clock in the process. The third
 one is used to invert the <span style="text-decoration:overline"><i>RESET</i></span> signal. The cell doesn't
-internally connect the outputs of these three inverters anywhere. There are external connections need to be made
+internally connect the outputs of these three inverters anywhere. There are external connections needed to be made
 to connect them to the rest of the cell. The other two inverters are driving the <i>Q</i> and
 <span style="text-decoration:overline"><i>Q</i></span> outputs.</p>
 <p>There are four external connections always made on this cell (see orange, cyan, green and pink
@@ -4886,7 +4892,7 @@ input has priority over <span style="text-decoration:overline"><i>SET</i></span>
 </table></td></tr>
 </table>
 <p><img src="img/cells/dffsr_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/dffsr_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/dffsr_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:axan">AXAN</a>
 <a href="/dmg_cpu_b_map/?view=c:agez">AGEZ</a>
@@ -4973,7 +4979,7 @@ input has priority over <span style="text-decoration:overline"><i>SET</i></span>
 <a href="/dmg_cpu_b_map/?view=c:xete">XETE</a>
 (83 total)
 </p>
-<h3 id="tffd">TFFD</h3>
+<h3 id="tffnl"><a id="tffd" aria-hidden="true"></a>TFFNL</h3>
 <p>Negative-edge-triggered toggle flip-flop with active-high asynchronous data load.</p>
 <p>This flip-flop is used for counters that can be loaded with a value.</p>
 <p>There are four external connections always made on this cell (see orange, cyan, green and pink
@@ -4984,7 +4990,7 @@ negative clock edge. The orange and cyan connections are required to connect the
 <i>LOAD</i> inputs respectively.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: COUNT</p>
 <table>
-<tr><td><img src="img/cells/tffd_kenu_fave_done_desc.png?v=1" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/tffnl_kenu_fave_done_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -5015,8 +5021,8 @@ the picture).</td></tr>
 <td>Input receiving the positive clock from <span style="color:gray"><i>TCLK OUT</i></span>.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/tffd_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/tffd_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/tffnl_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/tffnl_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:akyd">AKYD</a>
 <a href="/dmg_cpu_b_map/?view=c:bacy">BACY</a>
@@ -5117,24 +5123,24 @@ the picture).</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:ruby">RUBY</a>
 (97 total)
 </p>
-<h2 id="io">I/O buffers</h2>
-<h3 id="iobuf_a">IOBUFFER - Variant A</h3>
-<p>Input/output buffer with open-drain/-source capability.</p>
+<h2 id="pad"><a id="io" aria-hidden="true"></a>I/O pads</h2>
+<h3 id="pad_bidir"><a id="iobuf_a" aria-hidden="true"></a>PAD_BIDIR (A)</h3>
+<p>Bidirectional pad with open-drain/-source capability.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the three connections
 face inwards.</p>
 <table>
-<tr><td><img src="img/cells/iobuf_a_mrd_wr_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_bidir_mrd_wr_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>DRV_LOW</i></td>
+<tr><td><i>NDRV</i></td>
 <td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
-<tr><td><i><span style="text-decoration:overline">DRV</span>_HIGH</i></td>
+<tr><td><i><span style="text-decoration:overline">PDRV</span></i></td>
 <td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>INPUT</i></span></td>
 <td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/iobuf_a_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_bidir_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:a0">A0</a>
 <a href="/dmg_cpu_b_map/?view=c:a1">A1</a>
@@ -5159,17 +5165,17 @@ face inwards.</p>
 <a href="/dmg_cpu_b_map/?view=c:~%7Bwr%7D"><span style="text-decoration:overline">WR</span></a>
 (21 total)
 </p>
-<h3 id="iobuf_b">IOBUFFER - Variant B</h3>
-<p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
+<h3 id="pad_bidir_ena_pu"><a id="iobuf_b" aria-hidden="true"></a>PAD_BIDIR_ENA_PU (B)</h3>
+<p>Bidirectional pad with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
 <table>
-<tr><td><img src="img/cells/iobuf_b_sin_p13_sin_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_bidir_ena_pu_sin_p13_sin_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>DRV_LOW</i></td>
+<tr><td><i>NDRV</i></td>
 <td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
-<tr><td><i><span style="text-decoration:overline">DRV</span>_HIGH</i></td>
+<tr><td><i><span style="text-decoration:overline">PDRV</span></i></td>
 <td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><i><span style="text-decoration:overline">ENA</span>_PU</i></td>
 <td>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</td></tr>
@@ -5177,7 +5183,7 @@ face inwards.</p>
 <td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/iobuf_b_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_bidir_ena_pu_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:d0">D0</a>
 <a href="/dmg_cpu_b_map/?view=c:d1">D1</a>
@@ -5202,18 +5208,18 @@ face inwards.</p>
 <a href="/dmg_cpu_b_map/?view=c:sin">SIN</a>
 (21 total)
 </p>
-<h3 id="iobuf_c">IOBUFFER - Variant C</h3>
-<p>Input/output buffer with open-drain/-source capability and optional pull-up resistor.</p>
+<h3 id="pad_bidir_sck"><a id="iobuf_c" aria-hidden="true"></a>PAD_BIDIR_SCK (C)</h3>
+<p>Bidirectional pad with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:sck">SCK</a>. In the die shot this picture was taken
 from, this pin is located at the right-hand side. For consistency across this documentation it is rotated
 here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/iobuf_c_sck_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_bidir_sck_sck_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>DRV_LOW</i></td>
+<tr><td><i>NDRV</i></td>
 <td>Drive low. When high, the I/O pad is actively driven low.</td></tr>
-<tr><td><i><span style="text-decoration:overline">DRV</span>_HIGH</i></td>
+<tr><td><i><span style="text-decoration:overline">PDRV</span></i></td>
 <td>Drive high. When low, the I/O pad is actively driven high.</td></tr>
 <tr><td><i><span style="text-decoration:overline">ENA</span>_PU</i></td>
 <td>Pull-up resistor. When low, a pull-up resistor is connected to the I/O pad.</td></tr>
@@ -5221,58 +5227,58 @@ here (not mirrored!).</p>
 <td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
-<!--<p><img src="img/cells/iobuf_c_sch.png?v=0" alt=""></p>-->
+<!--<p><img src="img/cells/pad_bidir_sck_sch.png?v=0" alt=""></p>-->
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:sck">SCK</a>
 (1 total)
 </p>
-<h3 id="ibuf_a">IBUFFER - Variant A</h3>
-<p>Simple inverting input buffer.</p>
+<h3 id="pad_in"><a id="ibuf_a" aria-hidden="true"></a>PAD_IN (A)</h3>
+<p>Simple inverting input pad.</p>
 <p>This cell is only used for
 <a href="/dmg_cpu_b_map/?view=c:~%7Breset%7D"><span style="text-decoration:overline">RESET</span></a>,
 <a href="/dmg_cpu_b_map/?view=c:t1">T1</a> and <a href="/dmg_cpu_b_map/?view=c:t2">T2</a>.
 In the die shot this picture was taken from, these pins are located at the right-hand side. For consistency
 across this documentation it is rotated here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/ibuf_a_rst_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_in_rst_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>INPUT</i></span></td>
 <td>Inverted input state. Reads the inverted binary level at the input pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ibuf_a_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/ibuf_a_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/pad_in_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_in_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:~%7Breset%7D"><span style="text-decoration:overline">RESET</span></a>
 <a href="/dmg_cpu_b_map/?view=c:t1">T1</a>
 <a href="/dmg_cpu_b_map/?view=c:t2">T2</a>
 (3 total)
 </p>
-<h3 id="ibuf_b">IBUFFER - Variant B</h3>
-<p>Simple inverting input buffer with pull-up resistor.</p>
+<h3 id="pad_in_pu"><a id="ibuf_b" aria-hidden="true"></a>PAD_IN_PU (B)</h3>
+<p>Simple inverting input pad with pull-up resistor.</p>
 <p>This cell is only used for the un-bonded
 <a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a> pad.</p>
 <table>
-<tr><td><img src="img/cells/ibuf_b_nmi_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_in_pu_nmi_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>INPUT</i></span></td>
 <td>Inverted input state. Reads the inverted binary level at the input pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/ibuf_b_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/ibuf_b_sch.png?v=1" alt=""></p>
+<p><img src="img/cells/pad_in_pu_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_in_pu_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:~%7Bnmi%7D"><span style="text-decoration:overline">NMI</span></a>
 (1 total)
 </p>
-<h3 id="obuf_a">OBUFFER - Variant A</h3>
-<p>Simple inverting output buffer.</p>
+<h3 id="pad_out"><a id="obuf_a" aria-hidden="true"></a>PAD_OUT (A)</h3>
+<p>Simple inverting output pad.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the connection
 faces inwards.</p>
 <table>
-<tr><td><img src="img/cells/obuf_a_s_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_out_s_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>OUTPUT</i></span></td>
@@ -5281,7 +5287,7 @@ low, and it's driven low when <span style="text-decoration:overline"><i>OUTPUT</
 always actively driven.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/obuf_a_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_out_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:cp">CP</a>
 <a href="/dmg_cpu_b_map/?view=c:cpg">CPG</a>
@@ -5310,40 +5316,40 @@ always actively driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:st">ST</a>
 (25 total)
 </p>
-<h3 id="obuf_b">OBUFFER - Variant B</h3>
-<p>Output buffer with open-drain/-source capability.</p>
+<h3 id="pad_out_diff"><a id="obuf_b" aria-hidden="true"></a>PAD_OUT_DIFF (B)</h3>
+<p>Output pad with open-drain/-source capability.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:p14">P14</a> and
 <a href="/dmg_cpu_b_map/?view=c:p15">P15</a>. In the die shot this picture was taken from, these pins are located in
 the bottom right corner. For consistency across this documentation it is rotated here (not mirrored!). Keep
-that in mind, especially for P14, where the <i><span style="text-decoration:overline">DRV</span>_HIGH</i> connection
-is at the top and <i>DRV_LOW</i> is at the bottom.</p>
+that in mind, especially for P14, where the <i><span style="text-decoration:overline">PDRV</span></i> connection
+is at the top and <i>NDRV</i> is at the bottom.</p>
 <table>
-<tr><td><img src="img/cells/obuf_b_p14_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_out_diff_p14_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>DRV_LOW</i></td>
+<tr><td><i>NDRV</i></td>
 <td>Drive low. When high, the output pad is actively driven low.</td></tr>
-<tr><td><i><span style="text-decoration:overline">DRV</span>_HIGH</i></td>
+<tr><td><i><span style="text-decoration:overline">PDRV</span></i></td>
 <td>Drive high. When low, the output pad is actively driven high.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/obuf_b_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_out_diff_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:p14">P14</a>
 <a href="/dmg_cpu_b_map/?view=c:p15">P15</a>
 (2 total)
 </p>
-<h3 id="osc">OSC</h3>
+<h3 id="pad_xtal"><a id="osc" aria-hidden="true"></a>PAD_XTAL</h3>
 <p>Oscillator input and output pads for connecting external crystal.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:ck1_ck2">CK1/CK2</a>. In the die shot this picture was
 taken from, these pins are located at the right-hand side. For consistency across this documentation it is
 rotated here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/osc_ck1_ck2_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_xtal_ck1_ck2_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
-<td>Clock. Provides the source clock for the system. The input buffer is inverting:
+<td>Clock. Provides the source clock for the system. The input is inverting:
 <span style="text-decoration:overline"><i>CLK</i></span> has the inverse state of input pad
 <a href="/dmg_cpu_b_map/?view=c:ck1_ck2">CK1</a>.</td></tr>
 <tr><td><i>ENA</i></td>
@@ -5351,21 +5357,21 @@ rotated here (not mirrored!).</p>
 to stop the crystal oscillator (to save power) until a button gets pressed.</td></tr>
 </table></td></tr>
 </table>
-<!--<p><img src="img/cells/osc_sch.png?v=0" alt=""></p>-->
+<!--<p><img src="img/cells/pad_xtal_sch.png?v=0" alt=""></p>-->
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:ck1_ck2">CK1/CK2</a>
 (1 total)
 </p>
-<h3 id="aibuf">AIBUFFER</h3>
-<p>Analog input buffer.</p>
+<h3 id="pad_in_an"><a id="aibuf" aria-hidden="true"></a>PAD_IN_AN</h3>
+<p>Analog input pad.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>. In the die shot this picture was taken
 from, this pin is located at the bottom right. For consistency across this documentation it is rotated here (not
 mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/aibuf_vin_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_in_an_vin_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>VIN</i></td>
+<tr><td><i>INPUT</i></td>
 <td>Analog input. Reads the current analog level at the input pad.</td></tr>
 </table></td></tr>
 </table>
@@ -5373,16 +5379,16 @@ mirrored!).</p>
 <a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>
 (1 total)
 </p>
-<h3 id="aobuf">AOBUFFER</h3>
-<p>Analog output buffer.</p>
+<h3 id="pad_out_an"><a id="aobuf" aria-hidden="true"></a>PAD_OUT_AN</h3>
+<p>Analog output pad.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:so1">SO1 (ROUT)</a> and
 <a href="/dmg_cpu_b_map/?view=c:so2">SO2 (LOUT)</a>. In the die shot this picture was taken from, these pins are located
 at the bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/aobuf_so2_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_out_an_so2_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>VOUT</i></td>
+<tr><td><i>OUTPUT</i></td>
 <td>Analog output. Drives the output pad based on this analog level. The pad is always actively driven.</td></tr>
 </table></td></tr>
 </table>
@@ -5392,7 +5398,7 @@ at the bottom right. For consistency across this documentation it is rotated her
 (2 total)
 </p>
 <h2 id="other">Other</h2>
-<h3 id="const">CONST</h3>
+<h3 id="tie"><a id="const" aria-hidden="true"></a>TIE</h3>
 <p>Constant supply.</p>
 <p>The outputs of this cell are hardwired to VDD and GND. It is used to provide constant 1 and 0 signals to other
 cells. For example, it is used for the interrupt flags register: The <a href="/dmg_cpu_b_map/?view=c:pesu">PESU</a>
@@ -5401,7 +5407,7 @@ cell feeds a constant 1 into the data inputs of flip-flops (<a href="/dmg_cpu_b_
 by an interrupt, the constant 1 gets clocked in.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: INVERTER? or BUFFER?</p>
 <table>
-<tr><td><img src="img/cells/const_bohy_wefe_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/tie_bohy_wefe_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>0</i></td>
@@ -5410,8 +5416,8 @@ by an interrupt, the constant 1 gets clocked in.</p>
 <td>Constant 1 output. Connects to VDD.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/const_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/const_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/tie_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/tie_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:bohy">BOHY</a>
 <a href="/dmg_cpu_b_map/?view=c:pesu">PESU</a>
@@ -5462,7 +5468,7 @@ To change bit to a one, <span style="text-decoration:overline"><i>BL</i></span> 
 </table></td></tr>
 </table>
 <p><img src="img/cells/sram_bit_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/sram_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_bit_sch.png?v=1" alt=""></p>
 <p>Bit line precharger description:</p>
 <table>
 <tr><td><img src="img/cells/sram_pch_desc.png?v=1" style="min-width:350px;" alt=""></td>
@@ -5477,7 +5483,7 @@ driven high.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/sram_pch_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/sram_pch_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_pch_sch.png?v=1" alt=""></p>
 <p>Word line driver description:</p>
 <table>
 <tr><td><img src="img/cells/sram_wldrv_desc.png?v=1" style="min-width:280px;" alt=""></td>
@@ -5499,7 +5505,7 @@ then <i>WL</i> is driven low.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/sram_wldrv_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/sram_wldrv_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_wldrv_sch.png?v=1" alt=""></p>
 <p>Sense amplifier, write logic and column muxer description - Variant A (used in HRAM and OAM):</p>
 <table>
 <tr><td><img src="img/cells/sram_sa_a_desc.png?v=1" style="min-width:350px;" alt=""></td>
@@ -5538,7 +5544,7 @@ gets strongly driven low, causing the selected memory cell to flip to "one" stat
 </table></td></tr>
 </table>
 <p><img src="img/cells/sram_sa_a_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/sram_sa_a_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_sa_a_sch.png?v=1" alt=""></p>
 <p>Sense amplifier, write logic and column muxer description - Variant B (used in Wave RAM):</p>
 <table>
 <tr><td><img src="img/cells/sram_sa_b_desc.png?v=1" style="min-width:350px;" alt=""></td>
@@ -5572,7 +5578,7 @@ low, causing the selected memory cell to flip to "one" state.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/sram_sa_b_layout.png?v=1" alt=""></p>
-<p><img src="img/cells/sram_sa_b_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sram_sa_b_sch.png?v=1" alt=""></p>
 <h4 id="wave_ram">WAVE_RAM</h4>
 <p>16 byte SRAM, organized in four rows and four columns for each of the eight bits.</p>
 <p>Position of all the I/Os of the Wave RAM:</p>
@@ -5604,7 +5610,7 @@ contains a zero. Zero bits have a NMOS transistor.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/rom_bits_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/rom_bits_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_bits_sch.png?v=1" alt=""></p>
 <p>Row selector description:</p>
 <table>
 <tr><td><img src="img/cells/rom_rowsel_desc.png?v=0" style="min-width:300px;" alt=""></td>
@@ -5625,7 +5631,7 @@ the same time. Together with <i>A[2..3]</i>, selects one of the sixteen word lin
 </table></td></tr>
 </table>
 <p><img src="img/cells/rom_rowsel_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/rom_rowsel_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_rowsel_sch.png?v=1" alt=""></p>
 <p>Word line precharger description:</p>
 <table>
 <tr><td><img src="img/cells/rom_pch_desc.png?v=0" style="min-width:150px;" alt=""></td>
@@ -5638,7 +5644,7 @@ the same time. Together with <i>A[2..3]</i>, selects one of the sixteen word lin
 </table></td></tr>
 </table>
 <p><img src="img/cells/rom_pch_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/rom_pch_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_pch_sch.png?v=1" alt=""></p>
 <p>Sense amplifier and column muxer description:</p>
 <table>
 <tr><td><img src="img/cells/rom_sa_desc.png?v=0" style="min-width:350px;" alt=""></td>
@@ -5667,7 +5673,7 @@ and <i>A[6..7]</i>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/rom_sa_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/rom_sa_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/rom_sa_sch.png?v=1" alt=""></p>
 <h4 id="boot_rom">BOOT_ROM</h4>
 <p>256 byte masked ROM, organized in 16 rows and 16 columns for each of the eight bits.</p>
 <p>Position of all the I/Os of the Boot ROM:</p>
