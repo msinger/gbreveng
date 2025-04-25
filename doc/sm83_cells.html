@@ -49,6 +49,8 @@
    <li><a href="#not">NOT gates</a>
     <ul>
      <li><a href="#not_a">NOT_A</a></li>
+     <li><a href="#not_b">NOT_B</a></li>
+     <li><a href="#not_x3_p2">NOT_X3_P2</a></li>
      <li><a href="#not_reg">NOT_REG</a></li>
      <li><a href="#not2_idu">NOT2_IDU</a></li>
      <li><a href="#not5_irq">NOT5_IRQ</a></li>
@@ -88,6 +90,7 @@
      <li><a href="#nand2_a">NAND2_A</a></li>
      <li><a href="#nand2_b">NAND2_B</a></li>
      <li><a href="#nand2_c">NAND2_C</a></li>
+     <li><a href="#nand2_d">NAND2_D</a></li>
      <li><a href="#nand2_nand3_od_irq">NAND2_NAND3_OD_IRQ</a></li>
      <li><a href="#reg_a_out">REG_A_OUT</a></li>
     </ul>
@@ -95,12 +98,15 @@
    <li><a href="#nor">NOR gates</a>
     <ul>
      <li><a href="#nor2_a">NOR2_A</a></li>
+     <li><a href="#nor2_b">NOR2_B</a></li>
      <li><a href="#nor4_in2_n_in4_n">NOR4_IN2_N_IN4_N</a></li>
      <li><a href="#nor2_pch_in1_dec3">NOR2_PCH_IN1_DEC3</a></li>
     </ul>
    </li>
    <li><a href="#and">AND gates</a>
     <ul>
+     <li><a href="#and2">AND2</a></li>
+     <li><a href="#and3">AND3</a></li>
      <li><a href="#and2_reg">AND2_REG</a></li>
      <li><a href="#and2_and3_reg">AND2_AND3_REG</a></li>
     </ul>
@@ -194,6 +200,42 @@
 <p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:zgna">ZGNA</a>
+(1 total)
+</p>
+<h4 id="not_b">NOT_B</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/not_b_zudn_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/not_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:zudn">ZUDN</a>
+(1 total)
+</p>
+<h4 id="not_x3_p2">NOT_X3_P2</h4>
+<p>Inverter with 3&times; drive strength and a PMOS-to-NMOS size ratio of 2:1.</p>
+<table>
+<tr><td><img src="img/cells/sm83/not_x3_p2_zjbf_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/not_x3_p2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:zjbf">ZJBF</a>
 (1 total)
 </p>
 <h4 id="not_reg">NOT_REG</h4>
@@ -995,6 +1037,24 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:zaoc">ZAOC</a>
 (1 total)
 </p>
+<h4 id="nand2_d">NAND2_D</h4>
+<p>NAND gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nand2_d_ziks_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NAND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nand2_d_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nand2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:ziks">ZIKS</a>
+(1 total)
+</p>
 <h4 id="nand2_nand3_od_irq">NAND2_NAND3_OD_IRQ</h4>
 <p>NAND gate with two inputs and open-drain NAND gate with three inputs.</p>
 <table>
@@ -1074,6 +1134,24 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:zowa">ZOWA</a>
 (1 total)
 </p>
+<h4 id="nor2_b">NOR2_B</h4>
+<p>NOR gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor2_b_zwlm_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NOR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor2_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:zwlm">ZWLM</a>
+(1 total)
+</p>
 <h4 id="nor4_in2_n_in4_n">NOR4_IN2_N_IN4_N</h4>
 <p>NOR gate with four inputs, two of them inverted.</p>
 <table>
@@ -1120,6 +1198,42 @@ connected to the input.</td></tr>
 (2 total)
 </p>
 <h3 id="and">AND gates</h3>
+<h4 id="and2">AND2</h4>
+<p>AND gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/and2_ziul_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to AND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/and2_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/and2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:ziul">ZIUL</a>
+(1 total)
+</p>
+<h4 id="and3">AND3</h4>
+<p>AND gate with three inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/and3_zyoc_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
+<td>Inputs to AND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i> &amp;&amp; <i>IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/and3_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/and3_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:zyoc">ZYOC</a>
+(1 total)
+</p>
 <h4 id="and2_reg">AND2_REG</h4>
 <p>AND gate with two inputs.</p>
 <table>
