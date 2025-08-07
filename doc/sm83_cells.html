@@ -50,6 +50,7 @@
     <ul>
      <li><a href="#not_a">NOT_A</a></li>
      <li><a href="#not_b">NOT_B</a></li>
+     <li><a href="#not_c">NOT_C</a></li>
      <li><a href="#not_x3_p2">NOT_X3_P2</a></li>
      <li><a href="#not_reg">NOT_REG</a></li>
      <li><a href="#not2_idu">NOT2_IDU</a></li>
@@ -99,6 +100,8 @@
     <ul>
      <li><a href="#nor2_a">NOR2_A</a></li>
      <li><a href="#nor2_b">NOR2_B</a></li>
+     <li><a href="#nor2_c">NOR2_C</a></li>
+     <li><a href="#nor2_in2_n">NOR2_IN2_N</a></li>
      <li><a href="#nor4_in2_n_in4_n">NOR4_IN2_N_IN4_N</a></li>
      <li><a href="#nor2_pch_in1_dec3">NOR2_PCH_IN1_DEC3</a></li>
     </ul>
@@ -115,6 +118,8 @@
     <ul>
      <li><a href="#or2_a">OR2_A</a></li>
      <li><a href="#or2_b">OR2_B</a></li>
+     <li><a href="#or3_a">OR3_A</a></li>
+     <li><a href="#or3_b">OR3_B</a></li>
      <li><a href="#or2_tap_nor_tap_in1_n_reg">OR2_TAP_NOR_TAP_IN1_N_REG</a></li>
     </ul>
    </li>
@@ -128,8 +133,10 @@
  </li>
  <li><a href="#compound">Compound logic gates</a>
   <ul>
+   <li><a href="#aoi21_a">AOI21_A</a></li>
    <li><a href="#aoi331_s3">AOI331_S3</a></li>
    <li><a href="#ao33_s3_tap_in1_n">AO33_S3_TAP_IN1_N</a></li>
+   <li><a href="#oai21">OAI21</a></li>
    <li><a href="#oa21_reg">OA21_REG</a></li>
    <li><a href="#oa211_in1_n_in3_n">OA211_IN1_N_IN3_N</a></li>
    <li><a href="#mux_idu_h">MUX_IDU_H</a></li>
@@ -169,8 +176,11 @@
  <li><a href="#ff">Storage elements</a>
   <ul>
    <li><a href="#srlatch_r_n">SRLATCH_R_N</a></li>
+   <li><a href="#srlatch_r_n_alt">SRLATCH_R_N_ALT</a></li>
+   <li><a href="#dlatch_q">DLATCH_Q</a></li>
    <li><a href="#dlatch_irq">DLATCH_IRQ</a></li>
    <li><a href="#dff_cc_q">DFF_CC_Q</a></li>
+   <li><a href="#dff_cc_q_alt">DFF_CC_Q_ALT</a></li>
    <li><a href="#dffge_x1_reg_bit">DFFGE_X1_REG_BIT</a></li>
    <li><a href="#dffge_x2_reg_bit">DFFGE_X2_REG_BIT</a></li>
    <li><a href="#dffge_reg_sp_bit">DFFGE_REG_SP_BIT</a></li>
@@ -218,6 +228,24 @@
 <p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:zudn">ZUDN</a>
+(1 total)
+</p>
+<h4 id="not_c">NOT_C</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/not_c_yepj_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/not_c_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:yepj">YEPJ</a>
 (1 total)
 </p>
 <h4 id="not_x3_p2">NOT_X3_P2</h4>
@@ -1152,6 +1180,44 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:zwlm">ZWLM</a>
 (1 total)
 </p>
+<h4 id="nor2_c">NOR2_C</h4>
+<p>NOR gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor2_c_yniu_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NOR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor2_c_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:yniu">YNIU</a>
+(1 total)
+</p>
+<h4 id="nor2_in2_n">NOR2_IN2_N</h4>
+<p>NOR gate with two inputs, one of them inverted.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor2_in2_n_yolu_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i></td>
+<td>Non-inverted input to NOR gate.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>IN2</i></span></td>
+<td>Inverted input to NOR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> || !<span style="text-decoration:overline"><i>IN2</i></span>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor2_in2_n_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor2_in2_n_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:yolu">YOLU</a>
+(1 total)
+</p>
 <h4 id="nor4_in2_n_in4_n">NOR4_IN2_N_IN4_N</h4>
 <p>NOR gate with four inputs, two of them inverted.</p>
 <table>
@@ -1164,7 +1230,7 @@ connected to the input.</td></tr>
 <span style="text-decoration:overline"><i>IN4</i></span></td>
 <td>Inverted inputs to NOR gate.</td></tr>
 <tr><td><i>Y</i></td>
-<td>Outputs <code>!(<i>IN1</i> || <span style="text-decoration:overline"><i>IN2</i></span> || <i>IN3</i> || <span style="text-decoration:overline"><i>IN4</i></span>)</code>.</td></tr>
+<td>Outputs <code>!(<i>IN1</i> || !<span style="text-decoration:overline"><i>IN2</i></span> || <i>IN3</i> || !<span style="text-decoration:overline"><i>IN4</i></span>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/sm83/nor4_in2_n_in4_n_layout.png?v=0" alt=""></p>
@@ -1311,6 +1377,42 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:zfex">ZFEX</a>
 (1 total)
 </p>
+<h4 id="or3_a">OR3_A</h4>
+<p>OR gate with three inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/or3_a_ynoz_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
+<td>Inputs to OR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>(<i>IN1</i> || <i>IN2</i> || <i>IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/or3_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/or3_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:ynoz">YNOZ</a>
+(1 total)
+</p>
+<h4 id="or3_b">OR3_B</h4>
+<p>OR gate with three inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/or3_b_ycnf_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i></td>
+<td>Inputs to OR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>(<i>IN1</i> || <i>IN2</i> || <i>IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/or3_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/or3_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:ycnf">YCNF</a>
+(1 total)
+</p>
 <h4 id="or2_tap_nor_tap_in1_n_reg">OR2_TAP_NOR_TAP_IN1_N_REG</h4>
 <p>OR gate with two inputs, tap on intermediate NOR, and inverting tap on <i>IN1</i>.</p>
 <table>
@@ -1390,6 +1492,26 @@ to connect the two <i>IN1</i> inputs.</p>
 (8 total)
 </p>
 <h2 id="compound">Compound logic gates</h2>
+<h3 id="aoi21_a">AOI21_A</h3>
+<p>2-1 AND-OR-INVERT two-level compound gate.</p>
+<table>
+<tr><td><img src="img/cells/sm83/aoi21_a_yneu_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to AND gate.</td></tr>
+<tr><td><i>IN3</i></td>
+<td>Input to OR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!((<i>IN1</i> &amp;&amp; <i>IN2</i>) || <i>IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/aoi21_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/aoi21_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:yneu">YNEU</a>
+(1 total)
+</p>
 <h3 id="aoi331_s3">AOI331_S3</h3>
 <p>3-3-1 AND-OR-INVERT two-level compound gate with shared <i>IN3</i>.</p>
 <table>
@@ -1430,6 +1552,26 @@ to connect the two <i>IN1</i> inputs.</p>
 <a href="/sm83_map/?view=c:zbpp">ZBPP</a>
 (1 total)
 </p>
+<h3 id="oai21">OAI21</h3>
+<p>2-1 OR-AND-INVERT two-level compound gate.</p>
+<table>
+<tr><td><img src="img/cells/sm83/oai21_ykua_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to OR gate.</td></tr>
+<tr><td><i>IN3</i></td>
+<td>Input to AND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!((<i>IN1</i> || <i>IN2</i>) &amp;&amp; <i>IN3</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/oai21_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/oai21_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:ykua">YKUA</a>
+(1 total)
+</p>
 <h3 id="oa21_reg">OA21_REG</h3>
 <p>2-1 OR-AND two-level compound gate.</p>
 <table>
@@ -1466,7 +1608,7 @@ to connect the two <i>IN1</i> inputs.</p>
 <tr><td><i>IN4</i></td>
 <td>Non-inverted input to AND gate.</td></tr>
 <tr><td><i>Y</i></td>
-<td>Outputs <code>((<span style="text-decoration:overline"><i>IN1</i></span> || <i>IN2</i>) &amp;&amp; <span style="text-decoration:overline"><i>IN3</i></span> &amp;&amp; <i>IN4</i>)</code>.</td></tr>
+<td>Outputs <code>((!<span style="text-decoration:overline"><i>IN1</i></span> || <i>IN2</i>) &amp;&amp; !<span style="text-decoration:overline"><i>IN3</i></span> &amp;&amp; <i>IN4</i>)</code>.</td></tr>
 </table></td></tr>
 </table>
 <p><img src="img/cells/sm83/oa211_in1_n_in3_n_layout.png?v=0" alt=""></p>
@@ -2156,7 +2298,59 @@ are asserted.</p>
 <p><img src="img/cells/sm83/srlatch_r_n_layout.png?v=0" alt=""></p>
 <p><img src="img/cells/sm83/srlatch_r_n_sch.png?v=0" alt=""></p>
 <p>Instances:
-TODO: Add instances
+<a href="/sm83_map/?view=c:zjje">ZJJE</a>,
+<a href="/sm83_map/?view=c:zkog">ZKOG</a>,
+<a href="/sm83_map/?view=c:zloz">ZLOZ</a>,
+<a href="/sm83_map/?view=c:zojz">ZOJZ</a>,
+<a href="/sm83_map/?view=c:zrsy">ZRSY</a>,
+<a href="/sm83_map/?view=c:zumn">ZUMN</a>
+(6 total)
+</p>
+<h3 id="srlatch_r_n_alt">SRLATCH_R_N_ALT</h3>
+<p>SR-latch with active-high set input and active-low reset input. Reset takes precedence when both inputs
+are asserted.</p>
+<table>
+<tr><td><img src="img/cells/sm83/srlatch_r_n_alt_ynkw_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>SET</i></td>
+<td>Set input. When high, latch is set to 1. Has no effect when
+<span style="text-decoration:overline"><i>RESET</i></span> is low at the same time.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>RESET</i></span></td>
+<td>Inverted reset input. When low, latch is set to 0.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/srlatch_r_n_alt_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/srlatch_r_n_alt_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:ynkw">YNKW</a>
+(1 total)
+</p>
+<h3 id="dlatch_q">DLATCH_Q</h3>
+<p>Gated data latch with no inverted output.</p>
+<table>
+<tr><td><img src="img/cells/sm83/dlatch_q_yodp_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input.</td></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. When high, the value at <i>D</i> transparently propagates through the latch. As soon
+as <i>ENA</i> goes low, the output of the latch gets held at the level it had in that moment until <i>ENA</i> goes
+high again.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
+<td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dlatch_q_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_q_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:yodp">YODP</a>
+(1 total)
 </p>
 <h3 id="dlatch_irq">DLATCH_IRQ</h3>
 <p>Gated data latch with additional dynamically controlled inverted output.</p>
@@ -2231,7 +2425,53 @@ to each other (indicated by the pink line in the picture).</td></tr>
 <p><img src="img/cells/sm83/dff_cc_q_layout.png?v=0" alt=""></p>
 <p><img src="img/cells/sm83/dff_cc_q_sch.png?v=0" alt=""></p>
 <p>Instances:
-TODO: Add instances
+<a href="/sm83_map/?view=c:xaym">XAYM</a>,
+<a href="/sm83_map/?view=c:xdqf">XDQF</a>,
+<a href="/sm83_map/?view=c:xirf">XIRF</a>,
+<a href="/sm83_map/?view=c:xogs">XOGS</a>,
+<a href="/sm83_map/?view=c:ydxa">YDXA</a>,
+<a href="/sm83_map/?view=c:yoii">YOII</a>,
+<a href="/sm83_map/?view=c:ysbt">YSBT</a>,
+<a href="/sm83_map/?view=c:zacw">ZACW</a>,
+<a href="/sm83_map/?view=c:zaza">ZAZA</a>,
+<a href="/sm83_map/?view=c:zivv">ZIVV</a>,
+<a href="/sm83_map/?view=c:zkai">ZKAI</a>,
+<a href="/sm83_map/?view=c:zkdu">ZKDU</a>,
+<a href="/sm83_map/?view=c:zorp">ZORP</a>,
+<a href="/sm83_map/?view=c:zrby">ZRBY</a>
+(14 total)
+</p>
+<h3 id="dff_cc_q_alt">DFF_CC_Q_ALT</h3>
+<p>Single-edge-triggered data flip-flop with complementary clock inputs and no inverted output.</p>
+<p>There are two clock inputs to this cell. They need to be inverted towards each other. The flip-flop triggers
+on a positive edge of <i>CLK</i> and a negative edge of <span style="text-decoration:overline"><i>CLK</i></span>.</p>
+<p>There are two external connections always made on this cell (see pink and orange lines in the picture).</p>
+<table>
+<tr><td><img src="img/cells/sm83/dff_cc_q_alt_xufu_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D</i></td>
+<td>Data input. Gets stored in the flip-flop on positive edge of <i>CLK</i> and a simultanious negative edge of
+<span style="text-decoration:overline"><i>CLK</i></span>.</td></tr>
+<tr><td><i>CLK</i></td>
+<td>Positive clock input. On a positive edge the data input <i>D</i> gets stored in the flip-flop. There needs
+to be a negative edge on the <span style="text-decoration:overline"><i>CLK</i></span> input at the same time.
+There are two <i>CLK</i> inputs to this cell, which are externally connected to each other (indicated by the
+orange line in the picture).</td></tr>
+<tr><td><span style="text-decoration:overline"><i>CLK</i></span></td>
+<td>Negative clock input. On a negative edge the data input <i>D</i> gets stored in the flip-flop. There needs
+to be a positive edge on the <i>CLK</i> input at the same time. There are two
+<span style="text-decoration:overline"><i>CLK</i></span> inputs to this cell, which are externally connected
+to each other (indicated by the pink line in the picture).</td></tr>
+<tr><td><i>Q</i></td>
+<td>Data output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/dff_cc_q_alt_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_q_alt_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:xufu">XUFU</a>
+(1 total)
 </p>
 <h3 id="dffge_x1_reg_bit">DFFGE_X1_REG_BIT</h3>
 <p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and no inverted output.</p>
