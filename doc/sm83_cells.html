@@ -177,18 +177,18 @@
   <ul>
    <li><a href="#srlatch_r_n">SRLATCH_R_N</a></li>
    <li><a href="#srlatch_r_n_alt">SRLATCH_R_N_ALT</a></li>
-   <li><a href="#dlatch_q">DLATCH_Q</a></li>
-   <li><a href="#dlatch_irq">DLATCH_IRQ</a></li>
+   <li><a href="#dlatch_ee_q">DLATCH_EE_Q</a></li>
+   <li><a href="#dlatch_ee_irq">DLATCH_EE_IRQ</a></li>
    <li><a href="#dff_cc_q">DFF_CC_Q</a></li>
    <li><a href="#dff_cc_q_alt">DFF_CC_Q_ALT</a></li>
-   <li><a href="#dffge_x1_reg_bit">DFFGE_X1_REG_BIT</a></li>
-   <li><a href="#dffge_x2_reg_bit">DFFGE_X2_REG_BIT</a></li>
-   <li><a href="#dffge_reg_sp_bit">DFFGE_REG_SP_BIT</a></li>
-   <li><a href="#dffge_reg_wz_bit">DFFGE_REG_WZ_BIT</a></li>
-   <li><a href="#dffgre_reg_ie_bit">DFFGRE_REG_IE_BIT</a></li>
-   <li><a href="#dffgse_reg_pc_bit">DFFGSE_REG_PC_BIT</a></li>
-   <li><a href="#dffnge_alu_flag">DFFNGE_ALU_FLAG</a></li>
-   <li><a href="#dffnge_alu_tmp">DFFNGE_ALU_TMP</a></li>
+   <li><a href="#dff_cc_ee_q_x1_reg_bit">DFF_CC_EE_Q_X1_REG_BIT</a></li>
+   <li><a href="#dff_cc_ee_q_x2_reg_bit">DFF_CC_EE_Q_X2_REG_BIT</a></li>
+   <li><a href="#dff_cc_ee_pch_d_reg_sp_bit">DFF_CC_EE_PCH_D_REG_SP_BIT</a></li>
+   <li><a href="#dff_cc_ee_q_n_reg_wz_bit">DFF_CC_EE_Q_N_REG_WZ_BIT</a></li>
+   <li><a href="#dffr_cc_ee_reg_ie_bit">DFFR_CC_EE_REG_IE_BIT</a></li>
+   <li><a href="#dffs_cc_ee_pch_d_reg_pc_bit">DFFS_CC_EE_PCH_D_REG_PC_BIT</a></li>
+   <li><a href="#dffn_ee_pch_d_alu_flag">DFFN_EE_PCH_D_ALU_FLAG</a></li>
+   <li><a href="#dffn_ee_q_alu_tmp">DFFN_EE_Q_ALU_TMP</a></li>
   </ul>
  </li>
 </ul>
@@ -2328,10 +2328,11 @@ are asserted.</p>
 <a href="/sm83_map/?view=c:ynkw">YNKW</a>
 (1 total)
 </p>
-<h3 id="dlatch_q">DLATCH_Q</h3>
-<p>Gated data latch with no inverted output.</p>
+<h3 id="dlatch_ee_q">DLATCH_EE_Q</h3>
+<p>Gated data latch with externally inverted enable inputs and no inverted output.</p>
+<p>There are two enable inputs to this cell. They need to be inverted towards each other.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dlatch_q_yodp_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dlatch_ee_q_yodp_desc.png?v=0" style="min-width:250px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2346,16 +2347,17 @@ high again.</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dlatch_q_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dlatch_q_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_ee_q_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_ee_q_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:yodp">YODP</a>
 (1 total)
 </p>
-<h3 id="dlatch_irq">DLATCH_IRQ</h3>
-<p>Gated data latch with additional dynamically controlled inverted output.</p>
+<h3 id="dlatch_ee_irq">DLATCH_EE_IRQ</h3>
+<p>Gated data latch with externally inverted enable inputs and additional dynamically controlled inverted output.</p>
+<p>There are two enable inputs to this cell. They need to be inverted towards each other.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dlatch_irq1_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dlatch_ee_irq1_desc.png?v=0" style="min-width:200px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2383,8 +2385,8 @@ Must be undriven (hi-Z) when <span style="text-decoration:overline"><i>PCH</i></
 low. Must be disabled/high when <span style="text-decoration:overline"><i>ENA_Q</i></span> is enabled/low.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dlatch_irq_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dlatch_irq_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_ee_irq_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_ee_irq_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:irq_latch%5b0%5d">IRQ_LATCH[0]</a>,
 <a href="/sm83_map/?view=c:irq_latch%5b1%5d">IRQ_LATCH[1]</a>,
@@ -2473,10 +2475,11 @@ to each other (indicated by the pink line in the picture).</td></tr>
 <a href="/sm83_map/?view=c:xufu">XUFU</a>
 (1 total)
 </p>
-<h3 id="dffge_x1_reg_bit">DFFGE_X1_REG_BIT</h3>
-<p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and no inverted output.</p>
+<h3 id="dff_cc_ee_q_x1_reg_bit">DFF_CC_EE_Q_X1_REG_BIT</h3>
+<p>Semi-dynamic data flip-flop with complementary clock inputs, externally inverted enable inputs, level-sensitive
+D-gating, and no inverted output.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffge_x1_reg_bit_l3_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dff_cc_ee_q_x1_reg_bit_l3_desc.png?v=0" style="min-width:200px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2498,8 +2501,8 @@ is low.</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffge_x1_reg_bit_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffge_x1_reg_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_q_x1_reg_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_q_x1_reg_bit_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_b%5b0%5d">REG_B[0]</a>,
 <a href="/sm83_map/?view=c:reg_b%5b1%5d">REG_B[1]</a>,
@@ -2551,11 +2554,11 @@ is low.</td></tr>
 <a href="/sm83_map/?view=c:reg_l%5b7%5d">REG_L[7]</a>
 (48 total)
 </p>
-<h3 id="dffge_x2_reg_bit">DFFGE_X2_REG_BIT</h3>
-<p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating, 2&times; drive strength, and
-no inverted output.</p>
+<h3 id="dff_cc_ee_q_x2_reg_bit">DFF_CC_EE_Q_X2_REG_BIT</h3>
+<p>Semi-dynamic data flip-flop with complementary clock inputs, externally inverted enable inputs, level-sensitive
+D-gating, 2&times; drive strength, and no inverted output.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffge_x2_reg_bit_a3_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dff_cc_ee_q_x2_reg_bit_a3_desc.png?v=0" style="min-width:200px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2577,8 +2580,8 @@ is low.</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffge_x2_reg_bit_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffge_x2_reg_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_q_x2_reg_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_q_x2_reg_bit_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_a%5b0%5d">REG_A[0]</a>,
 <a href="/sm83_map/?view=c:reg_a%5b1%5d">REG_A[1]</a>,
@@ -2598,10 +2601,11 @@ is low.</td></tr>
 <a href="/sm83_map/?view=c:reg_ir%5b7%5d">REG_IR[7]</a>
 (16 total)
 </p>
-<h3 id="dffge_reg_sp_bit">DFFGE_REG_SP_BIT</h3>
-<p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and prechargable D input.</p>
+<h3 id="dff_cc_ee_pch_d_reg_sp_bit">DFF_CC_EE_PCH_D_REG_SP_BIT</h3>
+<p>Semi-dynamic data flip-flop with complementary clock inputs, externally inverted enable inputs, level-sensitive
+D-gating, and prechargable D input.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffge_reg_sp_bit_sph1_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dff_cc_ee_pch_d_reg_sp_bit_sph1_desc.png?v=0" style="min-width:220px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2630,8 +2634,8 @@ is low.</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffge_reg_sp_bit_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffge_reg_sp_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_pch_d_reg_sp_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_pch_d_reg_sp_bit_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_sph%5b0%5d">REG_SPH[0]</a>,
 <a href="/sm83_map/?view=c:reg_sph%5b1%5d">REG_SPH[1]</a>,
@@ -2651,10 +2655,11 @@ is low.</td></tr>
 <a href="/sm83_map/?view=c:reg_spl%5b7%5d">REG_SPL[7]</a>
 (16 total)
 </p>
-<h3 id="dffge_reg_wz_bit">DFFGE_REG_WZ_BIT</h3>
-<p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and no non-inverted output.</p>
+<h3 id="dff_cc_ee_q_n_reg_wz_bit">DFF_CC_EE_Q_N_REG_WZ_BIT</h3>
+<p>Semi-dynamic data flip-flop with complementary clock inputs, externally inverted enable inputs, level-sensitive
+D-gating, and no non-inverted output.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffge_reg_wz_bit_z4_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dff_cc_ee_q_n_reg_wz_bit_z4_desc.png?v=0" style="min-width:200px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2678,8 +2683,8 @@ is low.</td></tr>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffge_reg_wz_bit_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffge_reg_wz_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_q_n_reg_wz_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dff_cc_ee_q_n_reg_wz_bit_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_w%5b0%5d">REG_W[0]</a>,
 <a href="/sm83_map/?view=c:reg_w%5b1%5d">REG_W[1]</a>,
@@ -2699,13 +2704,13 @@ is low.</td></tr>
 <a href="/sm83_map/?view=c:reg_z%5b7%5d">REG_Z[7]</a>
 (16 total)
 </p>
-<h3 id="dffgre_reg_ie_bit">DFFGRE_REG_IE_BIT</h3>
-<p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and active-high asynchronous
-reset with clock-gated behavior.</p>
+<h3 id="dffr_cc_ee_reg_ie_bit">DFFR_CC_EE_REG_IE_BIT</h3>
+<p>Semi-dynamic data flip-flop with complementary clock inputs, externally inverted enable inputs, level-sensitive
+D-gating, and active-high reset gated by the clock level.</p>
 <p>There is one external connection always made on this cell (see orange line in the picture) that is required
 to connect the two <i>RESET</i> inputs.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffgre_reg_ie_bit1_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dffr_cc_ee_reg_ie_bit1_desc.png?v=0" style="min-width:250px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2726,18 +2731,17 @@ and <i>RESET</i> are both low.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
 <td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
 <tr><td><i>RESET</i></td>
-<td>Active-high reset input. Data inside the flip-flop gets reset to 0 when <i>RESET</i> is high. However, the change
-is not (yet) visible at the outputs <i>Q</i> and <span style="text-decoration:overline"><i>Q</i></span> while <i>CLK</i>
-is low. There are two <i>RESET</i> inputs to this cell, which are externally connected to each other (indicated by the
-orange line in the picture).</td></tr>
+<td>Active-high reset input. Data inside the flip-flop gets reset to 0 when <i>RESET</i> and <i>CLK</i> are both high.
+Has no effect while <i>CLK</i> is low. There are two <i>RESET</i> inputs to this cell, which are externally connected
+to each other (indicated by the orange line in the picture).</td></tr>
 <tr><td><i>Q</i></td>
 <td>Data output.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffgre_reg_ie_bit_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffgre_reg_ie_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffr_cc_ee_reg_ie_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffr_cc_ee_reg_ie_bit_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_ie%5b0%5d">REG_IE[0]</a>,
 <a href="/sm83_map/?view=c:reg_ie%5b1%5d">REG_IE[1]</a>,
@@ -2749,13 +2753,13 @@ orange line in the picture).</td></tr>
 <a href="/sm83_map/?view=c:reg_ie%5b7%5d">REG_IE[7]</a>
 (8 total)
 </p>
-<h3 id="dffgse_reg_pc_bit">DSFF_REG_PC_BIT</h3>
-<p>Single-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating, prechargable D input,
-and active-low asynchronous set with clock-gated behavior.</p>
+<h3 id="dffs_cc_ee_pch_d_reg_pc_bit">DFFS_CC_EE_PCH_D_REG_PC_BIT</h3>
+<p>Semi-dynamic data flip-flop with complementary clock inputs, externally inverted enable inputs, level-sensitive
+D-gating, prechargable D input, and active-low set gated by the clock level.</p>
 <p>There is one external connection always made on this cell (see orange line in the picture) that is required
 to connect the two <span style="text-decoration:overline"><i>SET</i></span> inputs.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffgse_reg_pc_bit_pch2_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dffs_cc_ee_pch_d_reg_pc_bit_pch2_desc.png?v=0" style="min-width:250px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2782,18 +2786,17 @@ time, otherwise the stored data will decay.</td></tr>
 <td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>SET</i></span></td>
 <td>Active-low set input. Data inside the flip-flop gets set to 1 when
-<span style="text-decoration:overline"><i>SET</i></span> is low. However, the change is not (yet) visible at the
-outputs <i>Q</i> and <span style="text-decoration:overline"><i>Q</i></span> while <i>CLK</i> is low. There are two
-<span style="text-decoration:overline"><i>SET</i></span> inputs to this cell, which are externally connected to
-each other (indicated by the orange line in the picture).</td></tr>
+<span style="text-decoration:overline"><i>SET</i></span> is low and <i>CLK</i> is high. Has no effect while <i>CLK</i>
+is low. There are two <span style="text-decoration:overline"><i>SET</i></span> inputs to this cell, which are
+externally connected to each other (indicated by the orange line in the picture).</td></tr>
 <tr><td><i>Q</i></td>
 <td>Data output.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffgse_reg_pc_bit_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffgse_reg_pc_bit_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffs_cc_ee_pch_d_reg_pc_bit_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffs_cc_ee_pch_d_reg_pc_bit_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_pch%5b0%5d">REG_PCH[0]</a>,
 <a href="/sm83_map/?view=c:reg_pch%5b1%5d">REG_PCH[1]</a>,
@@ -2813,10 +2816,11 @@ each other (indicated by the orange line in the picture).</td></tr>
 <a href="/sm83_map/?view=c:reg_pcl%5b7%5d">REG_PCL[7]</a>
 (16 total)
 </p>
-<h3 id="dffnge_alu_flag">DFFNGE_ALU_FLAG</h3>
-<p>Negative-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and prechargable D input.</p>
+<h3 id="dffn_ee_pch_d_alu_flag">DFFN_EE_PCH_D_ALU_FLAG</h3>
+<p>Semi-dynamic data flip-flop with externally inverted enable inputs, level-sensitive D-gating, and prechargable
+D input.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffnge_alu_flag_n_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dffn_ee_pch_d_alu_flag_n_desc.png?v=0" style="min-width:300px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2846,8 +2850,8 @@ must not be held high for an extended amount of time, otherwise the stored data 
 <td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffnge_alu_flag_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffnge_alu_flag_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffn_ee_pch_d_alu_flag_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffn_ee_pch_d_alu_flag_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:flag_c">FLAG_C</a>,
 <a href="/sm83_map/?view=c:flag_h">FLAG_H</a>,
@@ -2855,10 +2859,11 @@ must not be held high for an extended amount of time, otherwise the stored data 
 <a href="/sm83_map/?view=c:flag_z">FLAG_Z</a>
 (4 total)
 </p>
-<h3 id="dffnge_alu_tmp">DFFNGE_ALU_TMP</h3>
-<p>Negative-edge-triggered semi-dynamic data flip-flop with level-sensitive D-gating and no inverted output.</p>
+<h3 id="dffn_ee_q_alu_tmp">DFFN_EE_Q_ALU_TMP</h3>
+<p>Semi-dynamic data flip-flop with externally inverted enable inputs, level-sensitive D-gating, and no inverted
+output.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffnge_alu_tmp_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dffn_ee_q_alu_tmp_desc.png?v=0" style="min-width:250px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -2881,8 +2886,8 @@ otherwise the stored data will decay.</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffnge_alu_tmp_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffnge_alu_tmp_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffn_ee_q_alu_tmp_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffn_ee_q_alu_tmp_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:alu_dff">ALU_DFF</a>
 (1 total)
