@@ -84,6 +84,7 @@
      <li><a href="#not_p2_dec3_a">NOT_P2_DEC3_A</a></li>
      <li><a href="#not_p2_dec3_b">NOT_P2_DEC3_B</a></li>
      <li><a href="#not_p2_pch_dec3">NOT_P2_PCH_DEC3</a></li>
+     <li><a href="#not_dbus">NOT_DBUS</a></li>
     </ul>
    </li>
    <li><a href="#buf">BUF gates</a>
@@ -102,6 +103,9 @@
      <li><a href="#nand2_in1_n_c">NAND2_IN1_N_C</a></li>
      <li><a href="#nand2_nand3_od_irq">NAND2_NAND3_OD_IRQ</a></li>
      <li><a href="#reg_a_out">REG_A_OUT</a></li>
+     <li><a href="#nand2_od_a_dbus">NAND2_OD_A_DBUS</a></li>
+     <li><a href="#nand2_od_b_dbus">NAND2_OD_B_DBUS</a></li>
+     <li><a href="#nand2_spare">NAND2_SPARE</a></li>
     </ul>
    </li>
    <li><a href="#nor">NOR gates</a>
@@ -115,15 +119,16 @@
      <li><a href="#nor2_in2_n">NOR2_IN2_N</a></li>
      <li><a href="#nor4_in2_n_in4_n">NOR4_IN2_N_IN4_N</a></li>
      <li><a href="#nor2_pch_in1_dec3">NOR2_PCH_IN1_DEC3</a></li>
+     <li><a href="#nor2_spare">NOR2_SPARE</a></li>
     </ul>
    </li>
    <li><a href="#and">AND gates</a>
     <ul>
      <li><a href="#and2">AND2</a></li>
      <li><a href="#and3">AND3</a></li>
+     <li><a href="#and2_in1_n_tap_in1">AND2_IN1_N_TAP_IN1</a></li>
      <li><a href="#and2_reg">AND2_REG</a></li>
      <li><a href="#and2_and3_reg">AND2_AND3_REG</a></li>
-     <li><a href="#and2_in1_n_tap_in1_dec2">AND2_IN1_N_TAP_IN1_DEC2</a></li>
     </ul>
    </li>
    <li><a href="#or">OR gates</a>
@@ -160,6 +165,7 @@
  </li>
  <li><a href="#mixed">Mixed logic cells</a>
   <ul>
+   <li><a href="#b2b_wand_inj_a">B2B_WAND_INJ_A</a></li>
    <li><a href="#idu_bit0">IDU_BIT0</a></li>
    <li><a href="#idu_bit123456">IDU_BIT123456</a></li>
    <li><a href="#idu_bit7">IDU_BIT7</a></li>
@@ -1107,6 +1113,31 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:dec3_not57">DEC3_NOT57</a>
 (12 total)
 </p>
+<h4 id="not_dbus">NOT_DBUS</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/not_dbus2_desc.png?v=0" style="min-width:150px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/not_dbus_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dbus_not%5b0%5d">DBUS_NOT[0]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b1%5d">DBUS_NOT[1]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b2%5d">DBUS_NOT[2]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b3%5d">DBUS_NOT[3]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b4%5d">DBUS_NOT[4]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b5%5d">DBUS_NOT[5]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b6%5d">DBUS_NOT[6]</a>,
+<a href="/sm83_map/?view=c:dbus_not%5b7%5d">DBUS_NOT[7]</a>
+(8 total)
+</p>
 <h3 id="buf">BUF gates</h3>
 <h4 id="buf_dec2">BUF_DEC2</h4>
 <p>Simple buffer.</p>
@@ -1326,6 +1357,68 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:reg_a_out%5b7%5d">REG_A_OUT[7]</a>
 (8 total)
 </p>
+<h4 id="nand2_od_a_dbus">NAND2_OD_A_DBUS</h4>
+<p>Open-drain NAND gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nand2_od_a_dbus4_desc.png?v=0" style="min-width:120px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NAND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Open-drain output. Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nand2_od_a_dbus_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nand2_od_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dbus_nand%5b0%5d">DBUS_NAND[0]</a>,
+<a href="/sm83_map/?view=c:dbus_nand%5b2%5d">DBUS_NAND[2]</a>,
+<a href="/sm83_map/?view=c:dbus_nand%5b4%5d">DBUS_NAND[4]</a>,
+<a href="/sm83_map/?view=c:dbus_nand%5b6%5d">DBUS_NAND[6]</a>
+(4 total)
+</p>
+<h4 id="nand2_od_b_dbus">NAND2_OD_B_DBUS</h4>
+<p>Open-drain NAND gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nand2_od_b_dbus5_desc.png?v=0" style="min-width:120px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NAND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Open-drain output. Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nand2_od_b_dbus_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nand2_od_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dbus_nand%5b1%5d">DBUS_NAND[1]</a>,
+<a href="/sm83_map/?view=c:dbus_nand%5b3%5d">DBUS_NAND[3]</a>,
+<a href="/sm83_map/?view=c:dbus_nand%5b5%5d">DBUS_NAND[5]</a>,
+<a href="/sm83_map/?view=c:dbus_nand%5b7%5d">DBUS_NAND[7]</a>
+(4 total)
+</p>
+<h4 id="nand2_spare">NAND2_SPARE</h4>
+<p>NAND gate with two inputs.</p>
+<p>There is one external connection always made on this cell (see orange line in the picture) that is required
+to connect the two <i>Y</i> outputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nand2_spare_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NAND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nand2_spare_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nand2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:spare_nand">SPARE_NAND</a>
+(1 total)
+</p>
 <h3 id="nor">NOR gates</h3>
 <h4 id="nor2_a">NOR2_A</h4>
 <p>NOR gate with two inputs.</p>
@@ -1500,6 +1593,24 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:dec3_nor2">DEC3_NOR2</a>
 (2 total)
 </p>
+<h4 id="nor2_spare">NOR2_SPARE</h4>
+<p>NOR gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor2_spare_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to NOR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor2_spare_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:spare_nor">SPARE_NOR</a>
+(1 total)
+</p>
 <h3 id="and">AND gates</h3>
 <h4 id="and2">AND2</h4>
 <p>AND gate with two inputs.</p>
@@ -1535,6 +1646,28 @@ connected to the input.</td></tr>
 <p><img src="img/cells/sm83/and3_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:zyoc">ZYOC</a>
+(1 total)
+</p>
+<h4 id="and2_in1_n_tap_in1">AND2_IN1_N_TAP_IN1</h4>
+<p>AND gate with two inputs, inverted first input, and tap after inversion of first input.</p>
+<table>
+<tr><td><img src="img/cells/sm83/and2_in1_n_tap_in1_vequ_desc.png?v=0" style="min-width:200px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>IN1</i></span></td>
+<td>Inverted input to AND gate.</td></tr>
+<tr><td><i>IN2</i></td>
+<td>Non-inverted input to AND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>(!<span style="text-decoration:overline"><i>IN1</i></span> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+<tr><td><i>TAP_IN1</i></td>
+<td>Outputs inverted <span style="text-decoration:overline"><i>IN1</i></span>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/and2_in1_n_tap_in1_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/and2_in1_n_tap_in1_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:vequ">VEQU</a>
 (1 total)
 </p>
 <h4 id="and2_reg">AND2_REG</h4>
@@ -1575,28 +1708,6 @@ connected to the input.</td></tr>
 <p><img src="img/cells/sm83/and2_and3_reg_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_and2_and3">REG_AND2_AND3</a>
-(1 total)
-</p>
-<h4 id="and2_in1_n_tap_in1_dec2">AND2_IN1_N_TAP_IN1_DEC2</h4>
-<p>AND gate with two inputs, inverted first input, and tap after inversion of first input.</p>
-<table>
-<tr><td><img src="img/cells/sm83/and2_in1_n_tap_in1_dec2_desc.png?v=0" style="min-width:200px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><span style="text-decoration:overline"><i>IN1</i></span></td>
-<td>Inverted input to AND gate.</td></tr>
-<tr><td><i>IN2</i></td>
-<td>Non-inverted input to AND gate.</td></tr>
-<tr><td><i>Y</i></td>
-<td>Outputs <code>(!<span style="text-decoration:overline"><i>IN1</i></span> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
-<tr><td><i>TAP_IN1</i></td>
-<td>Outputs inverted <span style="text-decoration:overline"><i>IN1</i></span>.</td></tr>
-</table></td></tr>
-</table>
-<p><img src="img/cells/sm83/and2_in1_n_tap_in1_dec2_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/and2_in1_n_tap_in1_dec2_sch.png?v=0" alt=""></p>
-<p>Instances:
-<a href="/sm83_map/?view=c:dec2_and">DEC2_AND</a>
 (1 total)
 </p>
 <h3 id="or">OR gates</h3>
@@ -2001,6 +2112,58 @@ if <i>SEL</i> is low.</td></tr>
 (8 total)
 </p>
 <h2 id="mixed">Mixed logic cells</h2>
+<h3 id="b2b_wand_inj_a">B2B_WAND_INJ_A</h3>
+<p>Bidirectional bus bridge with wired-AND behavior (open-drain), active-low output enable, active-low
+precharge, and open-drain injector on side A.</p>
+<table>
+<tr><td><img src="img/cells/sm83/b2b_wand_inj_a_5_desc.png?v=0" style="min-width:400px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A</i></td>
+<td>Bidirectional port to bus A. If <span style="text-decoration:overline"><i>PCH</i></span> is high and
+<i>INJ_EN</i> is low, then <i>A</i> is driven high. If <span style="text-decoration:overline"><i>OE</i></span>
+and <i>B</i> are both low and <span style="text-decoration:overline"><i>PCH</i></span> is high, then <i>A</i>
+is driven low. If <i>INJ_EN</i> and <span style="text-decoration:overline"><i>PCH</i></span> are both high and
+<i>INJ_D</i> is low, then <i>A</i> is driven low.</td></tr>
+<tr><td><i>B</i></td>
+<td>Bidirectional port to bus B. If <span style="text-decoration:overline"><i>PCH</i></span> is high and
+<i>OE</i> is low, then <i>B</i> is driven high. If <span style="text-decoration:overline"><i>OE</i></span>
+and <i>A</i> are both low and <span style="text-decoration:overline"><i>PCH</i></span> is high, then <i>B</i>
+is driven low.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>OE</i></span></td>
+<td>Active-low bridge enable input. If <span style="text-decoration:overline"><i>OE</i></span> is low and
+<span style="text-decoration:overline"><i>PCH</i></span> is high, then a low state on any of the two ports
+<i>A</i> or <i>B</i> will cause both ports <i>A</i> and <i>B</i> to be actively driven low until
+<span style="text-decoration:overline"><i>OE</i></span> gets released.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If <span style="text-decoration:overline"><i>PCH</i></span> is low and
+<span style="text-decoration:overline"><i>OE</i></span> is high, then port <i>A</i> is driven high. If
+<span style="text-decoration:overline"><i>PCH</i></span> and
+<span style="text-decoration:overline"><i>OE</i></span> both are low, then both ports <i>A</i> and <i>B</i>
+are driven high. <i>INJ_EN</i> must be low while <span style="text-decoration:overline"><i>PCH</i></span>
+is low, otherwise the PMOS and NMOS drivers on port <i>A</i> will short circuit.</td></tr>
+<tr><td><i>INJ_D</i></td>
+<td>Injector data input. If <i>INJ_D</i> is low and <i>INJ_EN</i> is high, then port <i>A</i> is driven
+low.</td></tr>
+<tr><td><i>INJ_EN</i></td>
+<td>Active-high injector enable input. If <i>INJ_EN</i> is high and <i>INJ_D</i> is low, then port <i>A</i>
+is driven low. <span style="text-decoration:overline"><i>PCH</i></span> must be high while <i>INJ_EN</i> is
+high, otherwise the PMOS and NMOS drivers on port <i>A</i> will short circuit.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/b2b_wand_inj_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/b2b_wand_inj_a_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:dbus_bridge%5b0%5d">DBUS_BRIDGE[0]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b1%5d">DBUS_BRIDGE[1]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b2%5d">DBUS_BRIDGE[2]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b3%5d">DBUS_BRIDGE[3]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b4%5d">DBUS_BRIDGE[4]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b5%5d">DBUS_BRIDGE[5]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b6%5d">DBUS_BRIDGE[6]</a>,
+<a href="/sm83_map/?view=c:dbus_bridge%5b7%5d">DBUS_BRIDGE[7]</a>
+(8 total)
+</p>
 <h3 id="idu_bit0">IDU_BIT0</h3>
 <p>Bits 0 and 8 of the 16 bit increment/decrement unit.</p>
 <table>
