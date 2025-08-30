@@ -67,6 +67,8 @@
      <li><a href="#not_reg_l_wr">NOT_REG_L_WR</a></li>
      <li><a href="#not_reg_sp_wr">NOT_REG_SP_WR</a></li>
      <li><a href="#not2_reg_pc_wr">NOT2_REG_PC_WR</a></li>
+     <li><a href="#not_alu_a">NOT_ALU_A</a></li>
+     <li><a href="#not_alu_b">NOT_ALU_B</a></li>
      <li><a href="#not_pch_x1_alu">NOT_PCH_X1_ALU</a></li>
      <li><a href="#not_pch_x2_alu">NOT_PCH_X2_ALU</a></li>
      <li><a href="#not_dec1">NOT_DEC1</a></li>
@@ -119,6 +121,7 @@
      <li><a href="#nor2_in2_n">NOR2_IN2_N</a></li>
      <li><a href="#nor4_in2_n_in4_n">NOR4_IN2_N_IN4_N</a></li>
      <li><a href="#nor2_pch_in1_dec3">NOR2_PCH_IN1_DEC3</a></li>
+     <li><a href="#nor8_alu">NOR8_ALU</a></li>
      <li><a href="#nor2_spare">NOR2_SPARE</a></li>
     </ul>
    </li>
@@ -129,6 +132,7 @@
      <li><a href="#and2_in1_n_tap_in1">AND2_IN1_N_TAP_IN1</a></li>
      <li><a href="#and2_reg">AND2_REG</a></li>
      <li><a href="#and2_and3_reg">AND2_AND3_REG</a></li>
+     <li><a href="#and2_alu">AND2_ALU</a></li>
     </ul>
    </li>
    <li><a href="#or">OR gates</a>
@@ -153,6 +157,7 @@
    <li><a href="#aoi21_a">AOI21_A</a></li>
    <li><a href="#aoi21_b">AOI21_B</a></li>
    <li><a href="#aoi331_s3">AOI331_S3</a></li>
+   <li><a href="#ao221_xor_in4_s1">AO221_XOR_IN4_S1</a></li>
    <li><a href="#ao31_in3_n">AO31_IN3_N</a></li>
    <li><a href="#ao33_s3_tap_in1_n">AO33_S3_TAP_IN1_N</a></li>
    <li><a href="#oai21">OAI21</a></li>
@@ -165,6 +170,8 @@
  </li>
  <li><a href="#mixed">Mixed logic cells</a>
   <ul>
+   <li><a href="#alu_cgen">ALU_CGEN</a></li>
+   <li><a href="#alu_pggen">ALU_PGGEN</a></li>
    <li><a href="#b2b_wand_inj_a">B2B_WAND_INJ_A</a></li>
    <li><a href="#idu_bit0">IDU_BIT0</a></li>
    <li><a href="#idu_bit123456">IDU_BIT123456</a></li>
@@ -602,6 +609,42 @@
 <a href="/sm83_map/?view=c:reg_pch_not_wr">REG_PCH_NOT_WR</a>,
 <a href="/sm83_map/?view=c:reg_pcl_not_wr">REG_PCL_NOT_WR</a>
 (2 total)
+</p>
+<h4 id="not_alu_a">NOT_ALU_A</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/not_alu_a_desc.png?v=0" style="min-width:180px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/not_alu_a_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_not11">ALU_NOT11</a>
+(1 total)
+</p>
+<h4 id="not_alu_b">NOT_ALU_B</h4>
+<p>Simple inverter.</p>
+<table>
+<tr><td><img src="img/cells/sm83/not_alu_b_desc.png?v=0" style="min-width:220px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs inverted <i>IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/not_alu_b_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/not_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_not12">ALU_NOT12</a>
+(1 total)
 </p>
 <h4 id="not_pch_x1_alu">NOT_PCH_X1_ALU</h4>
 <p>Inverter with precharge.</p>
@@ -1593,6 +1636,24 @@ connected to the input.</td></tr>
 <a href="/sm83_map/?view=c:dec3_nor2">DEC3_NOR2</a>
 (2 total)
 </p>
+<h4 id="nor8_alu">NOR8_ALU</h4>
+<p>NOR gate with eight inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/nor8_alu_desc.png?v=0" style="min-width:300px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i>, <i>IN6</i>, <i>IN7</i>, <i>IN8</i></td>
+<td>Inputs to NOR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>!(<i>IN1</i> || <i>IN2</i> || <i>IN3</i> || <i>IN4</i> || <i>IN5</i> || <i>IN6</i> || <i>IN7</i> || <i>IN8</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/nor8_alu_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/nor8_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_zgen">ALU_ZGEN</a>
+(1 total)
+</p>
 <h4 id="nor2_spare">NOR2_SPARE</h4>
 <p>NOR gate with two inputs.</p>
 <table>
@@ -1709,6 +1770,31 @@ connected to the input.</td></tr>
 <p>Instances:
 <a href="/sm83_map/?view=c:reg_and2_and3">REG_AND2_AND3</a>
 (1 total)
+</p>
+<h4 id="and2_alu">AND2_ALU</h4>
+<p>AND gate with two inputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/and2_alu_5_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i></td>
+<td>Inputs to AND gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>(<i>IN1</i> &amp;&amp; <i>IN2</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/and2_alu_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/and2_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_and%5b0%5d">ALU_AND[0]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b1%5d">ALU_AND[1]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b2%5d">ALU_AND[2]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b3%5d">ALU_AND[3]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b4%5d">ALU_AND[4]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b5%5d">ALU_AND[5]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b6%5d">ALU_AND[6]</a>,
+<a href="/sm83_map/?view=c:alu_and%5b7%5d">ALU_AND[7]</a>
+(8 total)
 </p>
 <h3 id="or">OR gates</h3>
 <h4 id="or2_a">OR2_A</h4>
@@ -1922,6 +2008,38 @@ to connect the two <i>IN1</i> inputs.</p>
 <a href="/sm83_map/?view=c:zwuu">ZWUU</a>
 (1 total)
 </p>
+<h3 id="ao221_xor_in4_s1">AO221_XOR_IN4_S1</h3>
+<p>2-2-1 AND-OR two-level compound gate with XOR gate feeding IN4, and shared IN1 between both gates. The XOR gate
+in this cell functions as the sum generator of the carry lookahead adder (CLA).</p>
+<table>
+<tr><td><img src="img/cells/sm83/ao221_xor_in4_s1_4_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i></td>
+<td>Shared input to XOR gate and first AND gate.</td></tr>
+<tr><td><i>IN2</i>, <i>IN3</i></td>
+<td>Inputs to AND gates.</td></tr>
+<tr><td><i>IN4</i></td>
+<td>Input to XOR gate.</td></tr>
+<tr><td><i>IN5</i></td>
+<td>Input to OR gate.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>((<i>IN1</i> &amp;&amp; <i>IN2</i>) || (<i>IN3</i> &amp;&amp; (<i>IN1</i> ^ <i>IN4</i>)) || <i>IN5</i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/ao221_xor_in4_s1_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/ao221_xor_in4_s1_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_result%5b0%5d">ALU_RESULT[0]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b1%5d">ALU_RESULT[1]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b2%5d">ALU_RESULT[2]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b3%5d">ALU_RESULT[3]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b4%5d">ALU_RESULT[4]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b5%5d">ALU_RESULT[5]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b6%5d">ALU_RESULT[6]</a>,
+<a href="/sm83_map/?view=c:alu_result%5b7%5d">ALU_RESULT[7]</a>
+(8 total)
+</p>
 <h3 id="ao31_in3_n">AO31_IN3_N</h3>
 <p>3-1 AND-OR two-level compound gate with inverted third input.</p>
 <table>
@@ -2112,6 +2230,81 @@ if <i>SEL</i> is low.</td></tr>
 (8 total)
 </p>
 <h2 id="mixed">Mixed logic cells</h2>
+<h4 id="alu_cgen">ALU_CGEN</h4>
+<p>Logic for generating carry signals for the CLA (carry lookahead adder).</p>
+<p>The <i>Pn</i> and <i>Gn</i> inputs each consist of two ports that must be externally connected.</p>
+<p>This cell must be fed with valid P/G (propagate/generate) signals, otherwise it can short circuit internally,
+because the NMOS and PMOS networks are not complementary. The signals are valid if
+<code><i>Pn</i> = <i>An</i> || <i>Bn</i></code>, and <code><i>Gn</i> = <i>An</i> &amp;&amp; <i>Bn</i></code>;
+when <i>An</i> and <i>Bn</i> are the two operands of a sum operation.</p>
+<table>
+<tr><td><img src="img/cells/sm83/alu_cgen_l_desc.png?v=0" style="min-width:500px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>P0</i>, <i>P1</i>, <i>P2</i>, <i>P3</i></td>
+<td>Inputs for propagate signals.</td></tr>
+<tr><td><i>G0</i>, <i>G1</i>, <i>G2</i>, <i>G3</i></td>
+<td>Inputs for generate signals.</td></tr>
+<tr><td><i>CIN</i></td>
+<td>Input carry signal.</td></tr>
+<tr><td><i>COUT0</i>, <i>COUT1</i>, <i>COUT2</i>, <i>COUT3</i></td>
+<td>Output carry signals.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/alu_cgen_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/alu_cgen_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_cgen_l">ALU_CGEN_L</a>,
+<a href="/sm83_map/?view=c:alu_cgen_h">ALU_CGEN_H</a>
+(2 total)
+</p>
+<h4 id="alu_pggen">ALU_PGGEN</h4>
+<p>Logic for generating P/G (propagate/generate) signals for the CLA (carry lookahead adder).</p>
+<p>This cell contains a lot of other logic. The P/G signals are just two tap outputs.</p>
+<table>
+<tr><td><img src="img/cells/sm83/alu_pggen_4_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>XOR_IN1</i>, <i>XOR_IN2</i></td>
+<td>Inputs to XOR gate.</td></tr>
+<tr><td><i>AND_OR_IN2</i></td>
+<td>Shared second input for (N)AND and OR gates.</td></tr>
+<tr><td><i>AO221_IN2</i>, <i>AO221_IN3</i></td>
+<td>Inputs to AND gates of AO221 compound gate.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>PCH</i></span></td>
+<td>Active-low precharge input. If <span style="text-decoration:overline"><i>PCH</i></span> is low then
+<i>AO221_<span style="text-decoration:overline">IN5</span></i> is driven high for the purpose of precharging the
+net at the input.</td></tr>
+<tr><td><i>AO221_<span style="text-decoration:overline">IN5</span></i></td>
+<td>Input to OR gate of AO221 compound gate. Outputs high if <span style="text-decoration:overline"><i>PCH</i></span>
+is low.</td></tr>
+<tr><td><i>TAP_XOR</i></td>
+<td>Outputs <code>(<i>XOR_IN1</i> ^ <i>XOR_IN2</i>)</code>.</td></tr>
+<tr><td><i>TAP_NAND</i></td>
+<td>Outputs <code>!((<i>XOR_IN1</i> ^ <i>XOR_IN2</i>) &amp;&amp; <i>AND_OR_IN2</i>)</code>.</td></tr>
+<tr><td><i>TAP_AND</i></td>
+<td>Outputs <code>((<i>XOR_IN1</i> ^ <i>XOR_IN2</i>) &amp;&amp; <i>AND_OR_IN2</i>)</code>. This output is used as
+generate signal for carry generation.</td></tr>
+<tr><td><i>TAP_OR</i></td>
+<td>Outputs <code>((<i>XOR_IN1</i> ^ <i>XOR_IN2</i>) || <i>AND_OR_IN2</i>)</code>. This output is used as propagate
+signal for carry generation.</td></tr>
+<tr><td><i>Y</i></td>
+<td>Outputs <code>((<i>TAP_AND</i> &amp;&amp; <i>AO221_IN2</i>) || (<i>AO221_IN3</i> &amp;&amp; <i>TAP_OR</i>) || !<i>AO221_<span style="text-decoration:overline">IN5</span></i>)</code>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/sm83/alu_pggen_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/alu_pggen_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/sm83_map/?view=c:alu_pggen%5b0%5d">ALU_PGGEN[0]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b1%5d">ALU_PGGEN[1]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b2%5d">ALU_PGGEN[2]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b3%5d">ALU_PGGEN[3]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b4%5d">ALU_PGGEN[4]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b5%5d">ALU_PGGEN[5]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b6%5d">ALU_PGGEN[6]</a>,
+<a href="/sm83_map/?view=c:alu_pggen%5b7%5d">ALU_PGGEN[7]</a>
+(8 total)
+</p>
 <h3 id="b2b_wand_inj_a">B2B_WAND_INJ_A</h3>
 <p>Bidirectional bus bridge with wired-AND behavior (open-drain), active-low output enable, active-low
 precharge, and open-drain injector on side A.</p>
