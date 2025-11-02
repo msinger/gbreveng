@@ -209,7 +209,7 @@
   <ul>
    <li><a href="#srlatch_r_n">SRLATCH_R_N</a></li>
    <li><a href="#srlatch_r_n_alt">SRLATCH_R_N_ALT</a></li>
-   <li><a href="#dlatch_ee_q">DLATCH_EE_Q</a></li>
+   <li><a href="#dlatch_ee_q_n">DLATCH_EE_Q_N</a></li>
    <li><a href="#dlatch_ee_irq">DLATCH_EE_IRQ</a></li>
    <li><a href="#dff_cc_q">DFF_CC_Q</a></li>
    <li><a href="#dff_cc_q_alt">DFF_CC_Q_ALT</a></li>
@@ -3082,11 +3082,11 @@ are asserted.</p>
 <a href="/sm83_map/?view=c:ynkw">YNKW</a>
 (1 total)
 </p>
-<h3 id="dlatch_ee_q">DLATCH_EE_Q</h3>
-<p>Gated data latch with externally inverted enable inputs and no inverted output.</p>
+<h3 id="dlatch_ee_q_n">DLATCH_EE_Q_N</h3>
+<p>Gated data latch with externally inverted enable inputs and no non-inverted output.</p>
 <p>There are two enable inputs to this cell. They need to be inverted towards each other.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dlatch_ee_q_yodp_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dlatch_ee_q_n_yodp_desc.png?v=0" style="min-width:250px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -3097,12 +3097,12 @@ as <i>ENA</i> goes low, the output of the latch gets held at the level it had in
 high again.</td></tr>
 <tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
 <td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
-<tr><td><i>Q</i></td>
-<td>Data output.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>Q</i></span></td>
+<td>Inverted data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dlatch_ee_q_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dlatch_ee_q_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_ee_q_n_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dlatch_ee_q_n_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:yodp">YODP</a>
 (1 total)
