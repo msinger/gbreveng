@@ -38,578 +38,692 @@
 <p>This is a list of all connections to/from the SM83 CPU core as seen in the
 <a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">Gameboy DMG-CPU-B die shot</a>.
 The wire and cell names are taken from our
-<a href="https://github.com/msinger/dmg-schematics">schematics of the DMG-CPU B</a>. We inherited the cell names from
-<a href="https://github.com/furrtek/DMG-CPU-Inside">Furrtek's schematics</a>, the wire names though are mostly different
-to his.</p>
+<a href="https://github.com/msinger/dmg-schematics">schematics of the DMG-CPU B</a>.</p>
 <p>For a deeper understanding of the CPU, you should have a look at the reverse engineering efforts of
 <a href="https://github.com/emu-russia/dmgcpu">ogamespec</a> and
-<a href="https://github.com/Gekkio/gb-research/tree/main/sm83-cpu-core">Gekkio</a>.</p>
+<a href="https://github.com/Gekkio/gb-research/tree/main/sm83-cpu-core">Gekkio</a>. Or you can play
+with the <a href="https://iceboy.a-singer.de/visual6502/expert-sm83.html">visual6502 port</a> of the CPU.</p>
 <p>Please report any errors I made <a href="https://github.com/msinger/gbreveng/issues">here</a>.</p>
 <h2>SM83 "Pinout"</h2>
-<p><img src="img/cells/cpu_desc.png" alt="SM83 CPU core inside Game Boy DMG-CPU B chip"></p>
+<p><img src="img/cells/cpu_desc.png?v=0" alt="SM83 CPU core inside Game Boy DMG-CPU B chip"></p>
 <h2>SM83 Connections</h2>
 <table class="default"><tr>
 <th colspan="2">I/O</th>
-<th>Name</th>
-<th>Wire</th>
-<th>Cell</th>
+<th>Port Name</th>
+<th>Wire Name</th>
 <th>Description</th>
 </tr><tr>
 <td>T1</td>
 <td>O</td>
 <td>M1</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:m1">M1</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lexy&mark%5b0%5d=-105.34,111.61">LEXY.in</a></td>
-<td>Machine cycle one (M1) synchronization signal. The output of the inverter
-<a href="/dmg_cpu_b_map/?view=c:lexy">LEXY</a> ends at
-<a href="/dmg_cpu_b_map/?view=c:m1&mark%5b0%5d=-236.81,128.44">an output pad</a> at the bottom of the die,
-which is not bonded. It is high during the instruction fetch cycle (M1).<br>
-<i>TODO: Figure out exact timing.</i></td>
+<td><a href="/sm83_map/?wires=0&view=w:ctl_fetch">CTL_FETCH</a></td>
+<td>Machine cycle one (M1) synchronization signal. High during the instruction fetch cycle (M1).<br>
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+M1:           __|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>T2</td>
 <td>I</td>
-<td>ADR_CLK_N</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:bowa">BOWA</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:bowa&mark%5b0%5d=-62.07,174.17">BOWA.q</a></td>
+<td><span style="text-decoration:overline">EXEC_PHASE</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bexec_phase%7d"><span style="text-decoration:overline">EXEC_PHASE</span></a></td>
 <td>A gated 1 MiHz clock, which goes low the moment the CPU outputs the new address at the beginning of a
 memory cycle. It is low while the address is valid on the cartridge port and high during the short time when the
 address high byte on the cartridge port is usually zeroed.<br>
-The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T3.</td>
+The rising edge of this clock updates the <a href="/sm83_map/?wires=0&view=c:zivv">DFF</a> that stores the effective
+IME (Interrupt Master Enable) flag.<br>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently high. This is the inverse of EXEC_PHASE (T3).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+<span style="text-decoration:overline">EXEC_PHASE</span>:   ‾‾|____________________|
+</pre></td>
 </tr><tr>
 <td>T3</td>
 <td>I</td>
-<td>ADR_CLK_P</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:data_valid">DATA_VALID</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:bedo&mark%5b0%5d=-62.05,172.96">BEDO.q</a></td>
+<td>EXEC_PHASE</td>
+<td><a href="/sm83_map/?wires=0&view=w:exec_phase">EXEC_PHASE</a></td>
 <td>A gated 1 MiHz clock, which goes high the moment the CPU outputs the new address at the beginning of a
 memory cycle. It is high while the address is valid on the cartridge port and low during the short time when the
 address high byte on the cartridge port is usually zeroed.<br>
-The CPU can stop this clock by driving T11 or T14 low. This is the inverse of T2.</td>
+Most control signals generated from the dynamic NMOS decoders are valid while this clock is high, and are precharged
+while it is low. This clock is also responsible for precharging other components while it is low: Internal and external
+data bus, dynamic NMOS logic of ALU, ALU operand buses, and the input bus of the increment/decrement unit (IDU).<br>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently low. This is the inverse of <span style="text-decoration:overline">EXEC_PHASE</span> (T2).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+EXEC_PHASE:   __|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>T4</td>
 <td>I</td>
-<td>PHI_CLK_P</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_phi">CPU_PHI</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:beko&mark%5b0%5d=-62.05,169.54">BEKO.q</a>,
-<a href="/dmg_cpu_b_map/?view=c:bavy&mark%5b0%5d=-62.05,170.73">BAVY.q</a></td>
+<td><span style="text-decoration:overline">DATA_PHASE</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bdata_phase%7d"><span style="text-decoration:overline">DATA_PHASE</span></a></td>
 <td>A gated 1 MiHz clock, which is identical to the 1 MiHz PHI clock signal on the cartridge port.<br>
-The CPU can stop this clock by driving T11 low. This is the inverse of T5.</td>
+While this clock is high, IRQ_LATCH[0..7] are enabled.<br>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently high. This is the inverse of DATA_PHASE (T5).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+<span style="text-decoration:overline">DATA_PHASE</span>:   ‾‾‾‾‾‾‾‾‾‾‾|___________|
+</pre></td>
 </tr><tr>
 <td>T5</td>
 <td>I</td>
-<td>PHI_CLK_N</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:~%7bcpu_phi%7d"><span style="text-decoration:overline">CPU_PHI</span></a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:bude&mark%5b0%5d=-62.05,167.52">BUDE.q</a>,
-<a href="/dmg_cpu_b_map/?view=c:beva&mark%5b0%5d=-62.05,168.7">BEVA.q</a></td>
+<td>DATA_PHASE</td>
+<td><a href="/sm83_map/?wires=0&view=w:data_phase">DATA_PHASE</a></td>
 <td>A gated 1 MiHz clock, which is the inverse of the 1 MiHz PHI clock signal on the cartridge port.<br>
-The CPU can stop this clock by driving T11 low. This is the inverse of T4.</td>
+The few control signals generated by the dynamic NMOS decoders that are not timed by EXEC_PHASE (T3), are valid while
+DATA_PHASE is high. Those signals are write enable control signals for registers and flags. It makes sense that those
+are only asserted during the data phase where the value on the data bus is valid. While DATA_PHASE is low, those
+signals are precharged. DATA_PHASE also precharges the following: Dynamic NMOS logic that drives new values for writing
+registers, NMOS chains in increment/decrement unit (IDU). It also controls some latches in the interrupt logic part
+of the sequencer, and it gives shape to the RD (R1) signal.<br>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently low. This is the inverse of <span style="text-decoration:overline">DATA_PHASE</span> (T4).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+DATA_PHASE:   ___________|‾‾‾‾‾‾‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>T6</td>
 <td>I</td>
-<td>T4_CLK_N</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:~%7bcpu_t4%7d"><span style="text-decoration:overline">CPU_T4</span></a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:bolo&mark%5b0%5d=-62.05,164.26">BOLO.q</a>,
-<a href="/dmg_cpu_b_map/?view=c:byda&mark%5b0%5d=-62.05,165.46">BYDA.q</a></td>
+<td><span style="text-decoration:overline">WRITE_PHASE</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bwrite_phase%7d"><span style="text-decoration:overline">WRITE_PHASE</span></a></td>
 <td>A gated 1 MiHz clock, which is low during the fourth quarter of each memory cycle.<br>
-The CPU can stop this clock by driving T11 low. This is the inverse of T7.</td>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently high. This is the inverse of WRITE_PHASE (T7).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+<span style="text-decoration:overline">WRITE_PHASE</span>:  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|_____|
+</pre></td>
 </tr><tr>
 <td>T7</td>
 <td>I</td>
-<td>T4_CLK_P</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_t4">CPU_T4</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:bufa&mark%5b0%5d=-62.05,162.2">BUFA.q</a>,
-<a href="/dmg_cpu_b_map/?view=c:byly&mark%5b0%5d=-62.05,163.41">BYLY.q</a></td>
+<td>WRITE_PHASE</td>
+<td><a href="/sm83_map/?wires=0&view=w:write_phase">WRITE_PHASE</a></td>
 <td>A gated 1 MiHz clock, which is high during the fourth quarter of each memory cycle.<br>
-The CPU can stop this clock by driving T11 low. This is the inverse of T6.</td>
+Registers and flags are written during the high phase of this clock when their respective write enable signals are
+also asserted. When this clock is low, some dynamic NMOS logic responsible for interrupt priority decoding is
+precharged.<br>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently low. This is the inverse of <span style="text-decoration:overline">WRITE_PHASE</span> (T6).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+WRITE_PHASE:  _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>T8</td>
 <td>I</td>
-<td>?</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:buke">BUKE</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:buke&mark%5b0%5d=-62.05,159.97">BUKE.q</a></td>
-<td>A gated 1 MiHz clock, which goes high when T7 goes high, and low when T2 and T10 go low.<br>
-The CPU can stop this clock by driving T11 low. This is the only clock that goes into the CPU that has no
-inverse counterpart.</td>
+<td><span style="text-decoration:overline">PCH_PHASE</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bpch_phase%7d"><span style="text-decoration:overline">PCH_PHASE</span></a></td>
+<td>A gated 1 MiHz clock, which goes high when WRITE_PHASE (T7) goes high, and low when
+<span style="text-decoration:overline">EXEC_PHASE</span> (T2) and CLK (T10) go low.<br>
+During its low phase, this clock is responsible for precharging the dynamic NMOS logic in the ALU that produces the
+new values for the ALU flags, and also for precharging the dynamic NMOS logic that produces the new PC and SP.<br>
+The CPU can stop this clock by driving <span style="text-decoration:overline">HALT</span> (T11) low, in which case it
+stays permanently low. This is the only clock that goes into the CPU that has no inverse counterpart.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+<span style="text-decoration:overline">PCH_PHASE</span>:    ‾‾|______________|‾‾‾‾‾
+</pre></td>
 </tr><tr>
 <td>T9</td>
 <td>I</td>
-<td>MAIN_CLK_N</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:boma_1mhz">BOMA_1MHZ</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:boma&mark%5b0%5d=-62.05,150.75">BOMA.q</a></td>
+<td><span style="text-decoration:overline">CLK</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bclk%7d"><span style="text-decoration:overline">CLK</span></a></td>
 <td>A gated 1 MiHz clock, which goes high the moment the CPU outputs the new address at the beginning of a
 memory cycle. It is high while the address is valid on the cartridge port and low during the short time when the
 address high byte on the cartridge port is usually zeroed.<br>
-The CPU can stop this clock by driving T14 low. This is the inverse of T10. T9 and T10 are the only clock
-inputs that are ticking during HALT mode.</td>
+This is the inverse of CLK (T10). <span style="text-decoration:overline">CLK</span> (T9) and CLK (T10) are the only
+clock inputs that are ticking during HALT mode. When the oscillator is stopped, this clock stays permanently low.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+<span style="text-decoration:overline">CLK</span>:          __|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>T10</td>
 <td>I</td>
-<td>MAIN_CLK_P</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:boga_1mhz">BOGA_1MHZ</a></td>
-<td><a href="/dmg_cpu_b_map/?view=boga&mark%5b0%5d=-60.29,151.96">BOGA.q</a></td>
+<td>CLK</td>
+<td><a href="/sm83_map/?wires=0&view=w:clk">CLK</a></td>
 <td>A gated 1 MiHz clock, which goes low the moment the CPU outputs the new address at the beginning of a
 memory cycle. It is low while the address is valid on the cartridge port and high during the short time when the
 address high byte on the cartridge port is usually zeroed.<br>
-The CPU can stop this clock by driving T14 low. This is the inverse of T9. T9 and T10 are the only clock
-inputs that are ticking during HALT mode.</td>
+The rising edge of this clock is only used by the sequencer logic, for advancing the machine cycle and for some
+interrupt processing.<br>
+This is the inverse of <span style="text-decoration:overline">CLK</span> (T9).
+<span style="text-decoration:overline">CLK</span> (T9) and CLK (T10) are the only clock inputs that are ticking
+during HALT mode. When the oscillator is stopped, this clock stays permanently high.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+CLK:          ‾‾|____________________|
+</pre></td>
 </tr><tr>
 <td>T11</td>
 <td>O</td>
-<td>CLK_ENA</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:clk_ena">CLK_ENA</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:abol&mark%5b0%5d=-56.01,149.73">ABOL.in</a>,
-<a href="/dmg_cpu_b_map/?view=c:tubo&mark%5b0%5d=-60.62,136.05">TUBO.s</a></td>
-<td>CPU can drive this low to disable most of the clocks fed to itself. T9 and T10 are the only clocks that are not
-turned off when this signal gets driven low. However, T9 and T10 might have slightly shorter "shorter" phases while this
-signal is high. By "shorter" phases I mean, they are not symetric and have a shorter and a longer phase (and the
-shorter one gets even shorter). This is because of <a href="/dmg_cpu_b_map/?view=c:buto">BUTO</a> mixing them with the
-other clocks when they're active. Maybe they did this to guarantee a specific synchronicity between T9/T10 and the other
-clocks that tick at around the same time as T9/T10.<br>
-The initial state (during and directly after reset) of T11 must be low. The CPU must NOT switch this signal to high
-immediately after reset, otherwise the synchronous CPU reset T12 (<a href="/dmg_cpu_b_map/?view=c:afer">AFER</a>) and the
-synchronous peripheral resets (<span style="text-decoration:overline">RESET2</span>,
-APU_RESETn, PPU_RESETn, ...) will never be deasserted. The CPU must wait until T15
-(<a href="/dmg_cpu_b_map/?view=c:taba">TABA</a>) gets high. This happens when the DIV register is half run through, which
-takes about 32 milliseconds. Then the CPU can pull T11 high, which deasserts the synchronous CPU and peripheral resets
-one T9/T10 tick later. Wether the CPU pulls T11 high immediately when T15 gets high or if it delays that by a T9/T10 tick
-is unknown (both will work fine). I assume this mechanism is there to assure the crystal oscillator is stabilized.<br>
-The same mechanism likely is used when the system wakes up from STOP mode. When the crystal oscillator gets disabled by
-driving T14 low, the DIV register gets reset to zero, so it will take the same ~32 ms.<br>
-When the CPU executes a HALT instruction and none of the enabled interrupts are pending, then the CPU will pull T11 low
-to disable most of its clocks. When waking up from HALT mode (due to an interrupt), the CPU will pull T11 high on the
-next T9/T10 tick, which re-enables all the other clocks.</td>
+<td><span style="text-decoration:overline">HALT</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bhalt%7d"><span style="text-decoration:overline">HALT</span></a></td>
+<td>CPU can drive this low to disable most of the clocks fed to itself. <span style="text-decoration:overline">CLK</span>
+(T9) and CLK (T10) are the only clocks that are not turned off when this signal gets driven low.<br>
+When PWRON_RESET (T13) is asserted during power-on-reset, <span style="text-decoration:overline">HALT</span> is
+initialized to low state, so most CPU clocks are disabled. The CPU must NOT switch this signal to high immediately
+after reset, otherwise SYS_RESET (T12) (generated by <a href="/dmg_cpu_b_map/?view=c:afer">AFER</a>) and the
+synchronous peripheral resets (<span style="text-decoration:overline">RESET2</span>, APU_RESETn, PPU_RESETn, ...)
+will never be deasserted. The CPU must wait until CLK_READY (T15) (generated by
+<a href="/dmg_cpu_b_map/?view=c:taba">TABA</a>) gets high. This happens when the DIV register is half run through, which
+takes about 32 milliseconds. The CPU pulls <span style="text-decoration:overline">HALT</span> (T11) high when
+CLK_READY (T15) is high and SYS_RESET (T12) is low, but delayed by one CLK rising edge. I assume this mechanism is
+there to assure the crystal oscillator is stabilized.<br>
+The same mechanism is used when the system wakes up from STOP mode. When the crystal oscillator gets disabled by
+driving <span style="text-decoration:overline">STOP</span> (T14) low, the DIV register gets reset to zero, so it will
+take the same ~32 ms.<br>
+When the CPU executes a HALT instruction and none of the enabled interrupts are pending, then the CPU will pull
+<span style="text-decoration:overline">HALT</span> (T11) low to disable most of its clocks. When waking up from HALT
+mode (due to an interrupt), the CPU will pull <span style="text-decoration:overline">HALT</span> (T11) high on the
+next CLK rising edge, which re-enables all the other clocks.<br>
+Changes to the <span style="text-decoration:overline">HALT</span> output are always synchonized to the rising edge of
+CLK (T10).<br>
+<i>TODO: Test if an externally clocked SERIAL interrupt can bypass the 32 ms period when resuming from STOP mode.</i></td>
 </tr><tr>
 <td>T12</td>
 <td>I</td>
-<td>SYNC_RESET</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:reset_latch">RESET_LATCH</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:afer&mark%5b0%5d=-56.01,158.95">AFER.q</a></td>
-<td>Active-high synchronous reset input. Synchronized to T9/T10.</td>
+<td>SYS_RESET</td>
+<td><a href="/sm83_map/?wires=0&view=w:sys_reset">SYS_RESET</a></td>
+<td>Active-high system reset input. Supposed to be synchronized to the rising edge of CLK (T10).<br>
+The program counter (PC) and the interrupt enable register (IE) are both reset to 0 by this reset. Also the sequencer
+state is reset to perform an initial instruction fetch.<br>
+Nothing else is being reset in the CPU. Other registers will have random values, including the instruction register.
+This means the CPU can execute a random instruction in parallel to the initial fetch cycle. However, it can't execute
+any jumps or memory accesses (except the instruction fetch), because no instruction encodes these actions on M cycle 7
+(which is the initial state).</td>
 </tr><tr>
 <td>T13</td>
 <td>I</td>
-<td>ASYNC_RESET</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:reset">RESET</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:~%7breset%7d&mark%5b0%5d=-145.35,238.34"><span style="text-decoration:overline">RESET</span></a></td>
-<td>Active-high asynchronous reset input. Fed directly from
-<a href="/dmg_cpu_b_map/?view=c:~%7breset%7d&mark%5b0%5d=-145.35,238.34"><span style="text-decoration:overline">RESET</span> input pad</a>.</td>
+<td>PWRON_RESET</td>
+<td><a href="/sm83_map/?wires=0&view=w:pwron_reset">PWRON_RESET</a></td>
+<td>Active-high power-on reset input. Fed directly from
+<a href="/dmg_cpu_b_map/?view=c:~%7breset%7d&mark%5b0%5d=-145.35,238.34"><span style="text-decoration:overline">RESET</span> input pad</a>.<br>
+This reset is necessary on power-on to initialize the state of the <span style="text-decoration:overline">HALT</span> (T11)
+output to low and the <span style="text-decoration:overline">STOP</span> (T14) output to high, so that the crystal
+oscillator gets enabled. It resets nothing else. SYS_RESET (T12) is used to bring the CPU into a valid initial state
+once CLK/<span style="text-decoration:overline">CLK</span> (T10/T9) are ticking.</td>
 </tr><tr>
 <td>T14</td>
 <td>O</td>
-<td>OSC_ENA</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:osc_ena">OSC_ENA</a></td>
-<td><a href="/dmg_cpu_b_map/?view=-120.88,135.5,-52.5,254.45&mark%5b0%5d=-117.45,238.34&mark%5b1%5d=-82.12,139.71&mark%5b2%5d=-56.02,150.08">
-multiple</a></td>
-<td>Crystal oscillator enable. When CPU drives this low, the <a href="/dmg_cpu_b_map/?view=c:ck1_ck2">crystal oscillator</a>
-gets disabled to save power. This happens during STOP mode.</td>
+<td><span style="text-decoration:overline">STOP</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7bstop%7d"><span style="text-decoration:overline">STOP</span></a></td>
+<td>When CPU drives this low, the <a href="/dmg_cpu_b_map/?view=c:ck1_ck2">crystal oscillator</a>
+gets disabled to save power. This happens during STOP mode. <span style="text-decoration:overline">HALT</span> (T11)
+will also be low during STOP mode.<br>
+A change to <span style="text-decoration:overline">STOP</span> from high to low will always be synchonized to the rising
+edge of CLK (T10). A change from low to high happens immediately when WAKE (B25) is high.</td>
 </tr><tr>
 <td>T15</td>
 <td>I</td>
-<td>OSC_STABLE</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:osc_stable">OSC_STABLE</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:taba&mark%5b0%5d=-60.42,136.06">TABA.q</a></td>
-<td>Active-high crystal oscillator stablilized input? After reset, this signal gets high after about 32 milliseconds.
-The CPU must not drive T11 high before T15 gets high. See description of T11.</td>
+<td>CLK_READY</td>
+<td><a href="/sm83_map/?wires=0&view=w:clk_ready">CLK_READY</a></td>
+<td>On power-on reset or when waking up from STOP mode, this signal gets high after about 32 milliseconds to signal
+to the CPU that the clocks are stable. The CPU will acknowledge this signal by pulling
+<span style="text-decoration:overline">HALT</span> (T11) high, which in turn deasserts CLK_READY. See description of
+<span style="text-decoration:overline">HALT</span> (T11) for more details.</td>
 </tr><tr>
 <td>T16</td>
 <td>I</td>
 <td>NMI</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:nmi">NMI</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:~%7bnmi%7d&mark%5b0%5d=-41.91,132.19"><span style="text-decoration:overline">NMI</span></a></td>
+<td><a href="/sm83_map/?wires=0&view=w:nmi">NMI</a></td>
 <td>Directly connected to <a href="/dmg_cpu_b_map/?view=c:~%7bnmi%7d&mark%5b0%5d=-41.91,132.19">an input
 pad</a> at the top of the die, which is not bonded. This is the non-maskable interrupt of the CPU.</td>
 </tr><tr>
 <td>R1</td>
 <td>O</td>
 <td>RD</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:read">READ</a></td>
-<td><a href="/dmg_cpu_b_map/?view=-82.22,110.81,-78.25,141.09&mark%5b0%5d=-80.23,111.63&mark%5b1%5d=-81.59,111.63&mark%5b2%5d=-80.95,139.72">
-multiple</a></td>
-<td>Active-high memory RD signal from CPU.</td>
+<td><a href="/sm83_map/?wires=0&view=w:rd">RD</a></td>
+<td>Active-high memory read signal from CPU. In contrast to the read signal on the cartridge connector, the CPU its read
+signal is only asserted when the CPU actually reads data. It is synchronous to the DATA_PHASE (T5) clock. When the CPU is
+reading from its internal IE register on address 0xFFFF, the read signal is also asserted.<br>
+Although the read signal is only asserted during T3 and T4, data on the bus is sampled for much longer (see diagram below).
+The sampling doesn't happen on an edge, it happens while EXEC_PHASE (T3) is high. If at any time during this sampling
+period a data bit on the bus is low, then it will be read as low, even if it flips back to high later. So basically,
+the read operation works like an AND operation over time. When there is the value 0xFC on the data bus at T2 and the value
+0x3F at T4, then the CPU will read the value 0x3C, because 0xFC &and; 0x3F = 0x3C. The data bus is always precharged to
+0xFF during the first half-cycle of T1.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+RD:           ___________|‾‾‾‾‾‾‾‾‾‾‾|
+D[0..7]:      ‾‾|XXXXXXXXXXXXXXXXXXXX|
+</pre></td>
 </tr><tr>
 <td>R2</td>
 <td>O</td>
 <td>WR</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:write">WRITE</a></td>
-<td><a href="/dmg_cpu_b_map/?view=-91.75,33,-52.5,154.69&mark%5b0%5d=-89.89,35.68&mark%5b1%5d=-80.73,111.63&mark%5b2%5d=-56,151.78">
-multiple</a></td>
-<td>Active-high memory WR signal from CPU.</td>
+<td><a href="/sm83_map/?wires=0&view=w:wr">WR</a></td>
+<td>Active-high memory write signal from CPU. The write signal is synchronous to the EXEC_PHASE (T3) clock. When the CPU
+is writing to its internal IE register on address 0xFFFF, the write signal is also asserted.<br>
+Although the write signal is already asserted at the falling edge of T1, the data is only valid while DATA_PHASE (T5)
+is high (which is during T3 and T4). The data bus is always precharged to 0xFF during the first half-cycle of T1. At
+any other time, the data is only actively driven low. This means the same AND rule applies like during a read operation:
+If by accident, someone is driving a low bit onto the data bus (for example at T2), then this bit will stay low until
+the precharging at the beginning of the next memory cycle happens.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+WR:           __|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+D[0..7]:      ‾‾‾‾‾‾‾‾‾‾‾|XXXXXXXXXXX|
+</pre></td>
 </tr><tr>
 <td>R3</td>
 <td>I</td>
-<td>?</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:t1~%7bt2%7d">T1<span style="text-decoration:overline">T2</span></a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:unor&mark%5b0%5d=-76.33,141.46">UNOR.q</a></td>
-<td>Maybe used to disable all bus drivers in the CPU when test mode is active.</td>
+<td><span style="text-decoration:overline">OE</span></td>
+<td><a href="/sm83_map/?wires=0&view=w:~%7boe%7d"><span style="text-decoration:overline">OE</span></a></td>
+<td>Active-low output enable. When high, then D[0..7] (B1-B8) and A[0..15] (B9-B24) are disabled and not
+actively driven by the CPU, and RD (R1) is disabled by being driven low. WR (R2) is not affected.<br>
+This is only used when test mode T1 is enabled.</td>
 </tr><tr>
 <td>R4</td>
 <td>I</td>
-<td>?</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:fexx_ffxx">FEXX_FFXX</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:syro&mark%5b0%5d=-88.7,31.4">SYRO.q</a></td>
-<td>High when address bus is 0xfexx or 0xffxx. When high, it suppresses R7, so that the data bus can be driven by
-an internal component (HRAM, OAM, FFxx registers).</td>
+<td>INTERNAL_ACCESS</td>
+<td><a href="/sm83_map/?wires=0&view=w:internal_access">INTERNAL_ACCESS</a></td>
+<td>When high, then the MREQ (R7) output is inhibited and stays low.<br>
+The circuit outside the CPU drives this input high when address bus is 0xFEXX or 0xFFXX.</td>
 </tr><tr>
 <td>R5</td>
 <td>I</td>
-<td>?</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:boot_sel">BOOT_SEL</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:tutu&mark%5b0%5d=-93.99,35.66">TUTU.q</a></td>
-<td>High when address bus is 0x00xx and boot ROM is still visible. When high, it suppresses R7,
-so that the data bus can be driven by the internal boot ROM.</td>
+<td>SHADOW_ACCESS</td>
+<td><a href="/sm83_map/?wires=0&view=w:shadow_access">SHADOW_ACCESS</a></td>
+<td>When high while SHADOW_OVERRIDE (R6) is low, then the MREQ (R7) output is inhibited and stays low.<br>
+The circuit outside the CPU drives this input high when address bus is 0x00XX and boot ROM is still visible.</td>
 </tr><tr>
 <td>R6</td>
 <td>I</td>
-<td>?</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:~%7bt1%7dt2"><span style="text-decoration:overline">T1</span>T2</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:umut&mark%5b0%5d=-74.63,141.47">UMUT.q</a></td>
-<td>Maybe used to disable all bus drivers in the CPU when test mode is active.</td>
+<td>SHADOW_OVERRIDE</td>
+<td><a href="/sm83_map/?wires=0&view=w:shadow_override">SHADOW_OVERRIDE</a></td>
+<td>When high, this disables the function of the SHADOW_ACCESS (R5) input.<br>
+This is only used when test mode T2 is enabled.</td>
 </tr><tr>
 <td>R7</td>
 <td>O</td>
 <td>MREQ</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:mreq">MREQ</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:texo&mark%5b0%5d=-85.96,35.68">TEXO.in1</a>,
-<a href="/dmg_cpu_b_map/?view=c:agut&mark%5b0%5d=-56.03,154.86">AGUT.in3</a></td>
-<td>Active-high external memory request. Has to be high during external memory cycles (read or write). This causes
-one of the chip select signals
+<td><a href="/sm83_map/?wires=0&view=w:mreq">MREQ</a></td>
+<td>Active-high external memory request. High during external memory cycles (read or write). This causes one of the
+chip select signals
 (<a href="/dmg_cpu_b_map/?view=c:~%7bcs%7d"><span style="text-decoration:overline">CS</span></a>,
 <a href="/dmg_cpu_b_map/?view=c:~%7bmcs%7d"><span style="text-decoration:overline">MCS</span></a>,
-<a href="/dmg_cpu_b_map/?view=c:a15">A15</a>) to be asserted in the right moment. Has to be low if no memory cycle
-is going on, otherwise the chip select will be asserted even if R1 and R2 are low. During write cycles, this signal
+<a href="/dmg_cpu_b_map/?view=c:a15">A15</a>) to be asserted in the right moment. Low if no memory cycle is going on,
+otherwise the chip select would be asserted even if RD (R1) and WR (R2) are low. During write cycles, this signal
 is also needed for driving the internal data bus onto the external I/O pins. During read cycles, this signal is also
-needed for latching the external I/O pins and driving the latched data onto the internal data bus. When R4 or R5 is
-high, the CPU keeps this signal low, allowing internal components (HRAM, OAM, boot ROM, FFxx registers) to drive the
-internal data bus.</td>
+needed for latching the external I/O pins and driving the latched data onto the chip internal data bus. When
+INTERNAL_ACCESS (R4) or SHADOW_ACCESS (R5) is high, the CPU keeps this signal low, allowing internal components
+(HRAM, OAM, boot ROM, FFxx registers) to drive the data bus.<br>
+To be precise, MREQ is asserted during a memory cycle when this is true:<br>
+&not;INTERNAL_ACCESS &and; (&not;SHADOW_ACCESS &or; SHADOW_OVERRIDE)
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+MREQ:         __|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R8</td>
-<td>?</td>
-<td>?</td>
 <td>-</td>
 <td>-</td>
-<td>Not connected.</td>
+<td><a href="/sm83_map/?wires=0&view=w:vdd">VDD</a></td>
+<td>Not connected. Internally connected to VDD.</td>
 </tr><tr>
 <td>R9</td>
-<td>?</td>
-<td>?</td>
 <td>-</td>
 <td>-</td>
-<td>Not connected.</td>
+<td><a href="/sm83_map/?wires=0&view=w:vdd">VDD</a></td>
+<td>Not connected. Internally connected to VDD.</td>
 </tr><tr>
 <td>R10</td>
-<td>?</td>
-<td>?</td>
 <td>-</td>
 <td>-</td>
-<td>Not connected.</td>
+<td><a href="/sm83_map/?wires=0&view=w:gnd">GND</a></td>
+<td>Not connected. Internally connected to GND.</td>
 </tr><tr>
 <td>R11</td>
-<td>?</td>
-<td>?</td>
 <td>-</td>
 <td>-</td>
-<td>Not connected.</td>
+<td><a href="/sm83_map/?wires=0&view=w:gnd">GND</a></td>
+<td>Not connected. Internally connected to GND.</td>
 </tr><tr>
 <td>R12</td>
-<td>?</td>
-<td>?</td>
 <td>-</td>
 <td>-</td>
-<td>Not connected.</td>
+<td><a href="/sm83_map/?wires=0&view=w:gnd">GND</a></td>
+<td>Not connected. Internally connected to GND.</td>
 </tr><tr>
 <td>R13</td>
 <td>O</td>
-<td>IE_SEL</td>
-<td>-</td>
-<td>-</td>
-<td>Not connected. High when interrupt enable register is selected (ADR=0xFFFF).</td>
+<td>FFXX</td>
+<td><a href="/sm83_map/?wires=0&view=w:ffxx">FFXX</a></td>
+<td>Not connected. High when A[15..8] (B9-B16) are high.</td>
 </tr><tr>
 <td>R14</td>
 <td>O</td>
-<td>IRQ0_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack0">CPU_IRQ_ACK0</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lety&mark%5b0%5d=-83.13,111.63">LETY.in</a></td>
-<td>Active-high. Acknowledges IRQ0 (V-Blank).</td>
+<td>INTA[0]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b0%5d">INTA[0]</a></td>
+<td>Active-high. Acknowledges IRQ0 (V-Blank).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[0]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R15</td>
 <td>I</td>
-<td>IRQ0</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq0">CPU_IRQ0</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lope&mark%5b0%5d=-87.22,111.63">LOPE.q</a></td>
+<td>INT[0]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b0%5d">INT[0]</a></td>
 <td>Active-high. Triggers IRQ0 (V-Blank).</td>
 </tr><tr>
 <td>R16</td>
 <td>O</td>
-<td>IRQ1_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack1">CPU_IRQ_ACK1</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:leja&mark%5b0%5d=-88.41,111.63">LEJA.in</a></td>
-<td>Active-high. Acknowledges IRQ1 (Status).</td>
+<td>INTA[1]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b1%5d">INTA[1]</a></td>
+<td>Active-high. Acknowledges IRQ1 (Status).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[1]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R17</td>
 <td>I</td>
-<td>IRQ1</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq1">CPU_IRQ1</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lalu&mark%5b0%5d=-92.34,111.64">LALU.q</a></td>
+<td>INT[1]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b1%5d">INT[1]</a></td>
 <td>Active-high. Triggers IRQ1 (Status).</td>
 </tr><tr>
 <td>R18</td>
 <td>O</td>
-<td>IRQ2_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack2">CPU_IRQ_ACK2</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lesa&mark%5b0%5d=-89.12,111.64">LESA.in</a></td>
-<td>Active-high. Acknowledges IRQ2 (Timer).</td>
+<td>INTA[2]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b2%5d">INTA[2]</a></td>
+<td>Active-high. Acknowledges IRQ2 (Timer).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[2]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R19</td>
 <td>I</td>
-<td>IRQ2</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq2">CPU_IRQ2</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:nybo&mark%5b0%5d=-75.26,119.44">NYBO.q</a></td>
+<td>INT[2]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b2%5d">INT[2]</a></td>
 <td>Active-high. Triggers IRQ2 (Timer).</td>
 </tr><tr>
 <td>R20</td>
 <td>O</td>
-<td>IRQ3_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack3">CPU_IRQ_ACK3</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lufe&mark%5b0%5d=-89.46,111.64">LUFE.in</a></td>
-<td>Active-high. Acknowledges IRQ3 (Serial).</td>
+<td>INTA[3]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b3%5d">INTA[3]</a></td>
+<td>Active-high. Acknowledges IRQ3 (Serial).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[3]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R21</td>
 <td>I</td>
-<td>IRQ3</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq3">CPU_IRQ3</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:ubul&mark%5b0%5d=-71.70,139.71">UBUL.q</a></td>
+<td>INT[3]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b3%5d">INT[3]</a></td>
 <td>Active-high. Triggers IRQ3 (Serial).</td>
 </tr><tr>
 <td>R22</td>
 <td>O</td>
-<td>IRQ4_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack4">CPU_IRQ_ACK4</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:lamo&mark%5b0%5d=-93.54,111.63">LAMO.in</a></td>
-<td>Active-high. Acknowledges IRQ4 (Joypad).</td>
+<td>INTA[4]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b4%5d">INTA[4]</a></td>
+<td>Active-high. Acknowledges IRQ4 (Joypad).
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[4]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R23</td>
 <td>I</td>
-<td>IRQ4</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq4">CPU_IRQ4</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:ulak&mark%5b0%5d=-92.20,139.70">ULAK.q</a></td>
+<td>INT[4]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b4%5d">INT[4]</a></td>
 <td>Active-high. Triggers IRQ4 (Joypad).</td>
 </tr><tr>
 <td>R24</td>
 <td>O</td>
-<td>IRQ5_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack5">CPU_IRQ_ACK5</a></td>
-<td>-</td>
-<td>Active-high. Acknowledges IRQ5. Not connected.</td>
+<td>INTA[5]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b5%5d">INTA[5]</a></td>
+<td>Active-high. Acknowledges IRQ5. Not connected.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[5]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R25</td>
 <td>I</td>
-<td>IRQ5</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:gnd">GND</a></td>
-<td>-</td>
+<td>INT[5]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b5%5d">INT[5]</a></td>
 <td>Active-high. Triggers IRQ5. Hardwired to GND.</td>
 </tr><tr>
 <td>R26</td>
 <td>O</td>
-<td>IRQ6_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack6">CPU_IRQ_ACK6</a></td>
-<td>-</td>
-<td>Active-high. Acknowledges IRQ6. Not connected.</td>
+<td>INTA[6]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b6%5d">INTA[6]</a></td>
+<td>Active-high. Acknowledges IRQ6. Not connected.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[6]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R27</td>
 <td>I</td>
-<td>IRQ6</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:gnd">GND</a></td>
-<td>-</td>
+<td>INT[6]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b6%5d">INT[6]</a></td>
 <td>Active-high. Triggers IRQ6. Hardwired to GND.</td>
 </tr><tr>
 <td>R28</td>
 <td>O</td>
-<td>IRQ7_ACK</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_irq_ack7">CPU_IRQ_ACK7</a></td>
-<td>-</td>
-<td>Active-high. Acknowledges IRQ7. Not connected.</td>
+<td>INTA[7]</td>
+<td><a href="/sm83_map/?wires=0&view=w:inta%5b7%5d">INTA[7]</a></td>
+<td>Active-high. Acknowledges IRQ7. Not connected.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+INTA[7]:      _________________|‾‾‾‾‾|
+</pre></td>
 </tr><tr>
 <td>R29</td>
 <td>I</td>
-<td>IRQ7</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:gnd">GND</a></td>
-<td>-</td>
+<td>INT[7]</td>
+<td><a href="/sm83_map/?wires=0&view=w:int%5b7%5d">INT[7]</a></td>
 <td>Active-high. Triggers IRQ7. Hardwired to GND.</td>
+</tr><tr>
+<td>R30</td>
+<td>O</td>
+<td>PREFIX_CB</td>
+<td><a href="/sm83_map/?wires=0&view=w:ctl_op_cb_prefix">CTL_OP_CB_PREFIX</a></td>
+<td>Not connected. High when the currently executed opcode is 0xCB.
+<pre>
+Ticks:       : T1  : T2  : T3  : T4  :
+CLK4MiHz:     ‾‾|__|‾‾|__|‾‾|__|‾‾|__
+PREFIX_CB:    __|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾|
+</pre></td>
+</tr><tr>
+<td>R31</td>
+<td>I</td>
+<td>TEST_FREEZE</td>
+<td><a href="/sm83_map/?wires=0&view=w:test_freeze">TEST_FREEZE</a></td>
+<td>Hardwired to GND. I assume this was used for testing the CPU. When pulled high, the current M cycle in the
+sequencer is set to 7, and the TABLE_CB and IN_INTR inputs of the first instruction decoder stage are temporarily
+overriden to be true, which is an invalid state. In this state the CPU would just do nothing until TEST_FREEZE
+is released again.</td>
+</tr><tr>
+<td>R32</td>
+<td>O</td>
+<td>INT_ENTRY</td>
+<td><a href="/sm83_map/?wires=0&view=w:int_entry">INT_ENTRY</a></td>
+<td>Not connected. High while an interrupt entry sequence is executed.<br>
+Changes state on rising edges of CLK (T10).</td>
 </tr><tr>
 <td>B1</td>
 <td>I/O</td>
-<td>D0</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d0">D0</a></td>
-<td>multiple</td>
-<td>Data bus D0.</td>
+<td>D[0]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b0%5d">D[0]</a></td>
+<td>Data bus D[0].</td>
 </tr><tr>
 <td>B2</td>
 <td>I/O</td>
-<td>D1</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d1">D1</a></td>
-<td>multiple</td>
-<td>Data bus D1.</td>
+<td>D[1]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b1%5d">D[1]</a></td>
+<td>Data bus D[1].</td>
 </tr><tr>
 <td>B3</td>
 <td>I/O</td>
-<td>D2</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d2">D2</a></td>
-<td>multiple</td>
-<td>Data bus D2.</td>
+<td>D[2]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b2%5d">D[2]</a></td>
+<td>Data bus D[2].</td>
 </tr><tr>
 <td>B4</td>
 <td>I/O</td>
-<td>D3</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d3">D3</a></td>
-<td>multiple</td>
-<td>Data bus D3.</td>
+<td>D[3]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b3%5d">D[3]</a></td>
+<td>Data bus D[3].</td>
 </tr><tr>
 <td>B5</td>
 <td>I/O</td>
-<td>D4</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d4">D4</a></td>
-<td>multiple</td>
-<td>Data bus D4.</td>
+<td>D[4]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b4%5d">D[4]</a></td>
+<td>Data bus D[4].</td>
 </tr><tr>
 <td>B6</td>
 <td>I/O</td>
-<td>D5</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d5">D5</a></td>
-<td>multiple</td>
-<td>Data bus D5.</td>
+<td>D[5]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b5%5d">D[5]</a></td>
+<td>Data bus D[5].</td>
 </tr><tr>
 <td>B7</td>
 <td>I/O</td>
-<td>D6</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d6">D6</a></td>
-<td>multiple</td>
-<td>Data bus D6.</td>
+<td>D[6]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b6%5d">D[6]</a></td>
+<td>Data bus D[6].</td>
 </tr><tr>
 <td>B8</td>
 <td>I/O</td>
-<td>D7</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:d7">D7</a></td>
-<td>multiple</td>
-<td>Data bus D7.</td>
+<td>D[7]</td>
+<td><a href="/sm83_map/?wires=0&view=w:d%5b7%5d">D[7]</a></td>
+<td>Data bus D[7].</td>
 </tr><tr>
 <td>B9</td>
 <td>O</td>
-<td>A15</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a15">A15</a></td>
-<td>multiple</td>
-<td>Address bus A15.</td>
+<td>A[15]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b15%5d">A[15]</a></td>
+<td>Address bus A[15].</td>
 </tr><tr>
 <td>B10</td>
 <td>O</td>
-<td>A14</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a14">A14</a></td>
-<td>multiple</td>
-<td>Address bus A14.</td>
+<td>A[14]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b14%5d">A[14]</a></td>
+<td>Address bus A[14].</td>
 </tr><tr>
 <td>B11</td>
 <td>O</td>
-<td>A13</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a13">A13</a></td>
-<td>multiple</td>
-<td>Address bus A13.</td>
+<td>A[13]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b13%5d">A[13]</a></td>
+<td>Address bus A[13].</td>
 </tr><tr>
 <td>B12</td>
 <td>O</td>
-<td>A12</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a12">A12</a></td>
-<td>multiple</td>
-<td>Address bus A12.</td>
+<td>A[12]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b12%5d">A[12]</a></td>
+<td>Address bus A[12].</td>
 </tr><tr>
 <td>B13</td>
 <td>O</td>
-<td>A11</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a11">A11</a></td>
-<td>multiple</td>
-<td>Address bus A11.</td>
+<td>A[11]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b11%5d">A[11]</a></td>
+<td>Address bus A[11].</td>
 </tr><tr>
 <td>B14</td>
 <td>O</td>
-<td>A10</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a10">A10</a></td>
-<td>multiple</td>
-<td>Address bus A10.</td>
+<td>A[10]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b10%5d">A[10]</a></td>
+<td>Address bus A[10].</td>
 </tr><tr>
 <td>B15</td>
 <td>O</td>
-<td>A9</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a9">A9</a></td>
-<td>multiple</td>
-<td>Address bus A9.</td>
+<td>A[9]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b9%5d">A[9]</a></td>
+<td>Address bus A[9].</td>
 </tr><tr>
 <td>B16</td>
 <td>O</td>
-<td>A8</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a8">A8</a></td>
-<td>multiple</td>
-<td>Address bus A8.</td>
+<td>A[8]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b8%5d">A[8]</a></td>
+<td>Address bus A[8].</td>
 </tr><tr>
 <td>B17</td>
 <td>O</td>
-<td>A7</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a7">A7</a></td>
-<td>multiple</td>
-<td>Address bus A7.</td>
+<td>A[7]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b7%5d">A[7]</a></td>
+<td>Address bus A[7].</td>
 </tr><tr>
 <td>B18</td>
 <td>O</td>
-<td>A6</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a6">A6</a></td>
-<td>multiple</td>
-<td>Address bus A6.</td>
+<td>A[6]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b6%5d">A[6]</a></td>
+<td>Address bus A[6].</td>
 </tr><tr>
 <td>B19</td>
 <td>O</td>
-<td>A5</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a5">A5</a></td>
-<td>multiple</td>
-<td>Address bus A5.</td>
+<td>A[5]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b5%5d">A[5]</a></td>
+<td>Address bus A[5].</td>
 </tr><tr>
 <td>B20</td>
 <td>O</td>
-<td>A4</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a4">A4</a></td>
-<td>multiple</td>
-<td>Address bus A4.</td>
+<td>A[4]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b4%5d">A[4]</a></td>
+<td>Address bus A[4].</td>
 </tr><tr>
 <td>B21</td>
 <td>O</td>
-<td>A3</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a3">A3</a></td>
-<td>multiple</td>
-<td>Address bus A3.</td>
+<td>A[3]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b3%5d">A[3]</a></td>
+<td>Address bus A[3].</td>
 </tr><tr>
 <td>B22</td>
 <td>O</td>
-<td>A2</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a2">A2</a></td>
-<td>multiple</td>
-<td>Address bus A2.</td>
+<td>A[2]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b2%5d">A[2]</a></td>
+<td>Address bus A[2].</td>
 </tr><tr>
 <td>B23</td>
 <td>O</td>
-<td>A1</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a1">A1</a></td>
-<td>multiple</td>
-<td>Address bus A1.</td>
+<td>A[1]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b1%5d">A[1]</a></td>
+<td>Address bus A[1].</td>
 </tr><tr>
 <td>B24</td>
 <td>O</td>
-<td>A0</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:a0">A0</a></td>
-<td>multiple</td>
-<td>Address bus A0.</td>
+<td>A[0]</td>
+<td><a href="/sm83_map/?wires=0&view=w:a%5b0%5d">A[0]</a></td>
+<td>Address bus A[0].</td>
 </tr><tr>
 <td>B25</td>
 <td>I</td>
 <td>WAKE</td>
-<td><a href="/dmg_cpu_b_map/?wires=0&view=w:cpu_wakeup">CPU_WAKEUP</a></td>
-<td><a href="/dmg_cpu_b_map/?view=c:awob&mark%5b0%5d=-145.94,183.64">AWOB.q</a></td>
-<td>Wakes CPU from STOP mode.</td>
+<td><a href="/sm83_map/?wires=0&view=w:wake">WAKE</a></td>
+<td>Wakes CPU from STOP mode. Rising this signal immediately causes the CPU to pull
+<span style="text-decoration:overline">STOP</span> (T14) high, which enables the crystal oscillator. Has no effect
+when <span style="text-decoration:overline">STOP</span> is already high.</td>
 </tr></table></main>
 <footer><hr>
 <p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
