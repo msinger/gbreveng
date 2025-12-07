@@ -221,7 +221,7 @@
    <li><a href="#dffr_cc_ee_reg_ie_bit">DFFR_CC_EE_REG_IE_BIT</a></li>
    <li><a href="#dffs_cc_ee_pch_d_reg_pc_bit">DFFS_CC_EE_PCH_D_REG_PC_BIT</a></li>
    <li><a href="#dffn_ee_pch_d_alu_flag">DFFN_EE_PCH_D_ALU_FLAG</a></li>
-   <li><a href="#dffn_ee_q_alu_tmp">DFFN_EE_Q_ALU_TMP</a></li>
+   <li><a href="#dffn_ee_q_alu_sign">DFFN_EE_Q_ALU_SIGN</a></li>
    <li><a href="#dffre_cc_q">DFFRE_CC_Q</a></li>
   </ul>
  </li>
@@ -3632,11 +3632,11 @@ must not be held high for an extended amount of time, otherwise the stored data 
 <a href="/sm83_map/?view=c:flag_z">FLAG_Z</a>
 (4 total)
 </p>
-<h3 id="dffn_ee_q_alu_tmp">DFFN_EE_Q_ALU_TMP</h3>
+<h3 id="dffn_ee_q_alu_sign">DFFN_EE_Q_ALU_SIGN</h3>
 <p>Semi-dynamic data flip-flop with externally inverted enable inputs, level-sensitive D-gating, and no inverted
 output.</p>
 <table>
-<tr><td><img src="img/cells/sm83/dffn_ee_q_alu_tmp_desc.png?v=0" style="min-width:250px;" alt=""></td>
+<tr><td><img src="img/cells/sm83/dffn_ee_q_alu_sign_desc.png?v=0" style="min-width:250px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>D</i></td>
@@ -3659,8 +3659,8 @@ otherwise the stored data will decay.</td></tr>
 <td>Data output.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/sm83/dffn_ee_q_alu_tmp_layout.png?v=0" alt=""></p>
-<p><img src="img/cells/sm83/dffn_ee_q_alu_tmp_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffn_ee_q_alu_sign_layout.png?v=0" alt=""></p>
+<p><img src="img/cells/sm83/dffn_ee_q_alu_sign_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/sm83_map/?view=c:alu_dff">ALU_DFF</a>
 (1 total)
