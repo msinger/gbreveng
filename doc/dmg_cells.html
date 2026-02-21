@@ -162,8 +162,8 @@ Some I/O pads were also renamed, because the names did not fit the official docu
    <li><a href="#pad_out">PAD_OUT</a> (A)</li>
    <li><a href="#pad_out_diff">PAD_OUT_DIFF</a> (B)</li>
    <li><a href="#pad_xtal">PAD_XTAL</a></li>
-   <li><a href="#pad_in_an">PAD_IN_AN</a></li>
-   <li><a href="#pad_out_an">PAD_OUT_AN</a></li>
+   <li><a href="#pad_pass">PAD_PASS</a></li>
+   <li><a href="#pad_pass_tg">PAD_PASS_TG</a></li>
   </ul>
  </li>
  <li><a href="#other">Other</a>
@@ -5364,40 +5364,42 @@ to stop the crystal oscillator (to save power) until a button gets pressed.</td>
 <a href="/dmg_cpu_b_map/?view=c:ck1_ck2">CK1/CK2</a>
 (1 total)
 </p>
-<h3 id="pad_in_an"><a id="aibuf" aria-hidden="true"></a>PAD_IN_AN</h3>
-<p>Analog input pad.</p>
-<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>. In the die shot this picture was taken
-from, this pin is located at the bottom right. For consistency across this documentation it is rotated here (not
-mirrored!).</p>
-<table>
-<tr><td><img src="img/cells/pad_in_an_vin_desc.png?v=0" style="min-width:350px;" alt=""></td>
-<td><table class="default">
-<tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>INPUT</i></td>
-<td>Analog input. Reads the current analog level at the input pad.</td></tr>
-</table></td></tr>
-</table>
-<p>Instances:
-<a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>
-(1 total)
-</p>
-<h3 id="pad_out_an"><a id="aobuf" aria-hidden="true"></a>PAD_OUT_AN</h3>
-<p>Analog output pad.</p>
+<h3 id="pad_pass"><a id="aobuf" aria-hidden="true"></a><a id="pad_out_an" aria-hidden="true"></a>PAD_PASS</h3>
+<p>Simple pass pad with direct metal connection. Used as analog output.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:so1">SO1 (ROUT)</a> and
 <a href="/dmg_cpu_b_map/?view=c:so2">SO2 (LOUT)</a>. In the die shot this picture was taken from, these pins are located
 at the bottom right. For consistency across this documentation it is rotated here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/pad_out_an_so2_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_pass_so2_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
-<tr><td><i>OUTPUT</i></td>
-<td>Analog output. Drives the output pad based on this analog level. The pad is always actively driven.</td></tr>
+<tr><td><i>A</i></td>
+<td>Direct metal connection to the pad.</td></tr>
 </table></td></tr>
 </table>
+<p><img src="img/cells/pad_pass_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:so1">SO1</a>
 <a href="/dmg_cpu_b_map/?view=c:so2">SO2</a>
 (2 total)
+</p>
+<h3 id="pad_pass_tg"><a id="aibuf" aria-hidden="true"></a><a id="pad_in_an" aria-hidden="true"></a>PAD_PASS_TG</h3>
+<p>Simple pass pad with transmission gate. Used as analog input.</p>
+<p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>. In the die shot this picture was taken
+from, this pin is located at the bottom right. For consistency across this documentation it is rotated here (not
+mirrored!).</p>
+<table>
+<tr><td><img src="img/cells/pad_pass_tg_vin_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>A</i></td>
+<td>Connected to the pad through an always enabled transmission gate.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/pad_pass_tg_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>
+(1 total)
 </p>
 <h2 id="other">Other</h2>
 <h3 id="tie"><a id="const" aria-hidden="true"></a>TIE</h3>
