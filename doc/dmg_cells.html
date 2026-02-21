@@ -155,8 +155,8 @@ Some I/O pads were also renamed, because the names did not fit the official docu
  <li><a href="#pad">I/O pads</a>
   <ul>
    <li><a href="#pad_bidir">PAD_BIDIR</a> (A)</li>
-   <li><a href="#pad_bidir_ena_pu">PAD_BIDIR_ENA_PU</a> (B)</li>
-   <li><a href="#pad_bidir_sck">PAD_BIDIR_SCK</a> (C)</li>
+   <li><a href="#pad_bidir_pu">PAD_BIDIR_PU</a> (B)</li>
+   <li><a href="#pad_bidir_pu_latch">PAD_BIDIR_PU_LATCH</a> (C)</li>
    <li><a href="#pad_in">PAD_IN</a> (A)</li>
    <li><a href="#pad_in_pu">PAD_IN_PU</a> (B)</li>
    <li><a href="#pad_out">PAD_OUT</a> (A)</li>
@@ -5142,7 +5142,7 @@ face inwards.</p>
 <td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/pad_bidir_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_bidir_sch.png?v=1" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:a0">A0</a>
 <a href="/dmg_cpu_b_map/?view=c:a1">A1</a>
@@ -5167,12 +5167,12 @@ face inwards.</p>
 <a href="/dmg_cpu_b_map/?view=c:~%7Bwr%7D"><span style="text-decoration:overline">WR</span></a>
 (21 total)
 </p>
-<h3 id="pad_bidir_ena_pu"><a id="iobuf_b" aria-hidden="true"></a>PAD_BIDIR_ENA_PU (B)</h3>
+<h3 id="pad_bidir_pu"><a id="iobuf_b" aria-hidden="true"></a><a id="pad_bidir_ena_pu" aria-hidden="true"></a>PAD_BIDIR_PU (B)</h3>
 <p>Bidirectional pad with open-drain/-source capability and optional pull-up resistor.</p>
 <p>This cell is found all around the edge of the chip and is rotated (not mirrored!) so that the four connections
 face inwards.</p>
 <table>
-<tr><td><img src="img/cells/pad_bidir_ena_pu_sin_p13_sin_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_bidir_pu_sin_p13_sin_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>NDRV</i></td>
@@ -5185,7 +5185,7 @@ face inwards.</p>
 <td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
-<p><img src="img/cells/pad_bidir_ena_pu_sch.png?v=0" alt=""></p>
+<p><img src="img/cells/pad_bidir_pu_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:d0">D0</a>
 <a href="/dmg_cpu_b_map/?view=c:d1">D1</a>
@@ -5210,13 +5210,13 @@ face inwards.</p>
 <a href="/dmg_cpu_b_map/?view=c:sin">SIN</a>
 (21 total)
 </p>
-<h3 id="pad_bidir_sck"><a id="iobuf_c" aria-hidden="true"></a>PAD_BIDIR_SCK (C)</h3>
-<p>Bidirectional pad with open-drain/-source capability and optional pull-up resistor.</p>
+<h3 id="pad_bidir_pu_latch"><a id="iobuf_c" aria-hidden="true"></a><a id="pad_bidir_ena_pu_latch" aria-hidden="true"></a><a id="pad_bidir_sck" aria-hidden="true"></a>PAD_BIDIR_PU_LATCH (C)</h3>
+<p>Bidirectional pad with open-drain/-source capability, optional pull-up resistor, and input NAND latch.</p>
 <p>This cell is only used for <a href="/dmg_cpu_b_map/?view=c:sck">SCK</a>. In the die shot this picture was taken
 from, this pin is located at the right-hand side. For consistency across this documentation it is rotated
 here (not mirrored!).</p>
 <table>
-<tr><td><img src="img/cells/pad_bidir_sck_sck_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<tr><td><img src="img/cells/pad_bidir_pu_latch_sck_desc.png?v=0" style="min-width:350px;" alt=""></td>
 <td><table class="default">
 <tr><th>I/O</th><th>Description</th></tr>
 <tr><td><i>NDRV</i></td>
@@ -5229,7 +5229,7 @@ here (not mirrored!).</p>
 <td>Inverted input state. Reads the inverted binary level at the I/O pad.</td></tr>
 </table></td></tr>
 </table>
-<!--<p><img src="img/cells/pad_bidir_sck_sch.png?v=0" alt=""></p>-->
+<p><img src="img/cells/pad_bidir_pu_latch_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:sck">SCK</a>
 (1 total)
