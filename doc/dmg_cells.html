@@ -166,6 +166,15 @@ Some I/O pads were also renamed, because the names did not fit the official docu
    <li><a href="#pad_pass_tg">PAD_PASS_TG</a></li>
   </ul>
  </li>
+ <li><a href="#analog">Analog</a>
+  <ul>
+   <li><a href="#amp">AMP</a></li>
+   <li><a href="#dac">DAC</a></li>
+   <li><a href="#mixer">MIXER</a></li>
+   <li><a href="#rv">RV</a></li>
+   <li><a href="#vdiv">VDIV</a></li>
+  </ul>
+ </li>
  <li><a href="#other">Other</a>
   <ul>
    <li><a href="#tie">TIE</a></li>
@@ -3761,7 +3770,7 @@ When high, <i>Y</i> is not driven.</td></tr>
 (56 total)
 </p>
 <h2 id="ff">Storage elements</h2>
-<h4 id="nand_latch">NAND_LATCH</h4>
+<h3 id="nand_latch">NAND_LATCH</h3>
 <p>NAND-latch with inverted set/reset inputs.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: AND2</p>
 <p><a href="https://github.com/rgalland">Rgalland</a> figured out the correct (NAND-latch) function of these cells.</p>
@@ -3789,7 +3798,7 @@ When high, <i>Y</i> is not driven.</td></tr>
 <a href="/dmg_cpu_b_map/?view=c:taka">TAKA</a>
 (7 total)
 </p>
-<h4 id="nor_latch">NOR_LATCH</h4>
+<h3 id="nor_latch">NOR_LATCH</h3>
 <p>NOR-latch with set/reset inputs.</p>
 <p>Name in <a href="https://github.com/furrtek/DMG-CPU-Inside">DMG-CPU-Inside</a>: OR2</p>
 <p><a href="https://github.com/rgalland">Rgalland</a> figured out the correct (NOR-latch) function of these cells.</p>
@@ -5399,6 +5408,143 @@ mirrored!).</p>
 <p><img src="img/cells/pad_pass_tg_sch.png?v=0" alt=""></p>
 <p>Instances:
 <a href="/dmg_cpu_b_map/?view=c:vin">VIN</a>
+(1 total)
+</p>
+<h2 id="analog">Analog</h2>
+<h3 id="amp"><a id="amp_split_main" aria-hidden="true"></a><a id="amp_split_output" aria-hidden="true"></a>AMP</h3>
+<p>Audio amplifier.</p>
+<table>
+<tr><td><img src="img/cells/amp_ch1_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN_P</i>, <i>IN_M</i></td>
+<td>Amplifier inputs.</td></tr>
+<tr><td><i>BIAS</i></td>
+<td>Bias voltage input. A 3.0&nbsp;V bias is applied to all amplifier instances. It fine adjusts the linear window in
+which the amplifier operates.</td></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. If <i>ENA</i> is low, <i>OUT</i> is high-z.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>ENA</i></span></td>
+<td>Active-low enable input. Must always be the inverse of <i>ENA</i>.</td></tr>
+<tr><td><i>OUT</i></td>
+<td>Amplifier output.</td></tr>
+</table></td></tr>
+</table>
+<p>The final stage of amplifiers that drive the <a href="/dmg_cpu_b_map/?view=c:so1">SO1 (ROUT)</a> and
+<a href="/dmg_cpu_b_map/?view=c:so2">SO2 (LOUT)</a> output pads have much bigger output transistors (P6 and N5),
+which are not contained within the amplifier cell. They are connected like this:</p>
+<table>
+<tr><td><img src="img/cells/amp_split_l_r_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>OUT_P</i></span></td>
+<td>Output to PMOS gate.</td></tr>
+<tr><td><i>OUT_N</i></td>
+<td>Output to NMOS gate.</td></tr>
+<tr><td><span style="text-decoration:overline"><i>P</i></span></td>
+<td>Gate of PMOS output transistor.</td></tr>
+<tr><td><i>N</i></td>
+<td>Gate of NMOS output transistor.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/amp_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:ch1_amp">CH1_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:ch2_amp">CH2_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:ch3_amp">CH3_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:ch4_amp">CH4_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:ladj_amp">LADJ_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:radj_amp">RADJ_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:lout_amp">LOUT_AMP</a>,
+<a href="/dmg_cpu_b_map/?view=c:rout_amp">ROUT_AMP</a>
+(8 total)
+</p>
+<h3 id="dac">DAC</h3>
+<p>4-bit digital to analog converter.</p>
+<table>
+<tr><td><img src="img/cells/dac_ch4_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>D0</i>, <i>D1</i>, <i>D2</i>, <i>D3</i></td>
+<td>4-bit digital input.</td></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. If <i>ENA</i> is low, <i>OUT</i> and <i>VREF</i> are both pulled high to VDD through some
+resistors.</td></tr>
+<tr><td><i>OUT</i></td>
+<td>Analog output. If <i>ENA</i> is high, <i>OUT</i> ranges from 0.7V (D=0) to 3.7V (D=15). See schematic below for
+the full mapping.</td></tr>
+<tr><td><i>VREF</i></td>
+<td>Reference voltage output. If <i>ENA</i> is high, <i>VREF</i> outputs 2.2V.</td></tr>
+<tr><td><i>NOT_IN</i></td>
+<td>Input to inverter.</td></tr>
+<tr><td><i>NOT_Y</i></td>
+<td>Outputs inverted <i>NOT_IN</i>.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/dac_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:ch1_dac">CH1_DAC</a>,
+<a href="/dmg_cpu_b_map/?view=c:ch2_dac">CH2_DAC</a>,
+<a href="/dmg_cpu_b_map/?view=c:ch3_dac">CH3_DAC</a>,
+<a href="/dmg_cpu_b_map/?view=c:ch4_dac">CH4_DAC</a>
+(4 total)
+</p>
+<h3 id="mixer">MIXER</h3>
+<p>5-channel analog mixer.</p>
+<table>
+<tr><td><img src="img/cells/mixer_r_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>IN1</i>, <i>IN2</i>, <i>IN3</i>, <i>IN4</i>, <i>IN5</i></td>
+<td>Analog inputs.</td></tr>
+<tr><td><i>ENA1</i>, <i>ENA2</i>, <i>ENA3</i>, <i>ENA4</i>, <i>ENA5</i></td>
+<td>Active-high enable inputs; one for each analog input.</td></tr>
+<tr><td><i>OUT</i></td>
+<td>Analog output.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/mixer_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:lmix">LMIX</a>,
+<a href="/dmg_cpu_b_map/?view=c:rmix">RMIX</a>
+(2 total)
+</p>
+<h3 id="rv">RV</h3>
+<p>3-bit digital rheostat.</p>
+<table>
+<tr><td><img src="img/cells/rv_r_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><span style="text-decoration:overline"><i>ADJ0</i></span>,
+<span style="text-decoration:overline"><i>ADJ1</i></span>,
+<span style="text-decoration:overline"><i>ADJ2</i></span></td>
+<td>3-bit digital input to adjust resistance between <i>A</i> and <i>W</i>. If all three are high, representing 0b000,
+the resistance will be the lowest.</td></tr>
+<tr><td><i>A</i>, <i>W</i></td>
+<td>Terminals of adjustable resistor.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/rv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:lrv">LRV</a>,
+<a href="/dmg_cpu_b_map/?view=c:rrv">RRV</a>
+(2 total)
+</p>
+<h3 id="vdiv">VDIV</h3>
+<p>Voltage divider.</p>
+<table>
+<tr><td><img src="img/cells/vdiv_desc.png?v=0" style="min-width:350px;" alt=""></td>
+<td><table class="default">
+<tr><th>I/O</th><th>Description</th></tr>
+<tr><td><i>ENA</i></td>
+<td>Active-high enable input. If <i>ENA</i> is low, <i>VREF</i> is pulled high to VDD by a resistor.</td></tr>
+<tr><td><i>VREF</i></td>
+<td>Reference voltage output. If <i>ENA</i> is high, <i>VREF</i> outputs 3V.</td></tr>
+</table></td></tr>
+</table>
+<p><img src="img/cells/vdiv_sch.png?v=0" alt=""></p>
+<p>Instances:
+<a href="/dmg_cpu_b_map/?view=c:vdiv">VDIV</a>
 (1 total)
 </p>
 <h2 id="other">Other</h2>
