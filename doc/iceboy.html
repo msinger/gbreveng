@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IceBoy - Game Boy clone</title>
+<link rel="icon" href="/gameboy.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Some documentation about the Game Boy clone IceBoy.">
+<style>
+ img {
+  max-width: 100%;
+  display:   inline;
+ }
+ table.default {
+  border-top:    1px solid #b2b2b2;
+  border-left:   1px solid #b2b2b2;
+  border-bottom: 1px solid #4c4c4c;
+  border-right:  1px solid #4c4c4c;
+ }
+ table.default tr th {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+ table.default tr td {
+   border-top:    1px solid #4c4c4c;
+   border-left:   1px solid #4c4c4c;
+   border-bottom: 1px solid #b2b2b2;
+   border-right:  1px solid #b2b2b2;
+ }
+</style>
+</head>
+<body>
+<nav><p><a href="http://iceboy.a-singer.de/">Home</a></p>
+<hr></nav>
+<main><h1>IceBoy - Game Boy clone</h1>
+<p>I did a lot of research in the past years. The FPGA implementation was done before all that research hapened. I need
+to fully reimplement IceBoy once I'm done figuring everything out. You can find the (now very old) IceBoy source code
+here:</p>
+<p style="margin: 1em;">&rarr; <a href="https://github.com/msinger/iceboy">IceBoy repository on GitHub</a></p>
+<p style="margin: 1em;">&rarr; <a href="https://sourceforge.net/projects/iceboy/">IceBoy project on SourceForge</a></p>
+<p>The first prototype was running on a
+<a href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/iCE40HX8KBreakoutBoard.aspx">iCE40-HX8K
+Breakout Board</a> with a perfboard attached to it for memory, and an LCD display with UC1611 driver that I got with an
+<a href="https://web.archive.org/web/20080705022650/http://www.conitec.com/english/linuxboard.htm">ARM evaluation board</a>
+over a decade ago.</p>
+<table><tr><td><a href="img/prototype.jpg"><img src="img/prototype.jpg"
+alt="IceBoy prototype on iCE40-HX8K Breakout Board playing Super Mario Land 2"></a></td>
+<td><a href="img/perfbrd.jpg"><img src="img/perfbrd.jpg" alt="Perfboard with memory for IceBoy"></a>
+</td></tr></table>
+<p>The evaluation board on the left side is just used as an adapter to connect the pin header to the small 0.5 mm
+pitched connector of the LCD, and also as a power supply. The perfboard on the right side contains SRAM chips: One
+for the Game Boy its work RAM, one for the cartridge save game RAM (32 KiB), and two for holding a ROM file (2x512 KiB).
+The ROM file can be received over UART while the IceBoy is under reset. The video RAM and boot ROM are FGPA internal.</p>
+<p>This setup was very fragile so I wanted to make my own PCB for further development. I also wanted a system for making
+research on the Game Boy more comfortable. I combined those two aspects into one PCB: The Game Boy reverse engineering
+FGPA board.</p>
+<p><a href="img/gbreveng_brd.jpg"><img src="img/gbreveng_brd.jpg" alt="Game Boy reverse engineering FPGA board"
+style="max-width: 50%;"></a></p>
+<p>I let <a href="https://www.seeedstudio.com/fusion.html">SeeedStudio</a> manufacture and assemble two of those PCBs.
+I used their PCB manufacturing services multiple times now and so far I'm very happy with their quality. The board has
+all the memory the Game Boy needs onboard. It has even more than the perfboard had. There's 2x1 MiB for the ROM file,
+128 KiB for the cartridge RAM and I had added another RAM that has its own data and address bus, so it can be used as
+video RAM. There is a cartridge connector at the top, which can be used instead of loading a ROM file over UART. Just
+like on the real Game Boy, the cartridge connector is also sharing its data and address bus with the work RAM. The big
+pin header at the far left edge of the PCB can be connected to a real Game Boy using the
+<a href="https://github.com/Gekkio/gb-hardware">GB-BRK-CART v4.0 adapter PCB from Gekkio</a>. The FPGA board can act
+as a cartridge to the real Game Boy in this use case. On the right side there is a Game Boy Link Port and in the
+bottom right corner a DMG-LCD PCB can be connected with the original 21 pin flex cable, so IceBoy can drive the original
+LCD and also sense the buttons and use the original speaker for audio output.</p>
+<p>The KiCad project for the board is here:</p>
+<p style="margin: 1em;">&rarr; <a href="https://github.com/msinger/gbreveng/tree/master/pcb/fpgaboard">Game Boy reverse
+engineering FPGA board KiCad project</a></p>
+<p style="margin: 1em;">&rarr; <a href="gbreveng_sch.pdf">Game Boy reverse engineering FPGA board schematics PDF
+(rev 0)</a></p>
+</main><footer><hr>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+</footer></body>
+</html>

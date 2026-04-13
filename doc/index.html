@@ -49,63 +49,11 @@ would be a fun project for that. I decided to develop IceBoy for the Lattice iCE
 IceBoy comes from: <b><u>iCE</u></b>40 &rarr; <b><u>Ice</u></b>Boy. I made this decision to use the iCE40 family because
 I wanted to use a toolchain that is completely open source: <a href="http://www.clifford.at/icestorm/">Project
 IceStorm</a>.</p>
-<p>You can find the IceBoy source code here:</p>
-<p style="margin: 1em;">&rarr; <a href="https://github.com/msinger/iceboy">IceBoy repository on GitHub</a></p>
-<p style="margin: 1em;">&rarr; <a href="https://sourceforge.net/projects/iceboy/">IceBoy project on SourceForge</a></p>
-<p>The first prototype was running on a
-<a href="https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/iCE40HX8KBreakoutBoard.aspx">iCE40-HX8K
-Breakout Board</a> with a perfboard attached to it for memory, and an LCD display with UC1611 driver that I got with an
-<a href="https://web.archive.org/web/20080705022650/http://www.conitec.com/english/linuxboard.htm">ARM evaluation board</a>
-over a decade ago.</p>
-<table><tr><td><a href="doc/img/prototype.jpg"><img src="doc/img/prototype.jpg"
-alt="IceBoy prototype on iCE40-HX8K Breakout Board playing Super Mario Land 2"></a></td>
-<td><a href="doc/img/perfbrd.jpg"><img src="doc/img/perfbrd.jpg" alt="Perfboard with memory for IceBoy"></a>
-</td></tr></table>
-<p>The evaluation board on the left side is just used as an adapter to connect the pin header to the small 0.5 mm
-pitched connector of the LCD, and also as a power supply. The perfboard on the right side contains SRAM chips: One
-for the Game Boy its work RAM, one for the cartridge save game RAM (32 KiB), and two for holding a ROM file (2x512 KiB).
-The ROM file can be received over UART while the IceBoy is under reset. The video RAM and boot ROM are FGPA internal.</p>
-<p>This setup was very fragile so I wanted to make my own PCB for further development. I also wanted a system for making
-research on the Game Boy more comfortable. I combined those two aspects into one PCB: The Game Boy reverse engineering
-FGPA board.</p>
-<p><a href="doc/img/gbreveng_brd.jpg"><img src="doc/img/gbreveng_brd.jpg" alt="Game Boy reverse engineering FPGA board"
-style="max-width: 50%;"></a></p>
-<p>I let <a href="https://www.seeedstudio.com/fusion.html">SeeedStudio</a> manufacture and assemble two of those PCBs.
-I used their PCB manufacturing services multiple times now and so far I'm very happy with their quality. The board has
-all the memory the Game Boy needs onboard. It has even more than the perfboard had. There's 2x1 MiB for the ROM file,
-128 KiB for the cartridge RAM and I had added another RAM that has its own data and address bus, so it can be used as
-video RAM. There is a cartridge connector at the top, which can be used instead of loading a ROM file over UART. Just
-like on the real Game Boy, the cartridge connector is also sharing its data and address bus with the work RAM. The big
-pin header at the far left edge of the PCB can be connected to a real Game Boy using the
-<a href="https://github.com/Gekkio/gb-hardware">GB-BRK-CART v4.0 adapter PCB from Gekkio</a>. The FPGA board can act
-as a cartridge to the real Game Boy in this use case. On the right side there is a Game Boy Link Port and in the
-bottom right corner a DMG-LCD PCB can be connected with the original 21 pin flex cable, so IceBoy can drive the original
-LCD and also sense the buttons and use the original speaker for audio output.</p>
-<p>The KiCad project for the board is here:</p>
-<p style="margin: 1em;">&rarr; <a href="https://github.com/msinger/gbreveng/tree/master/pcb/fpgaboard">Game Boy reverse
-engineering FPGA board KiCad project</a></p>
-<p style="margin: 1em;">&rarr; <a href="doc/gbreveng_sch.pdf">Game Boy reverse engineering FPGA board schematics PDF
-(rev 0)</a></p>
+<p>You can find further details about IceBoy <a href="doc/iceboy.html">here</a>.</p>
 <article>
 <h2>Game Boy research</h2>
-<p>I've done a bit of research on Game Boys that I've documented on separate pages:</p>
+<p>I've done a lot of research on Game Boys that I've documented on separate pages:</p>
 <table class="default">
-<tr><td style="min-width:100px"><img src="doc/img/thumb/signals.png" alt=""></td><td>
-<a href="doc/mem_patterns.html">Game Boy Memory Access Patterns</a><br>
-This is just some basic stuff like what's visible on the external bus when the Game Boy accesses different
-address ranges.</td></tr>
-<tr><td style="min-width:100px"><img src="doc/img/thumb/nocrystal.jpg" alt=""></td><td>
-<a href="doc/skip_ff50.html">Skip write to 0xff50 register before leaving boot ROM</a><br>
-Of course, I wanted to experiment on the boot ROM skip like everybody else did already. I found out which single
-clock tick needs to be shortened for the CPU to make a deterministic jump to one specific address.</td></tr>
-<tr><td style="min-width:100px"><img src="doc/img/thumb/wideboy.jpg" alt=""></td><td>
-<a href="doc/wide_boy.html">Wide-Boy64 Research</a><br>
-I have reverse engineered the schematics of the Wide-Boy64 AGB and was able to dump the Spartan bitstream from
-the PROM and also the N64 code from the flash.</td></tr>
-<tr><td style="min-width:100px"><img src="doc/img/thumb/clkgen.png" alt=""></td><td>
-<a href="doc/dmg_reset.html">Weird DMG-CPU Reset Behavior</a><br>
-I discovered that some state of the clock generation logic inside the DMG-CPU B chip is not properly reset, which
-is actually measurable from outside the chip.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/schematics.png" alt=""></td><td>
 <a href="doc/dmg_cpu_b_sch.pdf">DMG-CPU B Schematics</a><br>
 <a href="doc/sm83_sch.pdf">SM83 Schematics</a><br>
@@ -114,13 +62,25 @@ is actually measurable from outside the chip.</td></tr>
 <a href="https://github.com/msinger/dmg-schematics">repository</a> containing KiCad files of Game Boy DMG-CPU B
 schematics. Régis did by far most of the work here, putting a lot of effort into a hierarchical structure that
 actually makes sense. With only a few exceptions, we kept the cell names given by Furrtek.<br>
-The schematics of the SM83 CPU core, which were not covered previously, are now also available.
+The schematics of the SM83 CPU core and all the analog audio circuitry, which were not covered previously, are now
+also available.
 </td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/cellref.jpg" alt=""></td><td>
+<a href="doc/dmg_cells.html">DMG-CPU Cells Reference</a><br>
+<a href="doc/sm83_cells.html">SM83 Cells Reference</a><br>
+These ought to be "reference manuals" for all the cells used inside the DMG-CPU B chip and the SM83 CPU core.
+I highly recommend to read these whenever the exact function of individual cells inside the schematics above are
+unclear or if you need more information. Most cells are documented with their own transistor level schematic and annotated
+layouts.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/cpucore.jpg" alt=""></td><td>
 <a href="doc/dmg_cpu_connections.html">DMG-CPU SM83 Connections</a><br>
-Here I'm trying to figure out the purpose of each connection from/to the CPU core inside the DMG-CPU B. I use our
-<a href="doc/dmg_cpu_b_sch.pdf">schematics</a> and some Icarus Verilog
+Here I described the purpose of each input/output of the SM83 CPU core inside the DMG-CPU B chip. I used our
+<a href="doc/dmg_cpu_b_sch.pdf">schematics</a> and the Icarus Verilog
 <a href="https://github.com/msinger/dmg-sim">simulations</a> for that.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/wideboy.jpg" alt=""></td><td>
+<a href="doc/wide_boy.html">Wide-Boy64 Research</a><br>
+I have reverse engineered the schematics of the Wide-Boy64 AGB and was able to dump the Spartan bitstream from
+the PROM and also the N64 code from the flash.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/np_gb_memory.png" alt=""></td><td>
 <a href="doc/np_gb_memory.html">Nintendo Power Game Boy Memory cartridge documentation</a><br>
 I have documented how to fully read, erase and program the white flash cartridges.</td></tr>
@@ -130,11 +90,6 @@ I have documented how to fully read, erase and program the white flash cartridge
 <h2>Tools for Game Boy research</h2>
 <p>During my research attempts, I made some stuff to make further research easier for myself. Maybe it helps you too:</p>
 <table class="default">
-<tr><td style="min-width:100px"><img src="doc/img/thumb/db.jpg" alt=""></td><td>
-<a href="db.html">Game Boy Database</a><br>
-A database of all the Game Boys and cartridges I've collected. I stole this idea from Gekkio, there's really no other
-way to put it. Check out his huge <a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot to track down
-all the different CPU revisions on eBay, based on the serial numbers on the back.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/map.jpg" alt=""></td><td>
 <a href="dmg_cpu_b_map/">Game Boy DMG-CPU B Map</a><br>
 <a href="sm83_map/">SM83 Map</a><br>
@@ -142,13 +97,36 @@ all the different CPU revisions on eBay, based on the serial numbers on the back
 CPU core. Source images are taken from <a href="https://siliconpr0n.org/map/nintendo/dmg-cpu-b/">siliconpr0n.org</a>,
 <a href="https://gekkio.fi/files/decapped-chips/Frankenscope/Nintendo_SGB-CPU_01/">Gekkio</a> and
 <a href="https://github.com/emu-russia/dmgcpu">emu-russia/ogamespec</a>.</td></tr>
-<tr><td style="min-width:100px"><img src="doc/img/thumb/cellref.jpg" alt=""></td><td>
-<a href="doc/dmg_cells.html">DMG-CPU Cells Reference</a><br>
-<a href="doc/sm83_cells.html">SM83 Cells Reference</a><br>
-These ought to be "reference manuals" for all the cells used inside the DMG-CPU B chip and the SM83 CPU core.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/gtkwave.png" alt=""></td><td>
+<a href="https://github.com/msinger/dmg-sim">Icarus Verilog simulation</a><br>
+A simulation of the complete DMG-CPU B chip that strives to reproduce all signal timings as close to the original
+as possible. Helps to explain many of the bugs and glitches of the chip.</td></tr>
 <tr><td style="min-width:100px"><img src="doc/img/thumb/visual-sm83.png" alt=""></td><td>
 <a href="visual6502/expert-sm83.html">Visual SM83 Transistor Level Simulation in JavaScript</a><br>
 A port of <a href="http://www.visual6502.org/">visual6502.org</a> for the Game Boy CPU.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/db.jpg" alt=""></td><td>
+<a href="db.html">Game Boy Database</a><br>
+A database of all the Game Boys and cartridges I've collected. I stole this idea from Gekkio, there's really no other
+way to put it. Check out his huge <a href="https://gbhwdb.gekkio.fi/">database</a>. It helped me a lot to track down
+all the different CPU revisions on eBay, based on the serial numbers on the back.</td></tr>
+</table>
+</article>
+<article>
+<h2>Older Game Boy research</h2>
+<p>Here some older research that I've done before we had the schematics and the simulation for explanations:</p>
+<table class="default">
+<tr><td style="min-width:100px"><img src="doc/img/thumb/signals.png" alt=""></td><td>
+<a href="doc/mem_patterns.html">Game Boy Memory Access Patterns</a><br>
+This is just some basic stuff like what's visible on the external bus when the Game Boy accesses different
+address ranges.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/nocrystal.jpg" alt=""></td><td>
+<a href="doc/skip_ff50.html">Skip write to 0xff50 register before leaving boot ROM</a><br>
+Of course, I wanted to experiment on the boot ROM skip like everybody else did already. I found out which single
+clock tick needs to be shortened for the CPU to make a deterministic jump to one specific address.</td></tr>
+<tr><td style="min-width:100px"><img src="doc/img/thumb/clkgen.png" alt=""></td><td>
+<a href="doc/dmg_reset.html">Weird DMG-CPU Reset Behavior</a><br>
+I discovered that some state of the clock generation logic inside the DMG-CPU B chip is not properly reset, which
+is actually measurable from outside the chip.</td></tr>
 </table>
 </article></main><footer>
 <hr>
