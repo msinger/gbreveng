@@ -43,7 +43,7 @@
 .section .hdrsgb
 	.db 0x00
 .section .hdrtype
-	.db 0x08
+	.db 0x03
 .section .hdrrom
 	.db 0x00
 .section .hdrram
@@ -89,6 +89,7 @@ _exit:
 	di
 	xor a
 	ld (0xff), a
+	ldx (0xe5a5), a
 _exit2:
 	halt
 	nop

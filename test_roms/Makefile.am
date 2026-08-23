@@ -8,6 +8,7 @@ ROMS = \
 	w-rom-ie.s \
 	w-rom-vram.s \
 	w-hram.s \
+	w-hram2.s \
 	w-vram.s \
 	w-wram.s \
 	dma-wram.s \
@@ -18,7 +19,8 @@ ROMS = \
 	halt.s \
 	sck-in.s \
 	eidi.s \
-	rout.s
+	rout.s \
+	oam-bug.s
 
 EXTRA_DIST = common.s $(ROMS)
 
