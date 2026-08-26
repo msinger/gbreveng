@@ -20,7 +20,8 @@ ROMS = \
 	sck-in.s \
 	eidi.s \
 	rout.s \
-	oam-bug.s
+	oam-bug.s \
+	lcdon-write-oam.s
 
 EXTRA_DIST = common.s $(ROMS)
 
